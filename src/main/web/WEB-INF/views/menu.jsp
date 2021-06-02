@@ -1,0 +1,59 @@
+<script type="text/javascript">
+
+    userId = '<%=(String)session.getAttribute("userId")%>';
+
+    $(document).ready(function () {
+
+        if(userId != "null" && userId != "") {
+            $(".subMenu").css({"display": "block"});
+            $(".subMenu").css({"visibility": "visible"});
+        }
+        else {
+            $(".subMenu").css({"display": "none"});
+        }
+
+        //아이콘, 로고, 메인 Click
+        $(".mainButton").click(function(){
+            $(location).attr('href', '/main.do');
+        });
+        //개별접수이력조회 Click
+        $("#history").click(function(){
+
+        });
+        //통계 Click
+        $("#statistic").click(function(){
+
+        });
+        //회원관리 Click
+        $("#member").click(function(){
+
+        });
+        //마이페이지 Click -> 임시로 샘플페이지 연결
+        $("#myPage").click(function(){
+            $(location).attr('href', '/sample.do');
+        });
+        //로그아웃 Click
+        $("#logout").click(function(){
+            $(location).attr('href', '/sample.do');
+        });
+    });
+
+    //선택된 화면의 메뉴색 변경
+    function setButton(buttonId) {
+        $(".subMenu>a").removeClass('selectMenu');
+        $("#"+buttonId).addClass('selectMenu');
+    }
+
+</script>
+<div class="wd100rate h100 mainMenu">
+    <div class="titleIcon wd80 h80 fl ml20 mt10 mainButton"></div>
+    <label class="fl mt50 font_size25 font_bold ml20 mainButton cursor_pointer">IoT 악취 모니터링 시스템</label>
+    <a id="logout" class="fr mt70 wd100 align_c cursor_pointer">로그아웃</a>
+</div>
+<div class="wd100rate subMenu" style="display: none;">
+    <a id="main" class="mainButton"><i class="bx bxs-home lh40 font_size20"></i></a>
+    <a id="history">개별접수이력조회</a>
+    <a id="statistic">통계</a>
+    <a id="member">회원관리</a>
+    <a id="myPage">마이페이지</a>
+</div>

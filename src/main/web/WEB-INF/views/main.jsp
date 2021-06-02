@@ -6,11 +6,17 @@
   To change this template use File | Settings | File Templates.
 -->
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
-<html>
-  <head>
-    <title>title</title>
-  </head>
+<%@include file="/WEB-INF/views/common/resources_common.jsp" %>
+<script type="text/javascript">
+
+  $(document).ready(function () {
+    userId = "admin";
+
+    setButton("main");
+  });
+
+</script>
   <body>
-  인텔리제이 세팅 테스트입니다ㅏㅏㅏㅏㅏㅏㅏㅏ.123142
+  <jsp:include page="/menu"/>
   </body>
 </html>

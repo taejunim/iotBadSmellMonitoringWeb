@@ -14,12 +14,11 @@ public class TestController {
     @Autowired
     private TestService testService;
 
-    @RequestMapping("/")
-    public String test(){
 
-        List<EgovMap> test = testService.selectTest();
 
-        System.out.println("결과 ---> " + test);
-        return "index";
+    @RequestMapping("/sample")
+    public String sample(){
+
+        return "designSample";
     }
 }

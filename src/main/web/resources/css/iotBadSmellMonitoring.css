@@ -1,0 +1,237 @@
+*{
+    font-family: 'NanumSquare', serif !important;
+}
+
+button,
+input,
+optgroup,
+select,
+textarea {
+    color: inherit;
+    /* 1 */
+    font: inherit;
+    /* 2 */
+    margin: 0;
+    /* 3 */
+}
+
+/**
+ * Address `overflow` set to `hidden` in IE 8/9/10/11.
+ */
+button {
+    overflow: visible;
+}
+
+/**
+ * Address inconsistent `text-transform` inheritance for `button` and `select`.
+ * All other form control elements do not inherit `text-transform` values.
+ * Correct `button` style inheritance in Firefox, IE 8/9/10/11, and Opera.
+ * Correct `select` style inheritance in Firefox.
+ */
+button,
+select {
+    text-transform: none;
+}
+
+/**
+ * 1. Avoid the WebKit bug in Android 4.0.* where (2) destroys native `audio`
+ *    and `video` controls.
+ * 2. Correct inability to style clickable `input` types in iOS.
+ * 3. Improve usability and consistency of cursor style between image-type
+ *    `input` and others.
+ */
+button,
+html input[type=button],
+input[type=reset],
+input[type=submit] {
+    -webkit-appearance: button;
+    /* 2 */
+    cursor: pointer;
+    /* 3 */
+}
+
+/**
+ * Re-set default cursor for disabled elements.
+ */
+button[disabled],
+html input[disabled] {
+    cursor: default;
+}
+
+/**
+ * Remove inner padding and border in Firefox 4+.
+ */
+button::-moz-focus-inner,
+input::-moz-focus-inner {
+    border: 0;
+    padding: 0;
+
+}
+
+/* Tables
+     ========================================================================== */
+/**
+   * Remove most spacing between table cells.
+   */
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+td,
+th {
+    width: 100px;
+    padding: 0;
+}
+
+select , input[type=text], input[type=password] , input[type=date] {
+    border: 1px solid #ccc;
+    height: 38px;
+    border-radius: 7px;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+
+}
+select, input[type=password] , input[type=date] {
+    padding: 0 40px 0 10px;
+}
+input[type=text] {
+    padding: 0 10px 0 10px;
+}
+input[type=password] {
+    font-family: 'password' !important;
+}
+input[type=date] {
+    background: url("../image/calendar2.png") no-repeat 98% 50%;
+}
+select {
+    background: url("../image/sort.png") no-repeat 98% 50%;
+}
+.button {
+    cursor: pointer;
+}
+.button{
+    font-size: 14px;
+    font-weight: bold;
+    text-align: center;
+    display: inline-block;
+    background: #555;
+    color: #fff;
+    line-height: 38px;
+    border-radius: 7px;
+    padding: 0 20px;
+    margin-right : 5px;
+    margin-top : 5px;
+    margin-bottom : 5px;
+}
+.button:hover {
+    background: #999;
+}
+.button > i {
+    line-height: inherit;
+}
+.subButton{
+    cursor: pointer;
+    font-size: 11px;
+    display: inline-block;
+    color: #999;
+    line-height: 34px;
+    border-radius: 7px;
+    padding: 0 10px;
+    margin-right : 5px;
+    margin-top : 5px;
+    margin-bottom : 5px;
+    border: 1px #999 solid;
+    background: #fff;
+}
+.bgcDeepBlue {
+    background-color: #10639a;
+}
+.bgcDeepRed {
+    background-color: #c0392b;
+}
+.bgcSkyBlue {
+    background-color: #61ade1;
+}
+.bgcLightSkyBlue {
+    background-color: #d9efff;
+}
+.mainMenu {
+    border-bottom: 3px #10639a solid;
+    background: #fff;
+    background-size: 80px;
+    min-width: 1200px;
+}
+.mainMenu > strong {
+    position: relative;
+    left: 110px;
+    top: 52px;
+    font-size: 24px;
+    cursor : pointer;
+}
+.subMenu {
+    border-bottom: 1px #10639a solid;
+    min-width: 1200px;
+    height: 40px;
+    background: #fff;
+}
+.subMenu > a {
+    background: #fff;
+    line-height: 40px;
+    height: 100%;
+    width : 150px;
+    text-align: center;
+    font-weight: bold;
+    float: left;
+    cursor: pointer;
+}
+.subMenu > a:hover, .selectMenu {
+    background: #10639a !important;
+    color: #fff;
+}
+.searchTable {
+    width: 100%;
+    height: 60px;
+    border-bottom: 1px #10639a solid;
+    min-width: 1200px;
+    font-size: 14px;
+}
+.searchTable > tbody > tr > th {
+    background: #d9efff;
+}
+.searchTable > tbody > tr > td {
+    padding-left: 10px;
+    padding-right: 10px;
+    background: #fff;
+}
+.blueForm {
+    border: 2px #10639a solid;
+    text-align: center;
+    margin-left:auto;
+    margin-right:auto;
+}
+.blueForm > tbody > tr> th {
+    background: #10639a;
+    color: #fff;
+    height: 40px;
+}
+.blueForm > tbody > tr> td {
+    height: 60px;
+    font-size: 15px;
+    background: #fff;
+}
+.blueForm > tbody > tr> td  input {
+    width: 80%;
+}
+.titleIcon {
+    background: url("../image/icon.png");
+    background-size: 80px;
+    cursor: pointer;
+}
+#lostPassword {
+    color : #555;
+    text-decoration: underline;
+    cursor: pointer;
+    font-size:12px;
+}
