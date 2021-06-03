@@ -5,7 +5,7 @@
 <head>
     <meta http-equiv="Content-Type"/>
 
-    <title>IoT 악취 모니터링 시스템</title>>
+    <title>IoT 악취 모니터링 시스템</title>
     <!-- js -->
     <script src="//code.jquery.com/jquery-3.3.1.min.js"></script>
     <script src="/resources/js/moment.js"></script>
@@ -21,6 +21,9 @@
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+    <!-- KakaoMap -->
+    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=4bcfea95a6c0fea34615b3ea4d5dd430"></script>
 
     <script type="text/javascript">
         var contextPath = '${pageContext.request.contextPath}';
