@@ -282,3 +282,17 @@ select {
     border: 1px solid #ccc;
     height: 30px;
 }
+.mainForm th {
+    background-color: #61ade1;
+    height: 40px;
+    border-bottom: 1px solid black;
+}
+.mainForm table th{
+    border: none;
+    background-color: #d9efff;
+    font-weight: normal;
+    width: 60px;
+}
+.mainForm table td{
+    padding-left: 10px;
+}
