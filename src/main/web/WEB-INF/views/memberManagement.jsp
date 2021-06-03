@@ -10,26 +10,35 @@ To change this template use File | Settings | File Templates.
 <script type="text/javascript">
 
     $(document).ready(function () {
-        userId = "admin";
         setButton("member");
     });
 
     //페이지 이동 스크립트
     function fn_page(pageNo) {
 
-        frm.pageIndex.value = pageNo;
-        document.frm.action = "<c:url value='/memberManagement'/>";
-        document.frm.submit();
+        <%--frm.pageIndex.value = pageNo;--%>
+        <%--document.frm.action = "<c:url value='/memberManagement'/>";--%>
+        <%--document.frm.submit();--%>
     }
+
+    //조회
+    function fn_seach() {
+
+        <%--frm.pageIndex.value = 1;--%>
+        <%--document.frm.action = "<c:url value='/memberManagement'/>";--%>
+        <%--document.frm.submit();--%>
+    }
+
 </script>
 <body>
 <jsp:include page="/menu"/>
 <table class="searchTable">
+    <form:form id="frm" name="frm" method="post">
     <tr>
         <th>아이디/이름</th>
-        <td><input type="text" placeholder="test"></td>
+        <td><input type="text"></td>
         <th>나이</th>
-        <td><input type="text" placeholder="test"></td>
+        <td><input type="text"></td>
         <th>성별</th>
         <td>
             <select>
@@ -46,7 +55,7 @@ To change this template use File | Settings | File Templates.
                 <option>일반</option>
             </select>
         </td>
-        <td><a class="button bgcSkyBlue mt10 fr"><i class="bx bx-search"></i>조회</a></td>
+        <td><a class="button bgcSkyBlue mt10 fr" onclick="fn_seach();"><i class="bx bx-search"></i>조회</a></td>
     </tr>
 </table>
 
@@ -155,47 +164,49 @@ To change this template use File | Settings | File Templates.
             </tr>
         </table>
 
-        <hr id="pageline">
+        <hr id="pageline" class="wd85rate">
         <div id="pagination" class="pagingBox align_c">
             <ui:pagination paginationInfo="${paginationInfo}" type="image" jsFunction="fn_page"/>
         </div>
-
+        </form:form>
     </div>
 
     <div class="h100rate fr wd28rate">
         <h2 class="mt50"><strong>회원정보</strong></h2>
-        <table class="listTable wd450">
+        <table class="listTable wd95rate">
             <tr class="h57">
-                <td class="align_l"><label>아이디</label></td>
-                <td><input type="text" placeholder="test" readonly>
+                <td class="align_l wd130"><label>아이디</label></td>
+                <td><input type="text" readonly class="wd210"></td>
             </tr>
             <tr class="h57">
                 <td class="align_l"><label>비밀번호</label></td>
-                <td><input type="password" class="wd48rate"></td>
+                <td><input type="password" class="wd180"></td>
             </tr>
             <tr class="h57">
                 <td class="align_l"><label>이름</label></td>
-                <td><input type="text" readonly></td>
+                <td><input type="text" readonly class="wd210"></td>
             </tr>
             <tr class="h57">
                 <td class="align_l"><label>나이</label></td>
-                <td><input type="text" readonly></td>
+                <td><input type="text" readonly class="wd210"></td>
             </tr>
             <tr class="h57">
                 <td class="align_l"><label>성별</label></td>
                 <td>
-                    <select class="wd65rate" readonly>
+                    <select class="wd230" disabled>
                         <option>남성</option>
                         <option>여성</option>
                     </select>
+                </td>
             </tr>
             <tr class="h57">
                 <td class="align_l"><label>구분</label></td>
                 <td>
-                    <select class="wd65rate" readonly>
+                    <select class="wd230" disabled>
                         <option>관리자</option>
                         <option>일반</option>
                     </select>
+                </td>
             </tr>
             <tr class="h80">
                 <td colspan="2" class="align_c">
