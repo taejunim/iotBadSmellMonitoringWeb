@@ -1,6 +1,5 @@
 package iotBadSmellMonitoring.main;
 
-import egovframework.rte.psl.dataaccess.util.EgovMap;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -8,7 +7,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.PrintWriter;
-import java.util.List;
 
 /**
  * @ Class Name   : MainController.java
@@ -61,5 +59,12 @@ public class MainController {
     @RequestMapping("/login")
     public String login(){
         return "login";
+    }
+
+    //회원관리
+    @RequestMapping("/memberManagement")
+    public String memberManagement(){
+
+        return "memberManagement";
     }
 }
