@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="INFO">
+    <Properties>
+        <Property name="logNm">logger</Property>
+        <Property name="layoutPattern">%d [%t] %-5level %c(%M:%L) - %m%n</Property>
+    </Properties>
+    <Appenders>
+        <Console name="console" target="SYSTEM_OUT">
+            <PatternLayout pattern="${layoutPattern}" />
+        </Console>
+
+<!--        <RollingFile name="file" fileName="C:/tomcat/logs/${logNm}.log"-->
+<!--                     filePattern="C:/tomcat/logs/${logNm}_%d{yyyy-MM-dd}_%i.log.zip">-->
+        <RollingFile name="file" fileName="/home/metis/tomcat/apache-tomcat-9.0.35/logs/${logNm}.log"
+                     filePattern="/home/metis/tomcat/apache-tomcat-9.0.35/logs/${logNm}_%d{yyyy-MM-dd}_%i.log.zip">
+            <PatternLayout pattern="${layoutPattern}" />
+            <Policies>
+                <SizeBasedTriggeringPolicy size="600MB" /> <!-- 600MB 용량이 초과시 DefaultRolloverStrategy 정책만큼 넘버링 -->
+                <TimeBasedTriggeringPolicy module="true" interval="1" /><!-- 일별 로그 파일 생성-->
+            </Policies>
+            <DefaultRolloverStrategy max="200" fileIndex="min" /><!-- 롤링 파일 200개 까지 생성 -->
+        </RollingFile>
+    </Appenders>
+
+    <Loggers>
+
+        <!-- 기본 레벨은 debug -->
+        <Root level="debug" additivity="false" >
+            <AppenderRef ref="console" />
+            <AppenderRef ref="file" />
+        </Root>
+
+        <!-- 스프링 프레임워크에서 찍는건 level을 info로 설정 -->
+        <logger name="org.springframework" level="debug" additivity="false" >
+            <AppenderRef ref="console" />
+            <AppenderRef ref="file" />
+        </logger>
+        <!-- 다른 기본 패키지도 설정 제어 가능하다. -->
+        <logger name="org.apache.commons.digester" level="debug" additivity="false" >
+            <AppenderRef ref="console" />
+            <AppenderRef ref="file" />
+        </logger>
+
+
+        <!-- rolling file에는 debug, console에는 info 분리하여 처리 가능하다. -->
+        <logger name="com.test" additivity="false" >
+            <AppenderRef ref="console" level="debug" />
+            <AppenderRef ref="file" level="debug" />
+        </logger>
+
+        <!-- SQL Logger START -->
+        <!-- DEBUG :  debug을 위한 용도로, 일반 정보를 상세하게 출력합니다.
+             INFO  :  일반적인 데이터를 출력합니다.
+             WARN  :  경고성 메시지로, 에러가 아닌 처리 가능한 문제를 출력 합니다.
+             EROOR :  일반적인 에러로 처리가 반드시 필요로 하는 문제를 출력 합니다.
+             FATAL :  시스템에 심각한 문제를 일이킬 수 있는 문제를 출력합니다.
+         -->
+        <!-- jdbc.sqltiming는 SQL문과 해당 SQL을 실행시키는데 수행된 시간 정보(milliseconds)를 포함한다. -->
+        <logger name="jdbc" additivity="false">
+            <level value="DEBUG" />
+            <appender-ref ref="console"/>
+        </logger>
+
+        <!--  jdbc.sqlonly는 SQL 쿼리 문장만 로그로 남긴다. PreparedStatement일 경우 관련된 argument 값으로 대체된 SQL문이 보여진다 -->
+       <!-- <logger name="jdbc.sqlonly" additivity="false">
+            <level value="DEBUG"/>
+            <appender-ref ref="console"/>
+        </logger> -->
+
+        <!-- ResultSet을 제외한 모든 JDBC 호출 정보를 로그로 남긴다. 많은 양의 로그가 생성되므로 특별히
+             JDBC 문제를 추적해야 할 필요가 있는 경우를 제외하고는 사용을 권장하지 않는다. -->
+        <!-- <logger name="jdbc.audit" additivity="false">
+            <level value="DEBUG"/>
+            <appender-ref ref="console"/>
+        </logger> -->
+
+        <!--  ResultSet을 포함한 모든 JDBC 호출 정보를 로그로 남기므로 매우 방대한 양의 로그가 생성된다 -->
+        <!-- <logger name="jdbc.resultset" additivity="false">
+            <level value="DEBUG" />
+            <appender-ref ref="console"/>
+        </logger> -->
+
+        <!--  SQL 결과 조회된 데이터의 table을 로그로 남긴다. -->
+<!--        <logger name="jdbc.resultsettable" additivity="false">-->
+<!--            <level value="DEBUG"/>-->
+<!--            <appender-ref ref="console"/>-->
+<!--        </logger>-->
+
+        <!-- SQL Logger END -->
+    </Loggers>
+</Configuration>
