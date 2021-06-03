@@ -30,7 +30,7 @@
         });
         //마이페이지 Click -> 임시로 샘플페이지 연결
         $("#myPage").click(function(){
-            $(location).attr('href', '/sample.do');
+            $(location).attr('href', '/myPage.do');
         });
         //로그아웃 Click
         $("#logout").click(function(){
