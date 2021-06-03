@@ -235,3 +235,24 @@ select {
     cursor: pointer;
     font-size:12px;
 }
+.brDeepBlue{
+    border-right: 1px #10639a solid;
+}
+.viewTable{
+    margin: 10% auto 5% auto;
+    text-align: center;
+}
+.viewTable th{
+    height: 30px;
+    background: #eaeaea;
+    border: 1px solid #ccc;
+    border-top: 2px solid black;
+    font-weight: bold;
+}
+.viewTable tr:last-child{
+    border-bottom: 2px solid black;
+}
+.viewTable td{
+    border: 1px solid #ccc;
+    height: 30px;
+}
