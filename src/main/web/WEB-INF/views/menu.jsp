@@ -18,7 +18,7 @@
         });
         //개별접수이력조회 Click
         $("#history").click(function(){
-
+            $(location).attr('href', '/history.do');
         });
         //통계 Click
         $("#statistic").click(function(){
@@ -26,7 +26,7 @@
         });
         //회원관리 Click
         $("#member").click(function(){
-
+            $(location).attr('href', '/member.do');
         });
         //마이페이지 Click -> 임시로 샘플페이지 연결
         $("#myPage").click(function(){

@@ -10,8 +10,8 @@
 <script type="text/javascript">
 
     $(document).ready(function () {
-        console.log("---");
-         // setButton("myPage");
+        userId = "admin";
+        setButton("myPage");
     });
 
 </script>
