@@ -60,11 +60,4 @@ public class MainController {
     public String login(){
         return "login";
     }
-
-    //회원관리
-    @RequestMapping("/memberManagement")
-    public String memberManagement(){
-
-        return "memberManagement";
-    }
 }

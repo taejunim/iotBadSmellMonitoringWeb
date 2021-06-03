@@ -13,6 +13,14 @@ To change this template use File | Settings | File Templates.
         userId = "admin";
         setButton("member");
     });
+
+    //페이지 이동 스크립트
+    function fn_page(pageNo) {
+
+        frm.pageIndex.value = pageNo;
+        document.frm.action = "<c:url value='/memberManagement'/>";
+        document.frm.submit();
+    }
 </script>
 <body>
 <jsp:include page="/menu"/>
@@ -146,7 +154,12 @@ To change this template use File | Settings | File Templates.
                 <td>등록일시</td>
             </tr>
         </table>
-        <div style="width: 100%;height: 30px; border: 1px solid #5E2FD8;"> 페이징</div>
+
+        <hr id="pageline">
+        <div id="pagination" class="pagingBox align_c">
+            <ui:pagination paginationInfo="${paginationInfo}" type="image" jsFunction="fn_page"/>
+        </div>
+
     </div>
 
     <div class="h100rate fr wd28rate">

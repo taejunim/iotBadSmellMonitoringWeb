@@ -7,6 +7,18 @@
     <groupId>org.example</groupId>
     <artifactId>iotBadSmellMonitoringWeb</artifactId>
     <version>1.0-SNAPSHOT</version>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>6</source>
+                    <target>6</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 
     <repositories>
         <repository>
@@ -201,6 +213,18 @@
             <groupId>egovframework.rte</groupId>
             <artifactId>egovframework.rte.psl.dataaccess</artifactId>
             <version>3.6.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>egovframework.rte</groupId>
+            <artifactId>egovframework.rte.ptl.mvc</artifactId>
+            <version>3.6.0</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>commons-logging</artifactId>
+                    <groupId>commons-logging</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <dependency>
