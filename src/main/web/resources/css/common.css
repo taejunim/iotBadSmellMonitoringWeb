@@ -541,6 +541,10 @@ span{
     height: 57px !important;
 }
 
+.h70 {
+    height: 70px !important;
+}
+
 .h80 {
     height: 80px !important;
 }
@@ -1031,6 +1035,10 @@ span{
 
 .mt200 {
     margin-top: 200px !important;
+}
+
+.mt220 {
+    margin-top: 220px !important;
 }
 
 .mtm33 {

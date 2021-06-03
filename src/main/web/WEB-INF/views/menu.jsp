@@ -4,14 +4,6 @@
 
     $(document).ready(function () {
 
-        if(userId != "null" && userId != "") {
-            $(".subMenu").css({"display": "block"});
-            $(".subMenu").css({"visibility": "visible"});
-        }
-        else {
-            $(".subMenu").css({"display": "none"});
-        }
-
         //아이콘, 로고, 메인 Click
         $(".mainButton").click(function(){
             $(location).attr('href', '/main.do');
@@ -50,7 +42,7 @@
     <label class="fl mt50 font_size25 font_bold ml20 mainButton cursor_pointer">IoT 악취 모니터링 시스템</label>
     <a id="logout" class="fr mt70 wd100 align_c cursor_pointer">로그아웃</a>
 </div>
-<div class="wd100rate subMenu" style="display: none;">
+<div class="wd100rate subMenu">
     <a id="main" class="mainButton"><i class="bx bxs-home lh40 font_size20"></i></a>
     <a id="history">개별접수이력조회</a>
     <a id="statistic">통계</a>

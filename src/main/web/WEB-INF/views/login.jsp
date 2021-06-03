@@ -15,10 +15,9 @@
 
 </script>
   <body>
-  <jsp:include page="/menu"/>
   <div>
-  <table class="blueForm wd500 mt200">
-    <tr><th>로그인</th></tr>
+  <table class="blueForm wd500 mt220">
+    <tr><th class="h70" style="line-height: 30px;"><a class="font_bold font_size20">악취 모니터링 시스템</a><br>로그인</th></tr>
     <tr><td class="h20"></td></tr>
     <tr><td><input type="text" placeholder="아이디"></td></tr>
     <tr><td><input type="text" placeholder="비밀번호"></td></tr>
