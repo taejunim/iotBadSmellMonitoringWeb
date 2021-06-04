@@ -25,8 +25,8 @@ public class RegisterVO {
     private String weaterState;                                                                                         //날씨 상태(코드 테이블 참고)
     private String temperatureValue;                                                                                    //온도
     private String humidityValue;                                                                                       //습도
-    private String wind_directionValue;                                                                                 //풍향
-    private String windSpeed_value;                                                                                     //풍속
+    private String windDirectionValue;                                                                                  //풍향
+    private String windSpeedValue;                                                                                      //풍속
     private String gpsX;                                                                                                //좌표 X
     private String gpsY;                                                                                                //좌표 Y
     private String smellComment;                                                                                        //냄새 설명

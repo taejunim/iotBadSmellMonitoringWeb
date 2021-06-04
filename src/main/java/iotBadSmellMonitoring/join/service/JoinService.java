@@ -4,7 +4,7 @@ import egovframework.rte.psl.dataaccess.util.EgovMap;
 
 /**
  * @ Class Name   : JoinService.java
- * @ Modification : 회원가입 / 아이디 찾기 관련 SERVICE
+ * @ Modification : 회원가입 / 로그인 / 아이디 찾기 관련 SERVICE
  * @
  * @ 최초 생성일     최초 생성자
  * @ ---------    ---------

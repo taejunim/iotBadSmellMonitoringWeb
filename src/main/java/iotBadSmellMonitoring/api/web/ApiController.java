@@ -1,6 +1,8 @@
 package iotBadSmellMonitoring.api.web;
 
 import egovframework.rte.psl.dataaccess.util.EgovMap;
+import iotBadSmellMonitoring.history.service.RegisterService;
+import iotBadSmellMonitoring.history.service.RegisterVO;
 import iotBadSmellMonitoring.join.service.JoinService;
 import iotBadSmellMonitoring.join.service.JoinVO;
 import iotBadSmellMonitoring.main.service.MainService;
@@ -9,7 +11,10 @@ import org.json.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.BufferedReader;
@@ -35,10 +40,13 @@ import java.util.List;
 public class ApiController {
 
     @Autowired
-    private JoinService joinService;
+    private RegisterService registerService;                                                                            //REGISTER MASTER / DETAIL SERVICE.
 
     @Autowired
-    private MainService mainService;
+    private JoinService     joinService;                                                                                //회원가입 / 로그인 / 아이디 찾기 관련 SERVICE.
+
+    @Autowired
+    private MainService     mainService;                                                                                //PC 공통 관련 SERVICE.
 
     /**
      * 회원가입 API
@@ -165,6 +173,54 @@ public class ApiController {
 
            System.out.println("Exception: ");
            message = "{\"result\":\"fail\",\"message\": \"ERR FIND SEARCH CODE.\"}";
+        }
+
+        return message;
+    }
+
+    /**
+     * 접수 마스터||디테일 등록 API
+     * @param registerVO     REGISTER MASTER / DETAIL VO.
+     * @return               RESPONSE MESSAGE.
+     * @throws Exception
+     */
+    @RequestMapping(value = "/api/registerInsert", method = RequestMethod.POST, consumes="application/json;", produces = "application/json; charset=utf8")
+    public String registerInsert(@ModelAttribute("registerVO")RegisterVO registerVO, HttpServletRequest request)  throws Exception {
+
+        String message = "";
+
+        try {
+
+            BufferedReader  br 	        = new BufferedReader(new InputStreamReader(request.getInputStream(), StandardCharsets.UTF_8));
+            String          paramValue  = parseJSONData(br);                                                            //JSON OBJECT TO STRING CALL.
+            JSONParser      jsonParser  = new JSONParser();
+            JSONObject      jsonObject  = (JSONObject)jsonParser.parse(paramValue);
+
+            registerVO.setSmellType(jsonObject.get("smellType").toString());
+            registerVO.setSmellValue(jsonObject.get("smellValue").toString());
+            registerVO.setWeaterState(jsonObject.get("weaterState").toString());
+            registerVO.setTemperatureValue(jsonObject.get("temperatureValue").toString());
+            registerVO.setHumidityValue(jsonObject.get("humidityValue").toString());
+            registerVO.setWindDirectionValue(jsonObject.get("windDirectionValue").toString());
+            registerVO.setWindSpeedValue(jsonObject.get("windSpeedValue").toString());
+            registerVO.setGpsX(jsonObject.get("gpsX").toString());
+            registerVO.setGpsY(jsonObject.get("gpsY").toString());
+            registerVO.setSmellComment(jsonObject.get("smellComment").toString());
+            registerVO.setSmellRegisterTime(jsonObject.get("smellRegisterTime").toString());
+            registerVO.setRegId(jsonObject.get("regId").toString());
+
+            int result = registerService.registerInsert(registerVO);                                                    //접수 마스터||디테일 등록 CALL.
+
+            if(result == 1)
+                message = "{\"result\":\"success\"}";
+
+            else
+                message = "{\"result\":\"fail\",\"message\": \"NO DB INSERT.\"}";
+
+        }catch (Exception e){
+
+            System.out.println("Exception: ");
+            message = "{\"result\":\"fail\",\"message\": \"ERR DB INSERT.\"}";
         }
 
         return message;

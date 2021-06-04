@@ -4,6 +4,7 @@ import iotBadSmellMonitoring.history.service.RegisterService;
 import iotBadSmellMonitoring.history.service.RegisterVO;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 /**
  * @ Class Name   : RegisterServiceImpl.java
@@ -18,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  * @
  **/
 
+@Service
 public class RegisterServiceImpl implements RegisterService {
 
     @Autowired
