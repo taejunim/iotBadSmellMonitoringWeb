@@ -33,7 +33,9 @@ To change this template use File | Settings | File Templates.
 <body>
 <jsp:include page="/menu"/>
 <table class="searchTable">
+
     <form:form id="frm" name="frm" method="post">
+
     <tr>
         <th>아이디/이름</th>
         <td><input type="text"></td>
@@ -43,16 +45,18 @@ To change this template use File | Settings | File Templates.
         <td>
             <select>
                 <option>전체</option>
-                <option>남성</option>
-                <option>여성</option>
+                <c:forEach var="item" items="${CG_SEX}">
+                    <option value="${item.CodeId}">${item.codeIdName}</option>
+                </c:forEach>
             </select>
         </td>
         <th>구분</th>
         <td>
             <select>
                 <option>전체</option>
-                <option>관리자</option>
-                <option>일반</option>
+                <c:forEach var="item" items="${CG_UST}">
+                    <option value="${item.CodeId}">${item.codeIdName}</option>
+                </c:forEach>
             </select>
         </td>
         <td><a class="button bgcSkyBlue mt10 fr" onclick="fn_seach();"><i class="bx bx-search"></i>조회</a></td>
