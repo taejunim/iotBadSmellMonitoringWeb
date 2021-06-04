@@ -26,7 +26,8 @@ import java.nio.charset.StandardCharsets;
  * @
  **/
 
-@RestController
+
+@RestController                 // spring 3.2부터 RestController 추가됨..@ResponseBody / Controller 기능을 포함하므로 따로 @ResponseBody를 안써도 됨.
 public class ApiController {
 
     @Autowired
@@ -39,7 +40,7 @@ public class ApiController {
      * @throws Exception
      */
     @RequestMapping(value = "/api/userJoinInsert", method = RequestMethod.POST, consumes="application/json;", produces = "application/json;")
-    public @ResponseBody String userJoinInsert(@ModelAttribute("joinVO")JoinVO joinVO, HttpServletRequest request)  throws Exception {
+    public String userJoinInsert(@ModelAttribute("joinVO")JoinVO joinVO, HttpServletRequest request)  throws Exception {
 
         String message = "";
 
@@ -60,14 +61,14 @@ public class ApiController {
             int result = joinService.userJoinInsert(joinVO);                                                            //회원가입 CALL.
 
             if(result == 1)
-                message = "{result:\"success\"}";
+                message = "{\"result\":\"success\"}";
 
             else
-                message = "{result:\"fail\",message: no Insert.}";
+                message = "{\"result\":\"fail\",\"message\": \"no Insert.\"}";
 
         }catch (Exception e){
 
-            message = "{result:\"fail\",message:"+e.getMessage()+"}";
+            message = "{\"result\":\"fail\",\"message\":\""+e.getMessage()+"\"}";
        }
 
         return message;
@@ -79,8 +80,8 @@ public class ApiController {
      * @return           RESPONSE MESSAGE.
      * @throws Exception
      */
-    @RequestMapping(value = "/api/userLogin", method = RequestMethod.GET, consumes="application/json;", produces = "application/json;")
-    public @ResponseBody String userLoginSelect(@ModelAttribute("joinVO")JoinVO joinVO, HttpServletRequest request)  throws Exception {
+    @RequestMapping(value = "/api/userLogin", method = RequestMethod.GET, consumes="application/json;", produces = "application/json; charset=utf8")
+    public String userLoginSelect(@ModelAttribute("joinVO")JoinVO joinVO, HttpServletRequest request)  throws Exception {
 
         String message = "";
 
@@ -96,15 +97,20 @@ public class ApiController {
 
             EgovMap result = joinService.userLoginSelect(joinVO);                                                       //로그인 CALL.
 
-            if(result != null)
-                message = "{result:\"success\"}";
+            if(!result.isEmpty()) {
 
-            else
-                message = "{result:\"fail\",message: no ID/PASSWORD.}";
+                JSONObject json =  new JSONObject(result);                                                                  //map을 json으로 변환.
 
+                message = "{\"result\":\"success\",\"data\":" + json + "}";
+            }
+            else {
+
+                message = "{\"result\":\"fail\",\"message\": \"no ID/PASSWORD.\"}";
+            }
         }catch (Exception e){
 
-            message = "{result:\"fail\",message:"+e.getMessage()+"}";
+            System.out.println("Exception: ");
+            message = "{\"result\":\"fail\",\"message\": \"no ID/PASSWORD.\"}";
         }
 
         return message;
