@@ -9,20 +9,46 @@
 <%@include file="/WEB-INF/views/common/resources_common.jsp" %>
 <script type="text/javascript">
 
-    $(document).ready(function () {
-        userId = "admin";
-        setButton("history");
-    });
+        $(document).ready(function () {
+            setButton("history");
+            setDatePicker();
+
+            var container = document.getElementById('map'); //지도를 담을 영역의 DOM 레퍼런스
+            var options = { //지도를 생성할 때 필요한 기본 옵션
+                center: new kakao.maps.LatLng(33.450701, 126.570667), //지도의 중심좌표.
+                level: 3 //지도의 레벨(확대, 축소 정도)
+            };
+
+            var map = new kakao.maps.Map(container, options); //지도 생성 및 객체 리턴
+        });
+        function setDatePicker(){
+
+            //datepicker 초기화 START
+            $('#datePicker').datepicker();
+
+            /*    $('#searchStartDt').datepicker("option", "maxDate", $("#searchEndDt").val());
+                $('#searchStartDt').datepicker("option", "onClose", function ( selectedDate ) {
+                  $("#searchEndDt").datepicker( "option", "minDate", selectedDate );
+                });
+
+                $('#searchEndDt').datepicker();
+                $('#searchEndDt').datepicker("option", "minDate", $("#searchStartDt").val());
+                $('#searchEndDt').datepicker("option", "onClose", function ( selectedDate ) {
+                  $("#searchStartDt").datepicker( "option", "maxDate", selectedDate );
+                });*/
+            //datepicker 초기화 END
+        }
+
 </script>
 <body>
 <jsp:include page="/menu"/>
 <table class="searchTable">
     <tr>
-        <th>등록자</th><td><input type="text" placeholder="test"></td>
+        <th>등록자</th><td><input type="text" ></td>
         <th>등록일</th><td><input type="date" class="mDateTimeInput" id="datePicker" readonly="readonly"></td>
-        <th>취기</th><td><select><option>1</option></select></td>
-        <th>악취 강도</th><td><select><option>1</option></select></td>
-        <th>기상 상태</th><td><select><option>1</option></select></td>
+        <th>취기</th><td><select><option>전체</option><option>구린 냄새</option><option>음식물 냄새</option><option>고무 냄새</option><option>가스 냄새</option><option>페인트 냄새</option><option>사료 냄새</option></select></td>
+        <th>악취 강도</th><td><select><option>전체</option><option>(0)무취</option><option>(1)감지 취기</option><option>(2)보통 취기</option><option>(3)강한 취기</option><option>(4)극심한 취기</option><option>(5)참기 어려운 취기</option></select></td>
+        <th>기상 상태</th><td><select><option>전체</option><option>날씨</option><option>기온</option><option>습도</option><option>풍향</option><option>풍속</option></select></td>
         <td><a class="button bgcSkyBlue mt10 fr"><i class="bx bx-search"></i>조회</a></td>
     </tr>
 </table>
@@ -32,180 +58,168 @@
         <table class="wd80rate viewTable">
             <tr>
                 <th class="wd5rate">NO</th>
-                <th>구분</th>
-                <th>아이디</th>
-                <th>이름</th>
-                <th>나이</th>
-                <th>성별</th>
+                <th>기상 상태</th>
+                <th>접수 시간대</th>
+                <th>악취 강도</th>
+                <th>취기</th>
+                <th>등록자</th>
                 <th class="wd20rate">등록일시</th>
             </tr>
             <tr>
                 <td>1</td>
-                <td>일반</td>
-                <td>test</td>
+                <td>맑음</td>
+                <td>20:00~22:00</td>
+                <td>(5)참기 어려운 취기</td>
+                <td>고무 냄새</td>
                 <td>이름1</td>
-                <td>나이</td>
-                <td>성별</td>
-                <td>등록일시</td>
+                <td>2021-05-28 21:56:00</td>
             </tr>
             <tr>
                 <td>2</td>
-                <td>관리자</td>
-                <td>system</td>
-                <td>이름</td>
-                <td>나이</td>
-                <td>성별</td>
-                <td>등록일시</td>
-            </tr>
-            <tr>
-                <td>3</td>
-                <td>일반</td>
-                <td>test</td>
+                <td>비</td>
+                <td>12:00~14:00</td>
+                <td>(1)감지 취기</td>
+                <td>음식물 냄새</td>
                 <td>이름1</td>
-                <td>나이</td>
-                <td>성별</td>
-                <td>등록일시</td>
+                <td>2021-05-28 21:56:00</td>
             </tr>
             <tr>
-                <td>4</td>
-                <td>관리자</td>
-                <td>system</td>
-                <td>이름</td>
-                <td>나이</td>
-                <td>성별</td>
-                <td>등록일시</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
             </tr>
             <tr>
-                <td>5</td>
-                <td>일반</td>
-                <td>test</td>
-                <td>이름1</td>
-                <td>나이</td>
-                <td>성별</td>
-                <td>등록일시</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
             </tr>
             <tr>
-                <td>6</td>
-                <td>관리자</td>
-                <td>system</td>
-                <td>이름</td>
-                <td>나이</td>
-                <td>성별</td>
-                <td>등록일시</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
             </tr>
             <tr>
-                <td>7</td>
-                <td>일반</td>
-                <td>test</td>
-                <td>이름1</td>
-                <td>나이</td>
-                <td>성별</td>
-                <td>등록일시</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
             </tr>
             <tr>
-                <td>8</td>
-                <td>관리자</td>
-                <td>system</td>
-                <td>이름</td>
-                <td>나이</td>
-                <td>성별</td>
-                <td>등록일시</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
             </tr>
             <tr>
-                <td>9</td>
-                <td>일반</td>
-                <td>test</td>
-                <td>이름1</td>
-                <td>나이</td>
-                <td>성별</td>
-                <td>등록일시</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
             </tr>
             <tr>
-                <td>10</td>
-                <td>관리자</td>
-                <td>system</td>
-                <td>이름</td>
-                <td>나이</td>
-                <td>성별</td>
-                <td>등록일시</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
             </tr>
         </table>
-        <div style="width: 100%;height: 30px; border: 1px solid #5E2FD8;"> 페이징</div>
+        <hr id="pageline">
+        <div id="pagination" class="pagingBox align_c">
+            <ui:pagination paginationInfo="${paginationInfo}" type="image" jsFunction="fn_page"/>
+        </div>
     </div>
 
-    <div class="h100rate fr wd28rate scroll_auto scroll_hidden ">
-        <h2 class="mt50"><strong>회원정보</strong></h2>
-        <table class="listTable wd450">
-            <tr class="h57">
-                <td class="align_l"><label>아이디</label></td>
-                <td><input type="text" placeholder="test" readonly>
-            </tr>
-            <tr class="h57">
-                <td class="align_l"><label>비밀번호</label></td>
-                <td><input type="password" class="wd48rate"></td>
-            </tr>
-            <tr class="h57">
-                <td class="align_l"><label>이름</label></td>
-                <td><input type="text" readonly></td>
-            </tr>
-            <tr class="h57">
-                <td class="align_l"><label>나이</label></td>
-                <td><input type="text" readonly></td>
-            </tr>
-            <tr class="h57">
-                <td class="align_l"><label>나이</label></td>
-                <td><input type="text" readonly></td>
-            </tr>
-            <tr class="h57">
-                <td class="align_l"><label>나이</label></td>
-                <td><input type="text" readonly></td>
-            </tr>
-            <tr class="h57">
-                <td class="align_l"><label>나이</label></td>
-                <td><input type="text" readonly></td>
-            </tr>
-            <tr class="h57">
-                <td class="align_l"><label>나이</label></td>
-                <td><input type="text" readonly></td>
-            </tr>
-            <tr class="h57">
-                <td class="align_l"><label>나이</label></td>
-                <td><input type="text" readonly></td>
-            </tr>
-            <tr class="h57">
-                <td class="align_l"><label>나이</label></td>
-                <td><input type="text" readonly></td>
-            </tr>
-            <tr class="h57">
-                <td class="align_l"><label>나이</label></td>
-                <td><input type="text" readonly></td>
-            </tr>
-
-            <tr class="h57">
-                <td class="align_l"><label>성별</label></td>
-                <td>
-                    <select class="wd65rate" readonly>
-                        <option>남성</option>
-                        <option>여성</option>
-                    </select>
-            </tr>
-            <tr class="h57">
-                <td class="align_l"><label>구분</label></td>
-                <td>
-                    <select class="wd65rate" readonly>
-                        <option>관리자</option>
-                        <option>일반</option>
-                    </select>
-            </tr>
-            <tr class="h80">
-                <td colspan="2" class="align_c">
-                    <a class="button bgcDeepBlue"><i class="bx bxs-save"></i><strong>저장</strong></a>
-                    <a class="button bgcDeepRed"><i class="bx bx-minus-circle"></i>탈퇴</a>
-                </td>
-            </tr>
-        </table>
+    <div class="scrollView">
+        <div id="rightSide" class="fr" style="width:100%; height: 40% ">
+            <div id="map" class="wd100rate h100rate"></div>
+        </div>
+        <p style="color: white">a</p>
+        <div>
+            <table class="wd80rate secondViewTable" >
+                <p></p>
+                <tr>
+                    <td class="font_bold">날씨</td>
+                    <td>맑음</td>
+                </tr>
+                <tr>
+                    <td class="font_bold">등록자</td>
+                    <td>이름4</td>
+                    <td class="font_bold">등록자 아이디</td>
+                    <td>test1234</td>
+                </tr>
+                <tr>
+                    <td class="font_bold">취기</td>
+                    <td>고무냄새</td>
+                    <td class="font_bold">악취 강도</td>
+                    <td>감지 취기(1)</td>
+                </tr>
+                <tr>
+                    <td class="font_bold">기상 상태</td>
+                    <td>이름4</td>
+                    <td class="font_bold">온도</td>
+                    <td>test1234</td>
+                </tr>
+                <tr>
+                    <td class="font_bold">풍향</td>
+                    <td>이름4</td>
+                    <td class="font_bold">풍속</td>
+                    <td>test1234</td>
+                </tr>
+                <tr>
+                    <td colspan="2" class="font_bold">등록일시</td>
+                    <td colspan="2">2021-05-28 21:56:00</td>
+                </tr>
+                <tr class="h200">
+                    <td colspan="1" class="font_bold" id="">비고</td>
+                    <td colspan="3">
+                        냄새가 났당 말았당 햄수다..<br>
+                        제기 봐줍서양!
+                    </td>
+                </tr>
+                <tr class="h200">
+                    <td colspan="3">이미지</td>
+                    <td colspan="1"><a class="subButton">이미지 삭제</a></td>
+                </tr>
+                <tr class="h200">
+                    <td colspan="3">이미지</td>
+                    <td colspan="1"><a class="subButton">이미지 삭제</a></td>
+                </tr>
+            </table>
+        </div>
     </div>
-
 </div>
 </body>
 </html>

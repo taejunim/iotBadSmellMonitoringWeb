@@ -10,12 +10,11 @@
 <script type="text/javascript">
 
     $(document).ready(function () {
-        console.log("---");
+
     });
 
 </script>
     <body>
-    <jsp:include page="/menu"/>
     <div>
         <table class="blueForm wd450 mt200"; >
             <tr><th colspan="2">회원가입</th></tr>

@@ -91,7 +91,6 @@ select , input[type=text], input[type=password] , input[type=date] {
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
-
 }
 select, input[type=password] , input[type=date] {
     padding: 0 40px 0 10px;
@@ -103,10 +102,13 @@ input[type=password] {
     font-family: 'password' !important;
 }
 input[type=date] {
-    background: url("../image/calendar2.png") no-repeat 98% 50%;
+    /*background: url("../image/calendar2.png") no-repeat 98% 50%;*/
 }
 select {
     background: url("../image/sort.png") no-repeat 98% 50%;
+}
+select::-ms-expand{
+    display: none;
 }
 .button {
     cursor: pointer;
@@ -250,6 +252,12 @@ select {
 .whiteForm > tbody > tr> td  select {
     width: 93%;
 }
+.scrollView{
+    width: 550px;
+    height: 710px;
+    /*border: 1px solid white;*/
+    overflow: auto;
+}
 .titleIcon {
     background: url("../image/icon.png");
     background-size: 80px;
@@ -295,4 +303,22 @@ select {
 }
 .mainForm table td{
     padding-left: 10px;
+}
+.secondViewTable{
+    margin: 5% auto 5% auto;
+    text-align: center;
+}
+.secondViewTable th{
+    height: 30px;
+    background: #eaeaea;
+    border: 2px solid #ccc;
+    font-weight: bold;
+}
+
+.secondViewTable td{
+    border: 1px solid #ccc;
+    height: 30px;
+}
+.conditionTitle{
+    font-weight: bold;
 }
