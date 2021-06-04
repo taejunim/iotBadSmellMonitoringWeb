@@ -21,7 +21,7 @@ public interface JoinMapper {
 
     /**
      * 회원가입
-     * @param joinVO     회원가입 / 아이디 찾기 관련 VO.
+     * @param joinVO     회원가입 / 로그인 / 아이디 찾기 관련 VO.
      * @return           int
      * @throws Exception
      */
@@ -29,7 +29,7 @@ public interface JoinMapper {
 
     /**
      * 로그인
-     * @param joinVO     회원가입 / 아이디 찾기 관련 VO.
+     * @param joinVO     회원가입 / 로그인 / 아이디 찾기 관련 VO.
      * @return           EgovMap
      * @throws Exception
      */

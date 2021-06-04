@@ -26,6 +26,7 @@
 
     </insert>
 
+    <!-- 로그인-->
     <select id="userLoginSelect" parameterType="joinVO" resultType="egovMap">
 
         SELECT USER_ID

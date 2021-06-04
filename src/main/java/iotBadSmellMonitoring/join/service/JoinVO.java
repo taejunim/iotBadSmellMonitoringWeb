@@ -4,7 +4,7 @@ import lombok.Data;
 
 /**
  * @ Class Name   : JoinVO.java
- * @ Modification : 회원가입 / 아이디 찾기 관련 VO.
+ * @ Modification : 회원가입 / 로그인 / 아이디 찾기 관련 VO.
  * @
  * @ 최초 생성일     최초 생성자
  * @ ---------    ---------

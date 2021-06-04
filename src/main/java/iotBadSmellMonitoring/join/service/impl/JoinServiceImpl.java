@@ -28,7 +28,7 @@ public class JoinServiceImpl implements JoinService {
 
     /**
      * 회원가입
-     * @param joinVO     회원가입 / 아이디 찾기 관련 VO.
+     * @param joinVO     회원가입 / 로그인 / 아이디 찾기 관련 VO.
      * @return           int
      * @throws Exception
      */
@@ -42,8 +42,8 @@ public class JoinServiceImpl implements JoinService {
 
     /**
      * 로그인
-     * @param joinVO     회원가입 / 아이디 찾기 관련 VO.
-     * @return           int
+     * @param joinVO     회원가입 / 로그인 / 아이디 찾기 관련 VO.
+     * @return           EgovMap
      * @throws Exception
      */
     @Override
