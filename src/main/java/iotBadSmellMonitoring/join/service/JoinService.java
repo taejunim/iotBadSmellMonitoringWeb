@@ -1,5 +1,7 @@
 package iotBadSmellMonitoring.join.service;
 
+import egovframework.rte.psl.dataaccess.util.EgovMap;
+
 /**
  * @ Class Name   : JoinService.java
  * @ Modification : 회원가입 / 아이디 찾기 관련 SERVICE
@@ -22,4 +24,13 @@ public interface JoinService {
      * @throws Exception
      */
     int userJoinInsert(JoinVO joinVO) throws Exception;
+
+    /**
+     * 로그인
+     * @param joinVO     회원가입 / 아이디 찾기 관련 VO.
+     * @return           int
+     * @throws Exception
+     */
+    EgovMap userLoginSelect(JoinVO joinVO) throws Exception;
+
 }

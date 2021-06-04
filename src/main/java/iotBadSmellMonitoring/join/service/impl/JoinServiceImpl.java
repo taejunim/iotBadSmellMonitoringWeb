@@ -1,5 +1,6 @@
 package iotBadSmellMonitoring.join.service.impl;
 
+import egovframework.rte.psl.dataaccess.util.EgovMap;
 import iotBadSmellMonitoring.join.service.JoinService;
 import iotBadSmellMonitoring.join.service.JoinVO;
 import org.apache.ibatis.session.SqlSession;
@@ -37,6 +38,20 @@ public class JoinServiceImpl implements JoinService {
         JoinMapper joinMapper = sqlSession.getMapper(JoinMapper.class);
 
         return joinMapper.userJoinInsert(joinVO);
+    }
+
+    /**
+     * 로그인
+     * @param joinVO     회원가입 / 아이디 찾기 관련 VO.
+     * @return           int
+     * @throws Exception
+     */
+    @Override
+    public EgovMap userLoginSelect(JoinVO joinVO) throws Exception {
+
+        JoinMapper joinMapper = sqlSession.getMapper(JoinMapper.class);
+
+        return joinMapper.userLoginSelect(joinVO);
     }
 
 }

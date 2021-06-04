@@ -26,4 +26,23 @@
 
     </insert>
 
+    <select id="userLoginSelect" parameterType="joinVO" resultType="egovMap">
+
+        SELECT USER_ID
+             , USER_TYPE
+             , F_GET_CODE_NAME('UST',USER_TYPE) USER_TYPE_NAME
+             , USER_NAME
+             , USER_SEX
+             , F_GET_CODE_NAME('SEX',USER_SEX) USER_SEX_NAME
+             , USER_AGE
+
+          FROM tb_user
+
+         WHERE 1=1
+
+           AND USER_ID       = #{userId}
+           AND USER_PASSWORD = password(#{userPassword});
+
+    </select>
+
 </mapper>
