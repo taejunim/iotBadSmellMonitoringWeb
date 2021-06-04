@@ -16,11 +16,11 @@ package iotBadSmellMonitoring.history.service;
 public interface RegisterService {
 
     /**
-     * 접수 마스터 등록
+     * 접수 마스터||디테일 등록
      * @param registerVO REGISTER MASTER / DETAIL VO.
      * @return           int
      * @throws Exception
      */
-    int registerMasterInsert(RegisterVO registerVO) throws Exception;
+    int registerInsert(RegisterVO registerVO) throws Exception;
 
 }

@@ -3,6 +3,13 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="iotBadSmellMonitoring.history.service.impl.RegisterMapper">
 
+    <!-- 접수 마스터 번호-->
+    <select id="registerSmellRegisterNoSelect" resultType="string">
+
+        (SELECT CONCAT('SR',DATE_FORMAT(now(), '%Y%m%d%H%i%s'),(SELECT IFNULL(LPAD(MAX(substr(t2.SMELL_REGISTER_NO,17,2))+1,'2','0'),'01') FROM tb_smell_register t2 WHERE substr(t2.SMELL_REGISTER_NO,1,16) = CONCAT('SR',DATE_FORMAT(now(), '%Y%m%d%H%i%s')))) SMELL_REGISTER_NO FROM DUAL)
+
+    </select>
+
     <!-- 접수 마스터 등록-->
     <insert id="registerMasterInsert" parameterType="registerVO">
 
@@ -22,7 +29,7 @@
                                         , REG_ID
                                       )
                               VALUES (
-                                        (SELECT CONCAT('SR',DATE_FORMAT(now(), '%Y%m%d%H%i%s'),(SELECT IFNULL(LPAD(MAX(substr(t2.SMELL_REGISTER_NO,17,2))+1,'2','0'),'01') FROM tb_smell_register t2 WHERE substr(t2.SMELL_REGISTER_NO,1,16) = CONCAT('ND',DATE_FORMAT(now(), '%Y%m%d%H%i%s')))) SMELL_REGISTER_NO FROM DUAL)
+                                        #{smellRegisterNo}
                                         , #{smellType}
                                         , #{smellValue}
                                         , #{weaterState}
@@ -37,6 +44,21 @@
                                         , #{regId}
                                      )
 
+    </insert>
+
+    <!-- 접수 디테일 등록-->
+    <insert id="registerDetailInsert" parameterType="registerVO">
+
+        INSERT INTO tb_smell_image (
+                                        SMELL_IMAGE_NO
+                                        , SMELL_IMAGE_PATH
+                                        , SMELL_REGISTER_NO
+                                    )
+                            VALUES (
+                                        (SELECT CONCAT('IM',DATE_FORMAT(now(), '%Y%m%d%H%i%s'),(SELECT IFNULL(LPAD(MAX(substr(t2.SMELL_IMAGE_NO,17,2))+1,'2','0'),'01') FROM tb_smell_image t2 WHERE substr(t2.SMELL_IMAGE_NO,1,16) = CONCAT('IM',DATE_FORMAT(now(), '%Y%m%d%H%i%s')))) SMELL_IMAGE_NO FROM DUAL)
+                                        , #{smellImagePath}
+                                        , #{smellRegisterNo}
+                                    )
     </insert>
 
 </mapper>

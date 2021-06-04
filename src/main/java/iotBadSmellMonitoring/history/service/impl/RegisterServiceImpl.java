@@ -24,16 +24,33 @@ public class RegisterServiceImpl implements RegisterService {
     SqlSession sqlSession;
 
     /**
-     * 접수 마스터 등록
+     * 접수 마스터||디테일 등록
      * @param registerVO REGISTER MASTER / DETAIL VO.
      * @return           int
      * @throws Exception
      */
-    public int registerMasterInsert(RegisterVO registerVO) throws Exception {
+    public int registerInsert(RegisterVO registerVO) throws Exception {
 
         RegisterMapper registerMapper = sqlSession.getMapper(RegisterMapper.class);
 
-        return registerMapper.registerMasterInsert(registerVO);
+        registerVO.setSmellRegisterNo(registerMapper.registerSmellRegisterNoSelect());                                  //접수 마스터 번호 CALL.
+
+        int masterResult = registerMapper.registerMasterInsert(registerVO);                                             //접수 마스터 등록 CALL.
+        int detailResult = registerMapper.registerDetailInsert(registerVO);                                             //접수 디테일 등록 CALL.
+        int allResult    = 0;                                                                                           //마스터||디테일 등록 결과
+
+        if(!registerVO.getSmellImagePath().equals("") && registerVO.getSmellImagePath() != null) {                      //접수 디테일이 있으면,
+
+            if(masterResult == 1 && detailResult == 1)                                                                  //접수 마스터&&디테일 결과 1이면,
+                allResult = 1;
+
+        }else{
+
+            if(masterResult == 1 )
+                allResult = 1;
+        }
+
+        return allResult;
     }
 
 }
