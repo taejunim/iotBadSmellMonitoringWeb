@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="iotBadSmellMonitoring.main.service.impl.MainMapper">
+
+    <!-- 코드 목록-->
+    <select id="codeListSelect" parameterType="mainVO" resultType="egovMap">
+
+        SELECT CODE_GROUP
+             , CODE_GROUP_NAME
+             , CODE_ID
+             , CODE_ID_NAME
+             , CODE_COMMENT
+
+          FROM tb_code
+
+         WHERE 1=1
+
+           AND CODE_GROUP = #{codeGroup}
+
+    </select>
+
+</mapper>

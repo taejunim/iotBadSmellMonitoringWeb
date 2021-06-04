@@ -14,8 +14,8 @@
         <typeAlias alias="string"                       type="java.lang.String"/>
         <typeAlias alias="int"                          type="java.lang.Integer"/>
         <typeAlias alias="joinVO"                       type="iotBadSmellMonitoring.join.service.JoinVO"/>
+        <typeAlias alias="mainVO"                       type="iotBadSmellMonitoring.main.service.MainVO"/>
         <typeAlias alias="egovMap"                      type="egovframework.rte.psl.dataaccess.util.EgovMap" />
-        <!--<typeAlias alias="AIVoucherAnnotationVO"        type="aiVoucherWebPerprocessing.VO.AIVoucherAnnotationVO"/>-->
     </typeAliases>
 
 </configuration>
