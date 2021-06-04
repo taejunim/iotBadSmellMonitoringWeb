@@ -71,11 +71,11 @@ public class ApiController {
                 message = "{\"result\":\"success\"}";
 
             else
-                message = "{\"result\":\"fail\",\"message\": \"no Insert.\"}";
+                message = "{\"result\":\"fail\",\"message\": \"NO DB INSERT.\"}";
 
         }catch (Exception e){
 
-            message = "{\"result\":\"fail\",\"message\":\""+e.getMessage()+"\"}";
+            message = "{\"result\":\"fail\",\"message\":\"ERR DB INSERT.\"}";
        }
 
         return message;
@@ -104,20 +104,20 @@ public class ApiController {
 
             EgovMap result = joinService.userLoginSelect(joinVO);                                                       //로그인 CALL.
 
-            if(!result.isEmpty()) {
+            if(result != null && !result.isEmpty()) {                                                                   //egovMap null CHECK.
 
                 JSONObject json =  new JSONObject(result);                                                              //map을 json으로 변환.
+                json = (JSONObject) jsonParser.parse(String.valueOf(json).replace("null", "\"\""));   //null시 KEY 누락을 막기 위하여.
 
                 message = "{\"result\":\"success\",\"data\":" + json + "}";
             }
-            else {
+            else
+                message = "{\"result\":\"fail\",\"message\": \"NO ID/PASSWORD.\"}";
 
-                message = "{\"result\":\"fail\",\"message\": \"no ID/PASSWORD.\"}";
-            }
         }catch (Exception e){
 
-            System.out.println("Exception: ");
-            message = "{\"result\":\"fail\",\"message\": \"no ID/PASSWORD.\"}";
+            //System.out.println("Exception: ");
+            message = "{\"result\":\"fail\",\"message\": \"ERR ID/PASSWORD.\"}";
         }
 
         return message;
@@ -152,7 +152,7 @@ public class ApiController {
                 for (EgovMap egovMap : resultList) {
 
                     JSONObject json = new JSONObject(egovMap);
-                    json = (JSONObject) jsonParser.parse(String.valueOf(json).replace("null", "\"\"")); //null 누락을 막기 위하여.
+                    json = (JSONObject) jsonParser.parse(String.valueOf(json).replace("null", "\"\""));//null시 KEY 누락을 막기 위하여.
                     jsonArray.put(json);
                 }
 
@@ -184,7 +184,7 @@ public class ApiController {
 
             JSONParser jsonParser = new JSONParser();
             JSONObject jsonObject = (JSONObject)jsonParser.parse(bufferedReader);
-            resultSet 			 = jsonObject.toJSONString();
+            resultSet 			  = jsonObject.toJSONString();
 
         } catch (Exception e) {
 
