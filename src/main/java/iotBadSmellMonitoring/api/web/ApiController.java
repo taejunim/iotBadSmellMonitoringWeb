@@ -149,14 +149,12 @@ public class ApiController {
 
                 JSONArray jsonArray = new JSONArray();
 
-                for (int i = 0; i < resultList.size(); i++) {
+                for (EgovMap egovMap : resultList) {
 
-                    JSONObject json =  new JSONObject(resultList.get(i));
-
+                    JSONObject json = new JSONObject(egovMap);
+                    json = (JSONObject) jsonParser.parse(String.valueOf(json).replace("null", "\"\"")); //null 누락을 막기 위하여.
                     jsonArray.put(json);
                 }
-
-                //JSONObject json =  new JSONObject(resultList);                                                        //map을 json으로 변환.
 
                 message = "{\"result\":\"success\",\"data\":" + jsonArray + "}";
             }
