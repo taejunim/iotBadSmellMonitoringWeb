@@ -1,5 +1,6 @@
 package iotBadSmellMonitoring.api.web;
 
+import egovframework.rte.psl.dataaccess.util.EgovMap;
 import iotBadSmellMonitoring.join.service.JoinService;
 import iotBadSmellMonitoring.join.service.JoinVO;
 import org.json.simple.JSONObject;
@@ -68,6 +69,43 @@ public class ApiController {
 
             message = "{result:\"fail\",message:"+e.getMessage()+"}";
        }
+
+        return message;
+    }
+
+    /**
+     * 로그인 API
+     * @param joinVO     회원가입 / 아이디 찾기 관련 VO.
+     * @return           RESPONSE MESSAGE.
+     * @throws Exception
+     */
+    @RequestMapping(value = "/api/userLogin", method = RequestMethod.GET, consumes="application/json;", produces = "application/json;")
+    public @ResponseBody String userLoginSelect(@ModelAttribute("joinVO")JoinVO joinVO, HttpServletRequest request)  throws Exception {
+
+        String message = "";
+
+        try {
+
+            BufferedReader  br 	        = new BufferedReader(new InputStreamReader(request.getInputStream(), StandardCharsets.UTF_8));
+            String          postValue   = parseJSONData(br);                                                            //JSON OBJECT TO STRING CALL.
+            JSONParser      jsonParser  = new JSONParser();
+            JSONObject      jsonObject  = (JSONObject)jsonParser.parse(postValue);
+
+            joinVO.setUserId(jsonObject.get("userId").toString());
+            joinVO.setUserPassword(jsonObject.get("userPassword").toString());
+
+            EgovMap result = joinService.userLoginSelect(joinVO);                                                       //로그인 CALL.
+
+            if(result != null)
+                message = "{result:\"success\"}";
+
+            else
+                message = "{result:\"fail\",message: no ID/PASSWORD.}";
+
+        }catch (Exception e){
+
+            message = "{result:\"fail\",message:"+e.getMessage()+"}";
+        }
 
         return message;
     }
