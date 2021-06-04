@@ -3,6 +3,9 @@ package iotBadSmellMonitoring.api.web;
 import egovframework.rte.psl.dataaccess.util.EgovMap;
 import iotBadSmellMonitoring.join.service.JoinService;
 import iotBadSmellMonitoring.join.service.JoinVO;
+import iotBadSmellMonitoring.main.service.MainService;
+import iotBadSmellMonitoring.main.service.MainVO;
+import org.json.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 
 /**
  * @ Class Name   : ApiController.java
@@ -33,9 +37,12 @@ public class ApiController {
     @Autowired
     private JoinService joinService;
 
+    @Autowired
+    private MainService mainService;
+
     /**
      * 회원가입 API
-     * @param joinVO     회원가입 / 아이디 찾기 관련 VO.
+     * @param joinVO     회원가입 / 로그인 / 아이디 찾기 관련 VO.
      * @return           RESPONSE MESSAGE.
      * @throws Exception
      */
@@ -47,9 +54,9 @@ public class ApiController {
         try {
 
             BufferedReader  br 	        = new BufferedReader(new InputStreamReader(request.getInputStream(), StandardCharsets.UTF_8));
-            String          postValue   = parseJSONData(br);                                                            //JSON OBJECT TO STRING CALL.
+            String          paramValue  = parseJSONData(br);                                                            //JSON OBJECT TO STRING CALL.
             JSONParser      jsonParser  = new JSONParser();
-            JSONObject      jsonObject  = (JSONObject)jsonParser.parse(postValue);
+            JSONObject      jsonObject  = (JSONObject)jsonParser.parse(paramValue);
 
             joinVO.setUserId(jsonObject.get("userId").toString());
             joinVO.setUserPassword(jsonObject.get("userPassword").toString());
@@ -76,7 +83,7 @@ public class ApiController {
 
     /**
      * 로그인 API
-     * @param joinVO     회원가입 / 아이디 찾기 관련 VO.
+     * @param joinVO     회원가입 / 로그인 / 아이디 찾기 관련 VO.
      * @return           RESPONSE MESSAGE.
      * @throws Exception
      */
@@ -88,9 +95,9 @@ public class ApiController {
         try {
 
             BufferedReader  br 	        = new BufferedReader(new InputStreamReader(request.getInputStream(), StandardCharsets.UTF_8));
-            String          postValue   = parseJSONData(br);                                                            //JSON OBJECT TO STRING CALL.
+            String          paramValue  = parseJSONData(br);                                                            //JSON OBJECT TO STRING CALL.
             JSONParser      jsonParser  = new JSONParser();
-            JSONObject      jsonObject  = (JSONObject)jsonParser.parse(postValue);
+            JSONObject      jsonObject  = (JSONObject)jsonParser.parse(paramValue);
 
             joinVO.setUserId(jsonObject.get("userId").toString());
             joinVO.setUserPassword(jsonObject.get("userPassword").toString());
@@ -99,7 +106,7 @@ public class ApiController {
 
             if(!result.isEmpty()) {
 
-                JSONObject json =  new JSONObject(result);                                                                  //map을 json으로 변환.
+                JSONObject json =  new JSONObject(result);                                                              //map을 json으로 변환.
 
                 message = "{\"result\":\"success\",\"data\":" + json + "}";
             }
@@ -111,6 +118,56 @@ public class ApiController {
 
             System.out.println("Exception: ");
             message = "{\"result\":\"fail\",\"message\": \"no ID/PASSWORD.\"}";
+        }
+
+        return message;
+    }
+
+    /**
+     * 코드 목록 API
+     * @param mainVO     PC 공통 관련 VO.
+     * @return           RESPONSE MESSAGE.
+     * @throws Exception
+     */
+    @RequestMapping(value = "/api/codeListSelect", method = RequestMethod.GET, consumes="application/json;", produces = "application/json; charset=utf8")
+    public String codeListSelect(@ModelAttribute("mianVO") MainVO mainVO, HttpServletRequest request)  throws Exception {
+
+        String message = "";
+
+       try {
+
+            BufferedReader  br 	        = new BufferedReader(new InputStreamReader(request.getInputStream(), StandardCharsets.UTF_8));
+            String          paramValue  = parseJSONData(br);                                                            //JSON OBJECT TO STRING CALL.
+            JSONParser      jsonParser  = new JSONParser();
+            JSONObject      jsonObject  = (JSONObject)jsonParser.parse(paramValue);
+
+            mainVO.setCodeGroup(jsonObject.get("codeGroup").toString());
+
+            List<EgovMap> resultList = mainService.codeListSelect(mainVO);                                              //코드 목록 CALL.
+
+            if(!resultList.isEmpty()) {
+
+                JSONArray jsonArray = new JSONArray();
+
+                for (int i = 0; i < resultList.size(); i++) {
+
+                    JSONObject json =  new JSONObject(resultList.get(i));
+
+                    jsonArray.put(json);
+                }
+
+                //JSONObject json =  new JSONObject(resultList);                                                        //map을 json으로 변환.
+
+                message = "{\"result\":\"success\",\"data\":" + jsonArray + "}";
+            }
+            else {
+
+                message = "{\"result\":\"fail\",\"message\": \"NO FIND SEARCH CODE.\"}";
+            }
+        }catch (Exception e){
+
+           System.out.println("Exception: ");
+           message = "{\"result\":\"fail\",\"message\": \"ERR FIND SEARCH CODE.\"}";
         }
 
         return message;
