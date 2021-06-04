@@ -22,19 +22,19 @@
                                         , REG_ID
                                       )
                               VALUES (
-                                        SMELL_REGISTER_NO
-                                        , SMELL_TYPE
-                                        , SMELL_VALUE
-                                        , WEATER_STATE
-                                        , TEMPERATURE_VALUE
-                                        , HUMIDITY_VALUE
-                                        , WIND_DIRECTION_VALUE
-                                        , WIND_SPEED_VALUE
-                                        , GPS_X
-                                        , GPS_Y
-                                        , SMELL_COMMENT
-                                        , SMELL_REGISTER_TIME
-                                        , REG_ID
+                                        (SELECT CONCAT('SR',DATE_FORMAT(now(), '%Y%m%d%H%i%s'),(SELECT IFNULL(LPAD(MAX(substr(t2.SMELL_REGISTER_NO,17,2))+1,'2','0'),'01') FROM tb_smell_register t2 WHERE substr(t2.SMELL_REGISTER_NO,1,16) = CONCAT('ND',DATE_FORMAT(now(), '%Y%m%d%H%i%s')))) SMELL_REGISTER_NO FROM DUAL)
+                                        , #{smellType}
+                                        , #{smellValue}
+                                        , #{weaterState}
+                                        , #{temperatureValue}
+                                        , #{humidityValue}
+                                        , #{windDirectionValue}
+                                        , #{windSpeedValue}
+                                        , #{gpsX}
+                                        , #{gpsY}
+                                        , #{smellComment}
+                                        , #{smellRegisterTime}
+                                        , #{regId}
                                      )
 
     </insert>
