@@ -1,4 +1,4 @@
-package iotBadSmellMonitoring.history;
+package iotBadSmellMonitoring.history.web;
 
 import egovframework.rte.ptl.mvc.tags.ui.pagination.PaginationInfo;
 import org.springframework.stereotype.Controller;
@@ -28,5 +28,5 @@ public class HistoryController {
     /*페이징 SETTING END*/
 
         return "history";
-}
+    }
 }

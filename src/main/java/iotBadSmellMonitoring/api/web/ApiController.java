@@ -104,7 +104,7 @@ public class ApiController {
 
             EgovMap result = joinService.userLoginSelect(joinVO);                                                       //로그인 CALL.
 
-            if(result != null && !result.isEmpty()) {                                                                   //egovMap null CHECK.
+            if(result != null && !result.isEmpty()) {                                                                   //null CHECK.
 
                 JSONObject json =  new JSONObject(result);                                                              //map을 json으로 변환.
                 json = (JSONObject) jsonParser.parse(String.valueOf(json).replace("null", "\"\""));   //null시 KEY 누락을 막기 위하여.
@@ -145,7 +145,7 @@ public class ApiController {
 
             List<EgovMap> resultList = mainService.codeListSelect(mainVO);                                              //코드 목록 CALL.
 
-            if(!resultList.isEmpty()) {
+            if(resultList != null && !resultList.isEmpty()) {                                                           //null CHECK.
 
                 JSONArray jsonArray = new JSONArray();
 
@@ -158,10 +158,9 @@ public class ApiController {
 
                 message = "{\"result\":\"success\",\"data\":" + jsonArray + "}";
             }
-            else {
-
+            else
                 message = "{\"result\":\"fail\",\"message\": \"NO FIND SEARCH CODE.\"}";
-            }
+
         }catch (Exception e){
 
            System.out.println("Exception: ");

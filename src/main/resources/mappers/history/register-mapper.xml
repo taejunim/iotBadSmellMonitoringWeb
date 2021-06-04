@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="iotBadSmellMonitoring.history.service.impl.RegisterMapper">
+
+    <!-- 접수 마스터 등록-->
+    <insert id="registerMasterInsert" parameterType="registerVO">
+
+        INSERT INTO tb_smell_register (
+                                        SMELL_REGISTER_NO
+                                        , SMELL_TYPE
+                                        , SMELL_VALUE
+                                        , WEATER_STATE
+                                        , TEMPERATURE_VALUE
+                                        , HUMIDITY_VALUE
+                                        , WIND_DIRECTION_VALUE
+                                        , WIND_SPEED_VALUE
+                                        , GPS_X
+                                        , GPS_Y
+                                        , SMELL_COMMENT
+                                        , SMELL_REGISTER_TIME
+                                        , REG_ID
+                                      )
+                              VALUES (
+                                        SMELL_REGISTER_NO
+                                        , SMELL_TYPE
+                                        , SMELL_VALUE
+                                        , WEATER_STATE
+                                        , TEMPERATURE_VALUE
+                                        , HUMIDITY_VALUE
+                                        , WIND_DIRECTION_VALUE
+                                        , WIND_SPEED_VALUE
+                                        , GPS_X
+                                        , GPS_Y
+                                        , SMELL_COMMENT
+                                        , SMELL_REGISTER_TIME
+                                        , REG_ID
+                                     )
+
+    </insert>
+
+</mapper>

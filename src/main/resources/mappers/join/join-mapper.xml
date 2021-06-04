@@ -21,7 +21,6 @@
                                 , #{userName}
                                 , #{userSex}
                                 , #{userAge}
-
                              )
 
     </insert>
