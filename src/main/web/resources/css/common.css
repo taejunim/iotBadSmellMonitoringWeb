@@ -604,7 +604,9 @@ span{
 .h660 {
     height: 660px !important;
 }
-
+.h40rate{
+    height: 40% !important;
+}
 .h50rate {
     height: 50% !important;
 }

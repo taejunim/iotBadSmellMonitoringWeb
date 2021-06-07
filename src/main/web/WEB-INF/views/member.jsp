@@ -66,7 +66,7 @@ To change this template use File | Settings | File Templates.
 <div class="wd100rate h100rate bgc_w">
 
     <div class="wd70rate h100rate fl brDeepBlue">
-        <table class="wd80rate viewTable">
+        <table class="viewTable">
             <tr>
                 <th class="wd5rate">NO</th>
                 <th>구분</th>
@@ -168,7 +168,7 @@ To change this template use File | Settings | File Templates.
             </tr>
         </table>
 
-        <hr id="pageline" class="wd85rate">
+        <hr id="pageline" class="wd95rate">
         <div id="pagination" class="pagingBox align_c">
             <ui:pagination paginationInfo="${paginationInfo}" type="image" jsFunction="fn_page"/>
         </div>

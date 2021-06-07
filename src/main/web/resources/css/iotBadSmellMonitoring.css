@@ -102,7 +102,7 @@ input[type=password] {
     font-family: 'password' !important;
 }
 input[type=date] {
-    /*background: url("../image/calendar2.png") no-repeat 98% 50%;*/
+    background: url("../image/calendar2.png") no-repeat 98% 50%;
 }
 select {
     background: url("../image/sort.png") no-repeat 98% 50%;
@@ -253,9 +253,8 @@ select::-ms-expand{
     width: 93%;
 }
 .scrollView{
-    width: 550px;
-    height: 710px;
-    /*border: 1px solid white;*/
+    height: 80%;
+    min-width: 100px;
     overflow: auto;
 }
 .titleIcon {
@@ -273,8 +272,10 @@ select::-ms-expand{
     border-right: 1px #10639a solid;
 }
 .viewTable{
-    margin: 10% auto 5% auto;
+    margin: 3% auto 5% auto;
     text-align: center;
+    width: 95%;
+    height: 55%;
 }
 .viewTable th{
     height: 30px;
