@@ -1370,6 +1370,10 @@ br, .br_2xls {
     background-color: black !important;
 }
 
+.bgc_grayC{
+    background-color: rgba(239, 239, 239, 0.5);
+}
+
 /* line-height */
 .lh_ih {
     line-height: inherit !important;

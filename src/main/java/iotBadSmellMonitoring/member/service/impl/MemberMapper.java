@@ -1,5 +1,10 @@
 package iotBadSmellMonitoring.member.service.impl;
 
+import egovframework.rte.psl.dataaccess.util.EgovMap;
+import iotBadSmellMonitoring.join.service.JoinVO;
+
+import java.util.List;
+
 /**
  * @ Class Name   : MemberMapper.java
  * @ Modification : 회원관리 MAPPER.
@@ -15,4 +20,35 @@ package iotBadSmellMonitoring.member.service.impl;
 
 public interface MemberMapper {
 
+    /**
+     * 회원 리스트 조회
+     * @param   joinVO
+     * @return  list
+     * @throws Exception
+     */
+    List<EgovMap> memberListSelect(JoinVO joinVO) throws Exception;
+
+    /**
+     * 회원 리스트 TOTAL COUNT 조회
+     * @param   joinVO
+     * @return  int
+     * @throws Exception
+     */
+    int memberListTotalCnt(JoinVO joinVO) throws Exception;
+
+    /**
+     * 회원 비밀번호 변경
+     * @param   joinVO
+     * @return
+     * @throws Exception
+     */
+    void memberPasswordUpdate(JoinVO joinVO) throws Exception;
+
+    /**
+     * 회원 탈퇴
+     * @param   joinVO
+     * @return
+     * @throws Exception
+     */
+    void memberDelete(JoinVO joinVO) throws Exception;
 }

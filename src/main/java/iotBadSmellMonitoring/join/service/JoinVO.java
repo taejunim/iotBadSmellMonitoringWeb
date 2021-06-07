@@ -1,5 +1,6 @@
 package iotBadSmellMonitoring.join.service;
 
+import iotBadSmellMonitoring.common.PageVO;
 import lombok.Data;
 
 /**
@@ -16,7 +17,7 @@ import lombok.Data;
  **/
 
 @Data
-public class JoinVO {
+public class JoinVO extends PageVO {
 
     private String userId;                                                                                              //아이디
     private String userPassword;                                                                                        //사용자_비밀번호(mysql password 함수 쓰면 무조건 41자리 나와서 char41로 FIX)
@@ -24,5 +25,6 @@ public class JoinVO {
     private String userName;                                                                                            //이름
     private String userSex;                                                                                             //성별(코드 테이블 참조)
     private String userAge;                                                                                             //나이
+    private String regDt;
 
 }
