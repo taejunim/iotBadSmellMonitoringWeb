@@ -31,12 +31,12 @@
         </Root>
 
         <!-- 스프링 프레임워크에서 찍는건 level을 info로 설정 -->
-        <logger name="org.springframework" level="debug" additivity="false" >
+        <logger name="org.springframework" level="DEBUG" additivity="false" >
             <AppenderRef ref="console" />
             <AppenderRef ref="file" />
         </logger>
         <!-- 다른 기본 패키지도 설정 제어 가능하다. -->
-        <logger name="org.apache.commons.digester" level="debug" additivity="false" >
+        <logger name="org.apache.commons.digester" level="DEBUG" additivity="false" >
             <AppenderRef ref="console" />
             <AppenderRef ref="file" />
         </logger>
@@ -44,8 +44,8 @@
 
         <!-- rolling file에는 debug, console에는 info 분리하여 처리 가능하다. -->
         <logger name="com.test" additivity="false" >
-            <AppenderRef ref="console" level="debug" />
-            <AppenderRef ref="file" level="debug" />
+            <AppenderRef ref="console" level="DEBUG" />
+            <AppenderRef ref="file" level="DEBUG" />
         </logger>
 
         <!-- SQL Logger START -->

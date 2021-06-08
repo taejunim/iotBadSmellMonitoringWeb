@@ -95,7 +95,7 @@ public class ApiController {
      * @return           RESPONSE MESSAGE.
      * @throws Exception
      */
-    @RequestMapping(value = "/api/userLogin", method = RequestMethod.GET, consumes="application/json;", produces = "application/json; charset=utf8")
+    @RequestMapping(value = "/api/userLogin", method = RequestMethod.POST, consumes="application/json;", produces = "application/json; charset=utf8")
     public String userLoginSelect(@ModelAttribute("joinVO")JoinVO joinVO, HttpServletRequest request)  throws Exception {
 
         String message = "";
@@ -144,12 +144,9 @@ public class ApiController {
 
        try {
 
-            BufferedReader  br 	        = new BufferedReader(new InputStreamReader(request.getInputStream(), StandardCharsets.UTF_8));
-            String          paramValue  = parseJSONData(br);                                                            //JSON OBJECT TO STRING CALL.
             JSONParser      jsonParser  = new JSONParser();
-            JSONObject      jsonObject  = (JSONObject)jsonParser.parse(paramValue);
 
-            mainVO.setCodeGroup(jsonObject.get("codeGroup").toString());
+            mainVO.setCodeGroup(request.getParameter("codeGroup"));
 
             List<EgovMap> resultList = mainService.codeListSelect(mainVO);                                              //코드 목록 CALL.
 
