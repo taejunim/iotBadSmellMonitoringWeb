@@ -14,7 +14,7 @@
         });
         //통계 Click
         $("#statistic").click(function(){
-
+            $(location).attr('href', '/statistic.do');
         });
         //회원관리 Click
         $("#member").click(function(){

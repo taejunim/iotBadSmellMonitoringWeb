@@ -84,7 +84,7 @@
         <a id = "join" class="button bgcSkyBlue wd60 font_bold fr">회원가입</a>
       </td></tr>
     </table>
-  </form:form>>
+  </form:form>
   </div>
   </body>
 </html>
