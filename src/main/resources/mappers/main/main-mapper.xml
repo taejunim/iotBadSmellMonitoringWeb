@@ -3,6 +3,34 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="iotBadSmellMonitoring.main.service.impl.MainMapper">
 
+    <!-- PC 메인 목록-->
+    <select id="pcMainListSelect" parameterType="mainVO" resultType="egovMap">
+
+        SELECT ANY_VALUE(tsr.SMELL_REGISTER_NO)                       SMELL_REGISTER_NO
+             , ANY_VALUE(tsr.SMELL_TYPE)                              SMELL_TYPE
+             , ANY_VALUE(F_GET_CODE_NAME('STY',SMELL_TYPE))           SMELL_TYPE_NAME
+             , ANY_VALUE(tsr.SMELL_VALUE)                             SMELL_VALUE
+             , ANY_VALUE(F_GET_CODE_NAME('SMT',SMELL_VALUE))          SMELL_TYPE_NAME
+             , ANY_VALUE(tsr.WEATER_STATE)                            WEATER_STATE
+             , ANY_VALUE(F_GET_CODE_NAME('WET',WEATER_STATE))         WEATER_STATE_NAME
+             , ANY_VALUE(tsr.TEMPERATURE_VALUE)                       TEMPERATURE_VALUE
+             , ANY_VALUE(tsr.HUMIDITY_VALUE)                          HUMIDITY_VALUE
+             , ANY_VALUE(tsr.WIND_DIRECTION_VALUE)                    WIND_DIRECTION_VALUE
+             , ANY_VALUE(F_GET_CODE_NAME('WND',WEATER_STATE))         WIND_DIRECTION_VALUE_NAME
+             , ANY_VALUE(tsr.WIND_SPEED_VALUE)                        WIND_SPEED_VALUE
+             , ANY_VALUE(tsr.GPS_X)                                   GPS_X
+             , ANY_VALUE(tsr.GPS_Y)                                   GPS_Y
+             , ANY_VALUE(tsr.SMELL_COMMENT)                           SMELL_COMMENT
+             , ANY_VALUE(tsr.SMELL_REGISTER_TIME)                     SMELL_REGISTER_TIME
+             , ANY_VALUE(F_GET_CODE_NAME('REN',SMELL_REGISTER_TIME))  SMELL_REGISTER_TIME_NAME
+             , tsr.REG_ID                                             REG_ID
+             , tu.USER_NAME                                           USER_NAME
+             , MAX(tsr.REG_DT)                                        REG_DT
+
+          FROM tb_smell_register tsr INNER JOIN tb_user tu on tsr.REG_ID = tu.USER_ID GROUP BY tsr.REG_ID
+
+    </select>
+
     <!-- 코드 목록-->
     <select id="codeListSelect" parameterType="mainVO" resultType="egovMap">
 

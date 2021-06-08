@@ -19,6 +19,14 @@ import java.util.List;
 public interface MainService {
 
     /**
+     * PC 메인 목록
+     * @param mainVO     PC 공통 관련 VO.
+     * @return           List<EgovMap>
+     * @throws Exception
+     */
+    List<EgovMap> pcMainListSelect(MainVO mainVO) throws Exception;
+
+    /**
      * 코드 목록
      * @param mainVO     PC 공통 관련 VO.
      * @return           List<EgovMap>

@@ -27,6 +27,20 @@ public class MainServiceImpl implements MainService {
     @Autowired
     SqlSession sqlSession;
 
+
+    /**
+     * PC 메인 목록
+     * @param mainVO     PC 공통 관련 VO.
+     * @return           List<EgovMap>
+     * @throws Exception
+     */
+    public List<EgovMap> pcMainListSelect(MainVO mainVO) throws Exception {
+
+        MainMapper mainMapper = sqlSession.getMapper(MainMapper.class);
+
+        return mainMapper.pcMainListSelect(mainVO);
+    }
+
     /**
      * 코드 목록
      * @param mainVO     PC 공통 관련 VO.
