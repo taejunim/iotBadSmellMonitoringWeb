@@ -1,7 +1,14 @@
 package iotBadSmellMonitoring.main.web;
 
+import egovframework.rte.psl.dataaccess.util.EgovMap;
+import iotBadSmellMonitoring.join.service.JoinService;
+import iotBadSmellMonitoring.join.service.JoinVO;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -23,6 +30,10 @@ import java.io.PrintWriter;
 
 @Controller
 public class MainController {
+
+    @Autowired
+    private JoinService joinService;       //회원가입 / 로그인 / 아이디 찾기 관련 SERVICE.
+
 
     /**
      * 로그인 정보 확인후, 있으면 메인화면 없으면 로그인화면
@@ -57,7 +68,33 @@ public class MainController {
 
     //로그인
     @RequestMapping("/login")
-    public String login(){
+    public String login(HttpSession session){
+        session.invalidate();
         return "login";
+    }
+
+    //로그인 요청
+    @RequestMapping(value = "/login", method = RequestMethod.POST)
+    public @ResponseBody String getLogin(@ModelAttribute("joinVO") JoinVO joinVO, HttpServletRequest request) throws Exception {
+
+        System.out.println("joinVo  --> " + joinVO);
+        EgovMap egovMap = joinService.userLoginSelect(joinVO);     //로그인 CALL.
+        String result = "";
+
+        if (egovMap != null) {
+            System.out.println(egovMap.get("userType"));
+            //일반 사용자 로그인 시도시 authFail
+            if(egovMap.get("userType").equals("001"))  return "authFail";
+
+            HttpSession session = request.getSession();
+            session.setAttribute("userId", egovMap.get("userId"));
+            session.setAttribute("userName", egovMap.get("userName"));
+
+        } else {
+            //로그인 정보 잘못되면 authFail
+            result = "wrongFail";
+        }
+
+        return result;
     }
 }

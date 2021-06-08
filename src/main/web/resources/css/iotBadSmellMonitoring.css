@@ -92,10 +92,10 @@ select , input[type=text], input[type=password] , input[type=date] {
     -moz-appearance: none;
     appearance: none;
 }
-select, input[type=password] , input[type=date] {
+select, input[type=date] {
     padding: 0 40px 0 10px;
 }
-input[type=text] {
+input[type=text] , input[type=password] {
     padding: 0 10px 0 10px;
 }
 input[type=password] {
@@ -158,6 +158,18 @@ select::-ms-expand{
 }
 .bgcLightSkyBlue {
     background-color: #d9efff;
+}
+.bgcLightGreen {
+    background-color: #2ecc71;
+}
+.bgcYellow {
+    background-color: #fff800;
+}
+.bgcWhite {
+    background-color: #e0e0e0;
+}
+.bgcOrange {
+    background-color: #f39c12;
 }
 .mainMenu {
     border-bottom: 3px #10639a solid;
@@ -320,6 +332,21 @@ select::-ms-expand{
     border: 1px solid #ccc;
     height: 30px;
 }
-.conditionTitle{
+.conditionTitle {
     font-weight: bold;
+}
+.mapLegend{
+    width: 30px;
+    height: 30px;
+    border: 1px solid #666;
+    margin-top: 10px;
+    margin-left:10px;
+    float: left;
+}
+.mapLegendLabel{
+    float:left;
+    height: 50px;
+    line-height: 50px;
+    margin-left: 10px;
+    font-size: 14px;
 }
