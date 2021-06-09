@@ -28,3 +28,17 @@ function focusMapCenter(latitude , longitude , zoom){
     var map = new kakao.maps.Map(container, options); //지도 생성 및 객체 리턴
     return map;
 }
+
+//냄새강도에 따라 마커 이미지 반환
+function returnMarkerImage(smellValue) {
+    var markerImage;
+
+    if(smellValue == '001')       markerImage = bluePin;
+    else if(smellValue == '002')  markerImage = greenPin;
+    else if(smellValue == '003')  markerImage = whitePin;
+    else if(smellValue == '004')  markerImage = yellowPin;
+    else if(smellValue == '005')  markerImage = orangePin;
+    else if(smellValue == '006')  markerImage = redPin;
+
+    return markerImage;
+}

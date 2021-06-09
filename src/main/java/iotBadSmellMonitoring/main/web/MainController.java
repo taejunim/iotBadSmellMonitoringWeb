@@ -3,8 +3,11 @@ package iotBadSmellMonitoring.main.web;
 import egovframework.rte.psl.dataaccess.util.EgovMap;
 import iotBadSmellMonitoring.join.service.JoinService;
 import iotBadSmellMonitoring.join.service.JoinVO;
+import iotBadSmellMonitoring.main.service.MainService;
+import iotBadSmellMonitoring.main.service.MainVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -14,6 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.PrintWriter;
+import java.util.List;
 
 /**
  * @ Class Name   : MainController.java
@@ -31,6 +35,8 @@ import java.io.PrintWriter;
 @Controller
 public class MainController {
 
+    @Autowired
+    private MainService mainService;       //메인화면 관련 SERVICE.
     @Autowired
     private JoinService joinService;       //회원가입 / 로그인 / 아이디 찾기 관련 SERVICE.
 
@@ -62,7 +68,20 @@ public class MainController {
 
     //메인
     @RequestMapping("/main")
-    public String main(){
+    public String main(HttpSession session, ModelMap model) throws Exception{
+        MainVO mainVO = new MainVO();
+        /*냄새 강도 SETTING START*/
+        // 처음 한번만 값을 가져와서 세션에 저장
+        if(session.getAttribute("CG_SMT") == null){
+            mainVO.setCodeGroup("SMT");
+            session.setAttribute("CG_SMT",mainService.codeListSelect(mainVO));
+            model.addAttribute("CG_SMT",session.getAttribute("CG_SMT"));
+        }
+        // 세션에 값을 저장했을 경우 세션값을  model에 넘겨줌
+        else{
+            model.addAttribute("CG_SMT",session.getAttribute("CG_SMT"));
+        }
+        System.out.println(mainService.pcMainListSelect(mainVO));
         return "main";
     }
 
@@ -77,12 +96,10 @@ public class MainController {
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     public @ResponseBody String getLogin(@ModelAttribute("joinVO") JoinVO joinVO, HttpServletRequest request) throws Exception {
 
-        System.out.println("joinVo  --> " + joinVO);
         EgovMap egovMap = joinService.userLoginSelect(joinVO);     //로그인 CALL.
         String result = "";
 
         if (egovMap != null) {
-            System.out.println(egovMap.get("userType"));
             //일반 사용자 로그인 시도시 authFail
             if(egovMap.get("userType").equals("001"))  return "authFail";
 
@@ -96,5 +113,12 @@ public class MainController {
         }
 
         return result;
+    }
+
+    //PC 메인 , 사용자별 가장 최근 접수 데이터 가져오기
+    @RequestMapping(value = "/pcMainListSelect")
+    public @ResponseBody List<EgovMap> pcMainListSelect() throws Exception {
+        MainVO mainVO = new MainVO();
+        return mainService.pcMainListSelect(mainVO);
     }
 }
