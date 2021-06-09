@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="iotBadSmellMonitoring.history.service.impl.HistoryMapper">
+
+    <!-- HISTORY 목록-->
+    <select id="historyListSelect" parameterType="mainVO" resultType="egovMap">
+
+        SELECT tsr.SMELL_REGISTER_NO                       SMELL_REGISTER_NO
+             , tsr.SMELL_TYPE                              SMELL_TYPE
+             , F_GET_CODE_NAME('STY',SMELL_TYPE)           SMELL_TYPE_NAME
+             , tsr.SMELL_VALUE                             SMELL_VALUE
+             , F_GET_CODE_NAME('SMT',SMELL_VALUE)          SMELL_TYPE_NAME
+             , tsr.WEATER_STATE)                           WEATER_STATE
+             , F_GET_CODE_NAME('WET',WEATER_STATE)         WEATER_STATE_NAME
+             , tsr.TEMPERATURE_VALUE                       TEMPERATURE_VALUE
+             , tsr.HUMIDITY_VALUE                          HUMIDITY_VALUE
+             , tsr.WIND_DIRECTION_VALUE)                   WIND_DIRECTION_VALUE
+             , F_GET_CODE_NAME('WND',WEATER_STATE)         WIND_DIRECTION_VALUE_NAME
+             , tsr.WIND_SPEED_VALUE                        WIND_SPEED_VALUE
+             , tsr.GPS_X                                   GPS_X
+             , tsr.GPS_Y                                   GPS_Y
+             , tsr.SMELL_COMMENT                           SMELL_COMMENT
+             , tsr.SMELL_REGISTER_TIME                     SMELL_REGISTER_TIME
+             , F_GET_CODE_NAME('REN',SMELL_REGISTER_TIME)  SMELL_REGISTER_TIME_NAME
+             , tsr.REG_ID                                  REG_ID
+             , tu.USER_NAME                                USER_NAME
+             , MAX(tsr.REG_DT)                             REG_DT
+
+          FROM tb_smell_register tsr INNER JOIN tb_user tu on tsr.REG_ID = tu.USER_ID
+
+        ORDER BY REG_DT DESC
+        LIMIT #{recordCountPerPage} OFFSET #{firstIndex};
+    </select>
+
+</mapper>

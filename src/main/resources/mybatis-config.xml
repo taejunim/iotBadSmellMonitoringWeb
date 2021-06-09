@@ -17,6 +17,7 @@
         <typeAlias alias="joinVO"          type="iotBadSmellMonitoring.join.service.JoinVO"/>
         <typeAlias alias="mainVO"          type="iotBadSmellMonitoring.main.service.MainVO"/>
         <typeAlias alias="registerVO"      type="iotBadSmellMonitoring.history.service.RegisterVO"/>
+        <typeAlias alias="historyVO"       type="iotBadSmellMonitoring.history.service.HistoryVO"/>
         <typeAlias alias="egovMap"         type="egovframework.rte.psl.dataaccess.util.EgovMap" />
     </typeAliases>
 
