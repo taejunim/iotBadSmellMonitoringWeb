@@ -11,11 +11,11 @@
              , F_GET_CODE_NAME('STY',SMELL_TYPE)           SMELL_TYPE_NAME
              , tsr.SMELL_VALUE                             SMELL_VALUE
              , F_GET_CODE_NAME('SMT',SMELL_VALUE)          SMELL_TYPE_NAME
-             , tsr.WEATER_STATE)                           WEATER_STATE
+             , tsr.WEATER_STATE                            WEATER_STATE
              , F_GET_CODE_NAME('WET',WEATER_STATE)         WEATER_STATE_NAME
              , tsr.TEMPERATURE_VALUE                       TEMPERATURE_VALUE
              , tsr.HUMIDITY_VALUE                          HUMIDITY_VALUE
-             , tsr.WIND_DIRECTION_VALUE)                   WIND_DIRECTION_VALUE
+             , tsr.WIND_DIRECTION_VALUE                    WIND_DIRECTION_VALUE
              , F_GET_CODE_NAME('WND',WEATER_STATE)         WIND_DIRECTION_VALUE_NAME
              , tsr.WIND_SPEED_VALUE                        WIND_SPEED_VALUE
              , tsr.GPS_X                                   GPS_X
@@ -25,12 +25,27 @@
              , F_GET_CODE_NAME('REN',SMELL_REGISTER_TIME)  SMELL_REGISTER_TIME_NAME
              , tsr.REG_ID                                  REG_ID
              , tu.USER_NAME                                USER_NAME
-             , MAX(tsr.REG_DT)                             REG_DT
+             , DATE_FORMAT(tsr.REG_DT,'%Y-%m-%d %H:%i:%S') REG_DT
 
           FROM tb_smell_register tsr INNER JOIN tb_user tu on tsr.REG_ID = tu.USER_ID
 
         ORDER BY REG_DT DESC
         LIMIT #{recordCountPerPage} OFFSET #{firstIndex};
+    </select>
+
+    <!--HISTORY IMG 목록-->
+    <select id="historyImgListSelect" parameterType="mainVO" resultType="egovMap">
+
+        SELECT SMELL_IMAGE_NO
+             , SMELL_IMAGE_PATH
+             , SMELL_REGISTER_NO
+             , DATE_FORMAT(tsr.REG_DT,'%Y-%m-%d %H:%i:%S') REG_DT
+
+          FROM tb_smell_image
+
+         WHERE 1=1
+           AND SMELL_REGISTER_NO = #{smellRegisterNo}
+
     </select>
 
 </mapper>

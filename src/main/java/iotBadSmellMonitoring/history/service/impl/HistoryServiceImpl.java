@@ -32,7 +32,7 @@ public class HistoryServiceImpl implements HistoryService {
 
     /**
      * HISTORY 목록
-     * @return           List<EgovMap>
+     * @return List<EgovMap>
      * @throws Exception
      */
     public List<EgovMap> historyListSelect(HistoryVO historyVO) throws Exception {
@@ -40,6 +40,18 @@ public class HistoryServiceImpl implements HistoryService {
         HistoryMapper historyMapper = sqlSession.getMapper(HistoryMapper.class);
 
         return historyMapper.historyListSelect(historyVO);
+    }
+
+    /**
+     * HISTORY IMG 목록
+     * @return List<EgovMap>
+     * @throws Exception
+     */
+    public List<EgovMap> historyImgListSelect(HistoryVO historyVO) throws Exception {
+
+        HistoryMapper historyMapper = sqlSession.getMapper(HistoryMapper.class);
+
+        return historyMapper.historyImgListSelect(historyVO);
     }
 
 }

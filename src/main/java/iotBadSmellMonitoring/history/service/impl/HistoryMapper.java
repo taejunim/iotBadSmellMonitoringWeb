@@ -21,9 +21,15 @@ public interface HistoryMapper {
 
     /**
      * HISTORY 목록
-     * @return           List<EgovMap>
+     * @return List<EgovMap>
      * @throws Exception
      */
     List<EgovMap> historyListSelect(HistoryVO historyVO) throws Exception;
 
+    /**
+     * HISTORY IMG 목록
+     * @return List<EgovMap>
+     * @throws Exception
+     */
+    List<EgovMap> historyImgListSelect(HistoryVO historyVO) throws Exception;
 }
