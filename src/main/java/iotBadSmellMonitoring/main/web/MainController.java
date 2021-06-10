@@ -103,10 +103,14 @@ public class MainController {
             //일반 사용자 로그인 시도시 authFail
             if(egovMap.get("userType").equals("001"))  return "authFail";
 
+            //로그인 성공시 user정보 session에 저장
             HttpSession session = request.getSession();
             session.setAttribute("userId", egovMap.get("userId"));
+            session.setAttribute("userPassword", joinVO.getUserPassword());
             session.setAttribute("userName", egovMap.get("userName"));
-
+            session.setAttribute("userAge", egovMap.get("userAge"));
+            session.setAttribute("userSex", egovMap.get("userSex"));
+            session.setAttribute("userType", egovMap.get("userType"));
         } else {
             //로그인 정보 잘못되면 authFail
             result = "wrongFail";

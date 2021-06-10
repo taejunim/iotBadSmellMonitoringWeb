@@ -15,53 +15,106 @@
     $(document).ready(function () {
         setButton("statistic");
 
-
-        var chart = c3.generate({
-            bindto: '#chartDiv',
-            data: {
-                columns: [
-                    ['data1', 30, 200, 100, 400, 150, 250],
-                    ['data2', 130, 100, 140, 200, 150, 50]
-                ],
-                type: 'bar'
-            },
-            bar: {
-                width: {
-                    ratio: 0.5 // this makes bar width 50% of length between ticks
-                }
-                // or
-                //width: 100 // this makes bar width 100px
-            }
+        //세션값 바로 가져오는 예제
+        console.log('<%=(String)session.getAttribute("userName")%>');
+        console.log('<%=(String)session.getAttribute("userPassword")%>');
+        
+        $("#type").change(function(){
+            setSearchCondition();
         });
+        setSearchCondition();
+        //var x = ['x','07:00~09:00','12:00~14:00' , '18:00~20:00' ,'22:00~00:00'];
+        //var x = ['x','rk','asdf' , 'adsf' ,'adsf'];
+        var data = [
+                ['x','rk','asdf' , 'adsf' ,'adsf'],
+                ['${CG_SMT[0].codeIdName}' ,30, 20, 10, 4],
+                ['${CG_SMT[1].codeIdName}' , 10, 15, 14, 2],
+                ['${CG_SMT[2].codeIdName}' , 4, 15, 10, 7],
+                ['${CG_SMT[3].codeIdName}' , 1, 7, 11, 20],
+                ['${CG_SMT[4].codeIdName}' , 7, 1, 30, 4],
+                ['${CG_SMT[5].codeIdName}' , 8, 9, 14, 19]
+         ];
+
+        drawChart(data);
 
     });
-    // 마커 클릭 이벤트
-    function clickMarker(id) {
-        //클릭된 infoWindow 또는 marker를 찾아 지도 가운데 이동
-        var index = id.replace("marker","").replace("infoWindow","");
-        var moveLatLon = new kakao.maps.LatLng($("#latitude"+index).val(), $("#longitude"+index).val());
-        map.panTo(moveLatLon);
-        showWeaterStatus(index);
-    }
-    //기상상태가 안보이는 상태일때 다시 보이게 함
-    function showWeaterStatus(index){
-        if($(".weatherStatus").css("display")=="none") $(".weatherStatus").css("display","");
-        $("#weatherState").text(setWeatherState($("#weatherState"+index).val()));
-        $("#temperatureValue").text($("#temperatureValue"+index).val() + " ℃");
 
+    function drawChart(data){
+/*        var chart = c3.generate({
+            bindto: '#chartDiv',
+            data: {
+                x:'test',
+                columns:{
+                    json : {
+                    test:['rk','asdf' , 'adsf' ,'adsf'],
+                    '${CG_SMT[0].codeIdName}':[30, 20, 10, 4],
+                    '${CG_SMT[1].codeIdName}':[10, 15, 14, 2],
+                    '${CG_SMT[2].codeIdName}':[ 4, 15, 10, 7],
+                    '${CG_SMT[3].codeIdName}':[ 1, 7, 11, 20],
+                    '${CG_SMT[4].codeIdName}':[ 7, 1, 30, 4],
+                    '${CG_SMT[5].codeIdName}':[ 8, 9, 14, 19]
     }
-    function setWeatherState(weatherState) {
-        switch (weatherState) {
-            case "001" : return "맑음";
-            case "002" : return "구름많음";
-            case "003" : return "흐림";
-            case "004" : return "비";
-            case "005" : return "비/눈";
-            case "006" : return "눈";
-            case "007" : return "소나기";
-            case "008" : return "빗방울";
-            case "009" : return "빗방울/눈날림";
-            case "010" : return "눈날림";
+                },
+                type:'bar'
+            },
+            axis:{
+                x : {
+                    type : 'text'
+                }
+            }
+        });
+        */
+        var chart = c3.generate({
+            bindto: '#chartDiv'
+            ,data: {
+                x: 'x'
+                ,columns: [
+                    ['x', '2021-06-01', '2021-06-02', '2021-06-03', '2021-06-04'],
+                    ['${CG_SMT[0].codeIdName}' ,30, 20, 10, 4],
+                    ['${CG_SMT[1].codeIdName}' , 10, 15, 14, 2],
+                    ['${CG_SMT[2].codeIdName}' , 4, 15, 10, 7],
+                    ['${CG_SMT[3].codeIdName}' , 1, 7, 11, 20],
+                    ['${CG_SMT[4].codeIdName}' , 7, 1, 30, 4],
+                    ['${CG_SMT[5].codeIdName}' , 8, 9, 14, 19]
+                ]
+                ,types: {
+                    '${CG_SMT[0].codeIdName}': 'bar'
+                    ,'${CG_SMT[1].codeIdName}': 'bar'
+                    ,'${CG_SMT[2].codeIdName}': 'bar'
+                    ,'${CG_SMT[3].codeIdName}': 'bar'
+                    ,'${CG_SMT[4].codeIdName}': 'bar'
+                    ,'${CG_SMT[5].codeIdName}': 'bar'
+                }
+                ,colors: {
+                    '${CG_SMT[0].codeIdName}': '#61ade1'
+                    ,'${CG_SMT[1].codeIdName}': '#23cc71'
+                    ,'${CG_SMT[2].codeIdName}': '#bbbbbb'
+                    ,'${CG_SMT[3].codeIdName}': '#fff800'
+                    ,'${CG_SMT[4].codeIdName}': '#f39c12'
+                    ,'${CG_SMT[5].codeIdName}': '#c0392b'
+                }
+            }
+            ,axis : {
+                x : {
+                    type : 'timeseries',
+                    tick: {
+                        format: '%Y-%m-%d'
+                    }
+                }
+            }
+
+        });
+        chart.resize({height:600})
+    }
+
+    function setSearchCondition(showDatePicker){
+
+        if($("#type").val() == "today"){
+            $(".dateInput").css("display","none");
+            $(".timeInput").css("display","");
+        }else {
+            $(".dateInput").css("display","");
+            $(".timeInput").css("display","none");
         }
     }
 </script>
@@ -71,47 +124,58 @@
     <table class="searchTable">
         <tr>
             <th class="wd90">구분</th>
-            <td class="wd120">
-                <select class="wd100">
-                    <option>전체</option>
+            <td class="wd120" >
+                <select id="type" class="wd100">
+                    <option value="today">당일</option>
+                    <option value="day">일별</option>
+                    <option value="month">월별</option>
+                    <option value="year">연별</option>
                 </select>
             </td>
             <td>
-                <input type="date" class="mDateTimeInput" id="startDatePicker" readonly="readonly"> ~
-                <input type="date" class="mDateTimeInput" id="endDatePicker" readonly="readonly">
-                <select class="wd200">
+                <div class="dateInput" >
+                <input type="date"id="startDatePicker" readonly="readonly"> ~
+                <input type="date" id="endDatePicker" readonly="readonly"></div>
+                <div class="timeInput"><select class="wd200">
                     <option>전체</option>
+                    <c:forEach var="item" items="${CG_REN}">
+                        <option value="${item.codeId}">${item.codeIdName}</option>
+                    </c:forEach>
                 </select> ~
                 <select class="wd200">
                     <option>전체</option>
+                    <c:forEach var="item" items="${CG_REN}">
+                        <option value="${item.codeId}">${item.codeIdName}</option>
+                    </c:forEach>
                 </select>
-
+                </div>
             </td>
             <td><a class="button bgcSkyBlue mt10 fr"><i class="bx bx-search"></i>조회</a></td>
         </tr>
     </table>
-    <div id="leftSide" class="dp_inlineBlock" style="width: 50%;">
+    <div id="leftSide" class="dp_inlineBlock" style="width: 55%; height: 100%;">
         <div id="chartDiv"></div>
     </div>
-    <div id="rightSide" class="fr" style="width:50%; height: 100% ">
+    <div id="rightSide" class="fr scroll_h" style="width:45%;">
         <table class="viewTable">
             <tr>
                 <th class="wd5rate">NO</th>
-                <th>구분</th>
-                <th>아이디</th>
-                <th>이름</th>
-                <th>나이</th>
-                <th>성별</th>
-                <th class="wd20rate">등록일시</th>
+                <th>${CG_SMT[0].codeIdName}</th>
+                <th>${CG_SMT[1].codeIdName}</th>
+                <th>${CG_SMT[2].codeIdName}</th>
+                <th>${CG_SMT[3].codeIdName}</th>
+                <th>${CG_SMT[4].codeIdName}</th>
+                <th>${CG_SMT[5].codeIdName}</th>
             </tr>
-                <tr class="cursor_pointer itemRow">
-                    <td>${resultList.userTypeName}</td>
-                    <td>${resultList.userId}</td>
-                    <td>${resultList.userName}</td>
-                    <td>${resultList.userAge}</td>
-                    <td>${resultList.userSexName}</td>
-                    <td><fmt:formatDate value="${resultList.regDt}" pattern="yyyy-MM-dd hh:mm:ss"/></td>
-                </tr>
+            <tr class="cursor_pointer itemRow">
+                <th style="border-top: 0px;">df</th>
+                <td>${resultList.userTypeName}</td>
+                <td>${resultList.userId}</td>
+                <td>${resultList.userName}</td>
+                <td>${resultList.userAge}</td>
+                <td>${resultList.userSexName}</td>
+                <td></td>
+            </tr>
         </table>
     </div>
 </div>
