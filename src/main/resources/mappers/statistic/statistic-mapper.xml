@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="iotBadSmellMonitoring.statistic.service.impl.StatisticMapper">
+
+    <!-- 당일 통계 목록-->
+    <select id="todayStatisticListSelect" parameterType="statisticVO" resultType="egovMap">
+
+        SELECT 'X'
+        <if test="smellRegisterTime001.equals('Y')" >
+             , MAX(CASE WHEN t1.CODE_ID_NAME = '07:00 ~ 09:00' THEN t1.CODE_ID_NAME END) AS CODE_ID_001
+        </if>
+        <if test="smellRegisterTime002.equals('Y')" >
+             , MAX(CASE WHEN t1.CODE_ID_NAME = '12:00 ~ 14:00' THEN t1.CODE_ID_NAME END) AS CODE_ID_002
+        </if>
+        <if test="smellRegisterTime003.equals('Y')" >
+             , MAX(CASE WHEN t1.CODE_ID_NAME = '18:00 ~ 20:00' THEN t1.CODE_ID_NAME END) AS CODE_ID_003
+        </if>
+        <if test="smellRegisterTime004.equals('Y')" >
+             , MAX(CASE WHEN t1.CODE_ID_NAME = '22:00 ~ 00:00' THEN t1.CODE_ID_NAME END) AS CODE_ID_004
+         </if>
+
+        FROM (
+                 SELECT CODE_ID_NAME
+                 FROM tb_code
+                 WHERE 1 = 1 AND CODE_GROUP = 'REN'
+            ) t1
+        UNION ALL
+        SELECT 'X'
+        <if test="smellRegisterTime001.equals('Y')" >
+             , (SELECT COUNT(*) FROM (SELECT ANY_VALUE(t1.REG_ID),ANY_VALUE(MAX(t1.REG_DT)), ANY_VALUE(t1.SMELL_REGISTER_TIME) FROM (SELECT tsr.REG_ID, DATE_FORMAT(tsr.REG_DT,'%Y-%m-%d') REG_DT, tsr.SMELL_REGISTER_TIME FROM tb_smell_register tsr WHERE 1=1 AND tsr.SMELL_REGISTER_TIME = '001' AND  tsr.SMELL_VALUE = '001' ORDER BY tsr.REG_DT DESC) t1 GROUP BY t1.REG_ID, t1.REG_DT, t1.SMELL_REGISTER_TIME) t2) CODE_ID_001
+        </if>
+        <if test="smellRegisterTime002.equals('Y')" >
+             , (SELECT COUNT(*) FROM (SELECT ANY_VALUE(t1.REG_ID),ANY_VALUE(MAX(t1.REG_DT)), ANY_VALUE(t1.SMELL_REGISTER_TIME) FROM (SELECT tsr.REG_ID, DATE_FORMAT(tsr.REG_DT,'%Y-%m-%d') REG_DT, tsr.SMELL_REGISTER_TIME FROM tb_smell_register tsr WHERE 1=1 AND tsr.SMELL_REGISTER_TIME = '002' AND  tsr.SMELL_VALUE = '001' ORDER BY tsr.REG_DT DESC) t1 GROUP BY t1.REG_ID, t1.REG_DT, t1.SMELL_REGISTER_TIME) t2) CODE_ID_002
+        </if>
+        <if test="smellRegisterTime003.equals('Y')" >
+             , (SELECT COUNT(*) FROM (SELECT ANY_VALUE(t1.REG_ID),ANY_VALUE(MAX(t1.REG_DT)), ANY_VALUE(t1.SMELL_REGISTER_TIME) FROM (SELECT tsr.REG_ID, DATE_FORMAT(tsr.REG_DT,'%Y-%m-%d') REG_DT, tsr.SMELL_REGISTER_TIME FROM tb_smell_register tsr WHERE 1=1 AND tsr.SMELL_REGISTER_TIME = '003' AND  tsr.SMELL_VALUE = '001' ORDER BY tsr.REG_DT DESC) t1 GROUP BY t1.REG_ID, t1.REG_DT, t1.SMELL_REGISTER_TIME) t2) CODE_ID_002
+        </if>
+        <if test="smellRegisterTime004.equals('Y')" >
+             , (SELECT COUNT(*) FROM (SELECT ANY_VALUE(t1.REG_ID),ANY_VALUE(MAX(t1.REG_DT)), ANY_VALUE(t1.SMELL_REGISTER_TIME) FROM (SELECT tsr.REG_ID, DATE_FORMAT(tsr.REG_DT,'%Y-%m-%d') REG_DT, tsr.SMELL_REGISTER_TIME FROM tb_smell_register tsr WHERE 1=1 AND tsr.SMELL_REGISTER_TIME = '004' AND  tsr.SMELL_VALUE = '001' ORDER BY tsr.REG_DT DESC) t1 GROUP BY t1.REG_ID, t1.REG_DT, t1.SMELL_REGISTER_TIME) t2) CODE_ID_002
+        </if>
+        FROM dual
+        UNION ALL
+        SELECT 'X'
+        <if test="smellRegisterTime001.equals('Y')" >
+             , (SELECT COUNT(*) FROM (SELECT ANY_VALUE(t1.REG_ID),ANY_VALUE(MAX(t1.REG_DT)), ANY_VALUE(t1.SMELL_REGISTER_TIME) FROM (SELECT tsr.REG_ID, DATE_FORMAT(tsr.REG_DT,'%Y-%m-%d') REG_DT, tsr.SMELL_REGISTER_TIME FROM tb_smell_register tsr WHERE 1=1 AND tsr.SMELL_REGISTER_TIME = '001' AND  tsr.SMELL_VALUE = '002' ORDER BY tsr.REG_DT DESC) t1 GROUP BY t1.REG_ID, t1.REG_DT, t1.SMELL_REGISTER_TIME) t2) CODE_ID_001
+        </if>
+        <if test="smellRegisterTime002.equals('Y')" >
+             , (SELECT COUNT(*) FROM (SELECT ANY_VALUE(t1.REG_ID),ANY_VALUE(MAX(t1.REG_DT)), ANY_VALUE(t1.SMELL_REGISTER_TIME) FROM (SELECT tsr.REG_ID, DATE_FORMAT(tsr.REG_DT,'%Y-%m-%d') REG_DT, tsr.SMELL_REGISTER_TIME FROM tb_smell_register tsr WHERE 1=1 AND tsr.SMELL_REGISTER_TIME = '002' AND  tsr.SMELL_VALUE = '002' ORDER BY tsr.REG_DT DESC) t1 GROUP BY t1.REG_ID, t1.REG_DT, t1.SMELL_REGISTER_TIME) t2) CODE_ID_002
+        </if>
+        <if test="smellRegisterTime003.equals('Y')" >
+             , (SELECT COUNT(*) FROM (SELECT ANY_VALUE(t1.REG_ID),ANY_VALUE(MAX(t1.REG_DT)), ANY_VALUE(t1.SMELL_REGISTER_TIME) FROM (SELECT tsr.REG_ID, DATE_FORMAT(tsr.REG_DT,'%Y-%m-%d') REG_DT, tsr.SMELL_REGISTER_TIME FROM tb_smell_register tsr WHERE 1=1 AND tsr.SMELL_REGISTER_TIME = '003' AND  tsr.SMELL_VALUE = '002' ORDER BY tsr.REG_DT DESC) t1 GROUP BY t1.REG_ID, t1.REG_DT, t1.SMELL_REGISTER_TIME) t2) CODE_ID_002
+        </if>
+        <if test="smellRegisterTime004.equals('Y')" >
+             , (SELECT COUNT(*) FROM (SELECT ANY_VALUE(t1.REG_ID),ANY_VALUE(MAX(t1.REG_DT)), ANY_VALUE(t1.SMELL_REGISTER_TIME) FROM (SELECT tsr.REG_ID, DATE_FORMAT(tsr.REG_DT,'%Y-%m-%d') REG_DT, tsr.SMELL_REGISTER_TIME FROM tb_smell_register tsr WHERE 1=1 AND tsr.SMELL_REGISTER_TIME = '004' AND  tsr.SMELL_VALUE = '002' ORDER BY tsr.REG_DT DESC) t1 GROUP BY t1.REG_ID, t1.REG_DT, t1.SMELL_REGISTER_TIME) t2) CODE_ID_002
+        </if>
+        FROM dual
+        UNION ALL
+        SELECT 'X'
+        <if test="smellRegisterTime001.equals('Y')" >
+             , (SELECT COUNT(*) FROM (SELECT ANY_VALUE(t1.REG_ID),ANY_VALUE(MAX(t1.REG_DT)), ANY_VALUE(t1.SMELL_REGISTER_TIME) FROM (SELECT tsr.REG_ID, DATE_FORMAT(tsr.REG_DT,'%Y-%m-%d') REG_DT, tsr.SMELL_REGISTER_TIME FROM tb_smell_register tsr WHERE 1=1 AND tsr.SMELL_REGISTER_TIME = '001' AND  tsr.SMELL_VALUE = '003' ORDER BY tsr.REG_DT DESC) t1 GROUP BY t1.REG_ID, t1.REG_DT, t1.SMELL_REGISTER_TIME) t2) CODE_ID_001
+        </if>
+        <if test="smellRegisterTime002.equals('Y')" >
+             , (SELECT COUNT(*) FROM (SELECT ANY_VALUE(t1.REG_ID),ANY_VALUE(MAX(t1.REG_DT)), ANY_VALUE(t1.SMELL_REGISTER_TIME) FROM (SELECT tsr.REG_ID, DATE_FORMAT(tsr.REG_DT,'%Y-%m-%d') REG_DT, tsr.SMELL_REGISTER_TIME FROM tb_smell_register tsr WHERE 1=1 AND tsr.SMELL_REGISTER_TIME = '002' AND  tsr.SMELL_VALUE = '003' ORDER BY tsr.REG_DT DESC) t1 GROUP BY t1.REG_ID, t1.REG_DT, t1.SMELL_REGISTER_TIME) t2) CODE_ID_002
+        </if>
+        <if test="smellRegisterTime003.equals('Y')" >
+             , (SELECT COUNT(*) FROM (SELECT ANY_VALUE(t1.REG_ID),ANY_VALUE(MAX(t1.REG_DT)), ANY_VALUE(t1.SMELL_REGISTER_TIME) FROM (SELECT tsr.REG_ID, DATE_FORMAT(tsr.REG_DT,'%Y-%m-%d') REG_DT, tsr.SMELL_REGISTER_TIME FROM tb_smell_register tsr WHERE 1=1 AND tsr.SMELL_REGISTER_TIME = '003' AND  tsr.SMELL_VALUE = '003' ORDER BY tsr.REG_DT DESC) t1 GROUP BY t1.REG_ID, t1.REG_DT, t1.SMELL_REGISTER_TIME) t2) CODE_ID_002
+        </if>
+        <if test="smellRegisterTime004.equals('Y')" >
+             , (SELECT COUNT(*) FROM (SELECT ANY_VALUE(t1.REG_ID),ANY_VALUE(MAX(t1.REG_DT)), ANY_VALUE(t1.SMELL_REGISTER_TIME) FROM (SELECT tsr.REG_ID, DATE_FORMAT(tsr.REG_DT,'%Y-%m-%d') REG_DT, tsr.SMELL_REGISTER_TIME FROM tb_smell_register tsr WHERE 1=1 AND tsr.SMELL_REGISTER_TIME = '004' AND  tsr.SMELL_VALUE = '003' ORDER BY tsr.REG_DT DESC) t1 GROUP BY t1.REG_ID, t1.REG_DT, t1.SMELL_REGISTER_TIME) t2) CODE_ID_002
+        </if>
+        FROM dual
+        UNION ALL
+        SELECT 'X'
+        <if test="smellRegisterTime001.equals('Y')" >
+             , (SELECT COUNT(*) FROM (SELECT ANY_VALUE(t1.REG_ID),ANY_VALUE(MAX(t1.REG_DT)), ANY_VALUE(t1.SMELL_REGISTER_TIME) FROM (SELECT tsr.REG_ID, DATE_FORMAT(tsr.REG_DT,'%Y-%m-%d') REG_DT, tsr.SMELL_REGISTER_TIME FROM tb_smell_register tsr WHERE 1=1 AND tsr.SMELL_REGISTER_TIME = '001' AND  tsr.SMELL_VALUE = '004' ORDER BY tsr.REG_DT DESC) t1 GROUP BY t1.REG_ID, t1.REG_DT, t1.SMELL_REGISTER_TIME) t2) CODE_ID_001
+        </if>
+        <if test="smellRegisterTime002.equals('Y')" >
+             , (SELECT COUNT(*) FROM (SELECT ANY_VALUE(t1.REG_ID),ANY_VALUE(MAX(t1.REG_DT)), ANY_VALUE(t1.SMELL_REGISTER_TIME) FROM (SELECT tsr.REG_ID, DATE_FORMAT(tsr.REG_DT,'%Y-%m-%d') REG_DT, tsr.SMELL_REGISTER_TIME FROM tb_smell_register tsr WHERE 1=1 AND tsr.SMELL_REGISTER_TIME = '002' AND  tsr.SMELL_VALUE = '004' ORDER BY tsr.REG_DT DESC) t1 GROUP BY t1.REG_ID, t1.REG_DT, t1.SMELL_REGISTER_TIME) t2) CODE_ID_002
+        </if>
+        <if test="smellRegisterTime003.equals('Y')" >
+             , (SELECT COUNT(*) FROM (SELECT ANY_VALUE(t1.REG_ID),ANY_VALUE(MAX(t1.REG_DT)), ANY_VALUE(t1.SMELL_REGISTER_TIME) FROM (SELECT tsr.REG_ID, DATE_FORMAT(tsr.REG_DT,'%Y-%m-%d') REG_DT, tsr.SMELL_REGISTER_TIME FROM tb_smell_register tsr WHERE 1=1 AND tsr.SMELL_REGISTER_TIME = '003' AND  tsr.SMELL_VALUE = '004' ORDER BY tsr.REG_DT DESC) t1 GROUP BY t1.REG_ID, t1.REG_DT, t1.SMELL_REGISTER_TIME) t2) CODE_ID_002
+        </if>
+        <if test="smellRegisterTime004.equals('Y')" >
+             , (SELECT COUNT(*) FROM (SELECT ANY_VALUE(t1.REG_ID),ANY_VALUE(MAX(t1.REG_DT)), ANY_VALUE(t1.SMELL_REGISTER_TIME) FROM (SELECT tsr.REG_ID, DATE_FORMAT(tsr.REG_DT,'%Y-%m-%d') REG_DT, tsr.SMELL_REGISTER_TIME FROM tb_smell_register tsr WHERE 1=1 AND tsr.SMELL_REGISTER_TIME = '004' AND  tsr.SMELL_VALUE = '004' ORDER BY tsr.REG_DT DESC) t1 GROUP BY t1.REG_ID, t1.REG_DT, t1.SMELL_REGISTER_TIME) t2) CODE_ID_002
+        </if>
+        FROM dual
+        UNION ALL
+        SELECT 'X'
+        <if test="smellRegisterTime001.equals('Y')" >
+             , (SELECT COUNT(*) FROM (SELECT ANY_VALUE(t1.REG_ID),ANY_VALUE(MAX(t1.REG_DT)), ANY_VALUE(t1.SMELL_REGISTER_TIME) FROM (SELECT tsr.REG_ID, DATE_FORMAT(tsr.REG_DT,'%Y-%m-%d') REG_DT, tsr.SMELL_REGISTER_TIME FROM tb_smell_register tsr WHERE 1=1 AND tsr.SMELL_REGISTER_TIME = '001' AND  tsr.SMELL_VALUE = '005' ORDER BY tsr.REG_DT DESC) t1 GROUP BY t1.REG_ID, t1.REG_DT, t1.SMELL_REGISTER_TIME) t2) CODE_ID_001
+        </if>
+        <if test="smellRegisterTime002.equals('Y')" >
+             , (SELECT COUNT(*) FROM (SELECT ANY_VALUE(t1.REG_ID),ANY_VALUE(MAX(t1.REG_DT)), ANY_VALUE(t1.SMELL_REGISTER_TIME) FROM (SELECT tsr.REG_ID, DATE_FORMAT(tsr.REG_DT,'%Y-%m-%d') REG_DT, tsr.SMELL_REGISTER_TIME FROM tb_smell_register tsr WHERE 1=1 AND tsr.SMELL_REGISTER_TIME = '002' AND  tsr.SMELL_VALUE = '005' ORDER BY tsr.REG_DT DESC) t1 GROUP BY t1.REG_ID, t1.REG_DT, t1.SMELL_REGISTER_TIME) t2) CODE_ID_002
+        </if>
+        <if test="smellRegisterTime003.equals('Y')" >
+             , (SELECT COUNT(*) FROM (SELECT ANY_VALUE(t1.REG_ID),ANY_VALUE(MAX(t1.REG_DT)), ANY_VALUE(t1.SMELL_REGISTER_TIME) FROM (SELECT tsr.REG_ID, DATE_FORMAT(tsr.REG_DT,'%Y-%m-%d') REG_DT, tsr.SMELL_REGISTER_TIME FROM tb_smell_register tsr WHERE 1=1 AND tsr.SMELL_REGISTER_TIME = '003' AND  tsr.SMELL_VALUE = '005' ORDER BY tsr.REG_DT DESC) t1 GROUP BY t1.REG_ID, t1.REG_DT, t1.SMELL_REGISTER_TIME) t2) CODE_ID_002
+        </if>
+        <if test="smellRegisterTime004.equals('Y')" >
+             , (SELECT COUNT(*) FROM (SELECT ANY_VALUE(t1.REG_ID),ANY_VALUE(MAX(t1.REG_DT)), ANY_VALUE(t1.SMELL_REGISTER_TIME) FROM (SELECT tsr.REG_ID, DATE_FORMAT(tsr.REG_DT,'%Y-%m-%d') REG_DT, tsr.SMELL_REGISTER_TIME FROM tb_smell_register tsr WHERE 1=1 AND tsr.SMELL_REGISTER_TIME = '004' AND  tsr.SMELL_VALUE = '005' ORDER BY tsr.REG_DT DESC) t1 GROUP BY t1.REG_ID, t1.REG_DT, t1.SMELL_REGISTER_TIME) t2) CODE_ID_002
+        </if>
+        FROM dual
+        UNION ALL
+        SELECT 'X'
+        <if test="smellRegisterTime001.equals('Y')" >
+             , (SELECT COUNT(*) FROM (SELECT ANY_VALUE(t1.REG_ID),ANY_VALUE(MAX(t1.REG_DT)), ANY_VALUE(t1.SMELL_REGISTER_TIME) FROM (SELECT tsr.REG_ID, DATE_FORMAT(tsr.REG_DT,'%Y-%m-%d') REG_DT, tsr.SMELL_REGISTER_TIME FROM tb_smell_register tsr WHERE 1=1 AND tsr.SMELL_REGISTER_TIME = '001' AND  tsr.SMELL_VALUE = '006' ORDER BY tsr.REG_DT DESC) t1 GROUP BY t1.REG_ID, t1.REG_DT, t1.SMELL_REGISTER_TIME) t2) CODE_ID_001
+        </if>
+        <if test="smellRegisterTime002.equals('Y')" >
+             , (SELECT COUNT(*) FROM (SELECT ANY_VALUE(t1.REG_ID),ANY_VALUE(MAX(t1.REG_DT)), ANY_VALUE(t1.SMELL_REGISTER_TIME) FROM (SELECT tsr.REG_ID, DATE_FORMAT(tsr.REG_DT,'%Y-%m-%d') REG_DT, tsr.SMELL_REGISTER_TIME FROM tb_smell_register tsr WHERE 1=1 AND tsr.SMELL_REGISTER_TIME = '002' AND  tsr.SMELL_VALUE = '006' ORDER BY tsr.REG_DT DESC) t1 GROUP BY t1.REG_ID, t1.REG_DT, t1.SMELL_REGISTER_TIME) t2) CODE_ID_002
+        </if>
+        <if test="smellRegisterTime003.equals('Y')" >
+             , (SELECT COUNT(*) FROM (SELECT ANY_VALUE(t1.REG_ID),ANY_VALUE(MAX(t1.REG_DT)), ANY_VALUE(t1.SMELL_REGISTER_TIME) FROM (SELECT tsr.REG_ID, DATE_FORMAT(tsr.REG_DT,'%Y-%m-%d') REG_DT, tsr.SMELL_REGISTER_TIME FROM tb_smell_register tsr WHERE 1=1 AND tsr.SMELL_REGISTER_TIME = '003' AND  tsr.SMELL_VALUE = '006' ORDER BY tsr.REG_DT DESC) t1 GROUP BY t1.REG_ID, t1.REG_DT, t1.SMELL_REGISTER_TIME) t2) CODE_ID_002
+        </if>
+        <if test="smellRegisterTime004.equals('Y')" >
+             , (SELECT COUNT(*) FROM (SELECT ANY_VALUE(t1.REG_ID),ANY_VALUE(MAX(t1.REG_DT)), ANY_VALUE(t1.SMELL_REGISTER_TIME) FROM (SELECT tsr.REG_ID, DATE_FORMAT(tsr.REG_DT,'%Y-%m-%d') REG_DT, tsr.SMELL_REGISTER_TIME FROM tb_smell_register tsr WHERE 1=1 AND tsr.SMELL_REGISTER_TIME = '004' AND  tsr.SMELL_VALUE = '006' ORDER BY tsr.REG_DT DESC) t1 GROUP BY t1.REG_ID, t1.REG_DT, t1.SMELL_REGISTER_TIME) t2) CODE_ID_002
+        </if>
+        FROM dual
+    </select>
+</mapper>

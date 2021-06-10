@@ -1,4 +1,4 @@
-package iotBadSmellMonitoring.statistic;
+package iotBadSmellMonitoring.statistic.web;
 
 import iotBadSmellMonitoring.main.service.MainService;
 import iotBadSmellMonitoring.main.service.MainVO;

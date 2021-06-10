@@ -3,8 +3,6 @@ package iotBadSmellMonitoring.history.service.impl;
 import egovframework.rte.psl.dataaccess.util.EgovMap;
 import iotBadSmellMonitoring.history.service.HistoryService;
 import iotBadSmellMonitoring.history.service.HistoryVO;
-import iotBadSmellMonitoring.main.service.MainVO;
-import iotBadSmellMonitoring.main.service.impl.MainMapper;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
