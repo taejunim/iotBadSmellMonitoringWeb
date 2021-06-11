@@ -33,4 +33,12 @@ public interface JoinService {
      */
     EgovMap userLoginSelect(JoinVO joinVO) throws Exception;
 
+    /**
+     * USER ID CHECK
+     * @param       userId      CHECK USER ID.
+     * @return      string
+     * @throws      Exception
+     */
+    String userFindIdSelect(String userId) throws Exception;
+
 }

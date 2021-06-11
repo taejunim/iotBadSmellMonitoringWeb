@@ -79,7 +79,7 @@ public class ApiController {
                 message = "{\"result\":\"success\"}";
 
             else
-                message = "{\"result\":\"fail\",\"message\": \"NO DB INSERT.\"}";
+                message = "{\"result\":\"fail\",\"message\":\"NO DB INSERT.\"}";
 
         }catch (Exception e){
 
@@ -132,6 +132,42 @@ public class ApiController {
     }
 
     /**
+     * USER ID CHECK API
+     * @param joinVO     회원가입 / 로그인 / 아이디 찾기 관련 VO.
+     * @return           RESPONSE MESSAGE.
+     * @throws Exception
+     */
+    @RequestMapping(value = "/api/userFindId", method = RequestMethod.GET, consumes="application/json;", produces = "application/json; charset=utf8")
+    public String userFindIdSelect(@ModelAttribute("joinVO")JoinVO joinVO, HttpServletRequest request)  throws Exception {
+
+        String message = "";
+        String userId  = "";
+        String result  = "";
+
+        try {
+
+            userId = request.getParameter("userId");
+            result = joinService.userFindIdSelect(userId);                                                              //USER ID CHECK CALL.
+
+            if(userId.equals("null"))
+                message = "{\"result\":\"fail\"}";
+
+            else if(result == null)                                                                                     //null CHECK.
+                message = "{\"result\":\"fail\"}";
+
+            else
+                message = "{\"result\":\"success\"}";
+
+        }catch (Exception e){
+
+            //System.out.println("Exception: ");
+            message = "{\"result\":\"fail\",\"message\": \"ERR USER ID CHECK.\"}";
+        }
+
+        return message;
+    }
+
+    /**
      * 코드 목록 API
      * @param mainVO     PC 공통 관련 VO.
      * @return           RESPONSE MESSAGE.
@@ -164,12 +200,12 @@ public class ApiController {
                 message = "{\"result\":\"success\",\"data\":" + jsonArray + "}";
             }
             else
-                message = "{\"result\":\"fail\",\"message\": \"NO FIND SEARCH CODE.\"}";
+                message = "{\"result\":\"fail\",\"message\":\"NO FIND SEARCH CODE.\"}";
 
         }catch (Exception e){
 
            System.out.println("Exception: ");
-           message = "{\"result\":\"fail\",\"message\": \"ERR FIND SEARCH CODE.\"}";
+           message = "{\"result\":\"fail\",\"message\":\"ERR FIND SEARCH CODE.\"}";
         }
 
         return message;
@@ -212,12 +248,12 @@ public class ApiController {
                 message = "{\"result\":\"success\"}";
 
             else
-                message = "{\"result\":\"fail\",\"message\": \"NO DB INSERT.\"}";
+                message = "{\"result\":\"fail\",\"message\":\"NO DB INSERT.\"}";
 
         }catch (Exception e){
 
             System.out.println("Exception: ");
-            message = "{\"result\":\"fail\",\"message\": \"ERR DB INSERT.\"}";
+            message = "{\"result\":\"fail\",\"message\":\"ERR DB INSERT.\"}";
         }
 
         return message;

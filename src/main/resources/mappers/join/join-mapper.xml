@@ -45,4 +45,17 @@
 
     </select>
 
+    <!-- USER ID CHECK-->
+    <select id="userFindIdSelect" parameterType="string" resultType="string">
+
+        SELECT USER_ID
+
+          FROM tb_user
+
+         WHERE 1=1
+
+           AND USER_ID = #{userId}
+
+    </select>
+
 </mapper>

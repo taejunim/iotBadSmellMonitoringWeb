@@ -54,4 +54,18 @@ public class JoinServiceImpl implements JoinService {
         return joinMapper.userLoginSelect(joinVO);
     }
 
+    /**
+     * USER ID CHECK
+     * @param       userId      CHECK USER ID.
+     * @return      string
+     * @throws      Exception
+     */
+    @Override
+    public String userFindIdSelect(String userId) throws Exception {
+
+        JoinMapper joinMapper = sqlSession.getMapper(JoinMapper.class);
+
+        return joinMapper.userFindIdSelect(userId);
+    }
+
 }
