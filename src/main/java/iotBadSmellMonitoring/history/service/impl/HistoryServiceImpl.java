@@ -61,11 +61,11 @@ public class HistoryServiceImpl implements HistoryService {
      * @return List<EgovMap>
      * @throws Exception
      */
-    public List<EgovMap> todayHistoryListSelect(HistoryVO historyVO) throws Exception {
+    public EgovMap todayHistoryListSelect(String userId) throws Exception {
 
         HistoryMapper historyMapper = sqlSession.getMapper(HistoryMapper.class);
 
-        return historyMapper.todayHistoryListSelect(historyVO);
+        return historyMapper.todayHistoryListSelect(userId);
     }
 
 }

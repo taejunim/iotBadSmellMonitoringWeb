@@ -38,6 +38,6 @@ public interface HistoryMapper {
      * @return List<EgovMap>
      * @throws Exception
      */
-    List<EgovMap> todayHistoryListSelect(HistoryVO historyVO) throws Exception;
+    EgovMap todayHistoryListSelect(String userId) throws Exception;
 
 }

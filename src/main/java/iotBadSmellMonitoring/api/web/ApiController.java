@@ -1,9 +1,7 @@
 package iotBadSmellMonitoring.api.web;
 
-import com.google.gson.JsonObject;
 import egovframework.rte.psl.dataaccess.util.EgovMap;
 import iotBadSmellMonitoring.history.service.HistoryService;
-import iotBadSmellMonitoring.history.service.HistoryVO;
 import iotBadSmellMonitoring.history.service.RegisterService;
 import iotBadSmellMonitoring.history.service.RegisterVO;
 import iotBadSmellMonitoring.join.service.JoinService;
@@ -24,6 +22,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -79,16 +78,23 @@ public class ApiController {
             joinVO.setUserSex(jsonObject.get("userSex").toString());
             joinVO.setUserType(jsonObject.get("userType").toString());
 
-            int result = joinService.userJoinInsert(joinVO);                                                            //회원가입 CALL.
-
-            if(result == 1)
-                message = "{\"result\":\"success\"}";
-
-            else
+            if(joinVO.getUserId().equals("") || joinVO.getUserPassword().equals("") || joinVO.getUserAge().equals("") || joinVO.getUserName().equals("") || joinVO.getUserSex().equals("")|| joinVO.getUserType().equals(""))
                 message = "{\"result\":\"fail\",\"message\":\"NO DB INSERT.\"}";
+
+            else {
+
+                int result = joinService.userJoinInsert(joinVO);                                                        //회원가입 CALL.
+
+                if(result == 1)
+                    message = "{\"result\":\"success\"}";
+
+                else
+                    message = "{\"result\":\"fail\",\"message\":\"NO DB INSERT.\"}";
+            }
 
         }catch (Exception e){
 
+            //System.out.println("Exception: "+e);
             message = "{\"result\":\"fail\",\"message\":\"ERR DB INSERT.\"}";
        }
 
@@ -130,7 +136,7 @@ public class ApiController {
 
         }catch (Exception e){
 
-            //System.out.println("Exception: ");
+            //System.out.println("Exception: "+e);
             message = "{\"result\":\"fail\",\"message\": \"ERR ID/PASSWORD.\"}";
         }
 
@@ -156,17 +162,17 @@ public class ApiController {
             result = joinService.userFindIdSelect(userId);                                                              //USER ID CHECK CALL.
 
             if(userId.equals("null"))
-                message = "{\"result\":\"fail\"}";
+                message = "{\"result\":\"fail\",\"message\":\"NO CEHCK USER ID.\"}";
 
             else if(result == null)                                                                                     //null CHECK.
-                message = "{\"result\":\"fail\"}";
+                message = "{\"result\":\"fail\",\"message\":\"NO CEHCK USER ID.\"}";
 
             else
                 message = "{\"result\":\"success\"}";
 
         }catch (Exception e){
 
-            //System.out.println("Exception: ");
+            //System.out.println("Exception: "+e);
             message = "{\"result\":\"fail\",\"message\": \"ERR USER ID CHECK.\"}";
         }
 
@@ -210,7 +216,7 @@ public class ApiController {
 
         }catch (Exception e){
 
-           System.out.println("Exception: ");
+           //System.out.println("Exception: "+e);
            message = "{\"result\":\"fail\",\"message\":\"ERR FIND SEARCH CODE.\"}";
         }
 
@@ -258,49 +264,143 @@ public class ApiController {
 
         }catch (Exception e){
 
-            System.out.println("Exception: ");
+            //System.out.println("Exception: "+e);
             message = "{\"result\":\"fail\",\"message\":\"ERR DB INSERT.\"}";
         }
 
         return message;
     }
 
-    @RequestMapping(value = "/api/todayRegisterStatus", method = RequestMethod.GET, consumes="application/json;", produces = "application/json; charset=utf8")
-    public String todayRegisterStatus(HistoryVO historyVO, HttpServletRequest request)  throws Exception {
-
-        List<EgovMap> resultList = null;
-
-        historyVO.setRegId(request.getParameter("userId"));
+    /**
+     * USER INFO API
+     * @param request
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping(value = "/api/userInfo", method = RequestMethod.GET, consumes="application/json;", produces = "application/json; charset=utf8")
+    public String userInfo(HttpServletRequest request)  throws Exception {
 
         String message = "";
 
         try {
 
-            JsonObject      jsonObject  = new JsonObject();
-            JSONParser      jsonParser  = new JSONParser();
+            EgovMap userInfo = memberService.memberGetInfoSelect(request.getParameter("userId"));                    //USER_ID / USER_NAME GET CALL.
 
-            /*USER INFO GET START*/
-            EgovMap userInfo = memberService.memberGetInfoSelect(request.getParameter("userId"));
-            /*USER INFO GET END*/
+            if(userInfo != null && !userInfo.isEmpty()){
 
-            /*USER TODAY REGISTER INFO GET START*/
-            List<EgovMap> todayInfoList = historyService.todayHistoryListSelect(historyVO);
-            /*USER TODAY REGISTER INFO GET END*/
+                JSONObject  json        = new JSONObject(userInfo);                                                     //map을 json으로 변환.
+                JSONParser  jsonParser  = new JSONParser();
 
-            if(!userInfo.isEmpty()){
-
-                message = "{\"result\":\"success\",\"data\":{\"userId\":\""+userInfo.getValue(0)+"\",\"userName\":\""+userInfo.getValue(1)+"\"}";
-                System.out.println("message: "+message);
+                json    = (JSONObject) jsonParser.parse(String.valueOf(json).replace("null", "\"\"")); //null시 KEY 누락을 막기 위하여.
+                message = "{\"result\":\"success\",\"data\":" + json + "}";
 
             }else
-                message = "{\"result\":\"fail\",\"message\":\"NO FIND SEARCH REGISTER STATUS.\"}";
+                message = "{\"result\":\"fail\",\"message\":\"NO SEARCH USER INFO.\"}";
 
+       }catch (Exception e){
+
+            //System.out.println("Exception: "+e);
+            message = "{\"result\":\"fail\",\"message\":\"ERR SEARCH USER INFO.\"}";
+       }
+
+        return message;
+    }
+
+    /**
+     * USER TODAY REGISTER INFO API
+     * @param request
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping(value = "/api/userTodayRegisterInfo", method = RequestMethod.GET, consumes="application/json;", produces = "application/json; charset=utf8")
+    public String userTodayRegisterInfo(HttpServletRequest request)  throws Exception {
+
+        String        message    = "";
+        String        userId     = request.getParameter("userId");
+
+       try {
+
+            if(userId.equals(""))
+                message = "{\"result\":\"fail\",\"message\":\"NO SEARCH USER REGISTER INFO.\"}";
+
+            else{
+
+                EgovMap         egovMap     = historyService.todayHistoryListSelect(userId);                                //TODAY HISTORY 목록 CALL.
+                EgovMap         resultMap   = new EgovMap();
+                JSONParser      jsonParser  = new JSONParser();
+                List<EgovMap>   resultList  = new ArrayList<>();
+
+                /*USER TODAY REGISTER DATA MAKE START*/
+                resultMap.put("smellRegisterTime","001");
+                resultMap.put("smellRegisterTimeName","08:00 ~ 10:00");
+                resultMap.put("resultCode",egovMap.getValue(0).toString());
+                if(egovMap.getValue(1) != null)
+                    resultMap.put("regDt",egovMap.getValue(1).toString());
+
+                else
+                    resultMap.put("regDt",null);
+
+                resultList.add(resultMap);
+
+                resultMap = new EgovMap();
+
+                resultMap.put("smellRegisterTime","002");
+                resultMap.put("smellRegisterTimeName","12:00 ~ 14:00");
+                resultMap.put("resultCode",egovMap.getValue(2).toString());
+                if(egovMap.getValue(3) != null)
+                    resultMap.put("regDt",egovMap.getValue(3).toString());
+
+                else
+                    resultMap.put("regDt",null);
+
+                resultList.add(resultMap);
+
+                resultMap = new EgovMap();
+
+                resultMap.put("smellRegisterTime","003");
+                resultMap.put("smellRegisterTimeName","18:00 ~ 20:00");
+                resultMap.put("resultCode",egovMap.getValue(4).toString());
+
+                if(egovMap.getValue(5) != null)
+                    resultMap.put("regDt",egovMap.getValue(5).toString());
+
+                else
+                    resultMap.put("regDt",null);
+
+                resultList.add(resultMap);
+
+                resultMap = new EgovMap();
+
+                resultMap.put("smellRegisterTime","004");
+                resultMap.put("smellRegisterTimeName","22:00 ~ 00:00");
+                resultMap.put("resultCode",egovMap.getValue(6).toString());
+
+                if(egovMap.getValue(7) != null)
+                    resultMap.put("regDt",egovMap.getValue(7).toString());
+
+                else
+                    resultMap.put("regDt",null);
+
+                resultList.add(resultMap);
+
+                JSONArray jsonArray = new JSONArray();
+
+                for (EgovMap egovMap2 : resultList) {
+
+                    JSONObject json = new JSONObject(egovMap2);
+                    json = (JSONObject) jsonParser.parse(String.valueOf(json).replace("null", "\"\""));//null시 KEY 누락을 막기 위하여.
+                    jsonArray.put(json);
+                }
+                /*USER TODAY REGISTER DATA MAKE END*/
+
+                message = "{\"result\":\"success\",\"data\":" + jsonArray + "}";
+            }
 
         }catch (Exception e){
 
-            System.out.println("Exception: ");
-            message = "{\"result\":\"fail\",\"message\":\"ERR FIND SEARCH REGISTER STATUS.\"}";
-       }
+            //System.out.println("Exception: "+e);
+            message = "{\"result\":\"fail\",\"message\":\"ERR SEARCH USER REGISTER INFO.\"}";
+        }
 
         return message;
     }
