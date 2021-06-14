@@ -63,3 +63,15 @@ function getWindDirectionName(code){
     }
     return name;
 }
+
+//단위 붙이기 -> %, m/s , ℃
+function addUnit(text, unit){
+
+    switch (unit) {
+        case "humidity" : text += " %"; break;
+        case "speed" : text += " m/s"; break;
+        case "temperature" : text += " ℃"; break;
+    }
+
+    return text;
+}
