@@ -4,7 +4,7 @@
 <mapper namespace="iotBadSmellMonitoring.history.service.impl.HistoryMapper">
 
     <!-- HISTORY 목록-->
-    <select id="historyListSelect" parameterType="mainVO" resultType="egovMap">
+    <select id="historyListSelect" parameterType="historyVO" resultType="egovMap">
 
         SELECT tsr.SMELL_REGISTER_NO                       SMELL_REGISTER_NO
              , tsr.SMELL_TYPE                              SMELL_TYPE
@@ -34,7 +34,7 @@
     </select>
 
     <!--HISTORY IMG 목록-->
-    <select id="historyImgListSelect" parameterType="mainVO" resultType="egovMap">
+    <select id="historyImgListSelect" parameterType="historyVO" resultType="egovMap">
 
         SELECT SMELL_IMAGE_NO
              , SMELL_IMAGE_PATH
@@ -45,6 +45,30 @@
 
          WHERE 1=1
            AND SMELL_REGISTER_NO = #{smellRegisterNo}
+
+    </select>
+
+    <!-- TODAY HISTORY 목록-->
+    <select id="todayHistoryListSelect" parameterType="historyVO" resultType="egovMap">
+
+        SELECT CASE t1.SMELL_REGISTER_TIME WHEN '001' THEN '001' WHEN '002' THEN '001' WHEN '003' THEN '001' WHEN '004' THEN '001' ELSE '002' END CODE_RESULT
+             , t1.*
+
+          FROM (
+                SELECT any_value(SMELL_REGISTER_TIME) SMELL_REGISTER_TIME
+                     , MAX(REG_DT)                    REG_DT
+                  FROM tb_smell_register
+
+                 WHERE 1 = 1
+
+                   AND SMELL_REGISTER_TIME IN ('001','002','003','004')
+                   AND REG_ID = #{regId}
+                   <![CDATA[
+                   AND REG_DT > DATE_FORMAT(concat(DATE_FORMAT(now(), '%Y-%m-%d'), ' 00:00:00'), '%Y-%m-%d %H:%i:%s')
+                   AND REG_DT < DATE_FORMAT(concat(DATE_FORMAT(now(), '%Y-%m-%d'), ' 23:59:59'), '%Y-%m-%d %H:%i:%s')
+                    ]]>
+                 GROUP BY REG_ID, SMELL_REGISTER_TIME
+               ) t1
 
     </select>
 

@@ -2,7 +2,6 @@ package iotBadSmellMonitoring.member.service;
 
 
 import egovframework.rte.psl.dataaccess.util.EgovMap;
-import iotBadSmellMonitoring.history.service.RegisterVO;
 import iotBadSmellMonitoring.join.service.JoinVO;
 
 import java.util.List;
@@ -53,4 +52,14 @@ public interface MemberService {
      * @throws Exception
      */
     void memberDelete(JoinVO joinVO) throws Exception;
+
+
+    /**
+     * USER_ID / USER_NAME GET
+     * @param  userId
+     * @return
+     * @throws Exception
+     */
+    EgovMap memberGetInfoSelect(String userId) throws Exception;
+
 }

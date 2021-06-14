@@ -68,4 +68,19 @@ public class MemberServiceImpl implements MemberService {
         MemberMapper mapper = sqlSession.getMapper(MemberMapper.class);
         mapper.memberDelete(joinVO);
     }
+
+    /**
+     * USER_ID / USER_NAME GET
+     * @param  userId
+     * @return
+     * @throws Exception
+     */
+    @Override
+    public EgovMap memberGetInfoSelect(String userId) throws Exception {
+
+        MemberMapper mapper = sqlSession.getMapper(MemberMapper.class);
+
+        return mapper.memberGetInfoSelect(userId);
+    }
+
 }

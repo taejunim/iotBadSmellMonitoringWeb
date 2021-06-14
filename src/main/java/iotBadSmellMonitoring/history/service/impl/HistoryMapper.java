@@ -32,4 +32,12 @@ public interface HistoryMapper {
      * @throws Exception
      */
     List<EgovMap> historyImgListSelect(HistoryVO historyVO) throws Exception;
+
+    /**
+     * TODAY HISTORY 목록
+     * @return List<EgovMap>
+     * @throws Exception
+     */
+    List<EgovMap> todayHistoryListSelect(HistoryVO historyVO) throws Exception;
+
 }

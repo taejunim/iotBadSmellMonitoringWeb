@@ -3,6 +3,7 @@ package iotBadSmellMonitoring.history.service.impl;
 import egovframework.rte.psl.dataaccess.util.EgovMap;
 import iotBadSmellMonitoring.history.service.HistoryService;
 import iotBadSmellMonitoring.history.service.HistoryVO;
+import iotBadSmellMonitoring.member.service.MemberService;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,6 +29,9 @@ public class HistoryServiceImpl implements HistoryService {
     @Autowired
     SqlSession sqlSession;
 
+    @Autowired
+    private MemberService memberService;
+
     /**
      * HISTORY 목록
      * @return List<EgovMap>
@@ -50,6 +54,18 @@ public class HistoryServiceImpl implements HistoryService {
         HistoryMapper historyMapper = sqlSession.getMapper(HistoryMapper.class);
 
         return historyMapper.historyImgListSelect(historyVO);
+    }
+
+    /**
+     * TODAY HISTORY 목록
+     * @return List<EgovMap>
+     * @throws Exception
+     */
+    public List<EgovMap> todayHistoryListSelect(HistoryVO historyVO) throws Exception {
+
+        HistoryMapper historyMapper = sqlSession.getMapper(HistoryMapper.class);
+
+        return historyMapper.todayHistoryListSelect(historyVO);
     }
 
 }

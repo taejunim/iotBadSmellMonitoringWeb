@@ -1,12 +1,16 @@
 package iotBadSmellMonitoring.api.web;
 
+import com.google.gson.JsonObject;
 import egovframework.rte.psl.dataaccess.util.EgovMap;
+import iotBadSmellMonitoring.history.service.HistoryService;
+import iotBadSmellMonitoring.history.service.HistoryVO;
 import iotBadSmellMonitoring.history.service.RegisterService;
 import iotBadSmellMonitoring.history.service.RegisterVO;
 import iotBadSmellMonitoring.join.service.JoinService;
 import iotBadSmellMonitoring.join.service.JoinVO;
 import iotBadSmellMonitoring.main.service.MainService;
 import iotBadSmellMonitoring.main.service.MainVO;
+import iotBadSmellMonitoring.member.service.MemberService;
 import org.json.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -41,12 +45,14 @@ public class ApiController {
 
     @Autowired
     private RegisterService registerService;                                                                            //REGISTER MASTER / DETAIL SERVICE.
-
     @Autowired
     private JoinService     joinService;                                                                                //회원가입 / 로그인 / 아이디 찾기 관련 SERVICE.
-
     @Autowired
     private MainService     mainService;                                                                                //PC 공통 관련 SERVICE.
+    @Autowired
+    private HistoryService  historyService;                                                                             //HISTORY MASTER / DETAIL SERVICE.
+    @Autowired
+    private MemberService   memberService;                                                                              //회원관리 SERVICE.
 
     /**
      * 회원가입 API
@@ -255,6 +261,46 @@ public class ApiController {
             System.out.println("Exception: ");
             message = "{\"result\":\"fail\",\"message\":\"ERR DB INSERT.\"}";
         }
+
+        return message;
+    }
+
+    @RequestMapping(value = "/api/todayRegisterStatus", method = RequestMethod.GET, consumes="application/json;", produces = "application/json; charset=utf8")
+    public String todayRegisterStatus(HistoryVO historyVO, HttpServletRequest request)  throws Exception {
+
+        List<EgovMap> resultList = null;
+
+        historyVO.setRegId(request.getParameter("userId"));
+
+        String message = "";
+
+        try {
+
+            JsonObject      jsonObject  = new JsonObject();
+            JSONParser      jsonParser  = new JSONParser();
+
+            /*USER INFO GET START*/
+            EgovMap userInfo = memberService.memberGetInfoSelect(request.getParameter("userId"));
+            /*USER INFO GET END*/
+
+            /*USER TODAY REGISTER INFO GET START*/
+            List<EgovMap> todayInfoList = historyService.todayHistoryListSelect(historyVO);
+            /*USER TODAY REGISTER INFO GET END*/
+
+            if(!userInfo.isEmpty()){
+
+                message = "{\"result\":\"success\",\"data\":{\"userId\":\""+userInfo.getValue(0)+"\",\"userName\":\""+userInfo.getValue(1)+"\"}";
+                System.out.println("message: "+message);
+
+            }else
+                message = "{\"result\":\"fail\",\"message\":\"NO FIND SEARCH REGISTER STATUS.\"}";
+
+
+        }catch (Exception e){
+
+            System.out.println("Exception: ");
+            message = "{\"result\":\"fail\",\"message\":\"ERR FIND SEARCH REGISTER STATUS.\"}";
+       }
 
         return message;
     }

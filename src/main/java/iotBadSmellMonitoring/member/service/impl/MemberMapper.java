@@ -51,4 +51,13 @@ public interface MemberMapper {
      * @throws Exception
      */
     void memberDelete(JoinVO joinVO) throws Exception;
+
+    /**
+     * USER_ID / USER_NAME GET
+     * @param  userId
+     * @return
+     * @throws Exception
+     */
+    EgovMap memberGetInfoSelect(String userId) throws Exception;
+
 }

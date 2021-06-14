@@ -71,4 +71,20 @@
           FROM tb_user
          WHERE USER_ID = #{userId};
     </delete>
+
+
+    <select id="memberGetInfoSelect" parameterType="string" resultType="egovMap" >
+
+        SELECT USER_ID
+             , USER_NAME
+
+          FROM tb_user
+
+         WHERE 1=1
+
+           AND USER_ID = #{userId}
+
+    </select>
+
+
 </mapper>
