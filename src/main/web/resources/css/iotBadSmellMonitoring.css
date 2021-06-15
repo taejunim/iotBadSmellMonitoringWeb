@@ -213,6 +213,7 @@ select::-ms-expand{
 }
 .searchTable > tbody > tr > th {
     background: #d9efff;
+    /*width: 70px;*/
 }
 .searchTable > tbody > tr > td {
     padding-left: 10px;
@@ -284,13 +285,12 @@ select::-ms-expand{
     border-right: 1px #10639a solid;
 }
 .viewTable{
-    margin: 3% auto 5% auto;
+    margin: 3% auto 1% auto;
     text-align: center;
-    width: 95%;
-    height: 55%;
+    width: 90%;
 }
 .viewTable th{
-    height: 30px;
+    height: 40px;
     background: #eaeaea;
     border: 1px solid #ccc;
     border-top: 2px solid black;
@@ -301,7 +301,7 @@ select::-ms-expand{
 }
 .viewTable td{
     border: 1px solid #ccc;
-    height: 30px;
+    height: 40px;
 }
 .mainForm th {
     background-color: #61ade1;
@@ -331,6 +331,7 @@ select::-ms-expand{
 .secondViewTable td{
     border: 1px solid #ccc;
     height: 30px;
+    width: 50px;
 }
 .conditionTitle {
     font-weight: bold;
@@ -349,4 +350,7 @@ select::-ms-expand{
     line-height: 50px;
     margin-left: 10px;
     font-size: 14px;
+}
+.mDateTimeInput{
+    width: 120px;
 }

@@ -1,6 +1,7 @@
 package iotBadSmellMonitoring.history.service;
 
 import egovframework.rte.psl.dataaccess.util.EgovMap;
+import iotBadSmellMonitoring.join.service.JoinVO;
 
 import java.util.List;
 
@@ -25,6 +26,14 @@ public interface HistoryService {
      * @throws Exception
      */
     List<EgovMap> historyListSelect(HistoryVO historyVO) throws Exception;
+
+    /**
+     * 회원 리스트 TOTAL COUNT 조회
+     * @param   historyVO
+     * @return  int
+     * @throws Exception
+     */
+    int historyListTotalCnt(HistoryVO historyVO) throws Exception;
 
     /**
      * HISTORY IMG 목록

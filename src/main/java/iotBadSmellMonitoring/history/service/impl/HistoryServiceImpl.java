@@ -43,7 +43,19 @@ public class HistoryServiceImpl implements HistoryService {
 
         return historyMapper.historyListSelect(historyVO);
     }
+    /**
+     * 회원 리스트 TOTAL COUNT 조회
+     * @param   historyVO
+     * @return  int
+     * @throws Exception
+     */
+    @Override
+    public int historyListTotalCnt(HistoryVO historyVO) throws Exception {
 
+        HistoryMapper mapper = sqlSession.getMapper(HistoryMapper.class);
+
+        return mapper.historyListTotalCnt(historyVO);
+    }
     /**
      * HISTORY IMG 목록
      * @return List<EgovMap>

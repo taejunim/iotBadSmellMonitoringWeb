@@ -27,6 +27,14 @@ public interface HistoryMapper {
     List<EgovMap> historyListSelect(HistoryVO historyVO) throws Exception;
 
     /**
+     * 회원 리스트 TOTAL COUNT 조회
+     * @param   historyVO
+     * @return  int
+     * @throws Exception
+     */
+    int historyListTotalCnt(HistoryVO historyVO) throws Exception;
+
+    /**
      * HISTORY IMG 목록
      * @return List<EgovMap>
      * @throws Exception

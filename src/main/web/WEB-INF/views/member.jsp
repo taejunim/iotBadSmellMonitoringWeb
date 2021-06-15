@@ -205,7 +205,6 @@ To change this template use File | Settings | File Templates.
             </c:if>
         </table>
 
-        <hr id="pageline" class="wd95rate">
         <div id="pagination" class="pagingBox align_c">
             <ui:pagination paginationInfo="${paginationInfo}" type="image" jsFunction="fn_page"/>
         </div>
