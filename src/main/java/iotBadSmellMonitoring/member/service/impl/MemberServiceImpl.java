@@ -55,11 +55,18 @@ public class MemberServiceImpl implements MemberService {
         return mapper.memberListTotalCnt(joinVO);
     }
 
+    /**
+     * 회원 비밀번호 변경
+     * @param   joinVO
+     * @return
+     * @throws Exception
+     */
     @Override
-    public void memberPasswordUpdate(JoinVO joinVO) throws Exception {
+    public int memberPasswordUpdate(JoinVO joinVO) throws Exception {
 
         MemberMapper mapper = sqlSession.getMapper(MemberMapper.class);
-        mapper.memberPasswordUpdate(joinVO);
+
+        return mapper.memberPasswordUpdate(joinVO);
     }
 
     @Override

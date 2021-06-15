@@ -406,6 +406,43 @@ public class ApiController {
     }
 
     /**
+     * USER PASSWORD CHANGE.
+     * @param joinVO         회원가입 / 로그인 / 아이디 찾기 관련 VO
+     * @return               RESPONSE MESSAGE.
+     * @throws Exception
+     */
+    @RequestMapping(value = "/api/userPasswordChange", method = RequestMethod.POST, consumes="application/json;", produces = "application/json; charset=utf8")
+    public String userPasswordChange(JoinVO joinVO, HttpServletRequest request)  throws Exception {
+
+        String message = "";
+
+        try {
+
+            BufferedReader  br 	        = new BufferedReader(new InputStreamReader(request.getInputStream(), StandardCharsets.UTF_8));
+            String          paramValue  = parseJSONData(br);                                                            //JSON OBJECT TO STRING CALL.
+            JSONParser      jsonParser  = new JSONParser();
+            JSONObject      jsonObject  = (JSONObject)jsonParser.parse(paramValue);
+
+            joinVO.setUserPassword(jsonObject.get("userPassword").toString());
+
+            int result = memberService.memberPasswordUpdate(joinVO);
+
+            if(result == 1)
+                message = "{\"result\":\"success\"}";
+
+            else
+                message = "{\"result\":\"fail\",\"message\":\"NO PASSWORD CHANGE.\"}";
+
+        }catch (Exception e){
+
+            //System.out.println("Exception: "+e);
+            message = "{\"result\":\"fail\",\"message\":\"ERR PASSWORD CHANGE.\"}";
+        }
+
+        return message;
+    }
+
+    /**
      * JSON OBJECT TO STRING
      * @param 	bufferedReader
      * @return	string

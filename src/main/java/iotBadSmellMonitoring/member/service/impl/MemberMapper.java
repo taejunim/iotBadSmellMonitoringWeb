@@ -42,7 +42,7 @@ public interface MemberMapper {
      * @return
      * @throws Exception
      */
-    void memberPasswordUpdate(JoinVO joinVO) throws Exception;
+    int memberPasswordUpdate(JoinVO joinVO) throws Exception;
 
     /**
      * 회원 탈퇴
