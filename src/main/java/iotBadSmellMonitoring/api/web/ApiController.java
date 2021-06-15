@@ -423,6 +423,7 @@ public class ApiController {
             JSONParser      jsonParser  = new JSONParser();
             JSONObject      jsonObject  = (JSONObject)jsonParser.parse(paramValue);
 
+            joinVO.setUserId(jsonObject.get("userId").toString());
             joinVO.setUserPassword(jsonObject.get("userPassword").toString());
 
             int result = memberService.memberPasswordUpdate(joinVO);
