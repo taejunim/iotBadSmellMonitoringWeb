@@ -25,6 +25,7 @@ public class JoinVO extends PageVO {
     private String userName;                                                                                            //이름
     private String userSex;                                                                                             //성별(코드 테이블 참조)
     private String userAge;                                                                                             //나이
+    private String userRegion;                                                                                          //지역
     private String regDt;
 
 }

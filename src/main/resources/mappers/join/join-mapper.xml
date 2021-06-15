@@ -13,6 +13,7 @@
                                 , USER_NAME
                                 , USER_SEX
                                 , USER_AGE
+                                , USER_REGION
                              )
                      VALUES (
                                 #{userId}
@@ -21,6 +22,7 @@
                                 , #{userName}
                                 , #{userSex}
                                 , #{userAge}
+                                , #{userRegion}
                              )
 
     </insert>
