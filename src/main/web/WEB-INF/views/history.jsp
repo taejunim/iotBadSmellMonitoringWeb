@@ -7,26 +7,89 @@
 --%>
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
 <%@include file="/WEB-INF/views/common/resources_common.jsp" %>
+<script src="/resources/js/kakaoMapUtils.js"></script>
 <script type="text/javascript">
-
+var map;
         $(document).ready(function () {
-            setButton("history");
-            setDatePicker();
 
-            var container = document.getElementById('map'); //지도를 담을 영역의 DOM 레퍼런스
-            var options = { //지도를 생성할 때 필요한 기본 옵션
-                center: new kakao.maps.LatLng(33.450701, 126.570667), //지도의 중심좌표.
-                level: 3 //지도의 레벨(확대, 축소 정도)
-            };
+            setButton("history");                   //선택된 화면의 메뉴색 변경 CALL.
+            setDatePicker();                        //달력 SETTING CALL.
 
-            var map = new kakao.maps.Map(container, options); //지도 생성 및 객체 리턴
+             //지도 기본 설정 -> 금악리로 중심 잡아둠, Zoom Level 5
+             map = focusMapCenter(33.352974, 126.314419, 5);
+
+            /* 검색 화면 검색어 세팅 START*/
+            var smellType = '${joinVO.smellType}';          //취기
+
+            if (smellType != "" && smellType != null)
+                $("#smellType").val(smellType).prop("selected", true);                              //VO 값 선택
+
+            var smellValue = '${joinVO.smellValue}';        //악취강도
+
+            if (smellValue != "" && smellValue != null)
+                $("#smellValue").val(smellValue).prop("selected", true);                              //VO 값 선택
+
+            var weaterState = '${joinVO.weaterState}';       //기상상태
+
+            if (weaterState != "" && weaterState != null)
+                $("#weaterState").val(weaterState).prop("selected", true);
+            /* 검색 화면 검색어 세팅 END*/
+
+            // 테이블 row 클릭 이벤트
+            $(".itemRow").click(function () {
+
+                var getItems = $(this).find("td");  //viewTable의 row
+
+                $("#getWeaterState").text(getItems.eq(1).text());
+                $("#getRegName").text(getItems.eq(5).text());
+                $("#getRegId").text(getItems.eq(7).text());
+                $("#getSmellType").text(getItems.eq(4).text());
+                $("#getSmellValue").text(getItems.eq(3).text());
+                $("#humidityValue").text(getItems.eq(8).text() + "%");
+                $("#getTemperatureValue").text(getItems.eq(9).text() + " ℃");
+                $("#getWindDirectionValue").text(getItems.eq(10).text());
+                $("#getWindSpeedValue").text(getItems.eq(11).text() +"m/s");
+                $("#getRegDt").text(getItems.eq(6).text());
+                $("#smellComment").text(getItems.eq(12).text());
+
+                /*지도 세팅 START*/
+                var gpsX = getItems.eq(13).text();       //gps_x의 값
+                var gpsY = getItems.eq(14).text();       //gps_y의 값
+
+                var mapContainer = document.getElementById('map'), // 지도를 표시할 div
+                    mapOption = {
+                        center: new kakao.maps.LatLng(gpsY, gpsX), // 지도의 중심좌표
+                        level: 3 // 지도의 확대 레벨
+                    };
+
+                var map = new kakao.maps.Map(mapContainer, mapOption); // 지도 생성
+
+                // 마커가 표시될 위치
+                var markerPosition  = new kakao.maps.LatLng(gpsY, gpsX);
+
+                // 마커 생성
+                var marker = new kakao.maps.Marker({
+                    position: markerPosition
+                });
+
+                // 마커가 지도 위에 표시되도록 설정
+                marker.setMap(map);
+                /*지도 세팅 END*/
+                
+
+            })
+
+
         });
+
+        //달력 SETTING
         function setDatePicker(){
 
             //datepicker 초기화 START
             $('#datePicker').datepicker();
 
-            /*    $('#searchStartDt').datepicker("option", "maxDate", $("#searchEndDt").val());
+                $('#searchStartDt').datepicker();
+                $('#searchStartDt').datepicker("option", "maxDate", $("#searchEndDt").val());
                 $('#searchStartDt').datepicker("option", "onClose", function ( selectedDate ) {
                   $("#searchEndDt").datepicker( "option", "minDate", selectedDate );
                 });
@@ -35,24 +98,71 @@
                 $('#searchEndDt').datepicker("option", "minDate", $("#searchStartDt").val());
                 $('#searchEndDt').datepicker("option", "onClose", function ( selectedDate ) {
                   $("#searchStartDt").datepicker( "option", "maxDate", selectedDate );
-                });*/
+                });
             //datepicker 초기화 END
         }
 
+        //페이지 이동 스크립트
+        function fn_page(pageNo) {
+
+            frm.pageIndex.value = pageNo;
+            document.frm.action = "<c:url value='/history.do'/>";
+            document.frm.submit();
+        }
+
+        //조회
+        function fn_search() {
+            console.log("조회 버튼 클릭");
+            // $("#searchStartDt").val($("#searchStartDt").val());
+            // $("#searchEndDt").val($("#searchEndDt").val());
+            frm.pageIndex.value = 1;
+            document.frm.action = "<c:url value='/history.do'/>";
+            document.frm.submit();
+        }
 </script>
 <body>
 <jsp:include page="/menu"/>
+
 <table class="searchTable">
+
+    <form:form id="frm" name="frm" method="post">
+    <input type="hidden" id="pageIndex" name="pageIndex" value="${joinVO.pageIndex}">
     <tr>
-        <th>등록자</th><td><input type="text" ></td>
-        <th>등록일</th><td><input type="date" class="mDateTimeInput" id="datePicker" readonly="readonly"></td>
-        <th>취기</th><td><select><option>전체</option><option>구린 냄새</option><option>음식물 냄새</option><option>고무 냄새</option><option>가스 냄새</option><option>페인트 냄새</option><option>사료 냄새</option></select></td>
-        <th>악취 강도</th><td><select><option>전체</option><option>(0)무취</option><option>(1)감지 취기</option><option>(2)보통 취기</option><option>(3)강한 취기</option><option>(4)극심한 취기</option><option>(5)참기 어려운 취기</option></select></td>
-        <th>기상 상태</th><td><select><option>전체</option><option>날씨</option><option>기온</option><option>습도</option><option>풍향</option><option>풍속</option></select></td>
-        <td><a class="button bgcSkyBlue mt10 fr"><i class="bx bx-search"></i>조회</a></td>
+        <th>등록자</th>
+        <td><input type="text" name="regId" value="${joinVO.regId}"></td>
+        <th>등록일</th>
+            <td>
+        <input type="date" class="mDateTimeInput" value="${joinVO.startDate}" id="searchStartDt" name="startDate" readonly="readonly">
+        ~
+        <input type="date"  class="mDateTimeInput" value="${joinVO.endDate}" id="searchEndDt" name="endDate" readonly="readonly">
+            </td>
+        <th>취기</th>
+        <td>
+            <select id="smellType" name="smellType">
+                <option value="">전체</option>
+                <c:forEach var="item" items="${CG_STY}">
+                    <option value="${item.codeId}">${item.codeIdName}</option>
+                </c:forEach>
+            </select>
+        </td>
+        <th>악취 강도</th>
+        <td><select id="smellValue" name="smellValue">
+            <option value="">전체</option>
+                <c:forEach var="item" items="${CG_SMT}">
+                    <option value="${item.codeId}">${item.codeIdName}</option>
+                </c:forEach>
+        </select></td>
+        <th>기상 상태</th>
+        <td><select id="weaterState" name="weaterState">
+            <option value="">전체</option>
+                <c:forEach var="item" items="${CG_WET}">
+                    <option value="${item.codeId}">${item.codeIdName}</option>
+                </c:forEach>
+        </select></td>
+        <td><a class="button bgcSkyBlue mt10 fr" onclick="fn_search();"><i class="bx bx-search"></i>조회</a></td>
     </tr>
 </table>
-<div class="wd100rate h100rate bgc_w">
+<div class="wd100rate h100rate bgc_w scrollView">
 
     <div class="wd70rate h100rate fl brDeepBlue">
         <table class=" viewTable">
@@ -65,103 +175,36 @@
                 <th>등록자</th>
                 <th class="wd20rate">등록일시</th>
             </tr>
-            <tr>
-                <td>1</td>
-                <td>맑음</td>
-                <td>20:00~22:00</td>
-                <td>(5)참기 어려운 취기</td>
-                <td>고무 냄새</td>
-                <td>이름1</td>
-                <td>2021-05-28 21:56:00</td>
+            <c:forEach var="resultList" items="${resultList}" varStatus="status">
+            <tr class="cursor_pointer itemRow">
+                <td>${paginationInfo.totalRecordCount - ((joinVO.pageIndex-1) * 10) - status.index}</td>
+                <td>${resultList.weaterStateName}</td>
+                <td>${resultList.smellRegisterTimeName}</td>
+                <td>${resultList.smellValueName}</td>
+                <td>${resultList.smellTypeName}</td>
+                <td>${resultList.regId}</td>
+                <td>${resultList.regDt }</td>
+                <td style="display:none;">${resultList.userName}</td>
+                <td style="display:none;">${resultList.humidityValue}</td>
+                <td style="display:none;">${resultList.temperatureValue}</td>
+                <td style="display:none;">${resultList.windDirectionValueName}</td>
+                <td style="display:none;">${resultList.windSpeedValue}</td>
+                <td style="display:none;">${resultList.smellComment}</td>
+                <td style="display:none;">${resultList.gpsX }</td>
+                <td style="display:none;">${resultList.gpsY}</td>
             </tr>
-            <tr>
-                <td>2</td>
-                <td>비</td>
-                <td>12:00~14:00</td>
-                <td>(1)감지 취기</td>
-                <td>음식물 냄새</td>
-                <td>이름1</td>
-                <td>2021-05-28 21:56:00</td>
-            </tr>
-            <tr>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
+            </c:forEach>
+            <c:if test="${empty resultList}">
+                <tr>
+                    <td align="center" colspan="19">- 해당 데이터가 존재하지 않습니다. -</td>
+                </tr>
+            </c:if>
         </table>
-        <hr id="pageline" class="wd95rate">
         <div id="pagination" class="pagingBox align_c">
             <ui:pagination paginationInfo="${paginationInfo}" type="image" jsFunction="fn_page"/>
         </div>
     </div>
-
+    </form:form>
     <div class="scrollView">
         <div id="rightSide" class="fr wd100rate h50rate">
             <div id="map" class="wd100rate h100rate"></div>
@@ -172,41 +215,39 @@
                 <p></p>
                 <tr>
                     <td class="font_bold">날씨</td>
-                    <td>맑음</td>
+                    <td id="getWeaterState"></td>
                 </tr>
                 <tr>
-                    <td class="font_bold">등록자</td>
-                    <td>이름4</td>
-                    <td class="font_bold">등록자 아이디</td>
-                    <td>test1234</td>
+                    <td  class="font_bold">등록자</td>
+                    <td  id="getRegName"> </td>
+                    <td  class="font_bold">등록자 아이디</td>
+                    <td  id="getRegId" name="redID"> </td>
                 </tr>
                 <tr>
                     <td class="font_bold">취기</td>
-                    <td>고무냄새</td>
+                    <td id="getSmellType"> </td>
                     <td class="font_bold">악취 강도</td>
-                    <td>감지 취기(1)</td>
+                    <td id="getSmellValue"> </td>
                 </tr>
                 <tr>
-                    <td class="font_bold">기상 상태</td>
-                    <td>이름4</td>
+                    <td class="font_bold">습도</td>
+                    <td id="humidityValue" ></td>
                     <td class="font_bold">온도</td>
-                    <td>test1234</td>
+                    <td id="getTemperatureValue" ></td>
                 </tr>
                 <tr>
-                    <td class="font_bold">풍향</td>
-                    <td>이름4</td>
-                    <td class="font_bold">풍속</td>
-                    <td>test1234</td>
+                    <td colspan="1" class="font_bold">풍향</td>
+                    <td colspan="1" id="getWindDirectionValue" ></td>
+                    <td colspan="1" class="font_bold">풍속</td>
+                    <td colspan="1" id="getWindSpeedValue" ></td>
                 </tr>
                 <tr>
-                    <td colspan="2" class="font_bold">등록일시</td>
-                    <td colspan="2">2021-05-28 21:56:00</td>
+                    <td colspan="1" class="font_bold">등록일시</td>
+                    <td colspan="3" id="getRegDt" ></td>
                 </tr>
                 <tr class="h200">
                     <td colspan="1" class="font_bold" id="">비고</td>
-                    <td colspan="3">
-                        냄새가 났당 말았당 햄수다..<br>
-                        제기 봐줍서양!
+                    <td colspan="3" id="smellComment">
                     </td>
                 </tr>
                 <tr class="h200">

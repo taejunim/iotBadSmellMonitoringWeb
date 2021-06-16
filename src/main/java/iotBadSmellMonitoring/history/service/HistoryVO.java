@@ -33,6 +33,8 @@ public class HistoryVO extends PageVO {
     private String smellComment;                                                                                        //냄새 설명
     private String smellRegisterTime;                                                                                   //냄새 접수 시간대(코드 테이블 참조)
     private String regId;                                                                                               //사용자 아이디
+    private String startDate;                                                                                           //시작날짜
+    private String endDate;                                                                                             //끝 날짜
     /*HISTORY MASTER END*/
 
     /*HISTORY DETAIL START*/
