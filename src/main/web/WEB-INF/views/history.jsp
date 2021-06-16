@@ -19,17 +19,25 @@ var map;
              map = focusMapCenter(33.352974, 126.314419, 5);
 
             /* 검색 화면 검색어 세팅 START*/
-            var smellType = '${joinVO.smellType}';          //취기
+            var startDate = '${historyVO.startDate}';          //시작날짜
+
+            if (startDate != "" && startDate != null)
+                $("#searchStartDt").val(startDate).prop("selected", true);
+            var endDate = '${historyVO.endDate}';              //종료날짜 
+
+            if (endDate != "" && endDate != null)
+                $("#searchEndDt").val(endDate).prop("selected", true);
+            var smellType = '${historyVO.smellType}';          //취기
 
             if (smellType != "" && smellType != null)
                 $("#smellType").val(smellType).prop("selected", true);                              //VO 값 선택
 
-            var smellValue = '${joinVO.smellValue}';        //악취강도
+            var smellValue = '${historyVO.smellValue}';        //악취강도
 
             if (smellValue != "" && smellValue != null)
                 $("#smellValue").val(smellValue).prop("selected", true);                              //VO 값 선택
 
-            var weaterState = '${joinVO.weaterState}';       //기상상태
+            var weaterState = '${historyVO.weaterState}';       //기상상태
 
             if (weaterState != "" && weaterState != null)
                 $("#weaterState").val(weaterState).prop("selected", true);
@@ -55,31 +63,24 @@ var map;
                 /*지도 세팅 START*/
                 var gpsX = getItems.eq(13).text();       //gps_x의 값
                 var gpsY = getItems.eq(14).text();       //gps_y의 값
-
                 var mapContainer = document.getElementById('map'), // 지도를 표시할 div
                     mapOption = {
                         center: new kakao.maps.LatLng(gpsY, gpsX), // 지도의 중심좌표
                         level: 3 // 지도의 확대 레벨
                     };
-
                 var map = new kakao.maps.Map(mapContainer, mapOption); // 지도 생성
-
                 // 마커가 표시될 위치
                 var markerPosition  = new kakao.maps.LatLng(gpsY, gpsX);
-
                 // 마커 생성
                 var marker = new kakao.maps.Marker({
                     position: markerPosition
                 });
-
                 // 마커가 지도 위에 표시되도록 설정
                 marker.setMap(map);
                 /*지도 세팅 END*/
-                
+
 
             })
-
-
         });
 
         //달력 SETTING
@@ -104,7 +105,6 @@ var map;
 
         //페이지 이동 스크립트
         function fn_page(pageNo) {
-
             frm.pageIndex.value = pageNo;
             document.frm.action = "<c:url value='/history.do'/>";
             document.frm.submit();
@@ -113,8 +113,6 @@ var map;
         //조회
         function fn_search() {
             console.log("조회 버튼 클릭");
-            // $("#searchStartDt").val($("#searchStartDt").val());
-            // $("#searchEndDt").val($("#searchEndDt").val());
             frm.pageIndex.value = 1;
             document.frm.action = "<c:url value='/history.do'/>";
             document.frm.submit();
@@ -126,15 +124,15 @@ var map;
 <table class="searchTable">
 
     <form:form id="frm" name="frm" method="post">
-    <input type="hidden" id="pageIndex" name="pageIndex" value="${joinVO.pageIndex}">
+    <input type="hidden" id="pageIndex" name="pageIndex" value="${historyVO.pageIndex}">
     <tr>
         <th>등록자</th>
-        <td><input type="text" name="regId" value="${joinVO.regId}"></td>
+        <td><input type="text" name="regId" value="${historyVO.regId}"></td>
         <th>등록일</th>
             <td>
-        <input type="date" class="mDateTimeInput" value="${joinVO.startDate}" id="searchStartDt" name="startDate" readonly="readonly">
+        <input type="date" name="startDate" class="mDateTimeInput" value="${historyVO.startDate}" id="searchStartDt" readonly="readonly">
         ~
-        <input type="date"  class="mDateTimeInput" value="${joinVO.endDate}" id="searchEndDt" name="endDate" readonly="readonly">
+        <input type="date" name="endDate" class="mDateTimeInput" value="${historyVO.endDate}" id="searchEndDt" readonly="readonly">
             </td>
         <th>취기</th>
         <td>
@@ -159,6 +157,7 @@ var map;
                     <option value="${item.codeId}">${item.codeIdName}</option>
                 </c:forEach>
         </select></td>
+        <td><a class="button resetBtn"></a></td>
         <td><a class="button bgcSkyBlue mt10 fr" onclick="fn_search();"><i class="bx bx-search"></i>조회</a></td>
     </tr>
 </table>
@@ -177,7 +176,7 @@ var map;
             </tr>
             <c:forEach var="resultList" items="${resultList}" varStatus="status">
             <tr class="cursor_pointer itemRow">
-                <td>${paginationInfo.totalRecordCount - ((joinVO.pageIndex-1) * 10) - status.index}</td>
+                <td>${paginationInfo.totalRecordCount - ((historyVO.pageIndex-1) * 10) - status.index}</td>
                 <td>${resultList.weaterStateName}</td>
                 <td>${resultList.smellRegisterTimeName}</td>
                 <td>${resultList.smellValueName}</td>

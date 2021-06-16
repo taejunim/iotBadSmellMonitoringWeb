@@ -40,7 +40,7 @@ public class HistoryController {
 
     //개별접수이력조회
     @RequestMapping("/history")
-    public String history(@ModelAttribute("joinVO") HistoryVO historyVO, ModelMap model) throws Exception {
+    public String history(@ModelAttribute("historyVO") HistoryVO historyVO, ModelMap model) throws Exception {
         System.out.println("HistoryVo ----->" +historyVO);
 
         MainVO mainVO = new MainVO();
