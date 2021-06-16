@@ -177,7 +177,18 @@ To change this template use File | Settings | File Templates.
 <div class="wd100rate h100rate bgc_w">
 
     <div class="wd70rate h100rate fl brDeepBlue">
-        <table class="viewTable">
+        <table class="viewTable font_size15">
+            <thead>
+                <colgroup>
+                    <col width="5%"/>
+                    <col width="10%"/>
+                    <col width="20%"/>
+                    <col width="20%"/>
+                    <col width="10%"/>
+                    <col width="10%"/>
+                    <col width=""/>
+                </colgroup>
+            </thead>
             <tr>
                 <th class="wd5rate">NO</th>
                 <th>구분</th>
@@ -188,7 +199,7 @@ To change this template use File | Settings | File Templates.
                 <th class="wd20rate">등록일시</th>
             </tr>
             <c:forEach var="resultList" items="${resultList}" varStatus="status">
-                <tr class="cursor_pointer itemRow">
+                <tr class="cursor_pointer itemRow h40">
                     <td>${paginationInfo.totalRecordCount - ((joinVO.pageIndex-1) * 10) - status.index}</td>
                     <td>${resultList.userTypeName}</td>
                     <td>${resultList.userId}</td>
@@ -201,6 +212,11 @@ To change this template use File | Settings | File Templates.
             <c:if test="${empty resultList}">
                 <tr>
                     <td align="center" colspan="19">- 해당 데이터가 존재하지 않습니다. -</td>
+                </tr>
+            </c:if>
+            <c:if test="${!empty resultList && resultList.size() ne 10}">
+                <tr>
+                    <td align="center" colspan="7" rowspan="${10-resultList.size()}"></td>
                 </tr>
             </c:if>
         </table>
