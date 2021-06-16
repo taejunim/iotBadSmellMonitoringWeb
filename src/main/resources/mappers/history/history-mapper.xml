@@ -27,7 +27,7 @@
              , tu.USER_NAME                                USER_NAME
              , DATE_FORMAT(tsr.REG_DT,'%Y-%m-%d %H:%i:%S') REG_DT
 
-          FROM tb_smell_register tsr INNER JOIN tb_user tu on tsr.REG_ID = tu.USER_ID
+          FROM tb_smell_register tsr LEFT OUTER JOIN tb_user tu on tsr.REG_ID = tu.USER_ID
 
         <if test="regId != null and !regId.equals('')" >
             AND (LOWER(REG_ID) LIKE LOWER('%${regId}%'))
