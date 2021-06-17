@@ -34,6 +34,8 @@
              , USER_TYPE
              , F_GET_CODE_NAME('UST',USER_TYPE) USER_TYPE_NAME
              , USER_NAME
+             , USER_REGION
+             , F_GET_CODE_NAME('RGN',USER_REGION) USER_REGION_NAME
              , USER_SEX
              , F_GET_CODE_NAME('SEX',USER_SEX) USER_SEX_NAME
              , USER_AGE

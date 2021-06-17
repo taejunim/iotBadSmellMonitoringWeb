@@ -13,6 +13,11 @@ To change this template use File | Settings | File Templates.
         setButton("member");
 
         /* 검색 화면 검색어 세팅 START*/
+        var userRegion = '${joinVO.userRegion}';
+
+        if (userRegion != "" && userRegion != null)
+            $("#searchUserRegion").val(userRegion).prop("selected", true);                              //VO 값 선택
+
         var userSex = '${joinVO.userSex}';
 
         if (userSex != "" && userSex != null)
@@ -32,11 +37,14 @@ To change this template use File | Settings | File Templates.
 
             $("#userPassword").val("");
             $("#userId").val(getItems.eq(2).text());
-            $("#userName").val(getItems.eq(4).text());
-            $("#userAge").val(getItems.eq(3).text());
+            $("#userName").val(getItems.eq(3).text());
+            $("#userAge").val(getItems.eq(5).text());
+
+            $("#userRegion").empty();
+            $("#userRegion").append("<option>"+getItems.eq(4).text()+"</option>");
 
             $("#userSex").empty();
-            $("#userSex").append("<option>"+getItems.eq(5).text()+"</option>");
+            $("#userSex").append("<option>"+getItems.eq(6).text()+"</option>");
 
             $("#userType").empty();
             $("#userType").append("<option>"+getItems.eq(1).text()+"</option>");
@@ -120,6 +128,7 @@ To change this template use File | Settings | File Templates.
         $("#userName").val("");
         $("#userAge").val("");
 
+        $("#userRegion").empty();
         $("#userSex").empty();
         $("#userType").empty();
     }
@@ -133,7 +142,7 @@ To change this template use File | Settings | File Templates.
     }
 
     //조회
-    function fn_seach() {
+    function fn_search() {
 
         frm.pageIndex.value = 1;
         document.frm.action = "<c:url value='/member.do'/>";
@@ -149,12 +158,21 @@ To change this template use File | Settings | File Templates.
     <input type="hidden" id="pageIndex" name="pageIndex" value="${joinVO.pageIndex}">
     <tr>
         <th>아이디/이름</th>
-        <td><input type="text" name="userId" value="${joinVO.userId}"></td>
+        <td class="wd100"><input type="text" name="userId" value="${joinVO.userId}"></td>
+        <th>지역</th>
+        <td class="wd100">
+            <select id="searchUserRegion" name="userRegion" class="wd90">
+                <option value="">전체</option>
+                <c:forEach var="item" items="${CG_RGN}">
+                    <option value="${item.codeId}">${item.codeIdName}</option>
+                </c:forEach>
+            </select>
+        </td>
         <th>나이</th>
-        <td><input type="text" name="userAge" value="${joinVO.userAge}"></td>
+        <td class="wd100"><input type="text" name="userAge" value="${joinVO.userAge}"></td>
         <th>성별</th>
-        <td>
-            <select id="searchUserSex" name="userSex">
+        <td class="wd100">
+            <select id="searchUserSex" name="userSex" class="wd90">
                 <option value="">전체</option>
                 <c:forEach var="item" items="${CG_SEX}">
                     <option value="${item.codeId}">${item.codeIdName}</option>
@@ -163,14 +181,14 @@ To change this template use File | Settings | File Templates.
         </td>
         <th>구분</th>
         <td>
-            <select id="searchUserType" name="userType">
+            <select id="searchUserType" name="userType" class="wd90">
                 <option value="">전체</option>
                 <c:forEach var="item" items="${CG_UST}">
                     <option value="${item.codeId}">${item.codeIdName}</option>
                 </c:forEach>
             </select>
         </td>
-        <td><a class="button bgcSkyBlue mt10 fr" onclick="fn_seach();"><i class="bx bx-search"></i>조회</a></td>
+        <td><a class="button bgcSkyBlue mt10 fr" onclick="fn_search();"><i class="bx bx-search"></i>조회</a></td>
     </tr>
 </table>
 
@@ -182,8 +200,9 @@ To change this template use File | Settings | File Templates.
                 <colgroup>
                     <col width="5%"/>
                     <col width="10%"/>
-                    <col width="20%"/>
-                    <col width="20%"/>
+                    <col width="15%"/>
+                    <col width="15%"/>
+                    <col width="10%"/>
                     <col width="10%"/>
                     <col width="10%"/>
                     <col width=""/>
@@ -194,6 +213,7 @@ To change this template use File | Settings | File Templates.
                 <th>구분</th>
                 <th>아이디</th>
                 <th>이름</th>
+                <th>지역</th>
                 <th>나이</th>
                 <th>성별</th>
                 <th class="wd20rate">등록일시</th>
@@ -204,6 +224,7 @@ To change this template use File | Settings | File Templates.
                     <td>${resultList.userTypeName}</td>
                     <td>${resultList.userId}</td>
                     <td>${resultList.userName}</td>
+                    <td>${resultList.userRegionName}</td>
                     <td>${resultList.userAge}</td>
                     <td>${resultList.userSexName}</td>
                     <td><fmt:formatDate value="${resultList.regDt}" pattern="yyyy-MM-dd hh:mm:ss"/></td>
@@ -211,12 +232,12 @@ To change this template use File | Settings | File Templates.
             </c:forEach>
             <c:if test="${empty resultList}">
                 <tr>
-                    <td align="center" colspan="7" rowspan="10">- 해당 데이터가 존재하지 않습니다. -</td>
+                    <td align="center" colspan="8" rowspan="10">- 해당 데이터가 존재하지 않습니다. -</td>
                 </tr>
             </c:if>
             <c:if test="${!empty resultList && resultList.size() ne 10}">
                 <tr>
-                    <td align="center" colspan="7" rowspan="${10-resultList.size()}"></td>
+                    <td align="center" colspan="8" rowspan="${10-resultList.size()}"></td>
                 </tr>
             </c:if>
         </table>
@@ -246,6 +267,13 @@ To change this template use File | Settings | File Templates.
                 <tr class="h57">
                     <td class="align_l"><label>나이</label></td>
                     <td><input type="text" readonly class="wd210" id="userAge" disabled></td>
+                </tr>
+                <tr class="h57">
+                    <td class="align_l"><label>지역</label></td>
+                    <td>
+                        <select class="wd230 bgc_grayC" disabled id="userRegion">
+                        </select>
+                    </td>
                 </tr>
                 <tr class="h57">
                     <td class="align_l"><label>성별</label></td>

@@ -108,6 +108,7 @@ public class MainController {
             session.setAttribute("userId", egovMap.get("userId"));                  //아이디
             session.setAttribute("userPassword", joinVO.getUserPassword());         //사용자_비밀번호(mysql password 함수 쓰면 무조건 41자리 나와서 char41로 FIX)
             session.setAttribute("userName", egovMap.get("userName"));              //이름
+            session.setAttribute("userRegionName", egovMap.get("userRegionName"));  //지역
             session.setAttribute("userAge", egovMap.get("userAge"));                //나이
             session.setAttribute("userSexName", egovMap.get("userSexName"));        //성별 이름(코드 테이블 참조)
             session.setAttribute("userTypeName", egovMap.get("userTypeName"));      //사용자 구분 이름(코드 테이블 참조)

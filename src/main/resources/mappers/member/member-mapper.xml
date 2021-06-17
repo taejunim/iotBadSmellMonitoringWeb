@@ -10,6 +10,8 @@
              , USER_TYPE
              , F_GET_CODE_NAME('UST',USER_TYPE) USER_TYPE_NAME
              , USER_NAME
+             , USER_REGION
+             , F_GET_CODE_NAME('RGN',USER_REGION) USER_REGION_NAME
              , USER_SEX
              , F_GET_CODE_NAME('SEX',USER_SEX) USER_SEX_NAME
              , USER_AGE
@@ -19,6 +21,9 @@
 
         <if test="userId != null and !userId.equals('')" >
             AND (LOWER(USER_ID) LIKE LOWER('%${userId}%') OR LOWER(USER_NAME) LIKE LOWER('%${userId}%'))
+        </if>
+        <if test="userRegion != null and !userRegion.equals('')" >
+            AND USER_REGION = #{userRegion}
         </if>
         <if test="userAge != null and !userAge.equals('')" >
             AND USER_AGE = #{userAge}

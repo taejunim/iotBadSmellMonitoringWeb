@@ -20,6 +20,9 @@
         $("#showName").val('<%=(String)session.getAttribute("userName")%>');                                //이름
         $("#showAge").val('<%=(String)session.getAttribute("userAge")%>');                                  //나이
 
+        $("#userRegion").empty();                                                                           //지역 구분 이름
+        $("#userRegion").append("<option>"+'<%=(String)session.getAttribute("userRegionName")%>'+"</option>");
+
         $("#userSex").empty();                                                                              //성별 이름
         $("#userSex").append("<option>"+'<%=(String)session.getAttribute("userSexName")%>'+"</option>");
 
@@ -108,6 +111,10 @@
         <tr>
             <td class="align_l pl20"><label class="tableLabel">나이</label></td>
             <td><input type="text" id="showAge" name="userAge" placeholder="나이"disabled></td>
+        </tr>
+        <tr>
+            <td class="align_l pl20"><label class="tableLabel">지역</label></td>
+            <td><select class="bgc_grayC" disabled id="userRegion"></select></td>
         </tr>
         <tr>
             <td class="align_l pl20"><label class="tableLabel">성별</label></td>

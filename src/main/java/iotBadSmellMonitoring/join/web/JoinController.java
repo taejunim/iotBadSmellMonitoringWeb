@@ -7,10 +7,7 @@ import iotBadSmellMonitoring.main.service.MainVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 
@@ -53,12 +50,16 @@ public class JoinController {
                 session.setAttribute("CG_UST",mainService.codeListSelect(mainVO));
                 model.addAttribute("CG_UST",session.getAttribute("CG_UST"));
 
+                mainVO.setCodeGroup("RGN");
+                session.setAttribute("CG_RGN",mainService.codeListSelect(mainVO));
+                model.addAttribute("CG_RGN",session.getAttribute("CG_RGN"));
 
             }
             // 세션에 값을 저장했을 경우 세션값을  model에 넘겨줌
             else{
                 model.addAttribute("CG_UST",session.getAttribute("CG_UST"));
                 model.addAttribute("CG_SEX",session.getAttribute("CG_SEX"));
+                model.addAttribute("CG_RGN",session.getAttribute("CG_RGN"));
             }
         /*성별, 구분 SETTING END*/
 
@@ -82,6 +83,14 @@ public class JoinController {
         return result;
     }
 
+    //아이디 중복 체크
+    @RequestMapping(value = "/userFindIdSelect", method = RequestMethod.POST)
+    public @ResponseBody String userFindIdSelect(@RequestParam String userId) throws Exception {
 
+        String result = "";
+        result = joinService.userFindIdSelect(userId);
+
+        return result;
+    }
 
 }

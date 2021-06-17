@@ -40,11 +40,16 @@ public class MemberController {
             mainVO.setCodeGroup("SEX");
             session.setAttribute("CG_SEX",mainService.codeListSelect(mainVO));
             model.addAttribute("CG_SEX",session.getAttribute("CG_SEX"));
+
+            mainVO.setCodeGroup("RGN");
+            session.setAttribute("CG_RGN",mainService.codeListSelect(mainVO));
+            model.addAttribute("CG_RGN",session.getAttribute("CG_RGN"));
         }
         // 세션에 값을 저장했을 경우 세션값을  model에 넘겨줌
         else{
             model.addAttribute("CG_UST",session.getAttribute("CG_UST"));
             model.addAttribute("CG_SEX",session.getAttribute("CG_SEX"));
+            model.addAttribute("CG_RGN",session.getAttribute("CG_RGN"));
         }
         /*성별, 구분 SETTING END*/
 
