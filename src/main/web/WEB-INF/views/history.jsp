@@ -164,7 +164,7 @@ var map;
 <div class="wd100rate h100rate bgc_w scrollView">
 
     <div class="wd70rate h100rate fl brDeepBlue">
-        <table class=" viewTable">
+        <table class=" viewTable font_size15">
             <tr>
                 <th class="wd5rate">NO</th>
                 <th>기상 상태</th>
@@ -195,7 +195,12 @@ var map;
             </c:forEach>
             <c:if test="${empty resultList}">
                 <tr>
-                    <td align="center" colspan="19">- 해당 데이터가 존재하지 않습니다. -</td>
+                    <td align="center" colspan="7" rowspan="10">- 해당 데이터가 존재하지 않습니다. -</td>
+                </tr>
+            </c:if>
+            <c:if test="${!empty resultList && resultList.size() ne 10}">
+                <tr>
+                    <td align="center" colspan="7" rowspan="${10-resultList.size()}"></td>
                 </tr>
             </c:if>
         </table>

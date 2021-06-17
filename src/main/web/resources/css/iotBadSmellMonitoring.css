@@ -288,10 +288,10 @@ select::-ms-expand{
     margin: 3% auto 1% auto;
     text-align: center;
     width: 95%;
-    height: 440px!important;
+    height: 480px!important;
 }
 .viewTable th{
-    height: 40px!important;
+    height: 40px;
     background: #eaeaea;
     border: 1px solid #ccc;
     border-top: 2px solid black;

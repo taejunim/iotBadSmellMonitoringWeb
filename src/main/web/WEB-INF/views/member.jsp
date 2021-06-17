@@ -211,7 +211,7 @@ To change this template use File | Settings | File Templates.
             </c:forEach>
             <c:if test="${empty resultList}">
                 <tr>
-                    <td align="center" colspan="19">- 해당 데이터가 존재하지 않습니다. -</td>
+                    <td align="center" colspan="7" rowspan="10">- 해당 데이터가 존재하지 않습니다. -</td>
                 </tr>
             </c:if>
             <c:if test="${!empty resultList && resultList.size() ne 10}">
