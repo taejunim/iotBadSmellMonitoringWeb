@@ -99,7 +99,7 @@
         </tr>
         <tr>
             <td class="align_l pl20"><label class="tableLabel" >비밀번호</label></td>
-            <td><input type="password" id="showPassword" name="userPassword" placeholder="비밀번호"></td>
+            <td><input type="password" id="showPassword" name="userPassword" placeholder="비밀번호" maxlength="5"></td>
         </tr>
         <tr>
             <td class="align_l pl20"><label class="tableLabel" >이름</label></td>

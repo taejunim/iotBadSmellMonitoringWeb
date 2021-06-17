@@ -26,7 +26,7 @@
         });
         //로그아웃 Click
         $("#logout").click(function(){
-            $(location).attr('href', '/sample.do');
+            $(location).attr('href', '/login.do');
         });
     });
 
