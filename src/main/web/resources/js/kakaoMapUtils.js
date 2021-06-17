@@ -33,12 +33,13 @@ function focusMapCenter(latitude , longitude , zoom){
 function returnMarkerImage(smellValue) {
     var markerImage;
 
-    if(smellValue == '001')       markerImage = bluePin;
-    else if(smellValue == '002')  markerImage = greenPin;
-    else if(smellValue == '003')  markerImage = whitePin;
-    else if(smellValue == '004')  markerImage = yellowPin;
-    else if(smellValue == '005')  markerImage = orangePin;
-    else if(smellValue == '006')  markerImage = redPin;
+    if(smellValue == '001' || smellValue == '(0)무취')       markerImage = bluePin;
+    else if(smellValue == '002' || smellValue == '(1)감지 취기')  markerImage = greenPin;
+    else if(smellValue == '003' || smellValue == '(2)보통 취기')  markerImage = whitePin;
+    else if(smellValue == '004' || smellValue == '(3)강한 취기')  markerImage = yellowPin;
+    else if(smellValue == '005' || smellValue == '(4)극심한 취기')  markerImage = orangePin;
+    else if(smellValue == '006' || smellValue == '(5)참기 어려운 취기')  markerImage = redPin;
+
 
     return markerImage;
 }

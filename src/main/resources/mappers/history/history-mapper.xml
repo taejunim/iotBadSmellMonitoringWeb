@@ -96,7 +96,7 @@
         SELECT SMELL_IMAGE_NO
              , SMELL_IMAGE_PATH
              , SMELL_REGISTER_NO
-             , DATE_FORMAT(tsr.REG_DT,'%Y-%m-%d %H:%i:%S') REG_DT
+             , DATE_FORMAT(REG_DT,'%Y-%m-%d %H:%i:%S') REG_DT
 
           FROM tb_smell_image
 

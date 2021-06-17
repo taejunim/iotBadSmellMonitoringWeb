@@ -20,25 +20,22 @@ var map;
 
             /* 검색 화면 검색어 세팅 START*/
             var startDate = '${historyVO.startDate}';          //시작날짜
-
             if (startDate != "" && startDate != null)
                 $("#searchStartDt").val(startDate).prop("selected", true);
-            var endDate = '${historyVO.endDate}';              //종료날짜 
 
+            var endDate = '${historyVO.endDate}';              //종료날짜
             if (endDate != "" && endDate != null)
                 $("#searchEndDt").val(endDate).prop("selected", true);
-            var smellType = '${historyVO.smellType}';          //취기
 
+            var smellType = '${historyVO.smellType}';          //취기
             if (smellType != "" && smellType != null)
                 $("#smellType").val(smellType).prop("selected", true);                              //VO 값 선택
 
             var smellValue = '${historyVO.smellValue}';        //악취강도
-
             if (smellValue != "" && smellValue != null)
                 $("#smellValue").val(smellValue).prop("selected", true);                              //VO 값 선택
 
             var weaterState = '${historyVO.weaterState}';       //기상상태
-
             if (weaterState != "" && weaterState != null)
                 $("#weaterState").val(weaterState).prop("selected", true);
             /* 검색 화면 검색어 세팅 END*/
@@ -46,40 +43,53 @@ var map;
             // 테이블 row 클릭 이벤트
             $(".itemRow").click(function () {
 
+                /*오른쪽 table에 값 담아주기 START*/
                 var getItems = $(this).find("td");  //viewTable의 row
 
-                $("#getWeaterState").text(getItems.eq(1).text());
-                $("#getRegName").text(getItems.eq(5).text());
-                $("#getRegId").text(getItems.eq(7).text());
-                $("#getSmellType").text(getItems.eq(4).text());
-                $("#getSmellValue").text(getItems.eq(3).text());
-                $("#humidityValue").text(getItems.eq(8).text() + "%");
-                $("#getTemperatureValue").text(getItems.eq(9).text() + " ℃");
-                $("#getWindDirectionValue").text(getItems.eq(10).text());
-                $("#getWindSpeedValue").text(getItems.eq(11).text() +"m/s");
-                $("#getRegDt").text(getItems.eq(6).text());
-                $("#smellComment").text(getItems.eq(12).text());
+                $("#getWeaterState").text(getItems.eq(1).text());               //기상 상태
+                $("#getRegName").text(getItems.eq(5).text());                   //등록자
+                $("#getRegId").text(getItems.eq(7).text());                     //등록자 아이디
+                $("#getSmellType").text(getItems.eq(4).text());                 //취기
+                $("#getSmellValue").text(getItems.eq(3).text());                //악취 강도
+                $("#humidityValue").text(getItems.eq(8).text() + "%");          //습도
+                $("#getTemperatureValue").text(getItems.eq(9).text() + " ℃");   //온도
+                $("#getWindDirectionValue").text(getItems.eq(10).text());       //풍향
+                $("#getWindSpeedValue").text(getItems.eq(11).text() +"m/s");    //풍속
+                $("#getRegDt").text(getItems.eq(6).text());                     //등록일시
+                $("#smellComment").text(getItems.eq(12).text());                //비고
+                /*오른쪽 table에 값 담아주기 END*/
 
                 /*지도 세팅 START*/
                 var gpsX = getItems.eq(13).text();       //gps_x의 값
                 var gpsY = getItems.eq(14).text();       //gps_y의 값
+
                 var mapContainer = document.getElementById('map'), // 지도를 표시할 div
                     mapOption = {
                         center: new kakao.maps.LatLng(gpsY, gpsX), // 지도의 중심좌표
                         level: 3 // 지도의 확대 레벨
                     };
                 var map = new kakao.maps.Map(mapContainer, mapOption); // 지도 생성
-                // 마커가 표시될 위치
-                var markerPosition  = new kakao.maps.LatLng(gpsY, gpsX);
-                // 마커 생성
+
+                var markerPosition  = new kakao.maps.LatLng(gpsY, gpsX); // 마커가 표시될 위치
+
+                var smellValue = getItems.eq(3).text();     //returnMarkerImage에 넘겨줄 파라미터
+
+                var markerImage = returnMarkerImage(smellValue); //마커 이미지
+
+                // 마커를 생성합니다
                 var marker = new kakao.maps.Marker({
-                    position: markerPosition
+                    map: map, // 마커를 표시할 지도
+                    position: markerPosition, // 마커를 표시할 위치
+                    image: markerImage // 마커 이미지
                 });
                 // 마커가 지도 위에 표시되도록 설정
                 marker.setMap(map);
                 /*지도 세팅 END*/
+            })
 
-
+            //검색조건 초기화
+            $(".resetBtn").click(function () {
+                $(location).attr('href', '/history.do');
             })
         });
 
@@ -117,6 +127,8 @@ var map;
             document.frm.action = "<c:url value='/history.do'/>";
             document.frm.submit();
         }
+
+
 </script>
 <body>
 <jsp:include page="/menu"/>
@@ -157,8 +169,8 @@ var map;
                     <option value="${item.codeId}">${item.codeIdName}</option>
                 </c:forEach>
         </select></td>
-        <td><a class="button resetBtn"></a></td>
-        <td><a class="button bgcSkyBlue mt10 fr" onclick="fn_search();"><i class="bx bx-search"></i>조회</a></td>
+        <td><a class="button resetBtn bgc_grayC mt10 fr"><i class="bx bx-redo"></i>초기화</a>
+            <a class="button bgcSkyBlue mt10 fr" onclick="fn_search();"><i class="bx bx-search"></i>조회</a></td>
     </tr>
 </table>
 <div class="wd100rate h100rate bgc_w scrollView">
@@ -208,7 +220,7 @@ var map;
             <ui:pagination paginationInfo="${paginationInfo}" type="image" jsFunction="fn_page"/>
         </div>
     </div>
-    </form:form>
+
     <div class="scrollView">
         <div id="rightSide" class="fr wd100rate h50rate">
             <div id="map" class="wd100rate h100rate"></div>
@@ -254,17 +266,16 @@ var map;
                     <td colspan="3" id="smellComment">
                     </td>
                 </tr>
+                <c:forEach var="imageList" items="${imageList}" varStatus="status">
                 <tr class="h200">
-                    <td colspan="3">이미지</td>
+                    <td colspan="3">이미지${imageList.smellImagePath}</td>
                     <td colspan="1"><a class="subButton">이미지 삭제</a></td>
                 </tr>
-                <tr class="h200">
-                    <td colspan="3">이미지</td>
-                    <td colspan="1"><a class="subButton">이미지 삭제</a></td>
-                </tr>
+                </c:forEach>
             </table>
         </div>
     </div>
 </div>
+</form:form>
 </body>
 </html>
