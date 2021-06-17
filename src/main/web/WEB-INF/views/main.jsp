@@ -81,8 +81,8 @@ var map;
     if($(".weatherStatus").css("display")=="none") $(".weatherStatus").css("display","");
     $("#weatherState").text($("#weaterStateName"+index).val());
     $("#temperatureValue").text(addUnit($("#temperatureValue"+index).val(),"temperature"));
-    $("#humidityValue").text($(addUnit("#humidityValue"+index).val(),"humidity"));
-    $("#windDirectionValue").text(getWindDirectionName($("#windDirectionValue"+index).val()));
+    $("#humidityValue").text(addUnit($("#humidityValue"+index).val(),"humidity"));
+    $("#windDirectionValue").text($("#windDirectionValue"+index).val());
     $("#windSpeedValue").text(addUnit($("#windSpeedValue"+index).val(),"speed"));
 
   }
@@ -108,10 +108,10 @@ var map;
               <th>날씨</th><td colspan="3" id="weatherState">빗방울/눈날림</td>
             </tr>
             <tr>
-              <th>기온</th><td id="temperatureValue"> 25 ℃</td><th>습도</th><td id="humidityValue">10 %</td>
+              <th>기온</th><td id="temperatureValue"></td><th>습도</th><td id="humidityValue"></td>
             </tr>
             <tr>
-              <th>풍향</th><td id="windDirectionValue">북서</td><th>풍속</th><td id="windSpeedValue"> 3.4 m/s</td>
+              <th>풍향</th><td id="windDirectionValue"></td><th>풍속</th><td id="windSpeedValue"></td>
             </tr>
           </table>
         </td></tr>

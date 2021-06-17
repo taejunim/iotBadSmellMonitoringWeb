@@ -40,30 +40,6 @@ $(function () {
     })
 });
 
-//풍향 코드로 풍향 구하기
-function getWindDirectionName(code){
-    var name = "";
-    switch (code) {
-        case "N" : name = "북"; break;
-        case "NNE" : name = "북북동"; break;
-        case "NE" : name = "북동"; break;
-        case "ENE" : name = "동북동"; break;
-        case "E" : name = "동"; break;
-        case "ESE" : name = "동남동"; break;
-        case "SE" : name = "남동"; break;
-        case "SSE" : name = "남남동"; break;
-        case "S" : name = "남"; break;
-        case "SSW" : name = "남남서"; break;
-        case "SW" : name = "남서"; break;
-        case "WSW" : name = "서남서"; break;
-        case "W" : name = "서"; break;
-        case "WNW" : name = "서북서"; break;
-        case "NW" : name = "북서"; break;
-        case "NNW" : name = "북북서"; break;
-    }
-    return name;
-}
-
 //단위 붙이기 -> %, m/s , ℃
 function addUnit(text, unit){
 
