@@ -231,7 +231,7 @@ var map;
                 <p></p>
                 <tr>
                     <td class="font_bold">날씨</td>
-                    <td id="getWeaterState"></td>
+                    <td colspan="3" id="getWeaterState"></td>
                 </tr>
                 <tr>
                     <td  class="font_bold">등록자</td>
