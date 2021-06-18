@@ -7,10 +7,10 @@ import java.util.List;
 public interface StatisticService {
 
     /**
-     * 당일 통계 목록
+     * 통계 목록
      * @return List<EgovMap>
      * @throws Exception
      */
-    List<EgovMap> todayStatisticListSelect(StatisticVO statisticVO) throws Exception;
+    List<EgovMap> statisticListSelect(StatisticVO statisticVO) throws Exception;
 
 }

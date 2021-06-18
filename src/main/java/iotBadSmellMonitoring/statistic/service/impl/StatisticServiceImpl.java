@@ -28,15 +28,15 @@ public class StatisticServiceImpl implements StatisticService {
     SqlSession sqlSession;
 
     /**
-     * 당일 통계 목록
+     * 통계 목록
      * @return List<EgovMap>
      * @throws Exception
      */
-    public List<EgovMap> todayStatisticListSelect(StatisticVO statisticVO) throws Exception {
+    public List<EgovMap> statisticListSelect(StatisticVO statisticVO) throws Exception {
 
         StatisticMapper statisticMapper = sqlSession.getMapper(StatisticMapper.class);
 
-        return statisticMapper.todayStatisticListSelect(statisticVO);
+        return statisticMapper.statisticListSelect(statisticVO);
     }
 
 }
