@@ -91,8 +91,16 @@ var map;
             $(".resetBtn").click(function () {
                 $(location).attr('href', '/history.do');
             })
+
+            $("#imageDeleteBtn").click(function () {
+               imageDelete();
+            })
         });
 
+        //이미지 삭제
+        function imageDelete(){
+            console.log("이미지 삭제 버튼 클릭");
+        }
         //달력 SETTING
         function setDatePicker(){
 
@@ -132,7 +140,7 @@ var map;
 </script>
 <body>
 <jsp:include page="/menu"/>
-
+<div class="wd100rate h100rate bgc_w scrollView">
 <table class="searchTable">
 
     <form:form id="frm" name="frm" method="post">
@@ -234,10 +242,10 @@ var map;
                     <td colspan="3" id="getWeaterState"></td>
                 </tr>
                 <tr>
-                    <td  class="font_bold">등록자</td>
-                    <td  id="getRegName"> </td>
-                    <td  class="font_bold">등록자 아이디</td>
-                    <td  id="getRegId" name="redID"> </td>
+                    <td class="font_bold">등록자</td>
+                    <td id="getRegName"> </td>
+                    <td class="font_bold">등록자 아이디</td>
+                    <td id="getRegId" name="redID"> </td>
                 </tr>
                 <tr>
                     <td class="font_bold">취기</td>
@@ -252,10 +260,10 @@ var map;
                     <td id="getTemperatureValue" ></td>
                 </tr>
                 <tr>
-                    <td colspan="1" class="font_bold">풍향</td>
-                    <td colspan="1" id="getWindDirectionValue" ></td>
-                    <td colspan="1" class="font_bold">풍속</td>
-                    <td colspan="1" id="getWindSpeedValue" ></td>
+                    <td class="font_bold">풍향</td>
+                    <td id="getWindDirectionValue" ></td>
+                    <td class="font_bold">풍속</td>
+                    <td id="getWindSpeedValue" ></td>
                 </tr>
                 <tr>
                     <td colspan="1" class="font_bold">등록일시</td>
@@ -266,16 +274,17 @@ var map;
                     <td colspan="3" id="smellComment">
                     </td>
                 </tr>
-                <c:forEach var="imageList" items="${imageList}" varStatus="status">
+<%--                <c:forEach var="imageList" items="${imageList}" varStatus="status">--%>
                 <tr class="h200">
-                    <td colspan="3">이미지${imageList.smellImagePath}</td>
-                    <td colspan="1"><a class="subButton">이미지 삭제</a></td>
+                    <td colspan="3">이미지</td>
+                    <td colspan="1"><a class="subButton" id="imageDeleteBtn">이미지 삭제</a></td>
                 </tr>
-                </c:forEach>
+<%--                </c:forEach>--%>
             </table>
         </div>
     </div>
-</div>
+
 </form:form>
+</div>
 </body>
 </html>

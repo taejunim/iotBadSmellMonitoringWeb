@@ -94,7 +94,7 @@
 <jsp:include page="/menu"/>
 <div>
     <form:form method="post">
-    <table class="whiteForm wd500 mt130"; >
+        <table class="whiteForm wd30rate h70rate mt5rate";>
         <tr><th colspan="2"></th></tr>
         <tr>
             <td class="align_l pl20"><label class="tableLabel">아이디</label></td>

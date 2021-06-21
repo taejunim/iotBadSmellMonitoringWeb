@@ -631,6 +631,10 @@ span{
     height: 100% !important;
 }
 
+.h120rate {
+    height: 120% !important;
+}
+
 .hAuto {
     height: auto !important;
 }
@@ -1054,7 +1058,9 @@ span{
 .mtm33 {
     margin-top: -33px !important;
 }
-
+.mt5rate {
+    margin-top: 5%;
+}
 .mb0 {
     margin-bottom: 0 !important;
 }

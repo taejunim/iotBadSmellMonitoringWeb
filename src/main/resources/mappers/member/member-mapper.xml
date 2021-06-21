@@ -52,6 +52,9 @@
         <if test="userAge != null and !userAge.equals('')" >
             AND USER_AGE = #{userAge}
         </if>
+        <if test="userRegion != null and !userRegion.equals('')" >
+            AND USER_REGION = #{userRegion}
+        </if>
         <if test="userType != null and !userType.equals('')" >
             AND USER_TYPE = #{userType}
         </if>

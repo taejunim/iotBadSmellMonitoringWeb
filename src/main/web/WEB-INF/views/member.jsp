@@ -152,6 +152,7 @@ To change this template use File | Settings | File Templates.
 </script>
 <body>
 <jsp:include page="/menu"/>
+<div class="wd100rate h100rate scrollView">
 <table class="searchTable">
 
     <form:form id="frm" name="frm" method="post">
@@ -298,7 +299,7 @@ To change this template use File | Settings | File Templates.
             </table>
         </form:form>
     </div>
-
+</div>
 </div>
 </body>
 </html>
