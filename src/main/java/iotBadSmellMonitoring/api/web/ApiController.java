@@ -333,7 +333,7 @@ public class ApiController {
 
                 /*USER TODAY REGISTER DATA MAKE START*/
                 resultMap.put("smellRegisterTime","001");
-                resultMap.put("smellRegisterTimeName","08:00 ~ 10:00");
+                resultMap.put("smellRegisterTimeName","07:00 ~ 09:00");
                 resultMap.put("resultCode",egovMap.getValue(0).toString());
                 if(egovMap.getValue(1) != null)
                     resultMap.put("regDt",egovMap.getValue(1).toString());

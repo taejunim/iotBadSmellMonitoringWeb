@@ -112,7 +112,7 @@
                 SELECT CASE
                    WHEN STATUS_001 = '001_OK' THEN '001'
                    ELSE CASE
-                            WHEN DATE_FORMAT(NOW(), '%H:%i:%s') > '10:00:00'
+                            WHEN DATE_FORMAT(NOW(), '%H:%i:%s') > '09:00:00'
                                 THEN '002'
                             ELSE '003' END END AS STATUS_001,
                TIME_001,
