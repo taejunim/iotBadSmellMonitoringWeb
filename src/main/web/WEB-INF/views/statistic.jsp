@@ -14,10 +14,7 @@
 <script type="text/javascript">
     $(document).ready(function () {
         setButton("statistic");
-        //$(".datepicker").datepicker();
-        //세션값 바로 가져오는 예제
-        console.log('<%=(String)session.getAttribute("userName")%>');
-        console.log('<%=(String)session.getAttribute("userPassword")%>');
+
         $(".datepicker").datepicker({
             changeMonth: true,
             changeYear: true,
@@ -50,6 +47,27 @@
     });
 
     function drawChart(data){
+
+        $.ajax({
+            url: "/statisticListSelect",
+            type: "POST",
+            dataType: "json",
+            data: {
+                searchGbn : "day",
+                searchStart : '2021-06-01',
+                searchEnd :  '2021-06-21'
+
+            },
+            success: function (data) {
+                arrays = data;
+                console.log(data);
+            },
+            error: function (err) {
+                alert("사용자 데이터를 불러오는중 에러가 발생하였습니다.");
+            }
+        });
+
+
 
         var chart1 = c3.generate({
             bindto: '#lineChartDiv'

@@ -10,7 +10,7 @@
              , F_GET_CODE_NAME('SMT',A.SMELL_TYPE) SMELL_TYPE_NAME
         <choose>
 
-            <when test="regId.equals('day')">
+            <when test="searchGbn.equals('day')">
              , COUNT(SMELL_TYPE)               CNT
              , DATE_FORMAT(REG_DT, '%Y-%m-%d') REG_DT
 
@@ -25,7 +25,7 @@
       ORDER BY REG_DT, SMELL_TYPE
             </when>
 
-            <when test="regId.equals('month')">
+            <when test="searchGbn.equals('month')">
              , COUNT(SMELL_TYPE)            CNT
              , DATE_FORMAT(REG_DT, '%Y-%m') REG_DT
 
@@ -41,7 +41,7 @@
 
             </when>
 
-            <when test="regId.equals('year')">
+            <when test="searchGbn.equals('year')">
             , COUNT(SMELL_TYPE)         CNT
             , DATE_FORMAT(REG_DT, '%Y') REG_DT
 

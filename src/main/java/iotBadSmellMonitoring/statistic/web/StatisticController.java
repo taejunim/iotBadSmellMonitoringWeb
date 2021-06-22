@@ -1,13 +1,20 @@
 package iotBadSmellMonitoring.statistic.web;
 
+import egovframework.rte.psl.dataaccess.util.EgovMap;
 import iotBadSmellMonitoring.main.service.MainService;
 import iotBadSmellMonitoring.main.service.MainVO;
+import iotBadSmellMonitoring.statistic.service.StatisticService;
+import iotBadSmellMonitoring.statistic.service.StatisticVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpSession;
+import java.util.List;
 
 /**
  * @ Class Name   : Statistic.java
@@ -25,7 +32,9 @@ import javax.servlet.http.HttpSession;
 public class StatisticController {
 
     @Autowired
-    private MainService mainService;       //메인화면 관련 SERVICE.
+    private MainService      mainService;       //메인화면 관련 SERVICE.
+    @Autowired
+    private StatisticService statisticService;       //통계 관련 SERVICE.
 
     //통계
     @RequestMapping("/statistic")
@@ -66,6 +75,17 @@ public class StatisticController {
         }
 
         return "statistic";
+    }
+
+
+    //통계 차트 데이터 조회
+    @RequestMapping(name="/statisticListSelect", method = RequestMethod.POST)
+    public @ResponseBody List<EgovMap> statisticListSelect(@ModelAttribute("statisticVO") StatisticVO statisticVO) throws Exception {
+
+        List<EgovMap> list = statisticService.statisticListSelect(statisticVO);
+
+        System.out.println("결과" + list);
+        return list;
     }
 
 }
