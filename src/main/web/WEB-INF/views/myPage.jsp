@@ -91,10 +91,11 @@
     });
 </script>
 <body>
+<div class="wd100rate h100rate scrollView">
 <jsp:include page="/menu"/>
 <div>
     <form:form method="post">
-        <table class="whiteForm wd30rate h70rate mt5rate";>
+        <table class="whiteForm wd30rate h70rate mt4rate";>
         <tr><th colspan="2"></th></tr>
         <tr>
             <td class="align_l pl20"><label class="tableLabel">아이디</label></td>

@@ -91,6 +91,7 @@
 </script>
 
 <body>
+<div class="wd100rate h100rate scrollView">
     <div>
         <form:form class="joinForm" name="joinForm">
         <table class="blueForm wd450 mt200"; >
@@ -150,5 +151,6 @@
         </table>
         </form:form>
     </div>
+</div>
  </body>
 </html>

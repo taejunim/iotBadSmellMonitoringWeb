@@ -71,6 +71,7 @@
   }
 </script>
   <body>
+  <div class="wd100rate h100rate scrollView">
   <div>
   <form:form class="loginForm">
     <table class="blueForm wd500 mt220">
