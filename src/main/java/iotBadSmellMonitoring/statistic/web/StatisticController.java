@@ -77,15 +77,9 @@ public class StatisticController {
         return "statistic";
     }
 
-
     //통계 차트 데이터 조회
-    @RequestMapping(name="/statisticListSelect", method = RequestMethod.POST)
+    @RequestMapping(value = "/statisticListSelect")
     public @ResponseBody List<EgovMap> statisticListSelect(@ModelAttribute("statisticVO") StatisticVO statisticVO) throws Exception {
-
-        List<EgovMap> list = statisticService.statisticListSelect(statisticVO);
-
-        System.out.println("결과" + list);
-        return list;
+        return statisticService.statisticListSelect(statisticVO);
     }
-
 }
