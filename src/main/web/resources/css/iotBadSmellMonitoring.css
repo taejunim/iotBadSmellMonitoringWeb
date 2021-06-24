@@ -355,3 +355,6 @@ select::-ms-expand{
 .mDateTimeInput{
     width: 137px;
 }
+.borderRight{
+    border-right: 1px solid #10639a;
+}
