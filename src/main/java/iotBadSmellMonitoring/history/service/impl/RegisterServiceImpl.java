@@ -11,11 +11,11 @@ import org.springframework.stereotype.Service;
  * @ Modification : REGISTER MASTER / DETAIL SERVICE IMPL
  * @
  * @ 최초 생성일     최초 생성자
- * @ ---------    ---------
+ * @ ————    ————
  * @ 2021.06.04.    고재훈
  * @
  * @   수정일         수정자
- * @ ---------    ---------
+ * @ ————    ————
  * @
  **/
 
