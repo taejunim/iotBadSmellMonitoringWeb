@@ -11,11 +11,11 @@ import org.springframework.stereotype.Service;
  * @ Modification : REGISTER MASTER / DETAIL SERVICE IMPL
  * @
  * @ 최초 생성일     최초 생성자
- * @ ---------    ---------
+ * @ ————    ————
  * @ 2021.06.04.    고재훈
  * @
  * @   수정일         수정자
- * @ ---------    ---------
+ * @ ————    ————
  * @
  **/
 
@@ -40,17 +40,20 @@ public class RegisterServiceImpl implements RegisterService {
         int masterResult = registerMapper.registerMasterInsert(registerVO);                                             //접수 마스터 등록 CALL.
         int allResult    = 0;                                                                                           //마스터||디테일 등록 결과
 
-        if(!registerVO.getSmellImagePath().equals("") && registerVO.getSmellImagePath() != null) {                      //접수 디테일이 있으면,
+        if(masterResult == 1){
 
-            int detailResult = registerMapper.registerDetailInsert(registerVO);                                         //접수 디테일 등록 CALL.
+            allResult = 1;
 
-            if(masterResult == 1 && detailResult == 1)                                                                  //접수 마스터&&디테일 결과 1이면,
-                allResult = 1;
+            if(registerVO.getSmellImagePath() != null) {                                                                 //접수 디테일이 있으면,
 
-        }else{
+                if(!registerVO.getSmellImagePath().equals("")){
 
-            if(masterResult == 1 )
-                allResult = 1;
+                    int detailResult = registerMapper.registerDetailInsert(registerVO);                                     //접수 디테일 등록 CALL.
+
+                    if(detailResult == 0)                                                                                   //접수 마스터&&디테일 결과 1이면,
+                        allResult = 0;
+                }
+            }
         }
 
         return allResult;
