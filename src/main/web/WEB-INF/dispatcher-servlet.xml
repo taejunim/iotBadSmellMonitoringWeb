@@ -31,4 +31,25 @@
         <property name="order" value="0"/>
     </bean>
 
+    <!-- 인터셉터 객체 생성 -->
+    <bean id="sampleInterceptor" class="iotBadSmellMonitoring.common.SampleInterceptor"></bean>
+
+    <!-- Interceptor 설정 -->
+    <mvc:interceptors>
+        <mvc:interceptor>
+
+            <!-- Interceptor url -->
+            <mvc:mapping path="/**/*"/>
+
+            <!-- Interceptor 제외 url -->
+            <mvc:exclude-mapping path="/login.do"/>
+            <mvc:exclude-mapping path="/login"/>
+            <mvc:exclude-mapping path="/join.do"/>
+            <mvc:exclude-mapping path="/join/**"/>
+            <mvc:exclude-mapping path="/api/**"/>
+
+            <ref bean="sampleInterceptor"/>
+        </mvc:interceptor>
+    </mvc:interceptors>
+
 </beans>

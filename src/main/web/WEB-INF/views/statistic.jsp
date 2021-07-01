@@ -99,9 +99,6 @@
                         }
                     }
 
-                    for(var i=0; i< arrays.length; i++) {
-                        console.log(arrays[i]);
-                    }
                     var chart1 = c3.generate({
                         bindto: '#lineChartDiv'
                         ,data: {
@@ -278,7 +275,7 @@
         <div class="noChartContent wd100rate h100rate align_c" style="display: none; position:relative; top:300px;">- 표시할 내용이 없습니다. -</div>
     </div>
     <div id="rightSide" class="fr scroll_h mt50" style="width:45%;">
-        <div id="lineChartDiv" class="chartContent" style="display: none;"></div>
+        <div id="lineChartDiv" class="chartContent" style="display: none; width: 90%;"></div>
         <div class="noChartContent wd100rate h100rate align_c" style="display: none; position:relative; top:250px;">- 표시할 내용이 없습니다. -</div>
     </div>
 </div>

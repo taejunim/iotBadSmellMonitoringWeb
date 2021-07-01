@@ -68,7 +68,7 @@ public class JoinController {
 
 
     //회원 가입 요청
-    @RequestMapping(value = "/userJoinInsert", method = RequestMethod.POST)
+    @RequestMapping(value = "/join/userJoinInsert", method = RequestMethod.POST)
     public @ResponseBody String userJoinInsert(@ModelAttribute JoinVO joinVO) throws Exception {
         System.out.println("JoinVO  --->  " + joinVO);
         String result = "";
@@ -84,7 +84,7 @@ public class JoinController {
     }
 
     //아이디 중복 체크
-    @RequestMapping(value = "/userFindIdSelect", method = RequestMethod.POST)
+    @RequestMapping(value = "/join/userFindIdSelect", method = RequestMethod.POST)
     public @ResponseBody String userFindIdSelect(@RequestParam String userId) throws Exception {
 
         String result = "";

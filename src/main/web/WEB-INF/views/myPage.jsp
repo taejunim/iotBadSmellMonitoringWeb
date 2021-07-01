@@ -10,9 +10,8 @@
 <script type="text/javascript">
 
     $(document).ready(function () {
-        userId = "admin";
-        setButton("myPage");                        //선택된 화면의 메뉴색 변경 CALL
 
+        setButton("myPage");                        //선택된 화면의 메뉴색 변경 CALL
 
         /*세션값 불러오기 START*/
         $("#showId").val('<%=(String)session.getAttribute("userId")%>');                                    //아이디
