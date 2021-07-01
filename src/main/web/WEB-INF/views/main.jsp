@@ -117,8 +117,8 @@ var map;
         </td></tr>
       </table>
     </div>
-    <div id="rightSide" class="fr" style="width:70%; height: 100% ">
-      <div id="map" class="wd100rate h100rate"></div>
+    <div id="rightSide" class="fr" style="width:70%; height: 100%; border-left: 1px solid #10639a; margin-left: -1px; ">
+      <div id="map" class="wd90rate h80rate mg0auto" style="top:2%"></div>
     </div>
   </div>
   </body>

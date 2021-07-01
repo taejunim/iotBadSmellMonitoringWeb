@@ -231,7 +231,7 @@ var map;
 
     <div class="scrollView">
         <div id="rightSide" class="fr wd100rate h50rate">
-            <div id="map" class="wd100rate h100rate"></div>
+            <div id="map" class="wd90rate h90rate" style="margin:auto; top:20px;"></div>
         </div>
         <p style="color: white">a</p>
         <div>

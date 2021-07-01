@@ -308,6 +308,7 @@ select::-ms-expand{
     background-color: #61ade1;
     height: 40px;
     border-bottom: 1px solid black;
+    border-right: 1px solid #10639a;
 }
 .mainForm table th{
     border: none;
