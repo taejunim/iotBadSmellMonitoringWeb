@@ -22,7 +22,7 @@ public class RegisterVO {
     private String smellRegisterNo;                                                                                     //냄새_접수_번호(SR+YYYYMMDDHHMISS+SEQ(2자리))
     private String smellType;                                                                                           //냄새 타입(코드 테이블 참고)
     private String smellValue;                                                                                          //냄새 강도(코드 테이블 참고)
-    private String weaterState;                                                                                         //날씨 상태(코드 테이블 참고)
+    private String weatherState;                                                                                        //날씨 상태(코드 테이블 참고)
     private String temperatureValue;                                                                                    //온도
     private String humidityValue;                                                                                       //습도
     private String windDirectionValue;                                                                                  //풍향

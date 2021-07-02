@@ -11,12 +11,12 @@
              , ANY_VALUE(F_GET_CODE_NAME('STY',SMELL_TYPE))           SMELL_TYPE_NAME
              , ANY_VALUE(tsr.SMELL_VALUE)                             SMELL_VALUE
              , ANY_VALUE(F_GET_CODE_NAME('SMT',SMELL_VALUE))          SMELL_TYPE_NAME
-             , ANY_VALUE(tsr.WEATER_STATE)                            WEATER_STATE
-             , ANY_VALUE(F_GET_CODE_NAME('WET',WEATER_STATE))         WEATER_STATE_NAME
+             , ANY_VALUE(tsr.WEATHER_STATE)                            WEATHER_STATE
+             , ANY_VALUE(F_GET_CODE_NAME('WET',WEATHER_STATE))         WEATHER_STATE_NAME
              , ANY_VALUE(tsr.TEMPERATURE_VALUE)                       TEMPERATURE_VALUE
              , ANY_VALUE(tsr.HUMIDITY_VALUE)                          HUMIDITY_VALUE
              , ANY_VALUE(tsr.WIND_DIRECTION_VALUE)                    WIND_DIRECTION_VALUE
-             , ANY_VALUE(F_GET_CODE_NAME('WND',WEATER_STATE))         WIND_DIRECTION_VALUE_NAME
+             , ANY_VALUE(F_GET_CODE_NAME('WND',WEATHER_STATE))         WIND_DIRECTION_VALUE_NAME
              , ANY_VALUE(tsr.WIND_SPEED_VALUE)                        WIND_SPEED_VALUE
              , ANY_VALUE(tsr.GPS_X)                                   GPS_X
              , ANY_VALUE(tsr.GPS_Y)                                   GPS_Y

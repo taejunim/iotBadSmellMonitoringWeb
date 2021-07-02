@@ -11,12 +11,12 @@
              , F_GET_CODE_NAME('STY',SMELL_TYPE)           SMELL_TYPE_NAME
              , tsr.SMELL_VALUE                             SMELL_VALUE
              , F_GET_CODE_NAME('SMT',SMELL_VALUE)          SMELL_VALUE_NAME
-             , tsr.WEATER_STATE                            WEATER_STATE
-             , F_GET_CODE_NAME('WET',WEATER_STATE)         WEATER_STATE_NAME
+             , tsr.WEATHER_STATE                            WEATHER_STATE
+             , F_GET_CODE_NAME('WET',WEATHER_STATE)         WEATHER_STATE_NAME
              , tsr.TEMPERATURE_VALUE                       TEMPERATURE_VALUE
              , tsr.HUMIDITY_VALUE                          HUMIDITY_VALUE
              , tsr.WIND_DIRECTION_VALUE                    WIND_DIRECTION_VALUE
-             , F_GET_CODE_NAME('WND',WEATER_STATE)         WIND_DIRECTION_VALUE_NAME
+             , F_GET_CODE_NAME('WND',WEATHER_STATE)         WIND_DIRECTION_VALUE_NAME
              , tsr.WIND_SPEED_VALUE                        WIND_SPEED_VALUE
              , tsr.GPS_X                                   GPS_X
              , tsr.GPS_Y                                   GPS_Y
@@ -39,8 +39,8 @@
         <if test="smellValue != null and !smellValue.equals('')" >
             AND SMELL_VALUE = #{smellValue}
         </if>
-        <if test="weaterState != null and !weaterState.equals('')" >
-            AND WEATER_STATE = #{weaterState}
+        <if test="weatherState != null and !weatherState.equals('')" >
+            AND WEATHER_STATE = #{weatherState}
         </if>
 
         <if test="startDate != null and !startDate.equals('')" >
@@ -74,8 +74,8 @@
         <if test="smellValue != null and !smellValue.equals('')" >
             AND SMELL_VALUE = #{smellValue}
         </if>
-        <if test="weaterState != null and !weaterState.equals('')" >
-            AND WEATER_STATE = #{weaterState}
+        <if test="weatherState != null and !weatherState.equals('')" >
+            AND WEATHER_STATE = #{weatherState}
         </if>
 
         <if test="startDate != null and !startDate.equals('')" >

@@ -17,7 +17,7 @@
                                         SMELL_REGISTER_NO
                                         , SMELL_TYPE
                                         , SMELL_VALUE
-                                        , WEATER_STATE
+                                        , WEATHER_STATE
                                         , TEMPERATURE_VALUE
                                         , HUMIDITY_VALUE
                                         , WIND_DIRECTION_VALUE
@@ -32,7 +32,7 @@
                                         #{smellRegisterNo}
                                         , #{smellType}
                                         , #{smellValue}
-                                        , #{weaterState}
+                                        , #{weatherState}
                                         , #{temperatureValue}
                                         , #{humidityValue}
                                         , #{windDirectionValue}

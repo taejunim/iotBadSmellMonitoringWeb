@@ -244,7 +244,7 @@ public class ApiController {
 
             registerVO.setSmellType(jsonObject.get("smellType").toString());
             registerVO.setSmellValue(jsonObject.get("smellValue").toString());
-            registerVO.setWeaterState(jsonObject.get("weaterState").toString());
+            registerVO.setWeatherState(jsonObject.get("weatherState").toString());
             registerVO.setTemperatureValue(jsonObject.get("temperatureValue").toString());
             registerVO.setHumidityValue(jsonObject.get("humidityValue").toString());
             registerVO.setWindDirectionValue(jsonObject.get("windDirectionValue").toString());
