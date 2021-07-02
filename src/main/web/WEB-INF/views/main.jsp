@@ -14,8 +14,10 @@ var map;
     setButton("main");
     $(".weatherStatus").css("display","none");
 
+    var latitude  = 33.352974;
+    var longitude = 126.314419;
     //지도 기본 설정 -> 금악리로 중심 잡아둠, Zoom Level 5
-    map = focusMapCenter(33.352974, 126.314419, 5);
+    map = focusMapCenter(latitude, longitude, 5);
 
     var arrays;
 
@@ -54,6 +56,8 @@ var map;
           infowindow.open(map, marker);
           // 마커 이벤트 연결
           kakao.maps.event.addListener(marker, 'click', function() {clickMarker($(this)[0].id)});
+
+          map.setCenter(new kakao.maps.LatLng(latitude, longitude));
         }
       },
       error: function (err) {
