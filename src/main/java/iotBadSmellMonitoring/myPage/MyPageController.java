@@ -18,9 +18,6 @@ import javax.servlet.http.HttpSession;
 public class MyPageController {
 
     @Autowired
-    private MainService mainService;
-
-    @Autowired
     private MemberService memberService;
 
 

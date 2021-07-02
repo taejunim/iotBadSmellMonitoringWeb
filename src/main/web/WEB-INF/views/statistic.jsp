@@ -99,9 +99,6 @@
                         }
                     }
 
-                    for(var i=0; i< arrays.length; i++) {
-                        console.log(arrays[i]);
-                    }
                     var chart1 = c3.generate({
                         bindto: '#lineChartDiv'
                         ,data: {
@@ -144,7 +141,15 @@
                         bindto: '#pieChartDiv',
                         data: {
                             columns: arrays.splice(1),
-                            type : 'pie'
+                            type : 'pie',
+                            colors: {
+                                '${CG_SMT[0].codeIdName}': '#61ade1'
+                                ,'${CG_SMT[1].codeIdName}': '#23cc71'
+                                ,'${CG_SMT[2].codeIdName}': '#bbbbbb'
+                                ,'${CG_SMT[3].codeIdName}': '#fff800'
+                                ,'${CG_SMT[4].codeIdName}': '#f39c12'
+                                ,'${CG_SMT[5].codeIdName}': '#c0392b'
+                            }
                         }
                     });
                     //새로 그릴떄마다 resize 해줘야함.
@@ -181,7 +186,9 @@
 
             var month = date.getMonth() + 1;
             if(month < 10) month = "0" + month;
-            $(".datepicker").val(date.getFullYear() + "-" + month+ "-" + date.getDate());
+            var day = date.getDate();
+            if(day < 10) day = "0" + day;
+            $(".datepicker").val(date.getFullYear() + "-" + month+ "-" + day);
 
         } else if($("#type").val() == "month"){
             $(".dateInput").css("display","none");
@@ -278,7 +285,7 @@
         <div class="noChartContent wd100rate h100rate align_c" style="display: none; position:relative; top:300px;">- 표시할 내용이 없습니다. -</div>
     </div>
     <div id="rightSide" class="fr scroll_h mt50" style="width:45%;">
-        <div id="lineChartDiv" class="chartContent" style="display: none;"></div>
+        <div id="lineChartDiv" class="chartContent" style="display: none; width: 90%;"></div>
         <div class="noChartContent wd100rate h100rate align_c" style="display: none; position:relative; top:250px;">- 표시할 내용이 없습니다. -</div>
     </div>
 </div>

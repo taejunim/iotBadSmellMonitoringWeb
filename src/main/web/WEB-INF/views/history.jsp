@@ -130,7 +130,6 @@ var map;
 
         //조회
         function fn_search() {
-            console.log("조회 버튼 클릭");
             frm.pageIndex.value = 1;
             document.frm.action = "<c:url value='/history.do'/>";
             document.frm.submit();
@@ -147,14 +146,14 @@ var map;
     <input type="hidden" id="pageIndex" name="pageIndex" value="${historyVO.pageIndex}">
     <tr>
         <th>등록자</th>
-        <td><input type="text" name="regId" value="${historyVO.regId}"></td>
-        <th>등록일</th>
+        <td><input type="text" name="regId" value="${historyVO.regId}" class="wd90"></td>
+        <th class="wd60">등록일</th>
             <td>
         <input type="date" name="startDate" class="mDateTimeInput" value="${historyVO.startDate}" id="searchStartDt" readonly="readonly">
         ~
         <input type="date" name="endDate" class="mDateTimeInput" value="${historyVO.endDate}" id="searchEndDt" readonly="readonly">
             </td>
-        <th>취기</th>
+        <th class="wd50">취기</th>
         <td>
             <select id="smellType" name="smellType">
                 <option value="">전체</option>
@@ -171,7 +170,7 @@ var map;
                 </c:forEach>
         </select></td>
         <th>기상 상태</th>
-        <td><select id="weaterState" name="weaterState">
+        <td><select id="weaterState" name="weaterState" class="wd120">
             <option value="">전체</option>
                 <c:forEach var="item" items="${CG_WET}">
                     <option value="${item.codeId}">${item.codeIdName}</option>
@@ -231,7 +230,7 @@ var map;
 
     <div class="scrollView">
         <div id="rightSide" class="fr wd100rate h50rate">
-            <div id="map" class="wd100rate h100rate"></div>
+            <div id="map" class="wd90rate h90rate" style="margin:auto; top:20px;"></div>
         </div>
         <p style="color: white">a</p>
         <div>

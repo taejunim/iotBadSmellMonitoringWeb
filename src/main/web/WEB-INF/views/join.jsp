@@ -47,7 +47,7 @@
          var formData = $(".joinForm").serialize();
             if(tmpId == $("input[name='userId']").val()) {
                 $.ajax({
-                    url: "/userJoinInsert",
+                    url: "/join/userJoinInsert",
                     type: "POST",
                     data: formData,
                     dataType: "text",
@@ -72,7 +72,7 @@
         var userId = $("input[name='userId']").val();
         if(userId != "") {
             $.ajax({
-                url: "/userFindIdSelect",
+                url: "/join/userFindIdSelect",
                 type: "POST",
                 data: {userId: userId},
                 dataType: "text",
