@@ -38,11 +38,11 @@ var map;
           });
 
           marker.id = "marker" + i;
-
+          marker.setMap(map);
           var iwContent = '<div id="infoWindow'+ i +'" class="cursor_pointer infoWindow" style="padding:5px; font-size:12px;">'+ arrays[i].userName +'<br>'+ arrays[i].regDt +'</div>'; // 인포윈도우에 표출될 내용으로 HTML 문자열이나 document element가 가능합니다
           iwContent += '<input type="hidden" id = "latitude' + i + '" value ="' + arrays[i].gpsY + '"/>';
           iwContent += '<input type="hidden" id = "longitude' + i + '" value ="' + arrays[i].gpsX + '"/>';
-          iwContent += '<input type="hidden" id = "weaterStateName' + i + '" value ="' + arrays[i].weaterStateName + '"/>';
+          iwContent += '<input type="hidden" id = "weatherStateName' + i + '" value ="' + arrays[i].weatherStateName + '"/>';
           iwContent += '<input type="hidden" id = "temperatureValue' + i + '" value ="' + arrays[i].temperatureValue + '"/>';
           iwContent += '<input type="hidden" id = "humidityValue' + i + '" value ="' + arrays[i].humidityValue + '"/>';
           iwContent += '<input type="hidden" id = "windDirectionValue' + i + '" value ="' + arrays[i].windDirectionValueName + '"/>';
@@ -57,8 +57,8 @@ var map;
           // 마커 이벤트 연결
           kakao.maps.event.addListener(marker, 'click', function() {clickMarker($(this)[0].id)});
 
-          map.setCenter(new kakao.maps.LatLng(latitude, longitude));
         }
+       // map.setCenter(new kakao.maps.LatLng(latitude, longitude));
       },
       error: function (err) {
         alert("사용자 데이터를 불러오는중 에러가 발생하였습니다.");
@@ -77,13 +77,13 @@ var map;
      var index = id.replace("marker","").replace("infoWindow","");
      var moveLatLon = new kakao.maps.LatLng($("#latitude"+index).val(), $("#longitude"+index).val());
      map.panTo(moveLatLon);
-     showWeaterStatus(index);
+     showWeatherStatus(index);
   }
   //기상상태가 안보이는 상태일때 다시 보이게 함
-  function showWeaterStatus(index){
+  function showWeatherStatus(index){
 
     if($(".weatherStatus").css("display")=="none") $(".weatherStatus").css("display","");
-    $("#weatherState").text($("#weaterStateName"+index).val());
+    $("#weatherState").text($("#weatherStateName"+index).val());
     $("#temperatureValue").text(addUnit($("#temperatureValue"+index).val(),"temperature"));
     $("#humidityValue").text(addUnit($("#humidityValue"+index).val(),"humidity"));
     $("#windDirectionValue").text($("#windDirectionValue"+index).val());

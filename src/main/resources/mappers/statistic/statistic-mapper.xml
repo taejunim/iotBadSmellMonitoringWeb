@@ -5,12 +5,12 @@
 
     <!-- 통계 -->
     <select id="statisticListSelect" parameterType="statisticVO" resultType="egovMap">
-        SELECT SMELL_TYPE
-             , F_GET_CODE_NAME('SMT',A.SMELL_TYPE) SMELL_TYPE_NAME
+        SELECT SMELL_VALUE
+             , F_GET_CODE_NAME('SMT',A.SMELL_VALUE) SMELL_VALUE_NAME
         <choose>
 
             <when test="searchGbn.equals('day')">
-             , COUNT(SMELL_TYPE)               CNT
+             , COUNT(SMELL_VALUE)               CNT
              , DATE_FORMAT(REG_DT, '%Y-%m-%d') REG_DT
         FROM TB_SMELL_REGISTER A LEFT JOIN (
                 SELECT   USER_ID
@@ -22,11 +22,11 @@
                 </if>
          AND DATE_FORMAT(REG_DT, '%Y-%m-%d') BETWEEN #{searchStart} AND #{searchEnd}
 
-       GROUP BY SMELL_TYPE, DATE_FORMAT(REG_DT, '%Y-%m-%d')
-       ORDER BY REG_DT, SMELL_TYPE
+       GROUP BY SMELL_VALUE, DATE_FORMAT(REG_DT, '%Y-%m-%d')
+       ORDER BY REG_DT, SMELL_VALUE
             </when>
             <when test="searchGbn.equals('month')">
-             , COUNT(SMELL_TYPE)            CNT
+             , COUNT(SMELL_VALUE)            CNT
              , DATE_FORMAT(REG_DT, '%Y-%m') REG_DT
 
         FROM TB_SMELL_REGISTER A LEFT JOIN (
@@ -38,11 +38,11 @@
          AND B.USER_REGION = #{region}
                 </if>
          AND DATE_FORMAT(REG_DT, '%Y-%m') BETWEEN #{searchStart} AND #{searchEnd}
-       GROUP BY SMELL_TYPE, DATE_FORMAT(REG_DT, '%Y-%m')
-       ORDER BY REG_DT, SMELL_TYPE
+       GROUP BY SMELL_VALUE, DATE_FORMAT(REG_DT, '%Y-%m')
+       ORDER BY REG_DT, SMELL_VALUE
             </when>
             <when test="searchGbn.equals('year')">
-            , COUNT(SMELL_TYPE)         CNT
+            , COUNT(SMELL_VALUE)         CNT
             , DATE_FORMAT(REG_DT, '%Y') REG_DT
 
                 FROM TB_SMELL_REGISTER A LEFT JOIN (
@@ -54,11 +54,11 @@
          AND B.USER_REGION = #{region}
                 </if>
          AND DATE_FORMAT(REG_DT, '%Y') BETWEEN #{searchStart} AND #{searchEnd}
-     GROUP BY SMELL_TYPE, DATE_FORMAT(REG_DT, '%Y')
+     GROUP BY SMELL_VALUE, DATE_FORMAT(REG_DT, '%Y')
      ORDER BY REG_DT, SMELL_TYPE
             </when>
             <otherwise>
-             , COUNT(SMELL_TYPE)                            CNT
+             , COUNT(SMELL_VALUE)                            CNT
              , F_GET_CODE_NAME('REN',A.SMELL_REGISTER_TIME) REG_DT
      FROM TB_SMELL_REGISTER A LEFT JOIN (
                 SELECT   USER_ID
@@ -81,8 +81,8 @@
                     ,'004'
                 </if>
                 )
-      GROUP BY SMELL_TYPE, A.SMELL_REGISTER_TIME
-      ORDER BY A.SMELL_REGISTER_TIME, SMELL_TYPE
+      GROUP BY SMELL_VALUE, A.SMELL_REGISTER_TIME
+      ORDER BY A.SMELL_REGISTER_TIME, SMELL_VALUE
             </otherwise>
         </choose>
     </select>

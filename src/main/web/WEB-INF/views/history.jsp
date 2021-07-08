@@ -35,9 +35,9 @@ var map;
             if (smellValue != "" && smellValue != null)
                 $("#smellValue").val(smellValue).prop("selected", true);                              //VO 값 선택
 
-            var weaterState = '${historyVO.weaterState}';       //기상상태
-            if (weaterState != "" && weaterState != null)
-                $("#weaterState").val(weaterState).prop("selected", true);
+            var weatherState = '${historyVO.weatherState}';       //기상상태
+            if (weatherState != "" && weatherState != null)
+                $("#weatherState").val(weatherState).prop("selected", true);
             /* 검색 화면 검색어 세팅 END*/
 
             // 테이블 row 클릭 이벤트
@@ -46,7 +46,7 @@ var map;
                 /*오른쪽 table에 값 담아주기 START*/
                 var getItems = $(this).find("td");  //viewTable의 row
 
-                $("#getWeaterState").text(getItems.eq(1).text());               //기상 상태
+                $("#getWeatherState").text(getItems.eq(1).text());               //기상 상태
                 $("#getRegName").text(getItems.eq(5).text());                   //등록자
                 $("#getRegId").text(getItems.eq(7).text());                     //등록자 아이디
                 $("#getSmellType").text(getItems.eq(4).text());                 //취기
@@ -66,7 +66,7 @@ var map;
                 var mapContainer = document.getElementById('map'), // 지도를 표시할 div
                     mapOption = {
                         center: new kakao.maps.LatLng(gpsY, gpsX), // 지도의 중심좌표
-                        level: 3 // 지도의 확대 레벨
+                        level: 5 // 지도의 확대 레벨
                     };
                 var map = new kakao.maps.Map(mapContainer, mapOption); // 지도 생성
 
@@ -146,7 +146,7 @@ var map;
     <input type="hidden" id="pageIndex" name="pageIndex" value="${historyVO.pageIndex}">
     <tr>
         <th>등록자</th>
-        <td><input type="text" name="regId" value="${historyVO.regId}" class="wd90"></td>
+        <td><input type="text" name="regId" value="${historyVO.regId}" class="wd100"></td>
         <th class="wd60">등록일</th>
             <td>
         <input type="date" name="startDate" class="mDateTimeInput" value="${historyVO.startDate}" id="searchStartDt" readonly="readonly">
@@ -155,7 +155,7 @@ var map;
             </td>
         <th class="wd50">취기</th>
         <td>
-            <select id="smellType" name="smellType">
+            <select id="smellType" name="smellType" class="wd90">
                 <option value="">전체</option>
                 <c:forEach var="item" items="${CG_STY}">
                     <option value="${item.codeId}">${item.codeIdName}</option>
@@ -163,14 +163,14 @@ var map;
             </select>
         </td>
         <th>악취 강도</th>
-        <td><select id="smellValue" name="smellValue">
+        <td><select id="smellValue" name="smellValue" class="wd150">
             <option value="">전체</option>
                 <c:forEach var="item" items="${CG_SMT}">
                     <option value="${item.codeId}">${item.codeIdName}</option>
                 </c:forEach>
         </select></td>
         <th>기상 상태</th>
-        <td><select id="weaterState" name="weaterState" class="wd120">
+        <td><select id="weatherState" name="weatherState" class="wd120">
             <option value="">전체</option>
                 <c:forEach var="item" items="${CG_WET}">
                     <option value="${item.codeId}">${item.codeIdName}</option>
@@ -196,7 +196,7 @@ var map;
             <c:forEach var="resultList" items="${resultList}" varStatus="status">
             <tr class="cursor_pointer itemRow">
                 <td>${paginationInfo.totalRecordCount - ((historyVO.pageIndex-1) * 10) - status.index}</td>
-                <td>${resultList.weaterStateName}</td>
+                <td>${resultList.weatherStateName}</td>
                 <td>${resultList.smellRegisterTimeName}</td>
                 <td>${resultList.smellValueName}</td>
                 <td>${resultList.smellTypeName}</td>
@@ -238,7 +238,7 @@ var map;
                 <p></p>
                 <tr>
                     <td class="font_bold">날씨</td>
-                    <td colspan="3" id="getWeaterState"></td>
+                    <td colspan="3" id="getWeatherState"></td>
                 </tr>
                 <tr>
                     <td class="font_bold">등록자</td>

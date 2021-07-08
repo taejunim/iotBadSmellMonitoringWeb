@@ -85,7 +85,7 @@
 
                     for(var i = 0; i < data.length; i++){
 
-                        arrays[parseInt(data[i].smellType)].push(data[i].cnt);
+                        arrays[parseInt(data[i].smellValue)].push(data[i].cnt);
 
                         if( arrays[0][arrays[0].length - 1] != data[i].regDt){
                             arrays[0].push(data[i].regDt);
