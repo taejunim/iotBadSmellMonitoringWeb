@@ -38,7 +38,7 @@
 
 </script>
 <div class="wd100rate h100 mainMenu">
-    <div class="titleIcon wd80 h80 fl ml20 mt10 mainButton"></div>
+    <div class="titleIcon wd80 h80 fl ml10 mt15 mainButton"></div>
     <label class="fl mt50 font_size25 font_bold ml20 mainButton cursor_pointer">IoT 악취 모니터링 시스템</label>
     <a id="logout" class="fr mt70 wd100 align_c cursor_pointer">로그아웃</a>
 </div>

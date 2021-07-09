@@ -10,6 +10,7 @@
 <script src="/resources/js/kakaoMapUtils.js"></script>
 <script type="text/javascript">
 var map;
+var markers = [];
   $(document).ready(function () {
     setButton("main");
     $(".weatherStatus").css("display","none");
@@ -17,53 +18,23 @@ var map;
     var latitude  = 33.352974;
     var longitude = 126.314419;
     //지도 기본 설정 -> 금악리로 중심 잡아둠, Zoom Level 5
-    map = focusMapCenter(latitude, longitude, 5);
-
-    var arrays;
+    map = focusMapCenter(latitude, longitude, 6);
 
     $.ajax({
       url: "/pcMainListSelect",
       type: "GET",
       dataType: "json",
       success: function (data) {
-        arrays = data;
-        for (var i = 0; i < arrays.length; i ++) {
-          var markerImage = returnMarkerImage(arrays[i].smellValue);
-
-          // 마커를 생성합니다
-          var marker = new kakao.maps.Marker({
-            map: map, // 마커를 표시할 지도
-            position: new kakao.maps.LatLng(arrays[i].gpsY,  arrays[i].gpsX), // 마커를 표시할 위치
-            image: markerImage // 마커 이미지
-          });
-
-          marker.id = "marker" + i;
-          marker.setMap(map);
-          var iwContent = '<div id="infoWindow'+ i +'" class="cursor_pointer infoWindow" style="padding:5px; font-size:12px;">'+ arrays[i].userName +'<br>'+ arrays[i].regDt +'</div>'; // 인포윈도우에 표출될 내용으로 HTML 문자열이나 document element가 가능합니다
-          iwContent += '<input type="hidden" id = "latitude' + i + '" value ="' + arrays[i].gpsY + '"/>';
-          iwContent += '<input type="hidden" id = "longitude' + i + '" value ="' + arrays[i].gpsX + '"/>';
-          iwContent += '<input type="hidden" id = "weatherStateName' + i + '" value ="' + arrays[i].weatherStateName + '"/>';
-          iwContent += '<input type="hidden" id = "temperatureValue' + i + '" value ="' + arrays[i].temperatureValue + '"/>';
-          iwContent += '<input type="hidden" id = "humidityValue' + i + '" value ="' + arrays[i].humidityValue + '"/>';
-          iwContent += '<input type="hidden" id = "windDirectionValue' + i + '" value ="' + arrays[i].windDirectionValueName + '"/>';
-          iwContent += '<input type="hidden" id = "windSpeedValue' + i + '" value ="' + arrays[i].windSpeedValue + '"/>';
-          // 인포윈도우를 생성합니다
-          var infowindow = new kakao.maps.InfoWindow({
-            content : iwContent,
-          });
-
-          // 마커 위에 인포윈도우를 표시합니다. 두번째 파라미터인 marker를 넣어주지 않으면 지도 위에 표시됩니다
-          infowindow.open(map, marker);
-          // 마커 이벤트 연결
-          kakao.maps.event.addListener(marker, 'click', function() {clickMarker($(this)[0].id)});
-
+        drawMarker(data);
+        for(var i=0; i< markers.length ; i++){
+          markers[i].setMap(map);
         }
-       // map.setCenter(new kakao.maps.LatLng(latitude, longitude));
       },
       error: function (err) {
         alert("사용자 데이터를 불러오는중 에러가 발생하였습니다.");
       }
     });
+
     //마커 위 infoWindow에도 이벤트 연결
     $(document).on("click",".infoWindow",function(event){
       clickMarker(event.target.id);
@@ -78,6 +49,42 @@ var map;
      var moveLatLon = new kakao.maps.LatLng($("#latitude"+index).val(), $("#longitude"+index).val());
      map.panTo(moveLatLon);
      showWeatherStatus(index);
+  }
+  function drawMarker(arrays) {
+
+    for (var i = 0; i < arrays.length; i++) {
+      var markerImage = returnMarkerImage(arrays[i].smellValue);
+
+      // 마커를 생성합니다
+     var marker = new kakao.maps.Marker({
+       map: map, // 마커를 표시할 지도
+       position: new kakao.maps.LatLng(arrays[i].gpsY, arrays[i].gpsX), // 마커를 표시할 위치
+       image: markerImage // 마커 이미지
+      });
+
+      marker.id = "marker" + i;
+
+      var iwContent = '<div id="infoWindow' + i + '" class="cursor_pointer infoWindow" style="padding:5px; font-size:12px;">' + arrays[i].userName + '<br>' + arrays[i].regDt + '</div>'; // 인포윈도우에 표출될 내용으로 HTML 문자열이나 document element가 가능합니다
+      iwContent += '<input type="hidden" id = "latitude' + i + '" value ="' + arrays[i].gpsY + '"/>';
+      iwContent += '<input type="hidden" id = "longitude' + i + '" value ="' + arrays[i].gpsX + '"/>';
+      iwContent += '<input type="hidden" id = "weatherStateName' + i + '" value ="' + arrays[i].weatherStateName + '"/>';
+      iwContent += '<input type="hidden" id = "temperatureValue' + i + '" value ="' + arrays[i].temperatureValue + '"/>';
+      iwContent += '<input type="hidden" id = "humidityValue' + i + '" value ="' + arrays[i].humidityValue + '"/>';
+      iwContent += '<input type="hidden" id = "windDirectionValue' + i + '" value ="' + arrays[i].windDirectionValueName + '"/>';
+      iwContent += '<input type="hidden" id = "windSpeedValue' + i + '" value ="' + arrays[i].windSpeedValue + '"/>';
+      // 인포윈도우를 생성합니다
+      var infowindow = new kakao.maps.InfoWindow({
+        content: iwContent,
+      });
+
+      // 마커 위에 인포윈도우를 표시합니다. 두번째 파라미터인 marker를 넣어주지 않으면 지도 위에 표시됩니다
+      infowindow.open(map, marker);
+      // 마커 이벤트 연결
+      kakao.maps.event.addListener(marker, 'click', function () {
+        clickMarker($(this)[0].id)
+      });
+      markers.push(marker);
+    }
   }
   //기상상태가 안보이는 상태일때 다시 보이게 함
   function showWeatherStatus(index){
