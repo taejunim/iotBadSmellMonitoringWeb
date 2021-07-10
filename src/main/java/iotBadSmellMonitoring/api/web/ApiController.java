@@ -2,6 +2,7 @@ package iotBadSmellMonitoring.api.web;
 
 import egovframework.rte.psl.dataaccess.util.EgovMap;
 import iotBadSmellMonitoring.history.service.HistoryService;
+import iotBadSmellMonitoring.history.service.HistoryVO;
 import iotBadSmellMonitoring.history.service.RegisterService;
 import iotBadSmellMonitoring.history.service.RegisterVO;
 import iotBadSmellMonitoring.join.service.JoinService;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartRequest;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.BufferedReader;
@@ -231,7 +233,7 @@ public class ApiController {
      * @throws Exception
      */
     @RequestMapping(value = "/api/registerInsert", method = RequestMethod.POST, consumes="application/json;", produces = "application/json; charset=utf8")
-    public String registerInsert(@ModelAttribute("registerVO")RegisterVO registerVO, HttpServletRequest request)  throws Exception {
+    public String registerInsert(@ModelAttribute("registerVO")RegisterVO registerVO, HttpServletRequest request, MultipartRequest mRequest)  throws Exception {
 
         String message = "";
 
@@ -396,6 +398,99 @@ public class ApiController {
 
                 message = "{\"result\":\"success\",\"data\":" + jsonArray + "}";
             }
+
+        }catch (Exception e){
+
+            //System.out.println("Exception: "+e);
+            message = "{\"result\":\"fail\",\"message\":\"ERR SEARCH USER REGISTER INFO.\"}";
+        }
+
+        return message;
+    }
+
+    /**
+     * USER REGISTER MASTER HISTORY API
+     * @param request
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping(value = "/api/registerMasterHistory", method = RequestMethod.GET, consumes="application/json;", produces = "application/json; charset=utf8")
+    public String registerMasterHistory(HttpServletRequest request, HistoryVO historyVO)  throws Exception {
+
+        String message = "";
+
+        try {
+
+            JSONParser      jsonParser  = new JSONParser();
+
+            historyVO.setStartDate(request.getParameter("startDate"));
+            historyVO.setEndDate(request.getParameter("endDate"));
+            historyVO.setFirstIndex(Integer.parseInt(request.getParameter("firstIndex")));
+            historyVO.setRecordCountPerPage(Integer.parseInt(request.getParameter("recordCountPerPage")));
+
+            List<EgovMap> resultList = historyService.historyListSelect(historyVO);                                     //HISTORY 목록 CALL.
+
+            if(resultList != null && !resultList.isEmpty()) {                                                           //null CHECK.
+
+                JSONArray jsonArray = new JSONArray();
+
+                for (EgovMap egovMap : resultList) {
+
+                    JSONObject json = new JSONObject(egovMap);
+                    json = (JSONObject) jsonParser.parse(String.valueOf(json).replace("null", "\"\""));//null시 KEY 누락을 막기 위하여.
+                    jsonArray.put(json);
+                }
+
+                message = "{\"result\":\"success\",\"data\":" + jsonArray + "}";
+            }
+            else
+                message = "{\"result\":\"fail\",\"message\":\"NO FIND SEARCH CODE.\"}";
+
+
+        }catch (Exception e){
+
+            //System.out.println("Exception: "+e);
+            message = "{\"result\":\"fail\",\"message\":\"ERR SEARCH USER REGISTER INFO.\"}";
+        }
+
+        return message;
+    }
+
+    /**
+     * USER REGISTER DETAIL HISTORY API
+     * @param request
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping(value = "/api/registerDetailHistory", method = RequestMethod.GET, consumes="application/json;", produces = "application/json; charset=utf8")
+    public String registerDetailHistory(HttpServletRequest request, HistoryVO historyVO)  throws Exception {
+
+        String message = "";
+
+        try {
+
+            JSONParser      jsonParser  = new JSONParser();
+
+            historyVO.setSmellRegisterNo(request.getParameter("smellRegisterNo"));
+
+            List<EgovMap> resultList = historyService.historyImgListSelect(historyVO);                                  //HISTORY IMG 목록 CALL.
+
+            if(resultList != null && !resultList.isEmpty()) {                                                           //null CHECK.
+
+                JSONArray jsonArray = new JSONArray();
+
+                for (EgovMap egovMap : resultList) {
+
+                    JSONObject json = new JSONObject(egovMap);
+                    json = (JSONObject) jsonParser.parse(String.valueOf(json).replace("null", "\"\""));//null시 KEY 누락을 막기 위하여.
+                    jsonArray.put(json);
+                }
+
+                message = "{\"result\":\"success\",\"data\":" + jsonArray + "}";
+            }
+            else
+                message = "{\"result\":\"fail\",\"message\":\"NO FIND SEARCH CODE.\"}";
+
 
         }catch (Exception e){
 
