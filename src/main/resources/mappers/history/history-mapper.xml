@@ -29,6 +29,7 @@
 
           FROM tb_smell_register tsr LEFT OUTER JOIN tb_user tu on tsr.REG_ID = tu.USER_ID
           WHERE 1=1
+
         <if test="regId != null and !regId.equals('')" >
             AND (LOWER(REG_ID) LIKE LOWER('%${regId}%'))
         </if>
