@@ -40,13 +40,16 @@ var map;
                 $("#weatherState").val(weatherState).prop("selected", true);
             /* 검색 화면 검색어 세팅 END*/
 
+
+            /*이미지 불러오기 END*/
             // 테이블 row 클릭 이벤트
             $(".itemRow").click(function () {
 
                 /*오른쪽 table에 값 담아주기 START*/
                 var getItems = $(this).find("td");  //viewTable의 row
 
-                $("#getWeatherState").text(getItems.eq(1).text());               //기상 상태
+
+                $("#getweatherState").text(getItems.eq(1).text());               //기상 상태
                 $("#getRegName").text(getItems.eq(5).text());                   //등록자
                 $("#getRegId").text(getItems.eq(7).text());                     //등록자 아이디
                 $("#getSmellType").text(getItems.eq(4).text());                 //취기
@@ -57,6 +60,10 @@ var map;
                 $("#getWindSpeedValue").text(getItems.eq(11).text() +"m/s");    //풍속
                 $("#getRegDt").text(getItems.eq(6).text());                     //등록일시
                 $("#smellComment").text(getItems.eq(12).text());                //비고
+
+                // var imageInfo = $(".abcImage").find("td");
+                // var varvar =  imageInfo.eq(2).text()
+                // console.log(varvar);                //이미지
                 /*오른쪽 table에 값 담아주기 END*/
 
                 /*지도 세팅 START*/
@@ -85,22 +92,97 @@ var map;
                 // 마커가 지도 위에 표시되도록 설정
                 marker.setMap(map);
                 /*지도 세팅 END*/
+
+                /*이미지 불러오기 START*/
+
+                var smellRegisterNo =  getItems.eq(15).text()
+
+                $.ajax({
+                    url: "/imageListSelect",
+                    type: "GET",
+                    data:{smellRegisterNo : smellRegisterNo},
+                    dataType: "json",
+                    cashe : false,
+                    success: function (data) {
+                        //해당 조건에 데이터가 없을때
+                        // if (data.length == 0) {
+                        //    $("#getImage").css("display","이미지가 존재하지 않습니다.");
+                        // }
+                        //else
+                            if(data.length > 0) getImage(data);
+                    },
+                    error: function (err) {
+                        alert("이미지 데이터를 불러오는중 에러가 발생하였습니다.");
+                    }
+                });
+
+                function getImage(images){
+                    //var images = imageList.images;
+                    var str = "";
+
+                    for (var i = 0; i < images.length; i++){
+                        var image = images[i];
+                        //console.log(image);
+                        str += '<tr>'
+                        str += '<td id="getImage" colspan="4">';
+                        str += '<img src="' + image.smellImagePath + '" width="380" height="200"/>';
+                        str += '<input type="hidden" id = "smellImageNo' + i + '" value = "' + image.smellImageNo + '"/>';
+                        str += '</td>';
+                        str += '<td colspan="1"><a class="subButton" id="imageDeleteBtn'+ i + '">이미지삭제</a></td>';
+                        str += '</tr>'
+                        //console.log(image.smellImagePath);
+                        //console.log(image.smellImageNo);
+
+                    }
+                    var $getImage = $("#getImage")
+                    $getImage.append(str);
+
+
+                }
             })
+            //이미지 삭제
+            $(document).on("click",".subButton",function(){
+                var index = $(this).attr('id').replaceAll("imageDeleteBtn","");  //viewTable의 row
+                imageDelete(index);
+            });
 
             //검색조건 초기화
             $(".resetBtn").click(function () {
                 $(location).attr('href', '/history.do');
             })
 
-            $("#imageDeleteBtn").click(function () {
-               imageDelete();
-            })
+            //이미지 삭제
+            function imageDelete(imageIndex){
+
+                $("#test").load(window.location.href + "#test");
+
+                /*오른쪽 table에 값 담아주기 START*/
+                var con_test = confirm("이미지를 삭제하시겠습니까?");
+                if(con_test == true){
+                    var getImageNo =  $("#smellImageNo" + imageIndex).val();
+                    console.log(getImageNo);
+                    $.ajax({
+                        url: "/historyImgDelete/",
+                        type: "GET",
+                        data: {smellImageNo: getImageNo},
+                        //data: {smellImageNo: "IM2021070513485102"},
+                        dataType: "json",
+                        cashe : false,
+                        success: function (data) {
+
+                            alert("이미지를 삭제하였습니다.");
+                            // that.parent("div").remove();
+                        },
+                        error: function (err) {
+                            console.log(err);
+                            alert("이미지 삭제를 실패하였습니다.");
+                        }
+                    });
+                }
+            }
         });
 
-        //이미지 삭제
-        function imageDelete(){
-            console.log("이미지 삭제 버튼 클릭");
-        }
+
         //달력 SETTING
         function setDatePicker(){
 
@@ -210,6 +292,7 @@ var map;
                 <td style="display:none;">${resultList.smellComment}</td>
                 <td style="display:none;">${resultList.gpsX }</td>
                 <td style="display:none;">${resultList.gpsY}</td>
+                <td style="display:none;">${resultList.smellRegisterNo}</td>
             </tr>
             </c:forEach>
             <c:if test="${empty resultList}">
@@ -238,7 +321,7 @@ var map;
                 <p></p>
                 <tr>
                     <td class="font_bold">날씨</td>
-                    <td colspan="3" id="getWeatherState"></td>
+                    <td colspan="3" id="getweatherState"></td>
                 </tr>
                 <tr>
                     <td class="font_bold">등록자</td>
@@ -273,12 +356,10 @@ var map;
                     <td colspan="3" id="smellComment">
                     </td>
                 </tr>
-<%--                <c:forEach var="imageList" items="${imageList}" varStatus="status">--%>
-                <tr class="h200">
-                    <td colspan="3">이미지</td>
-                    <td colspan="1"><a class="subButton" id="imageDeleteBtn">이미지 삭제</a></td>
+                <tr class="h200" id="test">
+                    <td colspan="4" id="getImage" name="smellRegisterNo">
+                    </td>
                 </tr>
-<%--                </c:forEach>--%>
             </table>
         </div>
     </div>

@@ -67,7 +67,17 @@ public class HistoryServiceImpl implements HistoryService {
 
         return historyMapper.historyImgListSelect(historyVO);
     }
+    /**
+    * USER_ID / USER_NAME GET
+    * @throws Exception
+    */
+    @Override
+    public void historyImgDelete(HistoryVO historyVo) throws Exception {
 
+        HistoryMapper mapper = sqlSession.getMapper(HistoryMapper.class);
+
+        mapper.historyImgDelete(historyVo);
+    }
     /**
      * TODAY HISTORY 목록
      * @return List<EgovMap>

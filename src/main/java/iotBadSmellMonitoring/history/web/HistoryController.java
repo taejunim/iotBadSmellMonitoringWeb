@@ -4,6 +4,7 @@ import egovframework.rte.psl.dataaccess.util.EgovMap;
 import egovframework.rte.ptl.mvc.tags.ui.pagination.PaginationInfo;
 import iotBadSmellMonitoring.history.service.HistoryService;
 import iotBadSmellMonitoring.history.service.HistoryVO;
+import iotBadSmellMonitoring.join.service.JoinVO;
 import iotBadSmellMonitoring.main.service.MainService;
 import iotBadSmellMonitoring.main.service.MainVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpSession;
@@ -42,6 +44,9 @@ public class HistoryController {
     @RequestMapping("/history")
     public String history(@ModelAttribute("historyVO") HistoryVO historyVO, ModelMap model) throws Exception {
         System.out.println("HistoryVo ----->" +historyVO);
+
+
+
 
         MainVO mainVO = new MainVO();
 
@@ -77,8 +82,22 @@ public class HistoryController {
         model.addAttribute("paginationInfo", paginationInfo);
         /*페이징 SETTING END*/
 
+
         return "history";
     }
+    //이미지 가져오기
+    @RequestMapping(value = "/imageListSelect")
+    public @ResponseBody
+    List<EgovMap> imageSelect(@ModelAttribute("historyVO") HistoryVO historyVO, ModelMap modelMap) throws Exception {
 
+        modelMap.addAttribute("imageResult", historyService.historyImgListSelect(historyVO));
+        return historyService.historyImgListSelect(historyVO);
+    }
 
+    //회원 탈퇴
+    @RequestMapping(value = "/historyImgDelete", method = RequestMethod.GET)
+    public @ResponseBody void historyImgDelete(@ModelAttribute HistoryVO historyVO) throws Exception {
+
+        historyService.historyImgDelete(historyVO);
+    }
 }

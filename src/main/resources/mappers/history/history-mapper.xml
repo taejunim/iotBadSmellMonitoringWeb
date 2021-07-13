@@ -106,6 +106,14 @@
 
     </select>
 
+    <!-- 이미지 삭제 -->
+    <delete id="historyImgDelete" parameterType="historyVO">
+
+        DELETE
+        FROM tb_smell_image
+        WHERE SMELL_IMAGE_NO = #{smellImageNo};
+    </delete>
+
     <!-- TODAY HISTORY 목록-->
     <select id="todayHistoryListSelect" parameterType="string" resultType="egovMap">
 
