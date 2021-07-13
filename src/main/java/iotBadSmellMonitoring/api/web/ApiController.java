@@ -237,7 +237,7 @@ public class ApiController {
 
         String message = "";
 
-        //try {
+        try {
 
             BufferedReader  br 	        = new BufferedReader(new InputStreamReader(request.getInputStream(), StandardCharsets.UTF_8));
             String          paramValue  = parseJSONData(br);                                                            //JSON OBJECT TO STRING CALL.
@@ -265,13 +265,11 @@ public class ApiController {
             else
                 message = "{\"result\":\"fail\",\"message\":\"NO DB INSERT.\"}";
 
-/*
-        }catch (Exception e){
+      }catch (Exception e){
 
             //System.out.println("Exception: "+e);
             message = "{\"result\":\"fail\",\"message\":\"ERR DB INSERT.\"}";
         }
-*/
 
         return message;
     }
@@ -427,6 +425,8 @@ public class ApiController {
 
             historyVO.setFirstIndex(Integer.parseInt(request.getParameter("firstIndex")));
             historyVO.setRecordCountPerPage(Integer.parseInt(request.getParameter("recordCountPerPage")));
+
+            System.out.println("조회 아이디: "+historyVO.getRegId());
 
             List<EgovMap> resultList = historyService.historyListSelect(historyVO);                                     //HISTORY 목록 CALL.
 
