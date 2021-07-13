@@ -99,13 +99,13 @@
             <tr>
                 <td class="align_l pl20"><label class="tableLabel">* 아이디</label></td>
                 <td><div style="width: 100%; height: 100%">
-                    <input type="text" name="userId" class="inputForm mt10 fl wd60rate" placeholder="아이디를 입력해 주십시오." maxlength="5">
+                    <input type="text" name="userId" class="inputForm mt10 fl wd60rate" placeholder="아이디를 입력해 주십시오." maxlength="20">
                     <a id= "btnCheck" class="subButton mt10">중복체크</a>
                 </div></td>
             </tr>
             <tr>
                 <td class="align_l pl20"><label class="tableLabel">* 비밀번호</label></td>
-                <td><input type="password" name="userPassword" class="inputForm fl" maxlength="5" placeholder="비밀번호를 입력해 주십시오."></td>
+                <td><input type="password" name="userPassword" class="inputForm fl" maxlength="20" placeholder="비밀번호를 입력해 주십시오."></td>
             </tr>
             <tr>
                 <td class="align_l pl20"><label class="tableLabel">* 이름</label></td>
