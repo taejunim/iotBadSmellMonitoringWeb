@@ -78,7 +78,7 @@
       <tr><th class="h70" style="line-height: 30px;"><a class="font_bold font_size20">악취 모니터링 시스템</a><br>로그인</th></tr>
       <tr><td class="h20"></td></tr>
       <tr><td><input type="text" name="userId" placeholder="아이디" class="formInput"></td></tr>
-      <tr><td><input type="password" name="userPassword" placeholder="비밀번호" class="formInput" id="password" maxlength="5"></td></tr>
+      <tr><td><input type="password" name="userPassword" placeholder="비밀번호" class="formInput" id="password"></td></tr>
       <tr><td><label id="lostPassword">비밀번호를 잃어버리셨습니까?</label></td></tr>
       <tr><td>
         <a id = "login" class="button bgcDeepBlue wd60 font_bold fr">로그인</a>
