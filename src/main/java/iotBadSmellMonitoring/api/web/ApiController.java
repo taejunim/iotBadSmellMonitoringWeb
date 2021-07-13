@@ -14,10 +14,8 @@ import org.json.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.BufferedReader;
@@ -231,15 +229,18 @@ public class ApiController {
      * @return               RESPONSE MESSAGE.
      * @throws Exception
      */
-    @RequestMapping(value = "/api/registerInsert", method = RequestMethod.POST, consumes="application/json;", produces = "application/json; charset=utf8")
-    public String registerInsert(@ModelAttribute("registerVO")RegisterVO registerVO,
-                                 HttpServletRequest request)  throws Exception {
+    @RequestMapping(value = "/api/registerInsert", method = RequestMethod.POST, consumes="multipart/form-data;", produces = "application/json; charset=utf8")
+    public String registerInsert(
+            @RequestParam(value = "file1",required = false) MultipartFile file1,
+            HttpServletRequest request)  throws Exception {
 
         String message = "";
 
-        try {
+        System.out.println("file1: "+file1.getOriginalFilename());
 
-            BufferedReader  br 	        = new BufferedReader(new InputStreamReader(request.getInputStream(), StandardCharsets.UTF_8));
+        //try {
+
+/*            BufferedReader  br 	        = new BufferedReader(new InputStreamReader(request.getInputStream(), StandardCharsets.UTF_8));
             String          paramValue  = parseJSONData(br);                                                            //JSON OBJECT TO STRING CALL.
             JSONParser      jsonParser  = new JSONParser();
             JSONObject      jsonObject  = (JSONObject)jsonParser.parse(paramValue);
@@ -255,21 +256,22 @@ public class ApiController {
             registerVO.setGpsY(jsonObject.get("gpsY").toString());
             registerVO.setSmellComment(jsonObject.get("smellComment").toString());
             registerVO.setSmellRegisterTime(jsonObject.get("smellRegisterTime").toString());
-            registerVO.setRegId(jsonObject.get("regId").toString());
+            registerVO.setRegId(jsonObject.get("regId").toString());*/
 
-            int result = registerService.registerInsert(registerVO);                                                    //접수 마스터||디테일 등록 CALL.
+        //int result = registerService.registerInsert(registerVO);                                                    //접수 마스터||디테일 등록 CALL.
 
-            if(result == 1)
-                message = "{\"result\":\"success\"}";
+        int result = 1;
+        if(result == 1)
+            message = "{\"result\":\"success\"}";
 
-            else
-                message = "{\"result\":\"fail\",\"message\":\"NO DB INSERT.\"}";
+        else
+            message = "{\"result\":\"fail\",\"message\":\"NO DB INSERT.\"}";
 
-      }catch (Exception e){
+        //}catch (Exception e){
 
-            //System.out.println("Exception: "+e);
-            message = "{\"result\":\"fail\",\"message\":\"ERR DB INSERT.\"}";
-        }
+        //System.out.println("Exception: "+e);
+        //message = "{\"result\":\"fail\",\"message\":\"ERR DB INSERT.\"}";
+        // }
 
         return message;
     }
