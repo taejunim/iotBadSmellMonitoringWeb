@@ -169,7 +169,7 @@ var smellRegisterNo;
                     str += '<img src="' + image.smellImagePath + '" width="400" height="200"/>';                        //이미지 경로
                     str += '<input type="hidden" id = "smellImageNo' + i + '" value = "' + image.smellImageNo + '"/>';  //이미지 번호
                     str += '</td>';
-                    str += '<td colspan="1"><a class="subButton" type="button" id="imageDeleteBtn' + i + '">이미지삭제</a></td>';        //삭제 버튼
+                    str += '<td colspan="1"><a class="subButton" type="button" id="imageDeleteBtn' + i + '">이 미 지 삭 제</a></td>';        //삭제 버튼
                     str += '</tr>'
                 }
                 var $getImage = $("#getImage")
