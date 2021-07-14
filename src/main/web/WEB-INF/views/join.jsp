@@ -17,6 +17,11 @@
             join();
         });
 
+        // 취소 버튼 클릭 이벤트
+        $("#btnCancel").click(function(){
+            $(location).attr('href', '/login.do');
+        });
+
         // 중복체크 버튼 클릭 이벤트
         $("#btnCheck").click(function(){
             idCheck();
@@ -146,7 +151,11 @@
                 </td>
             </tr>
             <tr>
-                <td colspan="2"><a class="button bgcDeepBlue wd60 font_bold" id="btnComplete">완료</a></td>
+                <td colspan="2">
+                    <a class="button bgc_grayC wd60 font_bold" id="btnCancel">취소</a>
+                    <a class="button bgcDeepBlue wd60 font_bold" id="btnComplete">완료</a>
+                </td>
+
             </tr>
         </table>
         </form:form>

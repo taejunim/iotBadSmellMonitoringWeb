@@ -10,6 +10,8 @@
 <script src="/resources/js/kakaoMapUtils.js"></script>
 <script type="text/javascript">
 var map;
+var smellRegisterNo;
+
         $(document).ready(function () {
 
             setButton("history");                   //선택된 화면의 메뉴색 변경 CALL.
@@ -40,16 +42,37 @@ var map;
                 $("#weatherState").val(weatherState).prop("selected", true);
             /* 검색 화면 검색어 세팅 END*/
 
+            /*달력 SETTING START*/
+            function setDatePicker(){
 
-            /*이미지 불러오기 END*/
-            // 테이블 row 클릭 이벤트
-            $(".itemRow").click(function () {
+                //datepicker 초기화 START
+                $('#datePicker').datepicker();
+
+                $('#searchStartDt').datepicker();
+                $('#searchStartDt').datepicker("option", "maxDate", $("#searchEndDt").val());
+                $('#searchStartDt').datepicker("option", "onClose", function ( selectedDate ) {
+                    $("#searchEndDt").datepicker( "option", "minDate", selectedDate );
+                });
+
+                $('#searchEndDt').datepicker();
+                $('#searchEndDt').datepicker("option", "minDate", $("#searchStartDt").val());
+                $('#searchEndDt').datepicker("option", "onClose", function ( selectedDate ) {
+                    $("#searchStartDt").datepicker( "option", "maxDate", selectedDate );
+                });
+                //datepicker 초기화 END
+            }
+            /*달력 SETTING END*/
+
+            /* 테이블 row 클릭 이벤트 START*/
+            $(".itemRow").click( function () {
+
+                $(this).css('background-color', 'rgb(217,239,255)');                        //선택된 로우 색상 변경
+                $(".itemRow").not($(this)).css('background-color', 'rgba(255,255,255,0)');  //선택되지 않은 로우 색상
 
                 /*오른쪽 table에 값 담아주기 START*/
                 var getItems = $(this).find("td");  //viewTable의 row
 
-
-                $("#getweatherState").text(getItems.eq(1).text());               //기상 상태
+                $("#getWeatherState").text(getItems.eq(1).text());               //기상 상태
                 $("#getRegName").text(getItems.eq(5).text());                   //등록자
                 $("#getRegId").text(getItems.eq(7).text());                     //등록자 아이디
                 $("#getSmellType").text(getItems.eq(4).text());                 //취기
@@ -60,10 +83,6 @@ var map;
                 $("#getWindSpeedValue").text(getItems.eq(11).text() +"m/s");    //풍속
                 $("#getRegDt").text(getItems.eq(6).text());                     //등록일시
                 $("#smellComment").text(getItems.eq(12).text());                //비고
-
-                // var imageInfo = $(".abcImage").find("td");
-                // var varvar =  imageInfo.eq(2).text()
-                // console.log(varvar);                //이미지
                 /*오른쪽 table에 값 담아주기 END*/
 
                 /*지도 세팅 START*/
@@ -93,9 +112,27 @@ var map;
                 marker.setMap(map);
                 /*지도 세팅 END*/
 
-                /*이미지 불러오기 START*/
+                //검색조건 초기화 버튼 클릭 이벤트
+                $(".resetBtn").click(function () {
+                    $(location).attr('href', '/history.do');
+                });
 
-                var smellRegisterNo =  getItems.eq(15).text()
+                /*이미지 불러오기 START*/
+                smellRegisterNo =  getItems.eq(15).text()  //table의 resultList로 받아온 smellRegisterNo 가져오기
+
+                fn_img_list(); //이미지 불러오기 함수
+                /*이미지 불러오기 END*/
+            });
+            /* 테이블 row 클릭 이벤트 END*/
+
+            //이미지 삭제 클릭 이벤트
+            $(document).on("click",".subButton",function(){
+                var index = $(this).attr('id').replaceAll("imageDeleteBtn","");  //viewTable의 row
+                imageDelete(index); //이미지 삭제 함수
+            });
+
+            //이미지 호출 AJAX
+            function fn_img_list(){
 
                 $.ajax({
                     url: "/imageListSelect",
@@ -104,104 +141,67 @@ var map;
                     dataType: "json",
                     cashe : false,
                     success: function (data) {
-                        //해당 조건에 데이터가 없을때
-                        // if (data.length == 0) {
-                        //    $("#getImage").css("display","이미지가 존재하지 않습니다.");
-                        // }
-                        //else
-                            if(data.length > 0) getImage(data);
+
+                        if (data.length == 0) {         //해당 조건에 데이터가 없을 때
+                            $("#getImage").html("-해당 이미지가 존재하지 않습니다.-");
+                        } else {                       //데이터가 있을 때
+                            $("#getImage").html("");
+                            getImage(data);             //이미지 호출 함수
+                        }
                     },
                     error: function (err) {
                         alert("이미지 데이터를 불러오는중 에러가 발생하였습니다.");
                     }
                 });
+            }
 
-                function getImage(images){
-                    //var images = imageList.images;
-                    var str = "";
+            //이미지 가져와서 보여주기
+            function getImage(images) {
 
-                    for (var i = 0; i < images.length; i++){
-                        var image = images[i];
-                        //console.log(image);
-                        str += '<tr>'
-                        str += '<td id="getImage" colspan="4">';
-                        str += '<img src="' + image.smellImagePath + '" width="380" height="200"/>';
-                        str += '<input type="hidden" id = "smellImageNo' + i + '" value = "' + image.smellImageNo + '"/>';
-                        str += '</td>';
-                        str += '<td colspan="1"><a class="subButton" id="imageDeleteBtn'+ i + '">이미지삭제</a></td>';
-                        str += '</tr>'
-                        //console.log(image.smellImagePath);
-                        //console.log(image.smellImageNo);
+                var str = "";
 
-                    }
-                    var $getImage = $("#getImage")
-                    $getImage.append(str);
+                for (var i = 0; i < images.length; i++) {
 
+                    var image = images[i];
 
+                    str += '<tr>'
+                    str += '<td id="getImage" colspan="4">';
+                    str += '<img src="' + image.smellImagePath + '" width="380" height="200"/>';                        //이미지 경로
+                    str += '<input type="hidden" id = "smellImageNo' + i + '" value = "' + image.smellImageNo + '"/>';  //이미지 번호
+                    str += '</td>';
+                    str += '<td colspan="1"><a class="subButton" type="button" id="imageDeleteBtn' + i + '">이미지삭제</a></td>';        //삭제 버튼
+                    str += '</tr>'
                 }
-            })
-            //이미지 삭제
-            $(document).on("click",".subButton",function(){
-                var index = $(this).attr('id').replaceAll("imageDeleteBtn","");  //viewTable의 row
-                imageDelete(index);
-            });
+                var $getImage = $("#getImage")
+                $getImage.append(str);
+            }
 
-            //검색조건 초기화
-            $(".resetBtn").click(function () {
-                $(location).attr('href', '/history.do');
-            })
-
-            //이미지 삭제
+            //이미지 삭제 함수
             function imageDelete(imageIndex){
 
-                $("#test").load(window.location.href + "#test");
+                var con_test = confirm("이미지를 삭제하시겠습니까?");  //이미지 삭제 허가 요청
 
-                /*오른쪽 table에 값 담아주기 START*/
-                var con_test = confirm("이미지를 삭제하시겠습니까?");
-                if(con_test == true){
-                    var getImageNo =  $("#smellImageNo" + imageIndex).val();
-                    console.log(getImageNo);
+                if(con_test == true){ //이미지 삭제 허용 시
+
+                    var getImageNo =  $("#smellImageNo" + imageIndex).val(); //이미지 번호
+
                     $.ajax({
                         url: "/historyImgDelete/",
                         type: "GET",
                         data: {smellImageNo: getImageNo},
-                        //data: {smellImageNo: "IM2021070513485102"},
-                        dataType: "json",
-                        cashe : false,
+                        dataType: "text",
                         success: function (data) {
-
                             alert("이미지를 삭제하였습니다.");
-                            // that.parent("div").remove();
+                            fn_img_list();   //이미지 불러오기 함수
                         },
                         error: function (err) {
-                            console.log(err);
                             alert("이미지 삭제를 실패하였습니다.");
+                            console.log(err);
                         }
                     });
                 }
             }
         });
-
-
-        //달력 SETTING
-        function setDatePicker(){
-
-            //datepicker 초기화 START
-            $('#datePicker').datepicker();
-
-                $('#searchStartDt').datepicker();
-                $('#searchStartDt').datepicker("option", "maxDate", $("#searchEndDt").val());
-                $('#searchStartDt').datepicker("option", "onClose", function ( selectedDate ) {
-                  $("#searchEndDt").datepicker( "option", "minDate", selectedDate );
-                });
-
-                $('#searchEndDt').datepicker();
-                $('#searchEndDt').datepicker("option", "minDate", $("#searchStartDt").val());
-                $('#searchEndDt').datepicker("option", "onClose", function ( selectedDate ) {
-                  $("#searchStartDt").datepicker( "option", "maxDate", selectedDate );
-                });
-            //datepicker 초기화 END
-        }
 
         //페이지 이동 스크립트
         function fn_page(pageNo) {
@@ -216,8 +216,6 @@ var map;
             document.frm.action = "<c:url value='/history.do'/>";
             document.frm.submit();
         }
-
-
 </script>
 <body>
 <jsp:include page="/menu"/>
@@ -321,7 +319,7 @@ var map;
                 <p></p>
                 <tr>
                     <td class="font_bold">날씨</td>
-                    <td colspan="3" id="getweatherState"></td>
+                    <td colspan="3" id="getWeatherState"></td>
                 </tr>
                 <tr>
                     <td class="font_bold">등록자</td>
@@ -357,13 +355,12 @@ var map;
                     </td>
                 </tr>
                 <tr class="h200" id="test">
-                    <td colspan="4" id="getImage" name="smellRegisterNo">
+                    <td colspan="4" id="getImage">
                     </td>
                 </tr>
             </table>
         </div>
     </div>
-
 </form:form>
 </div>
 </body>
