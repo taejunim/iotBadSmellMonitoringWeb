@@ -11,7 +11,6 @@
 <script type="text/javascript">
 var map;
 var smellRegisterNo;
-var smellImagePath;
 
         $(document).ready(function () {
 
@@ -170,6 +169,7 @@ var smellImagePath;
                     str += '<img src="' + image.smellImagePath + '" width="400" height="200"/>';                        //이미지 경로
                     str += '<input type="hidden" id = "smellImageNo' + i + '" value = "' + image.smellImageNo + '"/>';  //이미지 번호
                     str += '<input type="hidden" id = "smellImagePath' + i + '" value = "' + image.smellImagePath + '"/>';  //이미지 경로
+                    str += '<input type="hidden" id = "smellOriginalPath' + i + '" value = "' + image.smellOriginalPath + '"/>';  //이미지 오리지널 경로
                     str += '</td>';
                     str += '<td colspan="1"><a class="subButton" type="button" id="imageDeleteBtn' + i + '">이 미 지 삭 제</a></td>';        //삭제 버튼
                     str += '</tr>'
@@ -187,13 +187,17 @@ var smellImagePath;
 
                     var getImageNo =  $("#smellImageNo" + imageIndex).val(); //이미지 번호
                     var getImagePath =  $("#smellImagePath" + imageIndex).val(); //이미지 경로
+                    var getOriginalPath =  $("#smellOriginalPath" + imageIndex).val(); //이미지 오리지널 경로
 
                     $.ajax({
                         url: "/historyImgDelete/",
                         type: "GET",
-                        data: {smellImageNo: getImageNo,
-                               smellRegisterNo: smellRegisterNo,
-                               smellImagePath: getImagePath},
+                        data: {
+                            smellImageNo: getImageNo,
+                            smellRegisterNo: smellRegisterNo,
+                            smellImagePath: getImagePath,
+                            smellOriginalPath: getOriginalPath
+                        },
                         dataType: "text",
                         success: function (data) {
                             alert("이미지를 삭제하였습니다.");
