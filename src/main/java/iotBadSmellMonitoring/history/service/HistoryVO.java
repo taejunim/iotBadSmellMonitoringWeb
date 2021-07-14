@@ -40,6 +40,7 @@ public class HistoryVO extends PageVO {
     /*HISTORY DETAIL START*/
     private String smellImageNo;                                                                                        //냄새_이미지_번호(IM+YYYYMMDDHHMISS+SEQ(2자리))
     private String smellImagePath;                                                                                      //냄새 이미지 경로
+    private String smellOriginalPath;                                                                                   //냄새 오리리지날 경로
     /*HISTORY DETAIL END*/
 
 }

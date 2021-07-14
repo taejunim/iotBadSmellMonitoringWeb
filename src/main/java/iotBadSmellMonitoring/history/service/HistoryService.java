@@ -47,7 +47,7 @@ public interface HistoryService {
      * @param   historyVO
      * @throws Exception
      */
-    void historyImgDelete(HistoryVO historyVO) throws Exception;
+    int historyImgDelete(HistoryVO historyVO) throws Exception;
 
     /**
      * TODAY HISTORY 목록

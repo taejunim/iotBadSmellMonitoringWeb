@@ -96,8 +96,8 @@ public class HistoryController {
 
     //이미지 삭제
     @RequestMapping(value = "/historyImgDelete", method = RequestMethod.GET)
-    public @ResponseBody void historyImgDelete(@ModelAttribute HistoryVO historyVO) throws Exception {
+    public @ResponseBody int historyImgDelete(@ModelAttribute HistoryVO historyVO) throws Exception {
 
-        historyService.historyImgDelete(historyVO);
+        return historyService.historyImgDelete(historyVO);
     }
 }

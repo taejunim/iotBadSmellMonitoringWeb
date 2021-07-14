@@ -96,6 +96,7 @@
 
         SELECT SMELL_IMAGE_NO
              , SMELL_IMAGE_PATH
+             , SMELL_ORIGINAL_PATH
              , SMELL_REGISTER_NO
              , DATE_FORMAT(REG_DT,'%Y-%m-%d %H:%i:%S') REG_DT
 

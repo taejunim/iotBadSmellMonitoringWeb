@@ -43,12 +43,12 @@ public interface HistoryMapper {
     List<EgovMap> historyImgListSelect(HistoryVO historyVO) throws Exception;
 
     /**
-     * 이미지 삭제
+     * REGISTER DETAIL 삭제
      * @param   historyVO
      * @return
      * @throws Exception
      */
-    void historyImgDelete(HistoryVO historyVO) throws Exception;
+    int historyImgDelete(HistoryVO historyVO) throws Exception;
 
     /**
      * TODAY HISTORY 목록

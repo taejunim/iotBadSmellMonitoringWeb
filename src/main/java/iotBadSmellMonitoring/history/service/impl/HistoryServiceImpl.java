@@ -3,11 +3,12 @@ package iotBadSmellMonitoring.history.service.impl;
 import egovframework.rte.psl.dataaccess.util.EgovMap;
 import iotBadSmellMonitoring.history.service.HistoryService;
 import iotBadSmellMonitoring.history.service.HistoryVO;
-import iotBadSmellMonitoring.member.service.MemberService;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
 import java.util.List;
 
 /**
@@ -29,8 +30,8 @@ public class HistoryServiceImpl implements HistoryService {
     @Autowired
     SqlSession sqlSession;
 
-    @Autowired
-    private MemberService memberService;
+    @Value("${server.path}")
+    private String serverPath;
 
     /**
      * HISTORY 목록
@@ -67,17 +68,42 @@ public class HistoryServiceImpl implements HistoryService {
 
         return historyMapper.historyImgListSelect(historyVO);
     }
+
     /**
-    * USER_ID / USER_NAME GET
+    * REGISTER DETAIL 삭제
     * @throws Exception
     */
     @Override
-    public void historyImgDelete(HistoryVO historyVo) throws Exception {
+    public int historyImgDelete(HistoryVO historyVo) throws Exception {
 
         HistoryMapper mapper = sqlSession.getMapper(HistoryMapper.class);
 
-        mapper.historyImgDelete(historyVo);
+        int result = 0;
+
+        result = mapper.historyImgDelete(historyVo);
+        String delPath = serverPath+historyVo.getSmellRegisterNo()+"/";
+        //http://101.101.219.152:8080/iotBadSmellMonitoringWebImg/SR2021071415003201/SR2021071415003201_2.png
+
+
+
+
+        if(result == 1){
+
+            File file = new File(delPath);
+
+            if( file.exists() ){
+
+                if(file.delete())
+                    result = 1;
+
+                else
+                    result = 0;
+            }
+        }
+
+        return result;
     }
+
     /**
      * TODAY HISTORY 목록
      * @return List<EgovMap>
