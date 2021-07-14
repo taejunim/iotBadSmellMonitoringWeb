@@ -22,11 +22,11 @@
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
-    <!-- KakaoMap 서버 반영용-->
+    <!-- KakaoMap 실서버 반영용-->
     <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=4bcfea95a6c0fea34615b3ea4d5dd430"></script>
     <!-- KakaoMap 테스트 서버 반영용-->
     <%--<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=3b4561dd700f64e8fa55b3ced036b82e"></script>--%>
-    <!-- KakaoMap 개발용-->
+    <!-- KakaoMap 로컬 개발용-->
     <%--<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=31eb4881990129126e189d5ee4ed5f3e"></script>--%>
 
     <script type="text/javascript">

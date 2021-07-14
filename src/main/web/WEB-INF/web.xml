@@ -47,16 +47,15 @@
         <url-pattern>/*</url-pattern>
     </filter-mapping>
     <!-- 한글설정 END -->
+
     <filter>
-        <filter-name>MultipartFilter</filter-name>
+        <filter-name>multipartFilter</filter-name>
         <filter-class>org.springframework.web.multipart.support.MultipartFilter</filter-class>
     </filter>
-    <!-- Multipart 설정 -->
     <filter-mapping>
-        <filter-name>MultipartFilter</filter-name>
+        <filter-name>multipartFilter</filter-name>
         <url-pattern>/*</url-pattern>
     </filter-mapping>
-    <!-- Multipart 설정 END -->
 
     <absolute-ordering />
 </web-app>

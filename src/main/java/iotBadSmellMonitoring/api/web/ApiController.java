@@ -14,9 +14,11 @@ import org.json.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartResolver;
 
+import javax.servlet.MultipartConfigElement;
 import javax.servlet.http.HttpServletRequest;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -223,55 +225,70 @@ public class ApiController {
         return message;
     }
 
+    @Bean
+    public MultipartConfigElement multipartConfigElement() {
+        return new MultipartConfigElement("");
+    }
+
+    @Bean
+    public MultipartResolver multipartResolver() {
+        org.springframework.web.multipart.commons.CommonsMultipartResolver multipartResolver = new org.springframework.web.multipart.commons.CommonsMultipartResolver();
+        multipartResolver.setMaxUploadSize(4000000);
+        return multipartResolver;
+    }
+
     /**
      * 접수 마스터||디테일 등록 API
      * @param registerVO     REGISTER MASTER / DETAIL VO.
      * @return               RESPONSE MESSAGE.
      * @throws Exception
      */
-    @RequestMapping(value = "/api/registerInsert", method = RequestMethod.POST, consumes="multipart/form-data;", produces = "application/json; charset=utf8")
-    public String registerInsert(
-            @RequestParam(value = "file1",required = false) MultipartFile file1,
-            HttpServletRequest request)  throws Exception {
+    @RequestMapping(value = "/api/registerInsert", method = RequestMethod.POST, consumes =  "multipart/form-data",  produces = "application/json; charset=utf8")
+    public @ResponseBody String registerInsert(@ModelAttribute("registerVO")RegisterVO registerVO, HttpServletRequest request)  throws Exception {
 
         String message = "";
 
-        System.out.println("file1: "+file1.getOriginalFilename());
+        if(registerVO.getImg1() != null) {
+            System.out.println("img1: " + registerVO.getImg1().getOriginalFilename());
 
-        //try {
+            registerVO.getFileList().add(registerVO.getImg1());
+        }
+        if(registerVO.getImg2() != null && !registerVO.getImg2().isEmpty()) {
+            System.out.println("img2: " + registerVO.getImg2().getOriginalFilename());
 
-/*            BufferedReader  br 	        = new BufferedReader(new InputStreamReader(request.getInputStream(), StandardCharsets.UTF_8));
-            String          paramValue  = parseJSONData(br);                                                            //JSON OBJECT TO STRING CALL.
-            JSONParser      jsonParser  = new JSONParser();
-            JSONObject      jsonObject  = (JSONObject)jsonParser.parse(paramValue);
+            registerVO.getFileList().add(registerVO.getImg2());
+        }
+        if(registerVO.getImg3() != null && !registerVO.getImg3().isEmpty()) {
+            System.out.println("img3: " + registerVO.getImg3().getOriginalFilename());
 
-            registerVO.setSmellType(jsonObject.get("smellType").toString());
-            registerVO.setSmellValue(jsonObject.get("smellValue").toString());
-            registerVO.setWeatherState(jsonObject.get("weatherState").toString());
-            registerVO.setTemperatureValue(jsonObject.get("temperatureValue").toString());
-            registerVO.setHumidityValue(jsonObject.get("humidityValue").toString());
-            registerVO.setWindDirectionValue(jsonObject.get("windDirectionValue").toString());
-            registerVO.setWindSpeedValue(jsonObject.get("windSpeedValue").toString());
-            registerVO.setGpsX(jsonObject.get("gpsX").toString());
-            registerVO.setGpsY(jsonObject.get("gpsY").toString());
-            registerVO.setSmellComment(jsonObject.get("smellComment").toString());
-            registerVO.setSmellRegisterTime(jsonObject.get("smellRegisterTime").toString());
-            registerVO.setRegId(jsonObject.get("regId").toString());*/
+            registerVO.getFileList().add(registerVO.getImg3());
+        }
+        if(registerVO.getImg4() != null && !registerVO.getImg4().isEmpty()) {
+            System.out.println("img4: " + registerVO.getImg4().getOriginalFilename());
 
-        //int result = registerService.registerInsert(registerVO);                                                    //접수 마스터||디테일 등록 CALL.
+            registerVO.getFileList().add(registerVO.getImg4());
+        }
+        if(registerVO.getImg5() != null && !registerVO.getImg5().isEmpty()) {
+            System.out.println("img5: " + registerVO.getImg5().getOriginalFilename());
 
-        int result = 1;
-        if(result == 1)
-            message = "{\"result\":\"success\"}";
+            registerVO.getFileList().add(registerVO.getImg5());
+        }
 
-        else
-            message = "{\"result\":\"fail\",\"message\":\"NO DB INSERT.\"}";
+        try {
 
-        //}catch (Exception e){
+            int result = registerService.registerInsert(registerVO);                                                  //접수 마스터||디테일 등록 CALL.
 
-        //System.out.println("Exception: "+e);
-        //message = "{\"result\":\"fail\",\"message\":\"ERR DB INSERT.\"}";
-        // }
+            if(result == 1)
+                message = "{\"result\":\"success\"}";
+
+            else
+                message = "{\"result\":\"fail\",\"message\":\"NO DB INSERT / FILE UPLOAD.\"}";
+
+        }catch (Exception e){
+
+            System.out.println("Exception: "+e);
+            message = "{\"result\":\"fail\",\"message\":\"ERR DB INSERT / FILE UPLOAD.\"}";
+         }
 
         return message;
     }
@@ -446,13 +463,13 @@ public class ApiController {
                 message = "{\"result\":\"success\",\"data\":" + jsonArray + "}";
             }
             else
-                message = "{\"result\":\"fail\",\"message\":\"NO FIND SEARCH CODE.\"}";
+                message = "{\"result\":\"fail\",\"message\":\"NO SEARCH MASTER HISTORY DATA.\"}";
 
 
         }catch (Exception e){
 
             //System.out.println("Exception: "+e);
-            message = "{\"result\":\"fail\",\"message\":\"ERR SEARCH USER REGISTER INFO.\"}";
+            message = "{\"result\":\"fail\",\"message\":\"ERR SEARCH MASTER HISTORY DATA.\"}";
         }
 
         return message;
@@ -491,13 +508,13 @@ public class ApiController {
                 message = "{\"result\":\"success\",\"data\":" + jsonArray + "}";
             }
             else
-                message = "{\"result\":\"fail\",\"message\":\"NO FIND SEARCH CODE.\"}";
+                message = "{\"result\":\"fail\",\"message\":\"NO SEARCH DETAIL HISTORY DATA.\"}";
 
 
         }catch (Exception e){
 
             //System.out.println("Exception: "+e);
-            message = "{\"result\":\"fail\",\"message\":\"ERR SEARCH USER REGISTER INFO.\"}";
+            message = "{\"result\":\"fail\",\"message\":\"ERR SEARCH DETAIL HISTORY DATA.\"}";
         }
 
         return message;

@@ -13,7 +13,7 @@
        http://www.springframework.org/schema/tx
        http://www.springframework.org/schema/tx/spring-tx.xsd">
 
-    <context:property-placeholder location="/WEB-INF/application.properties"/>
+    <context:property-placeholder location="classpath:application.properties"/>
 
     <bean id="dataSource-mysql" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
         <property name="driverClassName" value="${spring.database.class}"/>
@@ -33,7 +33,7 @@
         <constructor-arg ref="sqlSessionFactory"/>
     </bean>
 
-    <util:properties id="properties" location="/WEB-INF/application.properties"/>
+    <util:properties id="properties" location="classpath:application.properties"/>
     <tx:annotation-driven proxy-target-class="true"/>
 
     <!-- For Pagination Tag -->
@@ -46,6 +46,12 @@
                 <entry key="image" value-ref="imageRenderer"/>
             </map>
         </property>
+    </bean>
+
+    <!-- MultipartResolver -->
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <property name="maxUploadSize" value="100000000"/>
+        <property name="maxInMemorySize" value="100000000"/>
     </bean>
 
 </beans>
