@@ -28,6 +28,10 @@
         $("#logout").click(function(){
             $(location).attr('href', '/login.do');
         });
+        //로그아웃 Click
+        $("#myId").click(function(){
+            $(location).attr('href', '/myPage.do');
+        });
     });
 
     //선택된 화면의 메뉴색 변경
@@ -40,7 +44,9 @@
 <div class="wd100rate h100 mainMenu">
     <div class="titleIcon wd80 h80 fl ml10 mt15 mainButton"></div>
     <label class="fl mt50 font_size25 font_bold ml20 mainButton cursor_pointer">IoT 악취 모니터링 시스템</label>
-    <a id="logout" class="fr mt70 wd100 align_c cursor_pointer">로그아웃</a>
+    <a id="logout" class="fr mt70 wd120 align_c cursor_pointer">로그아웃</a>
+    <div class="fr mt70 align_c">|</div>
+    <a id="myId" class="fr mt70 wd200 align_c cursor_pointer"><%=(String)session.getAttribute("userName")%> 님 환영합니다</a>
 </div>
 <div class="wd100rate subMenu">
     <a id="main" class="mainButton"><i class="bx bxs-home lh40 font_size20"></i></a>

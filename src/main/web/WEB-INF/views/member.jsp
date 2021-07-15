@@ -33,6 +33,9 @@ To change this template use File | Settings | File Templates.
         // 테이블 row 클릭 이벤트
         $(".itemRow").click(function () {
 
+            $(this).css('background-color', 'rgb(217,239,255)');                        //선택된 로우 색상 변경
+            $(".itemRow").not($(this)).css('background-color', 'rgba(255,255,255,0)');  //선택되지 않은 로우 색상
+
             var getItems = $(this).find("td");
 
             $("#userPassword").val("");

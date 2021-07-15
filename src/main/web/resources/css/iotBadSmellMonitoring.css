@@ -300,6 +300,9 @@ select::-ms-expand{
 .viewTable tr:last-child{
     border-bottom: 2px solid black;
 }
+.viewTable tr:hover{
+    background-color: rgb(217,239,255);
+}
 .viewTable td{
     border: 1px solid #ccc;
     height: 40px;
@@ -334,7 +337,11 @@ select::-ms-expand{
     border: 1px solid #ccc;
     height: 30px;
     width: 50px;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    WORD-BREAK:break-all;
 }
+
 .conditionTitle {
     font-weight: bold;
 }
