@@ -79,6 +79,7 @@ public class RegisterServiceImpl implements RegisterService {
                     registerVO.setSmellImagePath("http://"+serverIp+":8080/iotBadSmellMonitoringWebImg/"+registerVO.getSmellRegisterNo()+"/"+registerVO.getSmellRegisterNo()+"_"+fileSeq+"."+extension);
                     /*API에서 전송되는 MULTIPART FILE을 FILE / NAME / DIR 등의 관리를 위한 로직 END*/
 
+                    registerVO.setSmellOriginalPath(serverPath+registerVO.getSmellRegisterNo()+"/"+registerVO.getSmellRegisterNo()+"_"+fileSeq+"."+extension);
                     int detailResult = registerMapper.registerDetailInsert(registerVO);                                 //접수 디테일 등록 CALL.
 
                     if(detailResult == 0) {                                                                             //접수 마스터&&디테일 결과,

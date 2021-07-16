@@ -52,11 +52,13 @@
         INSERT INTO tb_smell_image (
                                         SMELL_IMAGE_NO
                                         , SMELL_IMAGE_PATH
+                                        , SMELL_ORIGINAL_PATH
                                         , SMELL_REGISTER_NO
                                     )
                             VALUES (
                                         (SELECT CONCAT('IM',DATE_FORMAT(now(), '%Y%m%d%H%i%s'),(SELECT IFNULL(LPAD(MAX(substr(t2.SMELL_IMAGE_NO,17,2))+1,'2','0'),'01') FROM tb_smell_image t2 WHERE substr(t2.SMELL_IMAGE_NO,1,16) = CONCAT('IM',DATE_FORMAT(now(), '%Y%m%d%H%i%s')))) SMELL_IMAGE_NO FROM DUAL)
                                         , #{smellImagePath}
+                                        , #{smellOriginalPath}
                                         , #{smellRegisterNo}
                                     )
     </insert>

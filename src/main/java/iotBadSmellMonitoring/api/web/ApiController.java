@@ -243,7 +243,7 @@ public class ApiController {
      * @return               RESPONSE MESSAGE.
      * @throws Exception
      */
-    @RequestMapping(value = "/api/registerInsert", method = RequestMethod.POST, consumes =  "multipart/form-data",  produces = "application/json; charset=utf8")
+    @RequestMapping(value = "/api/registerInsert", method = RequestMethod.POST, produces = "application/json; charset=utf8")
     public @ResponseBody String registerInsert(@ModelAttribute("registerVO")RegisterVO registerVO, HttpServletRequest request)  throws Exception {
 
         String message = "";
@@ -444,8 +444,6 @@ public class ApiController {
 
             historyVO.setFirstIndex(Integer.parseInt(request.getParameter("firstIndex")));
             historyVO.setRecordCountPerPage(Integer.parseInt(request.getParameter("recordCountPerPage")));
-
-            System.out.println("조회 아이디: "+historyVO.getRegId());
 
             List<EgovMap> resultList = historyService.historyListSelect(historyVO);                                     //HISTORY 목록 CALL.
 

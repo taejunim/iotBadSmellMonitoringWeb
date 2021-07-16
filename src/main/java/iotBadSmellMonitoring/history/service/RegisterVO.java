@@ -40,6 +40,7 @@ public class RegisterVO {
     /*REGISTER DETAIL START*/
     private String smellImageNo;                                                                                        //냄새_이미지_번호(IM+YYYYMMDDHHMISS+SEQ(2자리))
     private String smellImagePath;                                                                                      //냄새 이미지 경로
+    private String smellOriginalPath;                                                                                   //냄새 실제  경로
     private MultipartFile   img1;
     private MultipartFile   img2;
     private MultipartFile   img3;

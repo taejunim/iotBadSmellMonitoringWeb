@@ -81,15 +81,10 @@ public class HistoryServiceImpl implements HistoryService {
         int result = 0;
 
         result = mapper.historyImgDelete(historyVo);
-        String delPath = serverPath+historyVo.getSmellRegisterNo()+"/";
-        //http://101.101.219.152:8080/iotBadSmellMonitoringWebImg/SR2021071415003201/SR2021071415003201_2.png
-
-
-
 
         if(result == 1){
 
-            File file = new File(delPath);
+            File file = new File(historyVo.getSmellOriginalPath());
 
             if( file.exists() ){
 
