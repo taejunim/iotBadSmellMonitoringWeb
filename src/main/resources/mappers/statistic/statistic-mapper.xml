@@ -12,7 +12,7 @@
             <when test="searchGbn.equals('day')">
              , COUNT(SMELL_VALUE)               CNT
              , DATE_FORMAT(REG_DT, '%Y-%m-%d') REG_DT
-        FROM TB_SMELL_REGISTER A LEFT JOIN (
+        FROM tb_smell_register A LEFT JOIN (
                 SELECT   USER_ID
                        , USER_REGION
                 FROM tb_user ) B ON A.REG_ID = B.USER_ID
@@ -29,7 +29,7 @@
              , COUNT(SMELL_VALUE)            CNT
              , DATE_FORMAT(REG_DT, '%Y-%m') REG_DT
 
-        FROM TB_SMELL_REGISTER A LEFT JOIN (
+        FROM tb_smell_register A LEFT JOIN (
                 SELECT   USER_ID
                 , USER_REGION
                 FROM tb_user ) B ON A.REG_ID = B.USER_ID
@@ -45,7 +45,7 @@
             , COUNT(SMELL_VALUE)         CNT
             , DATE_FORMAT(REG_DT, '%Y') REG_DT
 
-                FROM TB_SMELL_REGISTER A LEFT JOIN (
+                FROM tb_smell_register A LEFT JOIN (
                 SELECT USER_ID,
                 USER_REGION
                 FROM tb_user ) B ON A.REG_ID = B.USER_ID
@@ -60,7 +60,7 @@
             <otherwise>
              , COUNT(SMELL_VALUE)                            CNT
              , F_GET_CODE_NAME('REN',A.SMELL_REGISTER_TIME) REG_DT
-     FROM TB_SMELL_REGISTER A LEFT JOIN (
+     FROM tb_smell_register A LEFT JOIN (
                 SELECT   USER_ID
                 , USER_REGION
                 FROM tb_user ) B ON A.REG_ID = B.USER_ID
