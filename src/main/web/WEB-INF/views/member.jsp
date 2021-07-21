@@ -262,7 +262,7 @@ To change this template use File | Settings | File Templates.
                 </tr>
                 <tr class="h57">
                     <td class="align_l"><label>비밀번호</label></td>
-                    <td><input type="password" class="wd180" name="userPassword" id="userPassword" maxlength="5"></td>
+                    <td><input type="password" class="wd210" name="userPassword" id="userPassword" maxlength="5"></td>
                 </tr>
                 <tr class="h57">
                     <td class="align_l"><label>이름</label></td>
