@@ -55,7 +55,7 @@
                 </if>
          AND DATE_FORMAT(REG_DT, '%Y') BETWEEN #{searchStart} AND #{searchEnd}
      GROUP BY SMELL_VALUE, DATE_FORMAT(REG_DT, '%Y')
-     ORDER BY REG_DT, SMELL_TYPE
+     ORDER BY REG_DT, SMELL_VALUE
             </when>
             <otherwise>
              , COUNT(SMELL_VALUE)                            CNT

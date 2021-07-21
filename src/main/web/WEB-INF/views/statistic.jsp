@@ -37,22 +37,27 @@
         var searchGbn = $("#type").val();
         var region = $("#region").val();
         var searchStart = "";
-        var searchEnd = "";
-        var tickFormat = "";
+        var searchEnd   = "";
+        var tickFormat  = "";
+        var xAxisText   = "";
 
         if(searchGbn == "day" ) {           //일별
             searchStart = $("#startDatePicker").val();
             searchEnd = $("#endDatePicker").val();
             tickFormat = "%Y-%m-%d";
+            xAxisText = "일";
         } else if(searchGbn == "month" ) {  //월별
             searchStart = $("#startYearSelect").val() + "-" + $("#startMonthSelect").val();
             searchEnd = $("#endYearSelect").val() + "-" + $("#endMonthSelect").val();
+            xAxisText = "월";
         } else if(searchGbn == "year" ) {   //연별
             searchStart = $("#startYearInput").val();
             searchEnd = $("#endYearInput").val();
+            xAxisText = "년";
         } else {                            //당일
             searchStart = $("#startTimeInput").val();
             searchEnd = $("#endTimeInput").val();
+            xAxisText = "시간대";
         }
 
         //검색 조건 유효성 체크
@@ -123,14 +128,28 @@
                         }
                         ,axis : {
                             x : {
-                                type : yType,
+                                type: yType,
                                 tick: {
                                     format: tickFormat
+                                },
+                                label: {
+                                    text: xAxisText,
+                                    position: 'outer-middle'
                                 }
                             },
                             y : {
                                 min : 0,
-                                padding: {bottom: 0}
+                                padding: {bottom: 0},
+                                label: {
+                                    text: '건 수',
+                                    position: 'outer-top',
+                                    rotate: 90
+                                },
+                                tick: {
+                                    format: function (d) {
+                                        return (parseInt(d) == d) ? d : null;
+                                    }
+                                }
                             }
                         }
                     });
