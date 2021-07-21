@@ -26,7 +26,9 @@
         });
         //로그아웃 Click
         $("#logout").click(function(){
-            $(location).attr('href', '/login.do');
+            if(confirm("로그아웃 하시겠습니까?")) {
+                $(location).attr('href', '/login.do');
+            }
         });
         //로그아웃 Click
         $("#myId").click(function(){

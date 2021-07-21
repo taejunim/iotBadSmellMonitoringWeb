@@ -29,6 +29,15 @@ To change this template use File | Settings | File Templates.
             $("#searchUserType").val(userType).prop("selected", true);                              //VO 값 선택
         /* 검색 화면 검색어 세팅 END*/
 
+        //검색조건 초기화 버튼 클릭 이벤트
+        $(".resetBtn").click(function () {
+            $(location).attr('href', '/member.do');
+        });
+
+        //검색 버튼 클릭 이벤트
+        $(".searchBtn").click(function () {
+           fn_search();
+        });
 
         // 테이블 row 클릭 이벤트
         $(".itemRow").click(function () {
@@ -39,6 +48,7 @@ To change this template use File | Settings | File Templates.
             var getItems = $(this).find("td");
 
             $("#userPassword").val("");
+            $("#userPasswordConfirm").val("");
             $("#userId").val(getItems.eq(2).text());
             $("#userName").val(getItems.eq(3).text());
             $("#userAge").val(getItems.eq(5).text());
@@ -70,6 +80,13 @@ To change this template use File | Settings | File Templates.
                 return false;
             }
 
+            if(getPw != $("#userPasswordConfirm").val().trim()) {
+                alert("비밀번호가 일치하지 않습니다.");
+                $("#userPasswordConfirm").focus();
+                return false;
+            }
+
+            if(confirm($("#userId").val().trim() + "의 비밃번호를 변경하시겠습니까?"))
             $.ajax({
                 url: "/memberPasswordUpdate/",
                 type: "POST",
@@ -77,7 +94,8 @@ To change this template use File | Settings | File Templates.
                 dataType: "text",
                 success: function (data) {
                     alert("비밀번호를 변경하였습니다.");
-                    memberFormClear();
+                    $("#userPassword").val("");
+                    $("#userPasswordConfirm").val("");
                 },
                 error: function (err) {
                     console.log(err);
@@ -98,7 +116,7 @@ To change this template use File | Settings | File Templates.
 
             //로그인한 아이디는 탈퇴 X
             if(userId === getUserId){
-                alert("로그인한 상태에서는 탈퇴할 수 없습니다.");
+                alert("로그인한 계정 탈퇴는 마이페이지에서 진행 가능합니다.");
                 return false;
             }
 
@@ -122,19 +140,6 @@ To change this template use File | Settings | File Templates.
         })
 
     });
-
-    //회원정보 초기화
-    function memberFormClear() {
-
-        $("#userId").val("");
-        $("#userPassword").val("");
-        $("#userName").val("");
-        $("#userAge").val("");
-
-        $("#userRegion").empty();
-        $("#userSex").empty();
-        $("#userType").empty();
-    }
 
     //페이지 이동 스크립트
     function fn_page(pageNo) {
@@ -192,7 +197,8 @@ To change this template use File | Settings | File Templates.
                 </c:forEach>
             </select>
         </td>
-        <td><a class="button bgcSkyBlue mt10 fr" onclick="fn_search();"><i class="bx bx-search"></i>조회</a></td>
+        <td><a class="button resetBtn bgc_grayC mt10 fr"><i class="bx bx-redo"></i>초기화</a>
+            <a class="button bgcSkyBlue mt10 fr searchBtn"><i class="bx bx-search"></i>조회</a></td>
     </tr>
 </table>
 
@@ -262,7 +268,11 @@ To change this template use File | Settings | File Templates.
                 </tr>
                 <tr class="h57">
                     <td class="align_l"><label>비밀번호</label></td>
-                    <td><input type="password" class="wd210" name="userPassword" id="userPassword" maxlength="5"></td>
+                    <td><input type="password" class="wd210" name="userPassword" id="userPassword" maxlength="20"></td>
+                </tr>
+                <tr class="h57">
+                    <td class="align_l"><label>비밀번호 확인</label></td>
+                    <td><input type="password" class="wd210" name="userPassword" id="userPasswordConfirm" maxlength="20"></td>
                 </tr>
                 <tr class="h57">
                     <td class="align_l"><label>이름</label></td>

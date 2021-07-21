@@ -49,23 +49,30 @@
 
         //chk이 true일 경우
         if(chk) {
-         var formData = $(".joinForm").serialize();
+            if($("input[name='userPassword']").val() != $("input[name='userPasswordConfirm']").val()) {
+                alert("비밀번호가 일치하지 않습니다.");
+                return $("input[name='userPasswordConfirm']").val();
+            }
+
             if(tmpId == $("input[name='userId']").val()) {
-                $.ajax({
-                    url: "/join/userJoinInsert",
-                    type: "POST",
-                    data: formData,
-                    dataType: "text",
-                    success: function (data) {
-                        if (data == "fail") return alert("이미 가입된 아이디입니다.");
-                        alert("회원가입이 완료되었습니다.");
-                        $(location).attr('href', '/login.do');
-                    },
-                    error: function (err) {
-                        console.log(err)
-                        alert("회원가입에 실패하였습니다.");
-                    }
-                });
+                if (confirm("회원가입을 진행하시겠습니까?")) {
+                    var formData = $(".joinForm").serialize();
+                    $.ajax({
+                        url: "/join/userJoinInsert",
+                        type: "POST",
+                        data: formData,
+                        dataType: "text",
+                        success: function (data) {
+                            if (data == "fail") return alert("이미 가입된 아이디입니다.");
+                            alert("회원가입이 완료되었습니다.");
+                            $(location).attr('href', '/login.do');
+                        },
+                        error: function (err) {
+                            console.log(err)
+                            alert("회원가입에 실패하였습니다.");
+                        }
+                    });
+                }
             } else {
                 return alert("아이디 중복체크를 수행하여 주십시오.");
             }
@@ -73,7 +80,6 @@
     }
 
     function idCheck(){
-
         var userId = $("input[name='userId']").val();
         if(userId != "") {
             $.ajax({
@@ -111,6 +117,10 @@
             <tr>
                 <td class="align_l pl20"><label class="tableLabel">* 비밀번호</label></td>
                 <td><input type="password" name="userPassword" class="inputForm fl" maxlength="20" placeholder="비밀번호를 입력해 주십시오."></td>
+            </tr>
+            <tr>
+                <td class="align_l pl20"><label class="tableLabel">* 비밀번호 확인</label></td>
+                <td><input type="password" name="userPasswordConfirm" class="inputForm fl" maxlength="20" placeholder="비밀번호를 한번 더 입력해 주십시오."></td>
             </tr>
             <tr>
                 <td class="align_l pl20"><label class="tableLabel">* 이름</label></td>
