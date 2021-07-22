@@ -72,16 +72,16 @@ var smellRegisterNo;
                 /*오른쪽 table에 값 담아주기 START*/
                 var getItems = $(this).find("td");  //viewTable의 row
 
-                $("#getWeatherState").text(getItems.eq(1).text());               //기상 상태
-                $("#getRegName").text(getItems.eq(5).text());                   //등록자
-                $("#getRegId").text(getItems.eq(7).text());                     //등록자 아이디
+                $("#getWeatherState").text(getItems.eq(1).text());              //기상 상태
+                $("#getRegId").text(getItems.eq(5).text());                     //등록자 아이디
+                $("#getRegName").text(getItems.eq(6).text());                   //등록자
                 $("#getSmellType").text(getItems.eq(4).text());                 //취기
                 $("#getSmellValue").text(getItems.eq(3).text());                //악취 강도
                 $("#humidityValue").text(getItems.eq(8).text() + "%");          //습도
                 $("#getTemperatureValue").text(getItems.eq(9).text() + " ℃");   //온도
                 $("#getWindDirectionValue").text(getItems.eq(10).text());       //풍향
                 $("#getWindSpeedValue").text(getItems.eq(11).text() +"m/s");    //풍속
-                $("#getRegDt").text(getItems.eq(6).text());                     //등록일시
+                $("#getRegDt").text(getItems.eq(7).text());                     //등록일시
                 $("#smellComment").text(getItems.eq(12).text());                //비고
                 /*오른쪽 table에 값 담아주기 END*/
 
@@ -111,11 +111,6 @@ var smellRegisterNo;
                 // 마커가 지도 위에 표시되도록 설정
                 marker.setMap(map);
                 /*지도 세팅 END*/
-
-                //검색조건 초기화 버튼 클릭 이벤트
-                $(".resetBtn").click(function () {
-                    $(location).attr('href', '/history.do');
-                });
 
                 /*이미지 불러오기 START*/
                 smellRegisterNo =  getItems.eq(15).text()  //table의 resultList로 받아온 smellRegisterNo 가져오기
@@ -166,7 +161,7 @@ var smellRegisterNo;
 
                     str += '<tr>'
                     str += '<td id="getImage" colspan="4">';
-                    str += '<img src="' + image.smellImagePath + '" width="400" height="200"/>';                        //이미지 경로
+                    str += '<img src="' + image.smellImagePath + '" width="460" height="200"/>';                        //이미지 경로
                     str += '<input type="hidden" id = "smellImageNo' + i + '" value = "' + image.smellImageNo + '"/>';  //이미지 번호
                     str += '<input type="hidden" id = "smellImagePath' + i + '" value = "' + image.smellImagePath + '"/>';  //이미지 경로
                     str += '<input type="hidden" id = "smellOriginalPath' + i + '" value = "' + image.smellOriginalPath + '"/>';  //이미지 오리지널 경로
@@ -225,6 +220,21 @@ var smellRegisterNo;
             document.frm.action = "<c:url value='/history.do'/>";
             document.frm.submit();
         }
+
+        //초기화
+        function fn_reset() {
+
+            $("#registerName").val("");
+            $("#searchStartDt").val("");
+            $("#searchEndDt").val("");
+            $("#smellType").val("");
+            $("#smellValue").val("");
+            $("#weatherState").val("");
+
+            frm.pageIndex.value = 1;
+            document.frm.action = "<c:url value='/history.do'/>";
+            document.frm.submit();
+        }
 </script>
 <body>
 <jsp:include page="/menu"/>
@@ -234,8 +244,8 @@ var smellRegisterNo;
     <form:form id="frm" name="frm" method="post">
     <input type="hidden" id="pageIndex" name="pageIndex" value="${historyVO.pageIndex}">
     <tr>
-        <th>등록자</th>
-        <td><input type="text" name="regId" value="${historyVO.regId}" class="wd100"></td>
+        <th>등록자/등록자 아이디</th>
+        <td><input type="text" id="registerName" name="regId" value="${historyVO.regId}" class="wd100"></td>
         <th class="wd60">등록일</th>
             <td>
         <input type="date" name="startDate" class="mDateTimeInput" value="${historyVO.startDate}" id="searchStartDt" readonly="readonly">
@@ -265,7 +275,7 @@ var smellRegisterNo;
                     <option value="${item.codeId}">${item.codeIdName}</option>
                 </c:forEach>
         </select></td>
-        <td><a class="button resetBtn bgc_grayC mt10 fr"><i class="bx bx-redo"></i>초기화</a>
+        <td><a class="button resetBtn bgc_grayC mt10 fr" onclick="fn_reset();"><i class="bx bx-redo"></i>초기화</a>
             <a class="button bgcSkyBlue mt10 fr" onclick="fn_search();"><i class="bx bx-search"></i>조회</a></td>
     </tr>
 </table>
@@ -279,7 +289,8 @@ var smellRegisterNo;
                 <th>접수 시간대</th>
                 <th>악취 강도</th>
                 <th>취기</th>
-                <th>등록자</th>
+                <th class="wd10rate">등록자 아이디</th>
+                <th class="wd10rate">등록자</th>
                 <th class="wd20rate">등록일시</th>
             </tr>
             <c:forEach var="resultList" items="${resultList}" varStatus="status">
@@ -290,8 +301,8 @@ var smellRegisterNo;
                 <td>${resultList.smellValueName}</td>
                 <td>${resultList.smellTypeName}</td>
                 <td>${resultList.regId}</td>
-                <td>${resultList.regDt }</td>
-                <td style="display:none;">${resultList.userName}</td>
+                <td>${resultList.userName}</td>
+                <td>${resultList.regDt}</td>
                 <td style="display:none;">${resultList.humidityValue}</td>
                 <td style="display:none;">${resultList.temperatureValue}</td>
                 <td style="display:none;">${resultList.windDirectionValueName}</td>
@@ -304,12 +315,12 @@ var smellRegisterNo;
             </c:forEach>
             <c:if test="${empty resultList}">
                 <tr>
-                    <td align="center" colspan="7" rowspan="10">- 해당 데이터가 존재하지 않습니다. -</td>
+                    <td align="center" colspan="8" rowspan="10">- 해당 데이터가 존재하지 않습니다. -</td>
                 </tr>
             </c:if>
             <c:if test="${!empty resultList && resultList.size() ne 10}">
                 <tr>
-                    <td align="center" colspan="7" rowspan="${10-resultList.size()}"></td>
+                    <td align="center" colspan="8" rowspan="${10-resultList.size()}"></td>
                 </tr>
             </c:if>
         </table>
@@ -319,55 +330,59 @@ var smellRegisterNo;
     </div>
 
     <div class="scrollView">
-        <div id="rightSide" class="fr wd100rate h50rate">
-            <div id="map" class="wd90rate h90rate" style="margin:auto; top:20px;"></div>
-        </div>
-        <p style="color: white">a</p>
-        <div>
-            <table class="wd80rate secondViewTable" >
-                <p></p>
-                <tr>
-                    <td class="font_bold">날씨</td>
-                    <td colspan="3" id="getWeatherState"></td>
-                </tr>
-                <tr>
-                    <td class="font_bold">등록자</td>
-                    <td id="getRegName"> </td>
-                    <td class="font_bold">등록자 아이디</td>
-                    <td id="getRegId" name="redID"> </td>
-                </tr>
-                <tr>
-                    <td class="font_bold">취기</td>
-                    <td id="getSmellType"> </td>
-                    <td class="font_bold">악취 강도</td>
-                    <td id="getSmellValue"> </td>
-                </tr>
-                <tr>
-                    <td class="font_bold">습도</td>
-                    <td id="humidityValue" ></td>
-                    <td class="font_bold">온도</td>
-                    <td id="getTemperatureValue" ></td>
-                </tr>
-                <tr>
-                    <td class="font_bold">풍향</td>
-                    <td id="getWindDirectionValue" ></td>
-                    <td class="font_bold">풍속</td>
-                    <td id="getWindSpeedValue" ></td>
-                </tr>
-                <tr>
-                    <td colspan="1" class="font_bold">등록일시</td>
-                    <td colspan="3" id="getRegDt" ></td>
-                </tr>
-                <tr class="h200">
-                    <td colspan="1" class="font_bold" id="">비고</td>
-                    <td colspan="3" id="smellComment">
-                    </td>
-                </tr>
-                <tr class="h200" id="test">
-                    <td colspan="4" id="getImage">
-                    </td>
-                </tr>
-            </table>
+        <div id="rightSide" class="fr wd100rate h40rate">
+            <div class=" h50 fl" style="padding-left: 15px;"><div class="mapLegendSmall bgcSkyBlue"></div><label class="mapLegendLabelSmall">${CG_SMT[0].codeIdName}</label></div>
+            <div class=" h50 fl"><div class="mapLegendSmall bgcLightGreen"></div><label class="mapLegendLabelSmall">${CG_SMT[1].codeIdName}</label></div>
+            <div class=" h50 fl"><div class="mapLegendSmall bgcWhite"></div><label class="mapLegendLabelSmall">${CG_SMT[2].codeIdName}</label></div>
+            <div class=" h50 fl"><div class="mapLegendSmall bgcYellow"></div><label class="mapLegendLabelSmall">${CG_SMT[3].codeIdName}</label></div>
+            <div class=" h50 fl"><div class="mapLegendSmall bgcOrange"></div><label class="mapLegendLabelSmall">${CG_SMT[4].codeIdName}</label></div>
+            <div class=" h50 fl"><div class="mapLegendSmall bgcDeepRed"></div><label class="mapLegendLabelSmall">${CG_SMT[5].codeIdName}</label></div>
+            <div id="map" class="wd90rate h80rate" style="margin:auto;"></div>
+            <div>
+                <table class="wd90rate secondViewTable" >
+                    <tr>
+                        <td class="font_bold">날씨</td>
+                        <td colspan="3" id="getWeatherState"></td>
+                    </tr>
+                    <tr>
+                        <td class="font_bold">등록자</td>
+                        <td id="getRegName"> </td>
+                        <td class="font_bold">등록자 아이디</td>
+                        <td id="getRegId" name="redID"> </td>
+                    </tr>
+                    <tr>
+                        <td class="font_bold">취기</td>
+                        <td id="getSmellType"> </td>
+                        <td class="font_bold">악취 강도</td>
+                        <td id="getSmellValue"> </td>
+                    </tr>
+                    <tr>
+                        <td class="font_bold">습도</td>
+                        <td id="humidityValue" ></td>
+                        <td class="font_bold">온도</td>
+                        <td id="getTemperatureValue" ></td>
+                    </tr>
+                    <tr>
+                        <td class="font_bold">풍향</td>
+                        <td id="getWindDirectionValue" ></td>
+                        <td class="font_bold">풍속</td>
+                        <td id="getWindSpeedValue" ></td>
+                    </tr>
+                    <tr>
+                        <td colspan="1" class="font_bold">등록일시</td>
+                        <td colspan="3" id="getRegDt" ></td>
+                    </tr>
+                    <tr class="h200">
+                        <td colspan="1" class="font_bold" id="">비고</td>
+                        <td colspan="3" id="smellComment">
+                        </td>
+                    </tr>
+                    <tr class="h200" id="test">
+                        <td colspan="4" id="getImage">
+                        </td>
+                    </tr>
+                </table>
+            </div>
         </div>
     </div>
 </form:form>

@@ -31,7 +31,7 @@
           WHERE 1=1
 
         <if test="regId != null and !regId.equals('')" >
-            AND (LOWER(REG_ID) LIKE LOWER('%${regId}%'))
+            AND (LOWER(tsr.REG_ID) LIKE LOWER('%${regId}%') OR LOWER(tu.USER_NAME) LIKE LOWER('%${regId}%'))
         </if>
 
         <if test="smellType != null and !smellType.equals('')" >

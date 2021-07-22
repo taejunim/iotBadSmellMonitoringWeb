@@ -267,7 +267,6 @@ select::-ms-expand{
 }
 .scrollView{
     height: 80%;
-    min-width: 100px;
     overflow: auto;
 }
 .titleIcon {
@@ -341,7 +340,6 @@ select::-ms-expand{
     text-overflow:ellipsis;
     WORD-BREAK:break-all;
 }
-
 .conditionTitle {
     font-weight: bold;
 }
@@ -353,12 +351,27 @@ select::-ms-expand{
     margin-left:10px;
     float: left;
 }
+.mapLegendSmall{
+    width: 15px;
+    height: 15px;
+    border: 1px solid #666;
+    margin-top: 20px;
+    margin-left:3px;
+    float: left;
+}
 .mapLegendLabel{
     float:left;
     height: 50px;
     line-height: 50px;
     margin-left: 10px;
     font-size: 14px;
+}
+.mapLegendLabelSmall{
+    float:left;
+    height: 20px;
+    margin-top: 22px;
+    margin-left: 3px;
+    font-size: 12px;
 }
 .mDateTimeInput{
     width: 137px;
