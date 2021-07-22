@@ -33,13 +33,24 @@
         $("#updateBtn").click(function () {
 
             var getPw = $("#showPassword").val();
+            var chkPw = $("#showPasswordConfirm").val();
 
             //변경할 비밀번호 값 입력 안했을 경우
             if (getPw === undefined || getPw === "") {
                 alert("변경할 비밀번호를 입력해 주십시오.");
                 return false;
+            //비밀번호 확인 값 입력 안했을 경우
+            }else if (chkPw === undefined || chkPw === ""){
+                alert("비밀번호 확인을 입력해 주십시오.");
+                return false;
             }
 
+            //비밀번호 확인 값 일치하지 않을 경우
+            if(getPw != $("#showPasswordConfirm").val().trim()) {
+                alert("비밀번호가 일치하지 않습니다.");
+                $("#showPasswordConfirm").focus();
+                return false;
+            }
 
             var con_test = confirm("비밀번호를 변경하시겠습니까?");
 
@@ -67,7 +78,7 @@
 
             var getUserId = $("#showId").val();
 
-            var con_test = confirm(getUserId+"을 탈퇴시키겠습니까?");
+            var con_test = confirm(getUserId+"을(를) 탈퇴시키겠습니까?");
 
             //탈퇴버튼 confirm true일 경우
             if(con_test == true){
