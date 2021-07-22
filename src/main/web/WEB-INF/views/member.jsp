@@ -86,7 +86,7 @@ To change this template use File | Settings | File Templates.
                 return false;
             }
 
-            if(confirm($("#userId").val().trim() + "의 비밃번호를 변경하시겠습니까?"))
+            if(confirm($("#userId").val().trim() + "의 비밀번호를 변경하시겠습니까?"))
             $.ajax({
                 url: "/memberPasswordUpdate/",
                 type: "POST",

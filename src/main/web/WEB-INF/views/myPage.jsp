@@ -63,7 +63,8 @@
                     dataType: "text",
                     success: function (data) {
                         alert("비밀번호를 변경하였습니다.");
-                        // memberFormClear();
+                        $("#showPassword").val("");
+                        $("#showPasswordConfirm").val("");
                     },
                     error: function (err) {
                         console.log(err);
