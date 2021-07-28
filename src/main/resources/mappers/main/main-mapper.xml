@@ -6,28 +6,27 @@
     <!-- PC 메인 목록-->
     <select id="pcMainListSelect" parameterType="mainVO" resultType="egovMap">
 
-        SELECT ANY_VALUE(tsr.SMELL_REGISTER_NO)                       SMELL_REGISTER_NO
-             , ANY_VALUE(tsr.SMELL_TYPE)                              SMELL_TYPE
-             , ANY_VALUE(F_GET_CODE_NAME('STY',SMELL_TYPE))           SMELL_TYPE_NAME
-             , ANY_VALUE(tsr.SMELL_VALUE)                             SMELL_VALUE
-             , ANY_VALUE(F_GET_CODE_NAME('SMT',SMELL_VALUE))          SMELL_VALUE_NAME
-             , ANY_VALUE(tsr.WEATHER_STATE)                           WEATHER_STATE
-             , ANY_VALUE(F_GET_CODE_NAME('WET',WEATHER_STATE))        WEATHER_STATE_NAME
-             , ANY_VALUE(tsr.TEMPERATURE_VALUE)                       TEMPERATURE_VALUE
-             , ANY_VALUE(tsr.HUMIDITY_VALUE)                          HUMIDITY_VALUE
-             , ANY_VALUE(tsr.WIND_DIRECTION_VALUE)                    WIND_DIRECTION_VALUE
-             , ANY_VALUE(F_GET_CODE_NAME('WND',WEATHER_STATE))        WIND_DIRECTION_VALUE_NAME
-             , ANY_VALUE(tsr.WIND_SPEED_VALUE)                        WIND_SPEED_VALUE
-             , ANY_VALUE(tsr.GPS_X)                                   GPS_X
-             , ANY_VALUE(tsr.GPS_Y)                                   GPS_Y
-             , ANY_VALUE(tsr.SMELL_COMMENT)                           SMELL_COMMENT
-             , ANY_VALUE(tsr.SMELL_REGISTER_TIME)                     SMELL_REGISTER_TIME
-             , ANY_VALUE(F_GET_CODE_NAME('REN',SMELL_REGISTER_TIME))  SMELL_REGISTER_TIME_NAME
-             , tsr.REG_ID                                             REG_ID
-             , tu.USER_NAME                                           USER_NAME
-             , DATE_FORMAT(MAX(tsr.REG_DT),'%Y-%m-%d %H:%i:%S')       REG_DT
-
-          FROM tb_smell_register tsr INNER JOIN tb_user tu on tsr.REG_ID = tu.USER_ID GROUP BY tsr.REG_ID
+    SELECT ANY_VALUE(tsr.SMELL_REGISTER_NO)                       SMELL_REGISTER_NO
+         , ANY_VALUE(tsr.SMELL_TYPE)                              SMELL_TYPE
+         , ANY_VALUE(F_GET_CODE_NAME('STY',SMELL_TYPE))           SMELL_TYPE_NAME
+         , ANY_VALUE(tsr.SMELL_VALUE)                             SMELL_VALUE
+         , ANY_VALUE(F_GET_CODE_NAME('SMT',SMELL_VALUE))          SMELL_VALUE_NAME
+         , ANY_VALUE(tsr.WEATHER_STATE)                           WEATHER_STATE
+         , ANY_VALUE(F_GET_CODE_NAME('WET',WEATHER_STATE))        WEATHER_STATE_NAME
+         , ANY_VALUE(tsr.TEMPERATURE_VALUE)                       TEMPERATURE_VALUE
+         , ANY_VALUE(tsr.HUMIDITY_VALUE)                          HUMIDITY_VALUE
+         , ANY_VALUE(tsr.WIND_DIRECTION_VALUE)                    WIND_DIRECTION_VALUE
+         , ANY_VALUE(F_GET_CODE_NAME('WND',WEATHER_STATE))        WIND_DIRECTION_VALUE_NAME
+         , ANY_VALUE(tsr.WIND_SPEED_VALUE)                        WIND_SPEED_VALUE
+         , ANY_VALUE(tsr.GPS_X)                                   GPS_X
+         , ANY_VALUE(tsr.GPS_Y)                                   GPS_Y
+         , ANY_VALUE(tsr.SMELL_COMMENT)                           SMELL_COMMENT
+         , ANY_VALUE(tsr.SMELL_REGISTER_TIME)                     SMELL_REGISTER_TIME
+         , ANY_VALUE(F_GET_CODE_NAME('REN',SMELL_REGISTER_TIME))  SMELL_REGISTER_TIME_NAME
+         , tsr.REG_ID                                             REG_ID
+         , tu.USER_NAME                                           USER_NAME
+         , DATE_FORMAT(tsr.REG_DT,'%Y-%m-%d %H:%i:%S')            REG_DT
+      FROM ( SELECT * FROM ( SELECT * FROM tb_smell_register ORDER BY tb_smell_register.REG_DT DESC LIMIT 18446744073709551615 ) AS tb_smell_register GROUP BY tb_smell_register.REG_ID) tsr INNER JOIN tb_user tu on tsr.REG_ID = tu.USER_ID
 
     </select>
 
