@@ -44,6 +44,7 @@ public class HistoryServiceImpl implements HistoryService {
 
         return historyMapper.historyListSelect(historyVO);
     }
+
     /**
      * 회원 리스트 TOTAL COUNT 조회
      * @param   historyVO
@@ -57,6 +58,7 @@ public class HistoryServiceImpl implements HistoryService {
 
         return mapper.historyListTotalCnt(historyVO);
     }
+
     /**
      * HISTORY IMG 목록
      * @return List<EgovMap>
@@ -109,6 +111,18 @@ public class HistoryServiceImpl implements HistoryService {
         HistoryMapper historyMapper = sqlSession.getMapper(HistoryMapper.class);
 
         return historyMapper.todayHistoryListSelect(userId);
+    }
+
+    /**
+     * HISTORY 엑셀 목록
+     * @return List<EgovMap>
+     * @throws Exception
+     */
+    public List<EgovMap> historyListExcelSelect(HistoryVO historyVO) throws Exception {
+
+        HistoryMapper historyMapper = sqlSession.getMapper(HistoryMapper.class);
+
+        return historyMapper.historyListExcelSelect(historyVO);
     }
 
 }

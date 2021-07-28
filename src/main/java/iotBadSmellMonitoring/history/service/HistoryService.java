@@ -56,4 +56,11 @@ public interface HistoryService {
      */
     EgovMap todayHistoryListSelect(String userId) throws Exception;
 
+    /**
+     * HISTORY 엑셀 목록
+     * @return List<EgovMap>
+     * @throws Exception
+     */
+    List<EgovMap> historyListExcelSelect(HistoryVO historyVO) throws Exception;
+
 }

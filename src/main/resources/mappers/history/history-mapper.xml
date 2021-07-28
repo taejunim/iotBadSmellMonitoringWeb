@@ -202,4 +202,58 @@
         ]]>
     </select>
 
+    <!-- HISTORY 엑셀 목록-->
+    <select id="historyListExcelSelect" parameterType="historyVO" resultType="egovMap">
+
+        SELECT tsr.SMELL_REGISTER_NO                       SMELL_REGISTER_NO
+        , tsr.SMELL_TYPE                              SMELL_TYPE
+        , F_GET_CODE_NAME('STY',SMELL_TYPE)           SMELL_TYPE_NAME
+        , tsr.SMELL_VALUE                             SMELL_VALUE
+        , F_GET_CODE_NAME('SMT',SMELL_VALUE)          SMELL_VALUE_NAME
+        , tsr.WEATHER_STATE                            WEATHER_STATE
+        , F_GET_CODE_NAME('WET',WEATHER_STATE)         WEATHER_STATE_NAME
+        , tsr.TEMPERATURE_VALUE                       TEMPERATURE_VALUE
+        , tsr.HUMIDITY_VALUE                          HUMIDITY_VALUE
+        , tsr.WIND_DIRECTION_VALUE                    WIND_DIRECTION_VALUE
+        , F_GET_CODE_NAME('WND',WEATHER_STATE)         WIND_DIRECTION_VALUE_NAME
+        , tsr.WIND_SPEED_VALUE                        WIND_SPEED_VALUE
+        , tsr.GPS_X                                   GPS_X
+        , tsr.GPS_Y                                   GPS_Y
+        , tsr.SMELL_COMMENT                           SMELL_COMMENT
+        , tsr.SMELL_REGISTER_TIME                     SMELL_REGISTER_TIME
+        , F_GET_CODE_NAME('REN',SMELL_REGISTER_TIME)  SMELL_REGISTER_TIME_NAME
+        , tsr.REG_ID                                  REG_ID
+        , tu.USER_NAME                                USER_NAME
+        , DATE_FORMAT(tsr.REG_DT,'%Y-%m-%d %H:%i:%S') REG_DT
+
+        FROM tb_smell_register tsr LEFT OUTER JOIN tb_user tu on tsr.REG_ID = tu.USER_ID
+        WHERE 1=1
+
+        <if test="regId != null and !regId.equals('')" >
+            AND (LOWER(tsr.REG_ID) LIKE LOWER('%${regId}%') OR LOWER(tu.USER_NAME) LIKE LOWER('%${regId}%'))
+        </if>
+
+        <if test="smellType != null and !smellType.equals('')" >
+            AND SMELL_TYPE = #{smellType}
+        </if>
+        <if test="smellValue != null and !smellValue.equals('')" >
+            AND SMELL_VALUE = #{smellValue}
+        </if>
+        <if test="weatherState != null and !weatherState.equals('')" >
+            AND WEATHER_STATE = #{weatherState}
+        </if>
+
+        <if test="startDate != null and !startDate.equals('')" >
+
+            <![CDATA[ AND tsr.REG_DT >= CONCAT(#{startDate}, ' 00:00:00') ]]>
+        </if>
+
+        <if test="endDate != null and !endDate.equals('')" >
+
+            <![CDATA[ AND tsr.REG_DT <= CONCAT(#{endDate}, ' 23:59:59') ]]>
+        </if>
+
+        ORDER BY tsr.REG_DT DESC
+    </select>
+
 </mapper>

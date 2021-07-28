@@ -2,7 +2,6 @@ package iotBadSmellMonitoring.history.service.impl;
 
 import egovframework.rte.psl.dataaccess.util.EgovMap;
 import iotBadSmellMonitoring.history.service.HistoryVO;
-import iotBadSmellMonitoring.join.service.JoinVO;
 
 import java.util.List;
 
@@ -56,5 +55,12 @@ public interface HistoryMapper {
      * @throws Exception
      */
     EgovMap todayHistoryListSelect(String userId) throws Exception;
+
+    /**
+     * HISTORY 엑셀 목록
+     * @return List<EgovMap>
+     * @throws Exception
+     */
+    List<EgovMap> historyListExcelSelect(HistoryVO historyVO) throws Exception;
 
 }
