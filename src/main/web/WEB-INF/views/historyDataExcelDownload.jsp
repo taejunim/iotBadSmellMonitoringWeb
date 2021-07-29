@@ -1,7 +1,7 @@
-<%@ page language="java" contentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="application/vnd.ms-excel;" pageEncoding="UTF-8"%>
 <meta http-equiv="content-type" content="application/vnd.ms-excel; charset=utf-8">
 <%
-    response.setHeader("Content-Disposition", "attachment; filename=LIST");
+    response.setHeader("Content-Disposition", "attachment; filename=LIST.xls");
     response.setHeader("Content-Description", "JSP Generated Data");
 %>
 <head>
