@@ -121,91 +121,99 @@ var smellRegisterNo;
             /* 테이블 row 클릭 이벤트 END*/
 
             //이미지 삭제 클릭 이벤트
-            $(document).on("click",".subButton",function(){
+            $(document).on("click",".deleteButton",function(){
                 var index = $(this).attr('id').replaceAll("imageDeleteBtn","");  //viewTable의 row
                 imageDelete(index); //이미지 삭제 함수
             });
 
-            //이미지 호출 AJAX
-            function fn_img_list(){
+            //데이터 다운로드 클릭 이벤트
+            $("#downloadButton").click(function(){
 
-                $.ajax({
-                    url: "/imageListSelect",
-                    type: "GET",
-                    data:{smellRegisterNo : smellRegisterNo},
-                    dataType: "json",
-                    cashe : false,
-                    success: function (data) {
+                document.frm.action = "<c:url value='/historyDataExcelDownload'/>";
+                document.frm.submit();
+            });
 
-                        if (data.length == 0) {         //해당 조건에 데이터가 없을 때
-                            $("#getImage").html("-해당 이미지가 존재하지 않습니다.-");
-                        } else {                       //데이터가 있을 때
-                            $("#getImage").html("");
-                            getImage(data);             //이미지 호출 함수
-                        }
-                    },
-                    error: function (err) {
-                        alert("이미지 데이터를 불러오는중 에러가 발생하였습니다.");
-                    }
-                });
+        });
+
+//이미지 호출 AJAX
+function fn_img_list(){
+
+    $.ajax({
+        url: "/imageListSelect",
+        type: "GET",
+        data:{smellRegisterNo : smellRegisterNo},
+        dataType: "json",
+        cashe : false,
+        success: function (data) {
+
+            if (data.length == 0) {         //해당 조건에 데이터가 없을 때
+                $("#getImage").html("-해당 이미지가 존재하지 않습니다.-");
+            } else {                       //데이터가 있을 때
+                $("#getImage").html("");
+                getImage(data);             //이미지 호출 함수
             }
+        },
+        error: function (err) {
+            alert("이미지 데이터를 불러오는중 에러가 발생하였습니다.");
+        }
+    });
+}
 
-            //이미지 가져와서 보여주기
-            function getImage(images) {
+//이미지 가져와서 보여주기
+function getImage(images) {
 
-                var str = "";
+    var str = "";
 
-                for (var i = 0; i < images.length; i++) {
+    for (var i = 0; i < images.length; i++) {
 
-                    var image = images[i];
+        var image = images[i];
 
-                    str += '<tr>'
-                    str += '<td id="getImage" colspan="4">';
-                    str += '<img src="' + image.smellImagePath + '" width="460" height="200"/>';                        //이미지 경로
-                    str += '<input type="hidden" id = "smellImageNo' + i + '" value = "' + image.smellImageNo + '"/>';  //이미지 번호
-                    str += '<input type="hidden" id = "smellImagePath' + i + '" value = "' + image.smellImagePath + '"/>';  //이미지 경로
-                    str += '<input type="hidden" id = "smellOriginalPath' + i + '" value = "' + image.smellOriginalPath + '"/>';  //이미지 오리지널 경로
-                    str += '</td>';
-                    str += '<td colspan="1"><a class="subButton" type="button" id="imageDeleteBtn' + i + '">이 미 지 삭 제</a></td>';        //삭제 버튼
-                    str += '</tr>'
-                }
-                var $getImage = $("#getImage")
-                $getImage.append(str);
-            }
+        str += '<tr>'
+        str += '<td id="getImage" colspan="4">';
+        str += '<img src="' + image.smellImagePath + '" width="460" height="200"/>';                        //이미지 경로
+        str += '<input type="hidden" id = "smellImageNo' + i + '" value = "' + image.smellImageNo + '"/>';  //이미지 번호
+        str += '<input type="hidden" id = "smellImagePath' + i + '" value = "' + image.smellImagePath + '"/>';  //이미지 경로
+        str += '<input type="hidden" id = "smellOriginalPath' + i + '" value = "' + image.smellOriginalPath + '"/>';  //이미지 오리지널 경로
+        str += '</td>';
+        str += '<td colspan="1"><a class="subButton deleteButton" type="button" id="imageDeleteBtn' + i + '">이 미 지 삭 제</a></td>';        //삭제 버튼
+        str += '</tr>'
+    }
+    var $getImage = $("#getImage")
+    $getImage.append(str);
+}
 
-            //이미지 삭제 함수
-            function imageDelete(imageIndex){
+//이미지 삭제 함수
+function imageDelete(imageIndex){
 
-                var con_test = confirm("이미지를 삭제하시겠습니까?");  //이미지 삭제 허가 요청
+    var con_test = confirm("이미지를 삭제하시겠습니까?");  //이미지 삭제 허가 요청
 
-                if(con_test == true){ //이미지 삭제 허용 시
+    if(con_test == true){ //이미지 삭제 허용 시
 
-                    var getImageNo =  $("#smellImageNo" + imageIndex).val(); //이미지 번호
-                    var getImagePath =  $("#smellImagePath" + imageIndex).val(); //이미지 경로
-                    var getOriginalPath =  $("#smellOriginalPath" + imageIndex).val(); //이미지 오리지널 경로
+        var getImageNo =  $("#smellImageNo" + imageIndex).val(); //이미지 번호
+        var getImagePath =  $("#smellImagePath" + imageIndex).val(); //이미지 경로
+        var getOriginalPath =  $("#smellOriginalPath" + imageIndex).val(); //이미지 오리지널 경로
 
-                    $.ajax({
-                        url: "/historyImgDelete/",
-                        type: "GET",
-                        data: {
-                            smellImageNo: getImageNo,
-                            smellRegisterNo: smellRegisterNo,
-                            smellImagePath: getImagePath,
-                            smellOriginalPath: getOriginalPath
-                        },
-                        dataType: "text",
-                        success: function (data) {
-                            alert("이미지를 삭제하였습니다.");
-                            fn_img_list();   //이미지 불러오기 함수
-                        },
-                        error: function (err) {
-                            alert("이미지 삭제를 실패하였습니다.");
-                            console.log(err);
-                        }
-                    });
-                }
+        $.ajax({
+            url: "/historyImgDelete/",
+            type: "GET",
+            data: {
+                smellImageNo: getImageNo,
+                smellRegisterNo: smellRegisterNo,
+                smellImagePath: getImagePath,
+                smellOriginalPath: getOriginalPath
+            },
+            dataType: "text",
+            success: function (data) {
+                alert("이미지를 삭제하였습니다.");
+                fn_img_list();   //이미지 불러오기 함수
+            },
+            error: function (err) {
+                alert("이미지 삭제를 실패하였습니다.");
+                console.log(err);
             }
         });
+    }
+}
 
         //페이지 이동 스크립트
         function fn_page(pageNo) {
@@ -280,8 +288,8 @@ var smellRegisterNo;
     </tr>
 </table>
 <div class="wd100rate h100rate bgc_w scrollView">
-
     <div class="wd70rate h100rate fl brDeepBlue">
+        <a class="button bgcDeepBlue fr" type="button" id="downloadButton"><i class="bx bx-download"></i>&nbsp;데이터 내려받기</a>
         <table class=" viewTable font_size15">
             <tr>
                 <th class="wd5rate">NO</th>

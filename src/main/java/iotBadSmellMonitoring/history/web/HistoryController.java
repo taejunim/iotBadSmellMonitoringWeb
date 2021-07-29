@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.servlet.http.HttpSession;
 import java.util.List;
 
 /**
@@ -98,5 +97,12 @@ public class HistoryController {
     public @ResponseBody int historyImgDelete(@ModelAttribute HistoryVO historyVO) throws Exception {
 
         return historyService.historyImgDelete(historyVO);
+    }
+
+    //엑셀 다운로드
+    @RequestMapping(value = "/historyDataExcelDownload")
+    public String historyDataExcelDownload(HistoryVO historyVO,ModelMap modelMap) throws Exception {
+        modelMap.addAttribute("resultList",historyService.historyListExcelSelect(historyVO));
+        return "historyDataExcelDownload";
     }
 }
