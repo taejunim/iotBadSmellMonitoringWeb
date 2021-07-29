@@ -339,7 +339,7 @@ function imageDelete(imageIndex){
 
     <div class="scrollView">
         <div id="rightSide" class="fr wd100rate h40rate">
-            <div class=" h50 fl" style="padding-left: 15px;"><div class="mapLegendSmall bgcSkyBlue"></div><label class="mapLegendLabelSmall">${CG_SMT[0].codeIdName}</label></div>
+            <div class=" h50 fl" style="padding-left: 5px;"><div class="mapLegendSmall bgcSkyBlue"></div><label class="mapLegendLabelSmall">${CG_SMT[0].codeIdName}</label></div>
             <div class=" h50 fl"><div class="mapLegendSmall bgcLightGreen"></div><label class="mapLegendLabelSmall">${CG_SMT[1].codeIdName}</label></div>
             <div class=" h50 fl"><div class="mapLegendSmall bgcWhite"></div><label class="mapLegendLabelSmall">${CG_SMT[2].codeIdName}</label></div>
             <div class=" h50 fl"><div class="mapLegendSmall bgcYellow"></div><label class="mapLegendLabelSmall">${CG_SMT[3].codeIdName}</label></div>
