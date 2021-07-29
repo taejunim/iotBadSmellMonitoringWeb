@@ -175,7 +175,7 @@ select::-ms-expand{
     border-bottom: 3px #10639a solid;
     background: #fff;
     background-size: 80px;
-    min-width: 1200px;
+    min-width: 1600px;
 }
 .mainMenu > strong {
     position: relative;
@@ -186,7 +186,7 @@ select::-ms-expand{
 }
 .subMenu {
     border-bottom: 1px #10639a solid;
-    min-width: 1200px;
+    min-width: 1600px;
     height: 40px;
     background: #fff;
 }
@@ -208,7 +208,7 @@ select::-ms-expand{
     width: 100%;
     height: 60px;
     border-bottom: 1px #10639a solid;
-    min-width: 1200px;
+    min-width: 1600px;
     font-size: 14px;
 }
 .searchTable > tbody > tr > th {
@@ -318,10 +318,10 @@ select::-ms-expand{
     font-weight: normal;
     width: 60px;
 }
-.mainForm table td{
+.mainForm table td {
     padding-left: 10px;
 }
-.secondViewTable{
+.secondViewTable {
     margin: 5% auto 5% auto;
     text-align: center;
 }

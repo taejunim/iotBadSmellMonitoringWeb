@@ -284,12 +284,12 @@ function imageDelete(imageIndex){
                 </c:forEach>
         </select></td>
         <td><a class="button resetBtn bgc_grayC mt10 fr" onclick="fn_reset();"><i class="bx bx-redo"></i>초기화</a>
-            <a class="button bgcSkyBlue mt10 fr" onclick="fn_search();"><i class="bx bx-search"></i>조회</a></td>
+            <a class="button bgcSkyBlue mt10 fr" onclick="fn_search();"><i class="bx bx-search"></i>조회</a>
+            <a class="button bgcDeepBlue mt10 fr" id="downloadButton"><i class="bx bx-download"></i>엑셀</a></td>
     </tr>
 </table>
 <div class="wd100rate h100rate bgc_w scrollView">
     <div class="wd70rate h100rate fl brDeepBlue">
-        <a class="button bgcDeepBlue fr" type="button" id="downloadButton"><i class="bx bx-download"></i>&nbsp;데이터 내려받기</a>
         <table class=" viewTable font_size15">
             <tr>
                 <th class="wd5rate">NO</th>
@@ -339,12 +339,18 @@ function imageDelete(imageIndex){
 
     <div class="scrollView">
         <div id="rightSide" class="fr wd100rate h40rate">
-            <div class=" h50 fl" style="padding-left: 5px;"><div class="mapLegendSmall bgcSkyBlue"></div><label class="mapLegendLabelSmall">${CG_SMT[0].codeIdName}</label></div>
-            <div class=" h50 fl"><div class="mapLegendSmall bgcLightGreen"></div><label class="mapLegendLabelSmall">${CG_SMT[1].codeIdName}</label></div>
-            <div class=" h50 fl"><div class="mapLegendSmall bgcWhite"></div><label class="mapLegendLabelSmall">${CG_SMT[2].codeIdName}</label></div>
-            <div class=" h50 fl"><div class="mapLegendSmall bgcYellow"></div><label class="mapLegendLabelSmall">${CG_SMT[3].codeIdName}</label></div>
-            <div class=" h50 fl"><div class="mapLegendSmall bgcOrange"></div><label class="mapLegendLabelSmall">${CG_SMT[4].codeIdName}</label></div>
-            <div class=" h50 fl"><div class="mapLegendSmall bgcDeepRed"></div><label class="mapLegendLabelSmall">${CG_SMT[5].codeIdName}</label></div>
+            <table class="border_none mg0auto wd90rate mb20">
+                <tr>
+                    <td><div class="mapLegendSmall bgcSkyBlue"></div><label class="mapLegendLabelSmall">${CG_SMT[0].codeIdName}</label></td>
+                    <td><div class="mapLegendSmall bgcLightGreen"></div><label class="mapLegendLabelSmall">${CG_SMT[1].codeIdName}</label></td>
+                    <td><div class="mapLegendSmall bgcWhite"></div><label class="mapLegendLabelSmall">${CG_SMT[2].codeIdName}</label></td>
+                </tr>
+                <tr>
+                    <td><div class="mapLegendSmall bgcYellow"></div><label class="mapLegendLabelSmall">${CG_SMT[3].codeIdName}</label></td>
+                    <td><div class="mapLegendSmall bgcOrange"></div><label class="mapLegendLabelSmall">${CG_SMT[4].codeIdName}</label></td>
+                    <td><div class="mapLegendSmall bgcDeepRed"></div><label class="mapLegendLabelSmall">${CG_SMT[5].codeIdName}</label></td>
+                </tr>
+            </table>
             <div id="map" class="wd90rate h80rate" style="margin:auto;"></div>
             <div>
                 <table class="wd90rate secondViewTable" >
