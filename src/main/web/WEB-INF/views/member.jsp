@@ -69,6 +69,11 @@ To change this template use File | Settings | File Templates.
 
             var getPw = $("#userPassword").val().trim();
 
+            //비밀번호 길이 확인
+            if(!fn_chkPwLength($("input[name='userPassword']").val())) {
+                return;
+            }
+
             // 회원을 선택 했는지 체크
             if($("#userId").val() === undefined || $("#userId").val().trim() === ""){
                 alert("변경할 회원을 선택해 주세요.");
@@ -237,7 +242,7 @@ To change this template use File | Settings | File Templates.
                     <td>${resultList.userRegionName}</td>
                     <td>${resultList.userAge}</td>
                     <td>${resultList.userSexName}</td>
-                    <td><fmt:formatDate value="${resultList.regDt}" pattern="yyyy-MM-dd hh:mm:ss"/></td>
+                    <td><fmt:formatDate value="${resultList.regDt}" pattern="yyyy-MM-dd HH:mm:ss"/></td>
                 </tr>
             </c:forEach>
             <c:if test="${empty resultList}">

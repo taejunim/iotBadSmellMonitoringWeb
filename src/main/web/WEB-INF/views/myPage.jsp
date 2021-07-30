@@ -15,7 +15,7 @@
 
         /*세션값 불러오기 START*/
         $("#showId").val('<%=(String)session.getAttribute("userId")%>');                                    //아이디
-        $("#showPassword").val("");                                                                         //사용자_비밀번호
+        $("#userPassword").val("");                                                                         //사용자_비밀번호
         $("#showName").val('<%=(String)session.getAttribute("userName")%>');                                //이름
         $("#showAge").val('<%=(String)session.getAttribute("userAge")%>');                                  //나이
 
@@ -32,8 +32,13 @@
         //비밀번호변경 버튼 클릭 이벤트
         $("#updateBtn").click(function () {
 
-            var getPw = $("#showPassword").val();
-            var chkPw = $("#showPasswordConfirm").val();
+            //비밀번호 길이 확인
+            if(!fn_chkPwLength($("input[name='userPassword']").val())) {
+                return;
+            }
+
+            var getPw = $("#userPassword").val();
+            var chkPw = $("#userPasswordConfirm").val();
 
             //변경할 비밀번호 값 입력 안했을 경우
             if (getPw === undefined || getPw === "") {
@@ -46,9 +51,9 @@
             }
 
             //비밀번호 확인 값 일치하지 않을 경우
-            if(getPw != $("#showPasswordConfirm").val().trim()) {
+            if(getPw != $("#userPasswordConfirm").val().trim()) {
                 alert("비밀번호가 일치하지 않습니다.");
-                $("#showPasswordConfirm").focus();
+                $("#userPasswordConfirm").focus();
                 return false;
             }
 
@@ -59,12 +64,12 @@
                 $.ajax({
                     url: "/myPagePasswordUpdate/",
                     type: "POST",
-                    data: {userPassword: $("#showPassword").val(), userId: $("#showId").val()},
+                    data: {userPassword: $("#userPassword").val(), userId: $("#showId").val()},
                     dataType: "text",
                     success: function (data) {
                         alert("비밀번호를 변경하였습니다.");
-                        $("#showPassword").val("");
-                        $("#showPasswordConfirm").val("");
+                        $("#userPassword").val("");
+                        $("#userPasswordConfirm").val("");
                     },
                     error: function (err) {
                         console.log(err);
@@ -114,11 +119,11 @@
         </tr>
         <tr>
             <td class="align_l pl20"><label class="tableLabel" >비밀번호</label></td>
-            <td><input type="password" id="showPassword" name="userPassword" placeholder="비밀번호" maxlength="20"></td>
+            <td><input type="password" id="userPassword" name="userPassword"  placeholder="비밀번호"></td>
         </tr>
         <tr>
             <td class="align_l pl20"><label class="tableLabel" >비밀번호 확인</label></td>
-            <td><input type="password" id="showPasswordConfirm" placeholder="비밀번호" maxlength="20"></td>
+            <td><input type="password" id="userPasswordConfirm" placeholder="비밀번호" ></td>
         </tr>
         <tr>
             <td class="align_l pl20"><label class="tableLabel" >이름</label></td>

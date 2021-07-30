@@ -47,7 +47,12 @@
             }
         })
 
-        //chk이 true일 경우
+        //비밀번호 길이 확인
+        if(!fn_chkPwLength($("input[name='userPassword']").val())) {
+            return;
+        }
+
+            //chk이 true일 경우
         if(chk) {
             if($("input[name='userPassword']").val() != $("input[name='userPasswordConfirm']").val()) {
                 alert("비밀번호가 일치하지 않습니다.");
@@ -80,7 +85,14 @@
     }
 
     function idCheck(){
+
         var userId = $("input[name='userId']").val();
+
+        //아이디 길이 확인
+        if(!fn_chkIdLength(userId)) {
+            return;
+        }
+
         if(userId != "") {
             $.ajax({
                 url: "/join/userFindIdSelect",
@@ -110,17 +122,17 @@
             <tr>
                 <td class="align_l pl20"><label class="tableLabel">* 아이디</label></td>
                 <td><div style="width: 100%; height: 100%">
-                    <input type="text" name="userId" class="inputForm mt10 fl wd60rate" placeholder="아이디를 입력해 주십시오." maxlength="20">
+                    <input type="text" id="userId" name="userId" class="inputForm mt10 fl wd60rate" placeholder="아이디를 입력해 주십시오." maxlength="20">
                     <a id= "btnCheck" class="subButton mt10">중복체크</a>
                 </div></td>
             </tr>
             <tr>
                 <td class="align_l pl20"><label class="tableLabel">* 비밀번호</label></td>
-                <td><input type="password" name="userPassword" class="inputForm fl" maxlength="20" placeholder="비밀번호를 입력해 주십시오."></td>
+                <td><input type="password" name="userPassword" class="inputForm fl" maxlength="20" id="userPassword" placeholder="비밀번호를 입력해 주십시오."></td>
             </tr>
             <tr>
                 <td class="align_l pl20"><label class="tableLabel">* 비밀번호 확인</label></td>
-                <td><input type="password" name="userPasswordConfirm" class="inputForm fl" maxlength="20" placeholder="비밀번호를 한번 더 입력해 주십시오."></td>
+                <td><input type="password" name="userPasswordConfirm" class="inputForm fl" maxlength="20" id="userPasswordConfirm" placeholder="비밀번호를 한번 더 입력해 주십시오."></td>
             </tr>
             <tr>
                 <td class="align_l pl20"><label class="tableLabel">* 이름</label></td>

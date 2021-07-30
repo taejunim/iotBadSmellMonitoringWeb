@@ -1,7 +1,5 @@
 <script type="text/javascript">
 
-    userId = '<%=(String)session.getAttribute("userId")%>';
-
     $(document).ready(function () {
 
         //아이콘, 로고, 메인 Click
@@ -30,7 +28,7 @@
                 $(location).attr('href', '/login.do');
             }
         });
-        //로그아웃 Click
+        //관리자명 Click
         $("#myId").click(function(){
             $(location).attr('href', '/myPage.do');
         });
