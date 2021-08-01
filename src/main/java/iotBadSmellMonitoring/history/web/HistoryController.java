@@ -41,7 +41,7 @@ public class HistoryController {
     //개별접수이력조회
     @RequestMapping("/history")
     public String history(@ModelAttribute("historyVO") HistoryVO historyVO, ModelMap model) throws Exception {
-        System.out.println("HistoryVo ----->" +historyVO);
+        //System.out.println("HistoryVo ----->" +historyVO);
 
 
 

@@ -81,7 +81,7 @@ public class MainController {
         else{
             model.addAttribute("CG_SMT",session.getAttribute("CG_SMT"));
         }
-        System.out.println(mainService.pcMainListSelect(mainVO));
+        //System.out.println(mainService.pcMainListSelect(mainVO));
         return "main";
     }
 

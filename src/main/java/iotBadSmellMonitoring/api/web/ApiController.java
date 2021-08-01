@@ -249,27 +249,27 @@ public class ApiController {
         String message = "";
 
         if(registerVO.getImg1() != null) {
-            System.out.println("img1: " + registerVO.getImg1().getOriginalFilename());
+            //System.out.println("img1: " + registerVO.getImg1().getOriginalFilename());
 
             registerVO.getFileList().add(registerVO.getImg1());
         }
         if(registerVO.getImg2() != null && !registerVO.getImg2().isEmpty()) {
-            System.out.println("img2: " + registerVO.getImg2().getOriginalFilename());
+            //System.out.println("img2: " + registerVO.getImg2().getOriginalFilename());
 
             registerVO.getFileList().add(registerVO.getImg2());
         }
         if(registerVO.getImg3() != null && !registerVO.getImg3().isEmpty()) {
-            System.out.println("img3: " + registerVO.getImg3().getOriginalFilename());
+            //System.out.println("img3: " + registerVO.getImg3().getOriginalFilename());
 
             registerVO.getFileList().add(registerVO.getImg3());
         }
         if(registerVO.getImg4() != null && !registerVO.getImg4().isEmpty()) {
-            System.out.println("img4: " + registerVO.getImg4().getOriginalFilename());
+            //System.out.println("img4: " + registerVO.getImg4().getOriginalFilename());
 
             registerVO.getFileList().add(registerVO.getImg4());
         }
         if(registerVO.getImg5() != null && !registerVO.getImg5().isEmpty()) {
-            System.out.println("img5: " + registerVO.getImg5().getOriginalFilename());
+            //System.out.println("img5: " + registerVO.getImg5().getOriginalFilename());
 
             registerVO.getFileList().add(registerVO.getImg5());
         }
@@ -286,7 +286,7 @@ public class ApiController {
 
         }catch (Exception e){
 
-            System.out.println("Exception: "+e);
+            //System.out.println("Exception: "+e);
             message = "{\"result\":\"fail\",\"message\":\"ERR DB INSERT / FILE UPLOAD.\"}";
          }
 
