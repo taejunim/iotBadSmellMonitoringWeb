@@ -51,7 +51,7 @@ public class RegisterServiceImpl implements RegisterService {
          * smellValue(악취 강도) - 001(무취) 이면 smellType(악취 타입) - 008(취기 없음)
          * 그 외 강도는 002(기타 냄새) 로 바꿔서 업데이트
          */
-        if (registerVO.getSmellType().trim().equals("") || registerVO.getSmellType() != null) {
+        if (registerVO.getSmellType().trim().equals("") || registerVO.getSmellType() == null) {
 
             if (registerVO.getSmellValue().equals("001")) {
                 registerVO.setSmellType("008");
