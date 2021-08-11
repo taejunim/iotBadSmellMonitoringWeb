@@ -62,11 +62,11 @@
     <select id="historyListTotalCnt" parameterType="historyVO" resultType="int">
 
         SELECT COUNT(*) cnt
-        FROM tb_smell_register
+        FROM tb_smell_register tsr LEFT OUTER JOIN tb_user tu on tsr.REG_ID = tu.USER_ID
         WHERE 1=1
 
         <if test="regId != null and !regId.equals('')" >
-            AND (LOWER(REG_ID) LIKE LOWER('%${regId}%') )
+            AND (LOWER(REG_ID) LIKE LOWER('%${regId}%') OR LOWER(USER_NAME) LIKE LOWER('%${regId}%'))
         </if>
 
         <if test="smellType != null and !smellType.equals('')" >
@@ -81,12 +81,12 @@
 
         <if test="startDate != null and !startDate.equals('')" >
 
-            <![CDATA[ AND REG_DT >= CONCAT(#{startDate}, ' 00:00:00') ]]>
+            <![CDATA[ AND tsr.REG_DT >= CONCAT(#{startDate}, ' 00:00:00') ]]>
         </if>
 
         <if test="endDate != null and !endDate.equals('')" >
 
-            <![CDATA[ AND REG_DT <= CONCAT(#{endDate}, ' 23:59:59') ]]>
+            <![CDATA[ AND tsr.REG_DT <= CONCAT(#{endDate}, ' 23:59:59') ]]>
         </if>
 
     </select>

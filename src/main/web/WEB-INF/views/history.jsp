@@ -12,6 +12,13 @@
 var map;
 var smellRegisterNo;
 
+var regId = '${historyVO.regId}';               //검색조건_등록자/등록자 아이디
+var startDate = '${historyVO.startDate}';       //검색조건_등록일 시작
+var endDate = '${historyVO.endDate}';           //검색조건_등록일 끝
+var smellType = '${historyVO.smellType}';       //검색조건_취기
+var smellValue = '${historyVO.smellValue}';     //검색조건_악취 강도
+var weatherState = '${historyVO.weatherState}'; //검색조건_기상 상태
+
         $(document).ready(function () {
 
             setButton("history");                   //선택된 화면의 메뉴색 변경 CALL.
@@ -21,23 +28,23 @@ var smellRegisterNo;
              map = focusMapCenter(33.352974, 126.314419, 5);
 
             /* 검색 화면 검색어 세팅 START*/
-            var startDate = '${historyVO.startDate}';          //시작날짜
+            //시작날짜
             if (startDate != "" && startDate != null)
                 $("#searchStartDt").val(startDate).prop("selected", true);
 
-            var endDate = '${historyVO.endDate}';              //종료날짜
+            //종료날짜
             if (endDate != "" && endDate != null)
                 $("#searchEndDt").val(endDate).prop("selected", true);
 
-            var smellType = '${historyVO.smellType}';          //취기
+            //취기
             if (smellType != "" && smellType != null)
                 $("#smellType").val(smellType).prop("selected", true);                              //VO 값 선택
 
-            var smellValue = '${historyVO.smellValue}';        //악취강도
+            //악취강도
             if (smellValue != "" && smellValue != null)
                 $("#smellValue").val(smellValue).prop("selected", true);                              //VO 값 선택
 
-            var weatherState = '${historyVO.weatherState}';       //기상상태
+            //기상상태
             if (weatherState != "" && weatherState != null)
                 $("#weatherState").val(weatherState).prop("selected", true);
             /* 검색 화면 검색어 세팅 END*/
@@ -68,6 +75,7 @@ var smellRegisterNo;
 
                 $(this).css('background-color', 'rgb(217,239,255)');                        //선택된 로우 색상 변경
                 $(".itemRow").not($(this)).css('background-color', 'rgba(255,255,255,0)');  //선택되지 않은 로우 색상
+
 
                 /*오른쪽 table에 값 담아주기 START*/
                 var getItems = $(this).find("td");  //viewTable의 row
@@ -217,6 +225,25 @@ function imageDelete(imageIndex){
 
         //페이지 이동 스크립트
         function fn_page(pageNo) {
+            //vo에 담긴 값이 입력된 값과 다를 경우 강제로 vo에 담긴 값을 form에 넣어주기
+            if (regId !=  $("#registerName")){
+                frm.regId.value = regId;
+            }
+            if (startDate !=  $("#searchStartDt")){
+                frm.startDate.value = startDate;
+            }
+            if (endDate !=  $("#searchEndDt")){
+                frm.endDate.value = endDate;
+            }
+            if (smellType !=  $("#smellType")){
+                frm.smellType.value = smellType;
+            }
+            if (smellValue !=  $("#smellValue")){
+                frm.smellValue.value = smellValue;
+            }
+            if (weatherState !=  $("#weatherState")){
+                frm.weatherState.value = weatherState;
+            }
             frm.pageIndex.value = pageNo;
             document.frm.action = "<c:url value='/history.do'/>";
             document.frm.submit();
@@ -302,7 +329,7 @@ function imageDelete(imageIndex){
                 <th class="wd20rate">등록일시</th>
             </tr>
             <c:forEach var="resultList" items="${resultList}" varStatus="status">
-            <tr class="cursor_pointer itemRow">
+            <tr class="cursor_pointer itemRow" id="tr-hover">
                 <td>${paginationInfo.totalRecordCount - ((historyVO.pageIndex-1) * 10) - status.index}</td>
                 <td>${resultList.weatherStateName}</td>
                 <td>${resultList.smellRegisterTimeName}</td>
@@ -327,7 +354,7 @@ function imageDelete(imageIndex){
                 </tr>
             </c:if>
             <c:if test="${!empty resultList && resultList.size() ne 10}">
-                <tr>
+                <tr style="background-color: rgba(255,255,255,0)">
                     <td align="center" colspan="8" rowspan="${10-resultList.size()}"></td>
                 </tr>
             </c:if>

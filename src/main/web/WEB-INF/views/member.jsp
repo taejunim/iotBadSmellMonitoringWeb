@@ -8,25 +8,23 @@ To change this template use File | Settings | File Templates.
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
 <%@include file="/WEB-INF/views/common/resources_common.jsp" %>
 <script type="text/javascript">
-
+var userId = '${joinVO.userId}';            //검색조건_아이디/이름
+var userRegion = '${joinVO.userRegion}';    //검색조건_지역
+var userAge = '${joinVO.userAge}';          //검색조건_나이
+var userSex = '${joinVO.userSex}';          //검색조건_성별
+var userType = '${joinVO.userType}';        //검색조건_구분
     $(document).ready(function () {
         setButton("member");
 
         /* 검색 화면 검색어 세팅 START*/
-        var userRegion = '${joinVO.userRegion}';
+        if (userRegion != "" && userRegion != null)                         //지역
+            $("#searchUserRegion").val(userRegion).prop("selected", true);
 
-        if (userRegion != "" && userRegion != null)
-            $("#searchUserRegion").val(userRegion).prop("selected", true);                              //VO 값 선택
+        if (userSex != "" && userSex != null)                               //성별
+            $("#searchUserSex").val(userSex).prop("selected", true);
 
-        var userSex = '${joinVO.userSex}';
-
-        if (userSex != "" && userSex != null)
-            $("#searchUserSex").val(userSex).prop("selected", true);                              //VO 값 선택
-
-        var userType = '${joinVO.userType}';
-
-        if (userType != "" && userType != null)
-            $("#searchUserType").val(userType).prop("selected", true);                              //VO 값 선택
+        if (userType != "" && userType != null)                              //구분
+            $("#searchUserType").val(userType).prop("selected", true);
         /* 검색 화면 검색어 세팅 END*/
 
         //검색조건 초기화 버튼 클릭 이벤트
@@ -148,7 +146,22 @@ To change this template use File | Settings | File Templates.
 
     //페이지 이동 스크립트
     function fn_page(pageNo) {
-
+        //vo에 담긴 값이 입력된 값과 다를 경우 강제로 vo에 담긴 값을 form에 넣어주기
+        if (userId !=  $("#userId")){
+            frm.userId.value = userId;
+        }
+        if (userRegion !=  $("#searchUserRegion")){
+            frm.userRegion.value = userRegion;
+        }
+        if (userAge !=  $("#userAge")){
+            frm.userAge.value = userAge;
+        }
+        if (userSex !=  $("#searchUserSex")){
+            frm.userSex.value = userSex;
+        }
+        if (userType !=  $("#searchUserType")){
+            frm.userType.value = userType;
+        }
         frm.pageIndex.value = pageNo;
         document.frm.action = "<c:url value='/member.do'/>";
         document.frm.submit();
@@ -172,7 +185,7 @@ To change this template use File | Settings | File Templates.
     <input type="hidden" id="pageIndex" name="pageIndex" value="${joinVO.pageIndex}">
     <tr>
         <th>아이디/이름</th>
-        <td class="wd100"><input type="text" name="userId" value="${joinVO.userId}"></td>
+        <td class="wd100"><input type="text" id="userId" name="userId" value="${joinVO.userId}"></td>
         <th>지역</th>
         <td class="wd100">
             <select id="searchUserRegion" name="userRegion" class="wd90">
@@ -183,7 +196,7 @@ To change this template use File | Settings | File Templates.
             </select>
         </td>
         <th>나이</th>
-        <td class="wd100"><input type="text" name="userAge" value="${joinVO.userAge}"></td>
+        <td class="wd100"><input type="text" id="userAge" name="userAge" value="${joinVO.userAge}"></td>
         <th>성별</th>
         <td class="wd100">
             <select id="searchUserSex" name="userSex" class="wd90">
@@ -251,7 +264,7 @@ To change this template use File | Settings | File Templates.
                 </tr>
             </c:if>
             <c:if test="${!empty resultList && resultList.size() ne 10}">
-                <tr>
+                <tr style="background-color: rgba(255,255,255,0)">
                     <td align="center" colspan="8" rowspan="${10-resultList.size()}"></td>
                 </tr>
             </c:if>
