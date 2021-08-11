@@ -24,7 +24,10 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+
+import static iotBadSmellMonitoring.common.Constants.dateFormatter;
 
 /**
  * @ Class Name   : ApiController.java
@@ -551,6 +554,35 @@ public class ApiController {
 
             //System.out.println("Exception: "+e);
             message = "{\"result\":\"fail\",\"message\":\"ERR PASSWORD CHANGE.\"}";
+        }
+
+        return message;
+    }
+
+    /**
+     * CURRENT DATE API
+     * @return           RESPONSE MESSAGE.
+     * @throws Exception
+     */
+    @RequestMapping(value = "/api/currentDate", method = RequestMethod.GET, consumes="application/json;", produces = "application/json; charset=utf8")
+    public String currentDate()  throws Exception {
+
+        String message = "";
+
+        String currentDate = "";
+
+        try {
+
+            Date date = new Date();
+
+            currentDate = dateFormatter.format(date);
+
+            message = "{\"result\":" + currentDate + "}";
+
+        } catch (Exception e){
+
+            //System.out.println("Exception: "+e);
+            message = "{\"result\":\"fail\",\"message\": \"Exception.\"}";
         }
 
         return message;
