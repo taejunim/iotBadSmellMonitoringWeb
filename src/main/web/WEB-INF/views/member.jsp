@@ -147,13 +147,13 @@ var userType = '${joinVO.userType}';        //검색조건_구분
     //페이지 이동 스크립트
     function fn_page(pageNo) {
         //vo에 담긴 값이 입력된 값과 다를 경우 강제로 vo에 담긴 값을 form에 넣어주기
-        if (userId !=  $("#userId")){
+        if (userId !=  $("#searchUserId")){
             frm.userId.value = userId;
         }
         if (userRegion !=  $("#searchUserRegion")){
             frm.userRegion.value = userRegion;
         }
-        if (userAge !=  $("#userAge")){
+        if (userAge !=  $("#searchUserAge")){
             frm.userAge.value = userAge;
         }
         if (userSex !=  $("#searchUserSex")){
@@ -185,7 +185,7 @@ var userType = '${joinVO.userType}';        //검색조건_구분
     <input type="hidden" id="pageIndex" name="pageIndex" value="${joinVO.pageIndex}">
     <tr>
         <th>아이디/이름</th>
-        <td class="wd100"><input type="text" id="userId" name="userId" value="${joinVO.userId}"></td>
+        <td class="wd100"><input type="text" id="searchUserId" name="userId" value="${joinVO.userId}"></td>
         <th>지역</th>
         <td class="wd100">
             <select id="searchUserRegion" name="userRegion" class="wd90">
@@ -196,7 +196,7 @@ var userType = '${joinVO.userType}';        //검색조건_구분
             </select>
         </td>
         <th>나이</th>
-        <td class="wd100"><input type="text" id="userAge" name="userAge" value="${joinVO.userAge}"></td>
+        <td class="wd100"><input type="text" id="searchUserAge" name="userAge" value="${joinVO.userAge}"></td>
         <th>성별</th>
         <td class="wd100">
             <select id="searchUserSex" name="userSex" class="wd90">
