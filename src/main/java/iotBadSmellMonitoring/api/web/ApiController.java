@@ -247,25 +247,23 @@ public class ApiController {
      * @throws Exception
      */
     @RequestMapping(value = "/api/registerInsert", method = RequestMethod.POST, produces = "application/json; charset=utf8")
-    public @ResponseBody String registerInsert(@ModelAttribute("registerVO")RegisterVO registerVO, HttpServletRequest request)  throws Exception {
+    public @ResponseBody String registerInsert(@ModelAttribute("registerVO")RegisterVO registerVO)  throws Exception {
 
         String strTime     = new java.text.SimpleDateFormat("HHmm").format(new java.util.Date());
         int    intTime     = Integer.parseInt(strTime);
         String message     = "";
 
-        System.out.println("intTime: "+intTime);
+        if(659 < intTime && 900 > intTime)
+            message = registMakeMsg(registerVO);
 
-        if(700 < intTime && 900 > intTime)
-            message = registMakeMsg(registerVO, request);
+        else if(1159 < intTime && 1400 > intTime)
+            message = registMakeMsg(registerVO);
 
-        else if(1200 < intTime && 1400 > intTime)
-            message = registMakeMsg(registerVO, request);
+        else if(1759 < intTime && 2000 > intTime)
+            message = registMakeMsg(registerVO);
 
-        else if(1800 < intTime && 2000 > intTime)
-            message = registMakeMsg(registerVO, request);
-
-        else if(2200 < intTime && 2359 >= intTime)
-            message = registMakeMsg(registerVO, request);
+        else if(2159 < intTime && 2359 >= intTime)
+            message = registMakeMsg(registerVO);
 
         else
             message = "{\"result\":\"fail\",\"message\":\"NO REGIST TIME.\"}";
@@ -273,7 +271,7 @@ public class ApiController {
         return message;
     }
 
-    public String registMakeMsg(RegisterVO registerVO, HttpServletRequest request){
+    public String registMakeMsg(RegisterVO registerVO){
 
         String message = "";
 
@@ -322,7 +320,6 @@ public class ApiController {
         return message;
 
     }
-
 
     /**
      * USER INFO API
