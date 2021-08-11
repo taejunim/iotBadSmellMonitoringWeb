@@ -249,6 +249,32 @@ public class ApiController {
     @RequestMapping(value = "/api/registerInsert", method = RequestMethod.POST, produces = "application/json; charset=utf8")
     public @ResponseBody String registerInsert(@ModelAttribute("registerVO")RegisterVO registerVO, HttpServletRequest request)  throws Exception {
 
+        String strTime     = new java.text.SimpleDateFormat("HHmm").format(new java.util.Date());
+        int    intTime     = Integer.parseInt(strTime);
+        String message     = "";
+
+        System.out.println("intTime: "+intTime);
+
+        if(700 < intTime && 900 > intTime)
+            message = registMakeMsg(registerVO, request);
+
+        else if(1200 < intTime && 1400 > intTime)
+            message = registMakeMsg(registerVO, request);
+
+        else if(1800 < intTime && 2000 > intTime)
+            message = registMakeMsg(registerVO, request);
+
+        else if(2200 < intTime && 2359 >= intTime)
+            message = registMakeMsg(registerVO, request);
+
+        else
+            message = "{\"result\":\"fail\",\"message\":\"NO REGIST TIME.\"}";
+
+        return message;
+    }
+
+    public String registMakeMsg(RegisterVO registerVO, HttpServletRequest request){
+
         String message = "";
 
         if(registerVO.getImg1() != null) {
@@ -291,10 +317,12 @@ public class ApiController {
 
             //System.out.println("Exception: "+e);
             message = "{\"result\":\"fail\",\"message\":\"ERR DB INSERT / FILE UPLOAD.\"}";
-         }
+        }
 
         return message;
+
     }
+
 
     /**
      * USER INFO API
@@ -567,22 +595,19 @@ public class ApiController {
     @RequestMapping(value = "/api/currentDate", method = RequestMethod.GET, consumes="application/json;", produces = "application/json; charset=utf8")
     public String currentDate()  throws Exception {
 
-        String message = "";
-
+        String message     = "";
         String currentDate = "";
 
         try {
 
-            Date date = new Date();
-
+            Date date   = new Date();
             currentDate = dateFormatter.format(date);
-
-            message = "{\"result\":" + currentDate + "}";
+            message = "{\"result\":\"success\",\"data\":\""+currentDate+"\"}";
 
         } catch (Exception e){
 
             //System.out.println("Exception: "+e);
-            message = "{\"result\":\"fail\",\"message\": \"Exception.\"}";
+            message = "{\"result\":\"fail\",\"message\": \"GET DATE TIME ERR.\"}";
         }
 
         return message;
