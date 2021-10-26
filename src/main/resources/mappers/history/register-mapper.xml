@@ -27,6 +27,9 @@
                                         , SMELL_COMMENT
                                         , SMELL_REGISTER_TIME
                                         , REG_ID
+                                        , AIR_SENSOR_NAME
+                                        , AIR_SENSING_DATE
+                                        , PM10_AVG
                                       )
                               VALUES (
                                         #{smellRegisterNo}
@@ -42,6 +45,9 @@
                                         , #{smellComment}
                                         , #{smellRegisterTime}
                                         , #{regId}
+                                        , #{airSensorName}
+                                        , #{airSensingDate}
+                                        , #{pm10Avg}
                                      )
 
     </insert>

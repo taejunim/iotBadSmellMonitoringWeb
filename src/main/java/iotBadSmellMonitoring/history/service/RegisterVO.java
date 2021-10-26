@@ -35,6 +35,9 @@ public class RegisterVO {
     private String smellComment;                                                                                        //냄새 설명
     private String smellRegisterTime;                                                                                   //냄새 접수 시간대(코드 테이블 참조)
     private String regId;                                                                                               //사용자 아이디
+    private String airSensorName;                                                                                       //측정소 명
+    private Double pm10Avg;                                                                                             //PM10 미세 먼지 평균 값 (㎍/㎥)
+    private String airSensingDate;                                                                                      //공기질 수집 일시 YYYYMMDDHH24MISS
     /*REGISTER MASTER END*/
 
     /*REGISTER DETAIL START*/

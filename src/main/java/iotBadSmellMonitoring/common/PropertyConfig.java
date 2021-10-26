@@ -25,7 +25,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupp
 
 @Configuration
 @ComponentScan(basePackages= "iotBadSmellMonitoring.common", includeFilters = @ComponentScan.Filter({Controller.class, Data.class}), useDefaultFilters = false)
-@PropertySource(value = {"classpath:application.properties"})
+@PropertySource(value = {"classpath:application.properties"}, encoding = "UTF-8")
 public class PropertyConfig extends WebMvcConfigurationSupport {
 
     @Bean

@@ -3,12 +3,19 @@ package iotBadSmellMonitoring.history.service.impl;
 import iotBadSmellMonitoring.history.service.RegisterService;
 import iotBadSmellMonitoring.history.service.RegisterVO;
 import org.apache.ibatis.session.SqlSession;
+
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import java.io.File;
-import java.io.FileOutputStream;
+import java.io.*;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.Base64;
 
 /**
  * @ Class Name   : RegisterServiceImpl.java
@@ -35,6 +42,21 @@ public class RegisterServiceImpl implements RegisterService {
     @Value("${server.path}")
     private String serverPath;
 
+    @Value("${ktApiLink.host}")
+    private String ktApiLinkHost;
+
+    @Value("${ktApiLink.id}")
+    private String ktApiLinkId;
+
+    @Value("${ktApiLink.password}")
+    private String ktApiLinkPassword;
+
+    @Value("${ktApiLink.period}")
+    private String period;
+
+    @Value("${ktApiLink.airSensorCode}")
+    private String ktApiLinkAirSensorCode;
+
     /**
      * 접수 마스터||디테일 등록
      * @param registerVO REGISTER MASTER / DETAIL VO.
@@ -59,6 +81,8 @@ public class RegisterServiceImpl implements RegisterService {
                 registerVO.setSmellType("002");
             }
         }
+
+        getFineDustInformation(registerVO);
 
         int masterResult = registerMapper.registerMasterInsert(registerVO);                                             //접수 마스터 등록 CALL.
         int allResult    = 0;                                                                                           //마스터||디테일 등록 결과
@@ -111,4 +135,79 @@ public class RegisterServiceImpl implements RegisterService {
         return allResult;
     }
 
+    /**
+     * KT API 를 활용하여 미세먼지 데이터 SET
+     * @param            registerVO
+     * @return           registerVO
+     * @throws Exception
+     */
+    public RegisterVO getFineDustInformation(RegisterVO registerVO) throws Exception {
+
+        HttpURLConnection conn = null;
+
+        try {
+            //URL 설정
+            URL url = new URL(ktApiLinkHost + "?ccomTypeCode=0003&period=" + period +"&airSensorCode=" + ktApiLinkAirSensorCode);
+
+            String encryptAuthorizationKey = getEncryptAuthorizationKey();
+
+            conn = (HttpURLConnection) url.openConnection();
+            //Request 형식 설정
+            conn.setRequestMethod("GET");
+            conn.setRequestProperty("Authorization", encryptAuthorizationKey);
+            conn.setRequestProperty("Content-Type", "application/json");
+
+            //request에 JSON data 준비
+            conn.setDoOutput(true);
+
+            //보내고 결과값 받기
+            int responseCode = conn.getResponseCode();
+
+            if (responseCode == 200 ) { // 성공 후 응답 JSON 데이터받기
+                BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                StringBuilder sb = new StringBuilder();
+                String line = "";
+                while ((line = br.readLine()) != null) {
+                    sb.append(line);
+                }
+
+                JSONParser parser = new JSONParser();
+                Object obj = parser.parse(sb.toString());
+                JSONObject jsonObj = (JSONObject) obj;
+
+                if(jsonObj.get("returncode") != "1") System.out.println("KT API Error >> " + jsonObj.get("errordescription"));
+
+                if(jsonObj.get("data") != null ) {
+                    JSONArray jsonObject2 = (JSONArray) jsonObj.get("data");
+
+                    //kt api 응답 결과 Result
+                    JSONObject ktApiResult = (JSONObject) jsonObject2.get(0);
+                    registerVO.setAirSensorName(ktApiResult.get("airSensorName").toString());
+                    registerVO.setPm10Avg(Double.parseDouble(ktApiResult.get("pm10Avg").toString()));
+                    registerVO.setAirSensingDate(ktApiResult.get("airSensingDate").toString());
+                }
+
+            }
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return registerVO;
+    }
+
+    String getEncryptAuthorizationKey(){
+
+        String authorization = ktApiLinkId + ":" + ktApiLinkPassword;
+        String encryptAuthorizationKey = "";
+
+        byte[] targetBytes = authorization.getBytes();
+        Base64.Encoder encoder = Base64.getEncoder();
+        byte[] encodedBytes = encoder.encode(targetBytes);
+
+        encryptAuthorizationKey = "Basic " + new String(encodedBytes);
+
+        return encryptAuthorizationKey;
+
+    }
 }

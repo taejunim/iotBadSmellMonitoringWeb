@@ -15,9 +15,9 @@ var markers = [];
     setButton("main");
     $(".weatherStatus").css("display","none");
 
-    //지도 기본 설정 -> 새별오름 중심 잡아둠, Zoom Level 8
-    var latitude  = 33.3880673;
-    var longitude = 126.3452422;
+    //지도 기본 설정 -> 금악초 근처 중심 잡아둠, Zoom Level 8
+    var latitude  = 33.357562;
+    var longitude = 126.296253;
     map = focusMapCenter(latitude, longitude, 8);
 
     $.ajax({
@@ -29,6 +29,7 @@ var markers = [];
         for(var i=0; i< markers.length ; i++){
           markers[i].setMap(map);
         }
+        map.panTo( new kakao.maps.LatLng(33.357562, 126.296253));
       },
       error: function (err) {
         alert("사용자 데이터를 불러오는중 에러가 발생하였습니다.");
@@ -104,6 +105,10 @@ var markers = [];
   <jsp:include page="/menu"/>
   <div class="bgc_w wd100rate h100rate fl">
     <div id="leftSide" class="dp_inlineBlock" style="width: 30%;">
+      <div class="ml10 mt10 mb10 font_size13 lh37">
+        측정소명/장치ID : ${airSensorName}</br>
+        공기질 수집일시 : ${airSensingDate} / PM10 미세먼지 평균 값(㎍/㎥) : ${pm10Avg}
+      </div>
       <table class="mainForm wd100rate h100rate">
         <tr><th>악취 강도</th></tr>
         <tr><td class="h200">

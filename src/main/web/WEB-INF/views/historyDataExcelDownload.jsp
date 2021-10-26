@@ -18,6 +18,9 @@
                     <th>온도(℃)</th>
                     <th>풍향</th>
                     <th>풍속(m/s)</th>
+                    <th>미세먼지 측정소명/장치ID</th>
+                    <th>PM10 미세먼지 평균 값 (㎍/㎥)</th>
+                    <th>공기질 수집일시</th>
                     <th>등록자 아이디</th>
                     <th>등록자</th>
                     <th>등록일시</th>
@@ -31,8 +34,11 @@
                     <td>${resultList.smellTypeName}</td>
                     <td>${resultList.humidityValue}</td>
                     <td>${resultList.temperatureValue}</td>
-                    <td>${resultList.windDirectionValue}</td>
+                    <td>${resultList.windDirectionValueName}</td>
                     <td>${resultList.windSpeedValue}</td>
+                    <td>${resultList.airSensorName}</td>
+                    <td>${resultList.pm10Avg}</td>
+                    <td style='mso-number-format: "yyyy-mm-dd hh:mm:ss";'>${resultList.airSensingDate}</td>
                     <td>${resultList.regId}</td>
                     <td>${resultList.userName}</td>
                     <td style='mso-number-format: "yyyy-mm-dd hh:mm:ss";'>${resultList.regDt}</td>

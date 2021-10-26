@@ -81,16 +81,16 @@ var weatherState = '${historyVO.weatherState}'; //검색조건_기상 상태
                 var getItems = $(this).find("td");  //viewTable의 row
 
                 $("#getWeatherState").text(getItems.eq(1).text());              //기상 상태
-                $("#getRegId").text(getItems.eq(5).text());                     //등록자 아이디
-                $("#getRegName").text(getItems.eq(6).text());                   //등록자
+                $("#getRegId").text(getItems.eq(8).text());                     //등록자 아이디
+                $("#getRegName").text(getItems.eq(9).text());                   //등록자
                 $("#getSmellType").text(getItems.eq(4).text());                 //취기
                 $("#getSmellValue").text(getItems.eq(3).text());                //악취 강도
-                $("#humidityValue").text(getItems.eq(8).text() + "%");          //습도
-                $("#getTemperatureValue").text(getItems.eq(9).text() + " ℃");   //온도
-                $("#getWindDirectionValue").text(getItems.eq(10).text());       //풍향
-                $("#getWindSpeedValue").text(getItems.eq(11).text() +"m/s");    //풍속
-                $("#getRegDt").text(getItems.eq(7).text());                     //등록일시
-                $("#smellComment").text(getItems.eq(12).text());                //비고
+                $("#humidityValue").text(getItems.eq(11).text() + "%");          //습도
+                $("#getTemperatureValue").text(getItems.eq(12).text() + " ℃");   //온도
+                $("#getWindDirectionValue").text(getItems.eq(13).text());       //풍향
+                $("#getWindSpeedValue").text(getItems.eq(14).text() +"m/s");    //풍속
+                $("#getRegDt").text(getItems.eq(10).text());                     //등록일시
+                $("#smellComment").text(getItems.eq(15).text());                //비고
                 /*오른쪽 table에 값 담아주기 END*/
 
                 /*지도 세팅 START*/
@@ -317,16 +317,19 @@ function imageDelete(imageIndex){
 </table>
 <div class="wd100rate h100rate bgc_w scrollView">
     <div class="wd70rate h100rate fl brDeepBlue">
-        <table class=" viewTable font_size15">
+        <table class=" viewTable font_size13">
             <tr>
                 <th class="wd5rate">NO</th>
                 <th>기상 상태</th>
                 <th>접수 시간대</th>
                 <th>악취 강도</th>
                 <th>취기</th>
+                <th>미세먼지</br>측정소명/장치ID</th>
+                <th>PM10 미세먼지</br>평균 값 (㎍/㎥)</th>
+                <th>미세먼지 데이터</br>수집일시</th>
                 <th class="wd10rate">등록자 아이디</th>
                 <th class="wd10rate">등록자</th>
-                <th class="wd20rate">등록일시</th>
+                <th class="wd15rate">등록일시</th>
             </tr>
             <c:forEach var="resultList" items="${resultList}" varStatus="status">
             <tr class="cursor_pointer itemRow" id="tr-hover">
@@ -335,6 +338,9 @@ function imageDelete(imageIndex){
                 <td>${resultList.smellRegisterTimeName}</td>
                 <td>${resultList.smellValueName}</td>
                 <td>${resultList.smellTypeName}</td>
+                <td>${resultList.airSensorName}</td>
+                <td>${resultList.pm10Avg}</td>
+                <td>${resultList.airSensingDate}</td>
                 <td>${resultList.regId}</td>
                 <td>${resultList.userName}</td>
                 <td>${resultList.regDt}</td>
@@ -350,12 +356,12 @@ function imageDelete(imageIndex){
             </c:forEach>
             <c:if test="${empty resultList}">
                 <tr>
-                    <td align="center" colspan="8" rowspan="10">- 해당 데이터가 존재하지 않습니다. -</td>
+                    <td align="center" colspan="11" rowspan="10">- 해당 데이터가 존재하지 않습니다. -</td>
                 </tr>
             </c:if>
             <c:if test="${!empty resultList && resultList.size() ne 10}">
                 <tr style="background-color: rgba(255,255,255,0)">
-                    <td align="center" colspan="8" rowspan="${10-resultList.size()}"></td>
+                    <td align="center" colspan="11" rowspan="${10-resultList.size()}"></td>
                 </tr>
             </c:if>
         </table>

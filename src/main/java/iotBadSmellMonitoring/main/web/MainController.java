@@ -1,6 +1,8 @@
 package iotBadSmellMonitoring.main.web;
 
 import egovframework.rte.psl.dataaccess.util.EgovMap;
+import iotBadSmellMonitoring.history.service.RegisterService;
+import iotBadSmellMonitoring.history.service.RegisterVO;
 import iotBadSmellMonitoring.join.service.JoinService;
 import iotBadSmellMonitoring.join.service.JoinVO;
 import iotBadSmellMonitoring.main.service.MainService;
@@ -17,6 +19,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.PrintWriter;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -39,7 +44,8 @@ public class MainController {
     private MainService mainService;       //메인화면 관련 SERVICE.
     @Autowired
     private JoinService joinService;       //회원가입 / 로그인 / 아이디 찾기 관련 SERVICE.
-
+    @Autowired
+    private RegisterService registerService;       //미세먼저 데이터 가져오기 위한 SERVICE.
 
     /**
      * 로그인 정보 확인후, 있으면 메인화면 없으면 로그인화면
@@ -81,7 +87,28 @@ public class MainController {
         else{
             model.addAttribute("CG_SMT",session.getAttribute("CG_SMT"));
         }
-        //System.out.println(mainService.pcMainListSelect(mainVO));
+
+        RegisterVO registerVO = new RegisterVO();
+        registerVO = registerService.getFineDustInformation(registerVO);
+
+        String airSensingDate = "-";
+
+        //KT API 결과 조회 못 할시에 예외 처리 실패시엔 화면에 - 표출
+        if(registerVO.getAirSensingDate() != null && registerVO.getAirSensingDate() != "") {
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
+            Date date = dateFormat.parse(registerVO.getAirSensingDate());
+            dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            airSensingDate = dateFormat.format(date);
+        }
+
+        String airSensorName = (registerVO.getAirSensorName() != null && registerVO.getAirSensorName() != "" )? registerVO.getAirSensorName() : "-";
+        String pm10Avg = (registerVO.getPm10Avg() != null )? registerVO.getPm10Avg().toString() : "-";
+
+        model.addAttribute("airSensorName",airSensorName);
+        model.addAttribute("pm10Avg", pm10Avg);
+        model.addAttribute("airSensingDate" ,airSensingDate);
+
+        System.out.println(mainService.pcMainListSelect(mainVO));
         return "main";
     }
 
