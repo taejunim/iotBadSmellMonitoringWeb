@@ -94,8 +94,8 @@ var weatherState = '${historyVO.weatherState}'; //검색조건_기상 상태
                 /*오른쪽 table에 값 담아주기 END*/
 
                 /*지도 세팅 START*/
-                var gpsX = getItems.eq(13).text();       //gps_x의 값
-                var gpsY = getItems.eq(14).text();       //gps_y의 값
+                var gpsX = getItems.eq(16).text();       //gps_x의 값
+                var gpsY = getItems.eq(17).text();       //gps_y의 값
 
                 var mapContainer = document.getElementById('map'), // 지도를 표시할 div
                     mapOption = {
