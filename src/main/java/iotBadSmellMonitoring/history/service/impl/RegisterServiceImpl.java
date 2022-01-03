@@ -163,7 +163,8 @@ public class RegisterServiceImpl implements RegisterService {
             //보내고 결과값 받기
             int responseCode = conn.getResponseCode();
 
-            if (responseCode == 200 ) { // 성공 후 응답 JSON 데이터받기
+            // 통신 성공 후 응답 JSON 데이터받기
+            if (responseCode == 200 ) {
                 BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
                 StringBuilder sb = new StringBuilder();
                 String line = "";
@@ -174,19 +175,21 @@ public class RegisterServiceImpl implements RegisterService {
                 JSONParser parser = new JSONParser();
                 Object obj = parser.parse(sb.toString());
                 JSONObject jsonObj = (JSONObject) obj;
-
-                if(jsonObj.get("returncode") != "1") System.out.println("KT API Error >> " + jsonObj.get("errordescription"));
+                System.out.println("KT API LINK DATA ==> ");
+                System.out.println(jsonObj);
+                if(!jsonObj.get("returncode").equals("1")) System.out.println("KT API Error >> " + jsonObj.get("errordescription"));
 
                 if(jsonObj.get("data") != null ) {
                     JSONArray jsonObject2 = (JSONArray) jsonObj.get("data");
-
                     //kt api 응답 결과 Result
                     JSONObject ktApiResult = (JSONObject) jsonObject2.get(0);
-                    registerVO.setAirSensorName(ktApiResult.get("airSensorName").toString());
-                    registerVO.setPm10Avg(Double.parseDouble(ktApiResult.get("pm10Avg").toString()));
-                    registerVO.setAirSensingDate(ktApiResult.get("airSensingDate").toString());
+                    if(ktApiResult.get("airSensorName") != null)                                            //측정소명
+                        registerVO.setAirSensorName(ktApiResult.get("airSensorName").toString());
+                    if(ktApiResult.get("pm10Avg") != null)                                                  //pm10 미세먼지 농도
+                        registerVO.setPm10Avg(Double.parseDouble(ktApiResult.get("pm10Avg").toString()));
+                    if(ktApiResult.get("airSensingDate") != null)                                           //미세먼지 측정 일자
+                        registerVO.setAirSensingDate(ktApiResult.get("airSensingDate").toString());
                 }
-
             }
         } catch (MalformedURLException e) {
             e.printStackTrace();
@@ -196,6 +199,12 @@ public class RegisterServiceImpl implements RegisterService {
         return registerVO;
     }
 
+    /**
+     * KT API 호출시 인증 정보 암호화 (ID/PW)
+     * @param
+     * @return
+     * @throws Exception
+     */
     String getEncryptAuthorizationKey(){
 
         String authorization = ktApiLinkId + ":" + ktApiLinkPassword;

@@ -88,12 +88,12 @@ public class MainController {
             model.addAttribute("CG_SMT",session.getAttribute("CG_SMT"));
         }
 
+        //KT API 결과 조회 못 할시에 예외 처리, 실패 시엔 화면에 API 응답값이 아닌 '-' 표출
         RegisterVO registerVO = new RegisterVO();
         registerVO = registerService.getFineDustInformation(registerVO);
 
         String airSensingDate = "-";
 
-        //KT API 결과 조회 못 할시에 예외 처리 실패시엔 화면에 - 표출
         if(registerVO.getAirSensingDate() != null && registerVO.getAirSensingDate() != "") {
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
             Date date = dateFormat.parse(registerVO.getAirSensingDate());
