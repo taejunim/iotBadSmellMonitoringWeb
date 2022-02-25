@@ -36,25 +36,25 @@ public class RegisterServiceImpl implements RegisterService {
     @Autowired
     SqlSession sqlSession;
 
-    @Value("${server.ip}")
+    @Value("${${environment}.server.ip}")
     private String serverIp;
 
-    @Value("${server.path}")
+    @Value("${${environment}.server.path}")
     private String serverPath;
 
-    @Value("${ktApiLink.host}")
+    @Value("${${environment}.ktApiLink.host}")
     private String ktApiLinkHost;
 
-    @Value("${ktApiLink.id}")
+    @Value("${${environment}.ktApiLink.id}")
     private String ktApiLinkId;
 
-    @Value("${ktApiLink.password}")
+    @Value("${${environment}.ktApiLink.password}")
     private String ktApiLinkPassword;
 
-    @Value("${ktApiLink.period}")
+    @Value("${${environment}.ktApiLink.period}")
     private String period;
 
-    @Value("${ktApiLink.airSensorCode}")
+    @Value("${${environment}.ktApiLink.airSensorCode}")
     private String ktApiLinkAirSensorCode;
 
     /**
@@ -175,8 +175,7 @@ public class RegisterServiceImpl implements RegisterService {
                 JSONParser parser = new JSONParser();
                 Object obj = parser.parse(sb.toString());
                 JSONObject jsonObj = (JSONObject) obj;
-                System.out.println("KT API LINK DATA ==> ");
-                System.out.println(jsonObj);
+
                 if(!jsonObj.get("returncode").equals("1")) System.out.println("KT API Error >> " + jsonObj.get("errordescription"));
 
                 if(jsonObj.get("data") != null ) {

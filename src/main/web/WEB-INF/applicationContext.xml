@@ -16,10 +16,10 @@
     <context:property-placeholder location="classpath:application.properties"/>
 
     <bean id="dataSource-mysql" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
-        <property name="driverClassName" value="${spring.database.class}"/>
-        <property name="url" value="${spring.database.host}"/>
-        <property name="username" value="${spring.database.username}"/>
-        <property name="password" value="${spring.database.password}"/>
+        <property name="driverClassName" value="${${environment}.spring.database.class}"/>
+        <property name="url" value="${${environment}.spring.database.host}"/>
+        <property name="username" value="${${environment}.spring.database.username}"/>
+        <property name="password" value="${${environment}.spring.database.password}"/>
     </bean>
 
     <!-- Mysql <-> Mybatis를 연결해주는 객체 -->
