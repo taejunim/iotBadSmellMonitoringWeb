@@ -32,7 +32,8 @@
         <repository>
             <id>egov</id>
             <name>egov Releases</name>
-            <url>http://maven.egovframe.kr:8080/maven/</url>
+            <url>https://maven.egovframe.kr/maven/</url>
+<!--            <url>http://maven.egovframe.kr:8080/maven/</url>-->
             <snapshots>
                 <enabled>false</enabled>
             </snapshots>
