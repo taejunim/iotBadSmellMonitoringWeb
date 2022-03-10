@@ -14,11 +14,11 @@
              , DATE_FORMAT(REG_DT, '%Y-%m-%d') REG_DT
         FROM tb_smell_register A LEFT JOIN (
                 SELECT   USER_ID
-                       , USER_REGION
+                       , USER_REGION_DETAIL
                 FROM tb_user ) B ON A.REG_ID = B.USER_ID
        WHERE 1=1
                 <if test="region != null and !region.equals('')" >
-         AND B.USER_REGION = #{region}
+         AND B.USER_REGION_DETAIL = #{region}
                 </if>
          AND DATE_FORMAT(REG_DT, '%Y-%m-%d') BETWEEN #{searchStart} AND #{searchEnd}
 
@@ -31,11 +31,11 @@
 
         FROM tb_smell_register A LEFT JOIN (
                 SELECT   USER_ID
-                , USER_REGION
+                , USER_REGION_DETAIL
                 FROM tb_user ) B ON A.REG_ID = B.USER_ID
        WHERE 1=1
                 <if test="region != null and !region.equals('')" >
-         AND B.USER_REGION = #{region}
+         AND B.USER_REGION_DETAIL = #{region}
                 </if>
          AND DATE_FORMAT(REG_DT, '%Y-%m') BETWEEN #{searchStart} AND #{searchEnd}
        GROUP BY SMELL_VALUE, DATE_FORMAT(REG_DT, '%Y-%m')
@@ -47,11 +47,11 @@
 
                 FROM tb_smell_register A LEFT JOIN (
                 SELECT USER_ID,
-                USER_REGION
+                USER_REGION_DETAIL
                 FROM tb_user ) B ON A.REG_ID = B.USER_ID
        WHERE 1=1
                 <if test="region != null and !region.equals('')" >
-         AND B.USER_REGION = #{region}
+         AND B.USER_REGION_DETAIL = #{region}
                 </if>
          AND DATE_FORMAT(REG_DT, '%Y') BETWEEN #{searchStart} AND #{searchEnd}
      GROUP BY SMELL_VALUE, DATE_FORMAT(REG_DT, '%Y')
@@ -62,11 +62,11 @@
              , F_GET_CODE_NAME('REN',A.SMELL_REGISTER_TIME) REG_DT
      FROM tb_smell_register A LEFT JOIN (
                 SELECT   USER_ID
-                , USER_REGION
+                , USER_REGION_DETAIL
                 FROM tb_user ) B ON A.REG_ID = B.USER_ID
     WHERE 1=1
                 <if test="region != null and !region.equals('')" >
-      AND B.USER_REGION = #{region}
+      AND B.USER_REGION_DETAIL = #{region}
                 </if>
       AND DATE_FORMAT(A.REG_DT, '%Y-%m-%d') = DATE_FORMAT(curdate(), '%Y-%m-%d')
       AND A.SMELL_REGISTER_TIME IN(
