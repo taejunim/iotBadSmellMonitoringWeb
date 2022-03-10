@@ -253,16 +253,13 @@ public class ApiController {
         int    intTime     = Integer.parseInt(strTime);
         String message     = "";
 
-        if(659 < intTime && 900 > intTime)
+        if(559 < intTime && 900 > intTime)
             message = registMakeMsg(registerVO);
 
-        else if(1159 < intTime && 1400 > intTime)
+        else if(1059 < intTime && 1700 > intTime)
             message = registMakeMsg(registerVO);
 
-        else if(1759 < intTime && 2000 > intTime)
-            message = registMakeMsg(registerVO);
-
-        else if(2159 < intTime && 2359 >= intTime)
+        else if(1859 < intTime && 2300 > intTime)
             message = registMakeMsg(registerVO);
 
         else
