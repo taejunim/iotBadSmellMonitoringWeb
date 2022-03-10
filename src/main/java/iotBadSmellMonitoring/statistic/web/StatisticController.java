@@ -64,7 +64,7 @@ public class StatisticController {
         }
         //지역
         if(session.getAttribute("CG_RGN") == null){
-            mainVO.setCodeGroup("RGN");
+            mainVO.setCodeGroup("RGD");
             session.setAttribute("CG_RGN",mainService.codeListSelect(mainVO));
             model.addAttribute("CG_RGN",session.getAttribute("CG_RGN"));
         }

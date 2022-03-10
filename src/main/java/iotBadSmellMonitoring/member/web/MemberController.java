@@ -41,7 +41,7 @@ public class MemberController {
             session.setAttribute("CG_SEX",mainService.codeListSelect(mainVO));
             model.addAttribute("CG_SEX",session.getAttribute("CG_SEX"));
 
-            mainVO.setCodeGroup("RGN");
+            mainVO.setCodeGroup("RGD");
             session.setAttribute("CG_RGN",mainService.codeListSelect(mainVO));
             model.addAttribute("CG_RGN",session.getAttribute("CG_RGN"));
         }

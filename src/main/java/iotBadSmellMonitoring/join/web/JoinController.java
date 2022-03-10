@@ -50,7 +50,7 @@ public class JoinController {
                 session.setAttribute("CG_UST",mainService.codeListSelect(mainVO));
                 model.addAttribute("CG_UST",session.getAttribute("CG_UST"));
 
-                mainVO.setCodeGroup("RGN");
+                mainVO.setCodeGroup("RGD");
                 session.setAttribute("CG_RGN",mainService.codeListSelect(mainVO));
                 model.addAttribute("CG_RGN",session.getAttribute("CG_RGN"));
 
