@@ -10,7 +10,7 @@
 <script type="text/javascript">
 
   $(document).ready(function () {
-
+    showLoader(false);
     //회원가입 Click
     $("#join").click(function(){
       $(location).attr('href', '/join.do');
@@ -45,12 +45,13 @@
         alert(txt +"를 입력해 주세요.");
         chk = false;
         return chk;
-      }
-    })
+      } else if($(obj).attr("id") == "password") chk = fn_chkPwLength($(obj).val());
+    });
 
     if(chk) {
       var formData = $(".loginForm").serialize();
 
+      showLoader(true);
       $.ajax({
         url: "/login",
         type: "POST",
@@ -72,7 +73,6 @@
 </script>
   <body>
   <div class="wd100rate h100rate scrollView">
-  <div>
   <form:form class="loginForm">
     <table class="blueForm wd500 mt220">
       <tr><th class="h70" style="line-height: 30px;"><a class="font_bold font_size20">악취 모니터링 시스템</a><br>로그인</th></tr>
@@ -86,6 +86,11 @@
       </td></tr>
     </table>
   </form:form>
+    <div id="loader" class="loaderContainer">
+      <div class="loaderBox">
+        <div class="loaderContent"></div>
+      </div>
+    </div>
   </div>
   </body>
 </html>

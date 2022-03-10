@@ -25,6 +25,7 @@ var markers = [];
       type: "GET",
       dataType: "json",
       success: function (data) {
+        showLoader(false);
         drawMarker(data);
         for(var i=0; i< markers.length ; i++){
           markers[i].setMap(map);
@@ -140,4 +141,9 @@ var markers = [];
     </div>
   </div>
   </body>
+<div id="loader" class="loaderContainer">
+  <div class="loaderBox">
+    <div class="loaderContent"></div>
+  </div>
+</div>
 </html>

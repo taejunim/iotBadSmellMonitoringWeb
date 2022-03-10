@@ -24,15 +24,14 @@
 
     <!-- 환경별 다른 카카오 앱키 세팅 -->
     <spring:eval expression="@environment.getProperty('environment')" var="environment" />
-    <spring:eval expression="@environment.getProperty('${environment}.kakaoAppKey')" var="kakaoAppKey" />
+    <spring:eval expression="@environment.getProperty('${environment}.kakaoMapKey')" var="kakaoMapKey" />
 
     <!-- KakaoMap 카카오 앱키 세팅 -->
-    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=${kakaoAppKey}"></script>
+    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=${kakaoMapKey}"></script>
 
     <script type="text/javascript">
         var contextPath = '${pageContext.request.contextPath}';
         $.ajaxSetup({cache: false});	//아작스 2번호출을 위한 캐쉬 설정
-
         //비밀번호 길이 체크
       function fn_chkPwLength(pw){
 
@@ -53,5 +52,13 @@
               return false;
           }
           return true;
+      }
+
+      //로딩바 표시/제거
+      function showLoader(show) {
+        if(show){
+            $("#loader").show();
+        }
+        else $("#loader").hide();
       }
     </script>

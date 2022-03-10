@@ -379,3 +379,43 @@ select::-ms-expand{
 .borderRight{
     border-right: 1px solid #10639a;
 }
+.loaderContainer{
+    width: 100%;
+    height: 100%;
+    background-color: #111;
+    z-index: 20;
+    position: fixed;
+    opacity: 0.7;
+    top: 0px;
+    left:0px;
+}
+.loaderBox{
+    height: 150px;
+    width: 150px;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    margin-top: -120px;
+}
+.loaderContent{
+    position: absolute;
+    border: 8px solid #10639a;
+    border-radius: 50%;
+    width: 100px;
+    height: 100px;
+    left: calc(50% - 55px);
+    top: calc(50% - 55px);
+    border-top-color: transparent;
+    -webkit-animation: loader-1-inner 1.3s cubic-bezier(.58, .58, .58, .58) infinite;
+    animation: loader-1-inner 1.3s cubic-bezier(.58, .58, .58, .58) infinite;
+}
+@-webkit-keyframes loader-1-inner {
+    0% {
+        -webkit-transform: rotate(-360deg);
+        transform: rotate(-360deg);
+    }
+    100% {
+        -webkit-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+}
