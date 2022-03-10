@@ -39,7 +39,7 @@
              , CODE_ID_NAME
              , CODE_COMMENT
 
-          FROM tb_code
+          FROM tb_code_back
 
          WHERE 1=1
 
