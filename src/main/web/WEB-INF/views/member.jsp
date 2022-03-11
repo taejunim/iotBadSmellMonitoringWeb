@@ -249,7 +249,7 @@ var userType = '${joinVO.userType}';        //검색조건_구분
                 <th>아이디</th>
                 <th>이름</th>
                 <th>지역</th>
-                <th>휴대폰 번호</th>
+                <th>전화번호</th>
                 <th>나이</th>
                 <th>성별</th>
                 <th class="wd20rate">등록일시</th>
@@ -263,7 +263,7 @@ var userType = '${joinVO.userType}';        //검색조건_구분
                     <td>${resultList.userId}</td>
                     <td>${resultList.userName}</td>
                     <td>${resultList.userRegionName}</td>
-                    <td>${resultList.regDt}</td> <!--phone-->
+                    <td>${resultList.userPhone}</td>
                     <td>${resultList.userAge}</td>
                     <td>${resultList.userSexName}</td>
                     <td><fmt:formatDate value="${resultList.regDt}" pattern="yyyy-MM-dd HH:mm:ss"/></td>
@@ -313,7 +313,7 @@ var userType = '${joinVO.userType}';        //검색조건_구분
                     <td><input type="text" readonly class="wd210" id="userName" disabled></td>
                 </tr>
                 <tr class="h57">
-                    <td class="align_l"><label>휴대폰 번호</label></td>
+                    <td class="align_l"><label>전화번호</label></td>
                     <td><input type="text" readonly class="wd210" id="userPhone" disabled></td>
                 </tr>
                 <tr class="h57">
