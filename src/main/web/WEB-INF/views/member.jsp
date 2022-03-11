@@ -192,7 +192,7 @@ var userType = '${joinVO.userType}';        //검색조건_구분
         <td class="wd100"><input type="text" id="searchUserId" name="userId" value="${joinVO.userId}"></td>
         <th>지역</th>
         <td class="wd100">
-            <select id="searchUserRegion" name="userRegion" class="wd90">
+            <select id="searchUserRegion" name="userRegionMaster" class="wd90">
                 <option value="">전체</option>
                 <c:forEach var="item" items="${CG_RGN}">
                     <option value="${item.codeId}">${item.codeIdName}</option>
@@ -281,7 +281,7 @@ var userType = '${joinVO.userType}';        //검색조건_구분
             </c:if>
             <c:if test="${!empty resultList && resultList.size() ne 10}">
                 <tr style="background-color: rgba(255,255,255,0)">
-                    <td align="center" colspan="8" rowspan="${10-resultList.size()}"></td>
+                    <td align="center" colspan="10" rowspan="${10-resultList.size()}"></td>
                 </tr>
             </c:if>
         </table>

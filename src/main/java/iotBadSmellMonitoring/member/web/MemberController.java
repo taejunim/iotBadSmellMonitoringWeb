@@ -2,7 +2,6 @@ package iotBadSmellMonitoring.member.web;
 
 import egovframework.rte.psl.dataaccess.util.EgovMap;
 import egovframework.rte.ptl.mvc.tags.ui.pagination.PaginationInfo;
-import iotBadSmellMonitoring.history.service.HistoryService;
 import iotBadSmellMonitoring.join.service.JoinVO;
 import iotBadSmellMonitoring.main.service.MainService;
 import iotBadSmellMonitoring.main.service.MainVO;
@@ -28,9 +27,6 @@ public class MemberController {
     @Autowired
     private MemberService memberService;
 
-    @Autowired
-    private HistoryService historyService;
-
     //회원관리
     @RequestMapping("/member")
     public String memberManagement(@ModelAttribute("joinVO")JoinVO joinVO, HttpSession session, ModelMap model) throws Exception{
@@ -48,7 +44,7 @@ public class MemberController {
             session.setAttribute("CG_SEX",mainService.codeListSelect(mainVO));
             model.addAttribute("CG_SEX",session.getAttribute("CG_SEX"));
 
-            mainVO.setCodeGroup("RGD");
+            mainVO.setCodeGroup("REM");
             session.setAttribute("CG_RGN",mainService.codeListSelect(mainVO));
             model.addAttribute("CG_RGN",session.getAttribute("CG_RGN"));
         }
@@ -74,7 +70,6 @@ public class MemberController {
         if(joinVO.getPageIndex() != 1){
             joinVO.setPageRowIndex(joinVO.getPageIndex()*10-10);
         }
-
 
         paginationInfo.setTotalRecordCount(memberService.memberListTotalCnt(joinVO));
 
