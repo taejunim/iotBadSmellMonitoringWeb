@@ -60,4 +60,10 @@ public interface MemberMapper {
      */
     EgovMap memberGetInfoSelect(String userId) throws Exception;
 
+    /**
+     * TODAY HISTORY 목록
+     * @return List<EgovMap>
+     * @throws Exception
+     */
+    EgovMap todayRegisterListSelect(String userId) throws Exception;
 }

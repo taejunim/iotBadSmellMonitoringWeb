@@ -12,8 +12,10 @@
              , USER_NAME
              , USER_REGION_MASTER
              , USER_REGION_DETAIL
-             , F_GET_CODE_NAME('RGM',USER_REGION_MASTER) USER_REGION_MASTER_NAME
+             , F_GET_CODE_NAME('REM',USER_REGION_MASTER) USER_REGION_MASTER_NAME
              , F_GET_CODE_NAME('RGD',USER_REGION_DETAIL) USER_REGION_DETAIL_NAME
+             , CONCAT(F_GET_CODE_NAME('REM',USER_REGION_MASTER),
+               ' ',F_GET_CODE_NAME('RGD',USER_REGION_DETAIL) )        USER_REGION_NAME
              , USER_SEX
              , F_GET_CODE_NAME('SEX',USER_SEX) USER_SEX_NAME
              , USER_AGE
@@ -24,8 +26,8 @@
         <if test="userId != null and !userId.equals('')" >
             AND (LOWER(USER_ID) LIKE LOWER('%${userId}%') OR LOWER(USER_NAME) LIKE LOWER('%${userId}%'))
         </if>
-        <if test="userRegion != null and !userRegion.equals('')" >
-            AND USER_REGION = #{userRegion}
+        <if test="userRegionMaster != null and !userRegionMaster.equals('')" >
+            AND USER_REGION = #{userRegionMaster}
         </if>
         <if test="userAge != null and !userAge.equals('')" >
             AND USER_AGE = #{userAge}
@@ -54,8 +56,8 @@
         <if test="userAge != null and !userAge.equals('')" >
             AND USER_AGE = #{userAge}
         </if>
-        <if test="userRegion != null and !userRegion.equals('')" >
-            AND USER_REGION = #{userRegion}
+        <if test="userRegionMaster != null and !userRegionMaster.equals('')" >
+            AND USER_REGION = #{userRegionMaster}
         </if>
         <if test="userType != null and !userType.equals('')" >
             AND USER_TYPE = #{userType}
@@ -87,6 +89,10 @@
 
         SELECT USER_ID
              , USER_NAME
+             , USER_REGION_MASTER
+             , USER_REGION_DETAIL
+             , F_GET_CODE_NAME('REM',USER_REGION_MASTER) USER_REGION_MASTER_NAME
+             , F_GET_CODE_NAME('RGD',USER_REGION_DETAIL) USER_REGION_DETAIL_NAME
 
           FROM tb_user
 
@@ -96,5 +102,49 @@
 
     </select>
 
+    <select id="todayRegisterListSelect" parameterType="string" resultType="egovMap">
 
+        <![CDATA[
+        SELECT CASE
+                   WHEN STATUS_001 = '001_OK' THEN '001'
+                   ELSE CASE
+                            WHEN DATE_FORMAT(NOW(), '%H:%i:%s') > '09:00:00'
+                                THEN '002'
+                            ELSE '003' END END AS STATUS_001,
+
+
+               CASE
+                   WHEN STATUS_002 = '002_OK' THEN '001'
+                   ELSE CASE
+                            WHEN DATE_FORMAT(NOW(), '%H:%i:%s') > '17:00:00'
+                                THEN '002'
+                            ELSE '003' END END AS STATUS_002,
+
+               CASE
+                   WHEN STATUS_003 = '003_OK' THEN '001'
+                   ELSE CASE
+                            WHEN DATE_FORMAT(NOW(), '%H:%i:%s') > '23:00:00'
+                                THEN '002'
+                            ELSE '003' END END AS STATUS_003
+
+        FROM (
+                 SELECT IF(EXISTS(SELECT *
+                                  FROM tb_smell_register
+                                  WHERE SMELL_REGISTER_TIME = '001'
+                                    AND DATE_FORMAT(REG_DT, '%Y-%m-%d') = DATE_FORMAT(now(), '%Y-%m-%d')
+                                    AND REG_ID = #{userId}), '001_OK', '001_NO') AS STATUS_001,
+             IF(EXISTS(SELECT *
+                       FROM tb_smell_register
+                       WHERE SMELL_REGISTER_TIME = '002'
+                         AND DATE_FORMAT(REG_DT, '%Y-%m-%d') = DATE_FORMAT(now(), '%Y-%m-%d')
+                         AND REG_ID = #{userId}), '002_OK', '002_NO') AS STATUS_002,
+             IF(EXISTS(SELECT *
+                       FROM tb_smell_register
+                       WHERE SMELL_REGISTER_TIME = '003'
+                         AND DATE_FORMAT(REG_DT, '%Y-%m-%d') = DATE_FORMAT(now(), '%Y-%m-%d')
+                         AND REG_ID = #{userId}), '003_OK', '003_NO') AS STATUS_003
+
+            ) AS A
+        ]]>
+    </select>
 </mapper>

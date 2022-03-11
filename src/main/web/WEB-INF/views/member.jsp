@@ -9,12 +9,13 @@ To change this template use File | Settings | File Templates.
 <%@include file="/WEB-INF/views/common/resources_common.jsp" %>
 <script type="text/javascript">
 var userId = '${joinVO.userId}';            //검색조건_아이디/이름
-var userRegion = '${joinVO.userRegion}';    //검색조건_지역
+var userRegion = '${joinVO.userRegionMaster}';    //검색조건_지역
 var userAge = '${joinVO.userAge}';          //검색조건_나이
 var userSex = '${joinVO.userSex}';          //검색조건_성별
 var userType = '${joinVO.userType}';        //검색조건_구분
     $(document).ready(function () {
         setButton("member");
+        // setDropButton("member3");
 
         /* 검색 화면 검색어 세팅 START*/
         if (userRegion != "" && userRegion != null)                         //지역
@@ -50,16 +51,11 @@ var userType = '${joinVO.userType}';        //검색조건_구분
             $("#userPasswordConfirm").val("");
             $("#userId").val(getItems.eq(2).text());
             $("#userName").val(getItems.eq(3).text());
-            $("#userAge").val(getItems.eq(5).text());
-
-            $("#userRegion").empty();
-            $("#userRegion").append("<option>"+getItems.eq(4).text()+"</option>");
-
-            $("#userSex").empty();
-            $("#userSex").append("<option>"+getItems.eq(6).text()+"</option>");
-
-            $("#userType").empty();
-            $("#userType").append("<option>"+getItems.eq(1).text()+"</option>");
+            $("#userRegion").val(getItems.eq(4).text());
+            $("#userPhone").val(getItems.eq(5).text());
+            $("#userAge").val(getItems.eq(6).text());
+            $("#userSex").val(getItems.eq(7).text());
+            $("#userType").val(getItems.eq(1).text());
 
         })
 
@@ -235,13 +231,16 @@ var userType = '${joinVO.userType}';        //검색조건_구분
             <thead>
                 <colgroup>
                     <col width="5%"/>
+                    <col width="7%"/>
+                    <col width="12%"/>
+                    <col width="8%"/>
                     <col width="10%"/>
                     <col width="15%"/>
-                    <col width="15%"/>
+                    <col width="5%"/>
+                    <col width="5%"/>
                     <col width="10%"/>
                     <col width="10%"/>
-                    <col width="10%"/>
-                    <col width=""/>
+
                 </colgroup>
             </thead>
             <tr>
@@ -250,9 +249,12 @@ var userType = '${joinVO.userType}';        //검색조건_구분
                 <th>아이디</th>
                 <th>이름</th>
                 <th>지역</th>
+                <th>휴대폰 번호</th>
                 <th>나이</th>
                 <th>성별</th>
                 <th class="wd20rate">등록일시</th>
+                <th>당일 출석 완료 여부</th>
+
             </tr>
             <c:forEach var="resultList" items="${resultList}" varStatus="status">
                 <tr class="cursor_pointer itemRow h40">
@@ -261,9 +263,15 @@ var userType = '${joinVO.userType}';        //검색조건_구분
                     <td>${resultList.userId}</td>
                     <td>${resultList.userName}</td>
                     <td>${resultList.userRegionName}</td>
+                    <td>${resultList.regDt}</td> <!--phone-->
                     <td>${resultList.userAge}</td>
                     <td>${resultList.userSexName}</td>
                     <td><fmt:formatDate value="${resultList.regDt}" pattern="yyyy-MM-dd HH:mm:ss"/></td>
+                    <td>
+                        <c:forEach var="status" items="${statusToday}">
+                            ${status}
+                        </c:forEach>
+                    </td>
                 </tr>
             </c:forEach>
             <c:if test="${empty resultList}">
@@ -305,29 +313,24 @@ var userType = '${joinVO.userType}';        //검색조건_구분
                     <td><input type="text" readonly class="wd210" id="userName" disabled></td>
                 </tr>
                 <tr class="h57">
+                    <td class="align_l"><label>휴대폰 번호</label></td>
+                    <td><input type="text" readonly class="wd210" id="userPhone" disabled></td>
+                </tr>
+                <tr class="h57">
                     <td class="align_l"><label>나이</label></td>
                     <td><input type="text" readonly class="wd210" id="userAge" disabled></td>
                 </tr>
                 <tr class="h57">
                     <td class="align_l"><label>지역</label></td>
-                    <td>
-                        <select class="wd230 bgc_grayC" disabled id="userRegion">
-                        </select>
-                    </td>
+                    <td><input type="text" readonly class="wd210" id="userRegion" disabled></td>
                 </tr>
                 <tr class="h57">
                     <td class="align_l"><label>성별</label></td>
-                    <td>
-                        <select class="wd230 bgc_grayC" disabled id="userSex">
-                        </select>
-                    </td>
+                    <td><input type="text" readonly class="wd210" id="userSex" disabled></td>
                 </tr>
                 <tr class="h57">
                     <td class="align_l"><label>구분</label></td>
-                    <td>
-                        <select class="wd230 bgc_grayC" disabled id="userType">
-                        </select>
-                    </td>
+                    <td><input type="text" readonly class="wd210" id="userType" disabled></td>
                 </tr>
                 <tr class="h80">
                     <td colspan="2" class="align_c">

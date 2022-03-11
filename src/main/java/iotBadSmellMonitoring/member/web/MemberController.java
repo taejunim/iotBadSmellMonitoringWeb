@@ -1,6 +1,8 @@
 package iotBadSmellMonitoring.member.web;
 
+import egovframework.rte.psl.dataaccess.util.EgovMap;
 import egovframework.rte.ptl.mvc.tags.ui.pagination.PaginationInfo;
+import iotBadSmellMonitoring.history.service.HistoryService;
 import iotBadSmellMonitoring.join.service.JoinVO;
 import iotBadSmellMonitoring.main.service.MainService;
 import iotBadSmellMonitoring.main.service.MainVO;
@@ -14,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpSession;
+import java.util.Arrays;
+import java.util.List;
 
 @Controller
 public class MemberController {
@@ -23,6 +27,9 @@ public class MemberController {
 
     @Autowired
     private MemberService memberService;
+
+    @Autowired
+    private HistoryService historyService;
 
     //회원관리
     @RequestMapping("/member")
@@ -67,6 +74,7 @@ public class MemberController {
         if(joinVO.getPageIndex() != 1){
             joinVO.setPageRowIndex(joinVO.getPageIndex()*10-10);
         }
+
 
         paginationInfo.setTotalRecordCount(memberService.memberListTotalCnt(joinVO));
 
