@@ -89,9 +89,9 @@
         var userId = $("input[name='userId']").val();
 
         //아이디 길이 확인
-        if(!fn_chkIdLength(userId)) {
+        /*if(!fn_chkIdLength(userId)) {
             return;
-        }
+        }*/
 
         if(userId != "") {
             $.ajax({

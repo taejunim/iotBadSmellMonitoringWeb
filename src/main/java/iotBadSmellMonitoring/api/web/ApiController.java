@@ -1,5 +1,7 @@
 package iotBadSmellMonitoring.api.web;
 
+import net.nurigo.sdk.NurigoApp;
+
 import egovframework.rte.psl.dataaccess.util.EgovMap;
 import iotBadSmellMonitoring.history.service.HistoryService;
 import iotBadSmellMonitoring.history.service.HistoryVO;
@@ -10,17 +12,30 @@ import iotBadSmellMonitoring.join.service.JoinVO;
 import iotBadSmellMonitoring.main.service.MainService;
 import iotBadSmellMonitoring.main.service.MainVO;
 import iotBadSmellMonitoring.member.service.MemberService;
+import net.nurigo.sdk.message.model.Balance;
+import net.nurigo.sdk.message.model.Message;
+import net.nurigo.sdk.message.model.StorageType;
+import net.nurigo.sdk.message.request.MessageListRequest;
+import net.nurigo.sdk.message.request.MultipleMessageSendingRequest;
+import net.nurigo.sdk.message.request.SingleMessageSendingRequest;
+import net.nurigo.sdk.message.response.MessageListResponse;
+import net.nurigo.sdk.message.response.MultipleMessageSentResponse;
+import net.nurigo.sdk.message.response.SingleMessageSentResponse;
+import net.nurigo.sdk.message.service.DefaultMessageService;
 import org.json.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartResolver;
 
 import javax.servlet.MultipartConfigElement;
 import javax.servlet.http.HttpServletRequest;
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -46,6 +61,8 @@ import static iotBadSmellMonitoring.common.Constants.dateFormatter;
 @RestController                 // spring 3.2부터 RestController 추가됨..@ResponseBody / Controller 기능을 포함하므로 따로 @ResponseBody를 안써도 됨.
 public class ApiController {
 
+    private final DefaultMessageService messageService;
+
     @Autowired
     private RegisterService registerService;                                                                            //REGISTER MASTER / DETAIL SERVICE.
     @Autowired
@@ -56,6 +73,101 @@ public class ApiController {
     private HistoryService  historyService;                                                                             //HISTORY MASTER / DETAIL SERVICE.
     @Autowired
     private MemberService   memberService;                                                                              //회원관리 SERVICE.
+
+    /**
+     * 발급받은 API KEY와 API Secret Key를 사용해주세요.
+     */
+    public ApiController() {
+        this.messageService = NurigoApp.INSTANCE.initialize("NCSIBRLPU8MXHJSZ", "WNIG3XTACTIFD1QIIEYN4RIBQU6O1LFE", "https://api.solapi.com");
+    }
+
+    /**
+     * 메시지 조회 예제
+     */
+    @GetMapping("/get-message-list")
+    public void getMessageList() {
+        MessageListResponse response = this.messageService.getMessageList(new MessageListRequest());
+
+        System.out.println(response);
+    }
+
+    /**
+     * 단일 메시지 발송 예제
+     */
+    @PostMapping("/send-one")
+    public SingleMessageSentResponse sendOne() {
+        Message message = new Message();
+        message.setFrom("029302266");
+        message.setTo("01050541386");
+        message.setText("한글 45자, 영자 90자 이하 입력되면 자동으로 SMS타입의 메시지가 추가됩니다.");
+
+        SingleMessageSentResponse response = this.messageService.sendOne(new SingleMessageSendingRequest(message));
+        System.out.println(response);
+
+        return response;
+    }
+
+    /**
+     * MMS 발송 예제
+     * 단일 발송, 여러 건 발송 상관없이 이용 가능
+     */
+    @PostMapping("/send-mms")
+    public SingleMessageSentResponse sendMmsByResourcePath() throws IOException {
+        ClassPathResource resource = new ClassPathResource("static/sample.jpg");
+        File file = resource.getFile();
+        String imageId = this.messageService.uploadFile(file, StorageType.MMS, null);
+
+        Message message = new Message();
+        message.setFrom("029302266");
+        message.setTo("01000000000");
+        message.setText("한글 45자, 영자 90자 이하 입력되면 자동으로 SMS타입의 메시지가 추가됩니다.");
+        message.setImageId(imageId);
+
+        // 여러 건 메시지 발송일 경우 send many 예제와 동일하게 구성하여 발송할 수 있습니다.
+        SingleMessageSentResponse response = this.messageService.sendOne(new SingleMessageSendingRequest(message));
+        System.out.println(response);
+
+        return response;
+    }
+
+    /**
+     * 여러 메시지 발송 예제
+     * 한 번 실행으로 최대 10,000건 까지의 메시지가 발송 가능합니다.
+     */
+    @PostMapping("/send-many")
+    public MultipleMessageSentResponse sendMany() {
+        ArrayList<Message> messageList = new ArrayList<>();
+
+        String[] a = new String[]{"01033591522", "01068936803" , "01037288621"};
+
+        for (int i = 0; i < 3; i++) {
+            Message message = new Message();
+            message.setFrom("01050541386");
+            message.setTo(a[i]);
+            message.setText("문자 테스트"+i);
+
+            messageList.add(message);
+        }
+        MultipleMessageSendingRequest request = new MultipleMessageSendingRequest(messageList);
+        // allowDuplicates를 true로 설정하실 경우 중복으로 수신번호를 입력해도 각각 발송됩니다.
+        // request.setAllowDuplicates(true);
+
+        MultipleMessageSentResponse response = this.messageService.sendMany(request);
+        System.out.println(response);
+
+        return response;
+    }
+
+    /**
+     * 잔액 조회 예제
+     */
+    @GetMapping("/get-balance")
+    public Balance getBalance() {
+        Balance balance = this.messageService.getBalance();
+        System.out.println(balance);
+
+        return balance;
+    }
 
     /**
      * 회원가입 API
