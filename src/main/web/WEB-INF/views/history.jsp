@@ -4,7 +4,7 @@
   Date: 2021/06/03
   Time: 10:04 오전
   To change this template use File | Settings | File Templates.
---%>x
+--%>
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
 <%@include file="/WEB-INF/views/common/resources_common.jsp" %>
 <script src="/resources/js/kakaoMapUtils.js"></script>
@@ -138,9 +138,10 @@ var weatherState = '${historyVO.weatherState}'; //검색조건_기상 상태
 
             //데이터 다운로드 클릭 이벤트
             $("#downloadButton").click(function(){
-
+                showLoader(true);
                 document.frm.action = "<c:url value='/historyDataExcelDownload'/>";
                 document.frm.submit();
+                showLoader(false);
             });
 
         });

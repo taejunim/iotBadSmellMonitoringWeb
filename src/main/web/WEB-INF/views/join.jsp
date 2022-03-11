@@ -11,7 +11,7 @@
     //회원가입용 임시 아이디
     var tmpId = "";
     $(document).ready(function () {
-
+        showLoader(false);
         // 완료 버튼 클릭 이벤트
         $("#btnComplete").click(function(){
             join();
@@ -76,6 +76,7 @@
 
             if(tmpId == $("input[name='userId']").val()) {
                 if (confirm("회원가입을 진행하시겠습니까?")) {
+                    showLoader(true);
                     var formData = $(".joinForm").serialize();
                     $.ajax({
                         url: "/join/userJoinInsert",
@@ -91,6 +92,8 @@
                             console.log(err)
                             alert("회원가입에 실패하였습니다.");
                         }
+                    }).done(function () {
+                        showLoader(false);
                     });
                 }
             } else {
@@ -105,15 +108,11 @@
 
         //아이디 체크
         if (!fn_chkId_pattern(userId)) {
-            return;
+            return $("input[name='userId']").focus();
         }
 
-        //아이디 길이 확인
-        // if(!fn_chkIdLength(userId)) {
-        //     return;
-        // }
-
         if(userId != "") {
+            showLoader(true);
             $.ajax({
                 url: "/join/userFindIdSelect",
                 type: "POST",
@@ -128,8 +127,10 @@
                     console.log(err)
                     alert("회원가입에 실패하였습니다.");
                 }
+            }).done(function () {
+                showLoader(false);
             });
-        }
+        } else return alert("중복체크를 수행할 아이디를 입력하여 주십시오.");
     }
 
     //지역 선택시 해당지역상세 표출
@@ -250,6 +251,11 @@
             </tr>
         </table>
         </form:form>
+    </div>
+</div>
+<div id="loader" class="loaderContainer">
+    <div class="loaderBox">
+        <div class="loaderContent"></div>
     </div>
 </div>
  </body>
