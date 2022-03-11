@@ -80,24 +80,22 @@ var weatherState = '${historyVO.weatherState}'; //검색조건_기상 상태
                 /*오른쪽 table에 값 담아주기 START*/
                 var getItems = $(this).find("td");  //viewTable의 row
 
-
                 $("#getWeatherState").text(getItems.eq(1).text());              //기상 상태
-                $("#getRegion").text(getItems.eq(5).text());                 //취기
-                $("#getRegId").text(getItems.eq(9).text());                     //등록자 아이디
-                $("#getRegName").text(getItems.eq(10).text());                   //등록자
+                $("#getRegId").text(getItems.eq(8).text());                     //등록자 아이디
+                $("#getRegName").text(getItems.eq(9).text());                   //등록자
                 $("#getSmellType").text(getItems.eq(4).text());                 //취기
                 $("#getSmellValue").text(getItems.eq(3).text());                //악취 강도
-                $("#humidityValue").text(getItems.eq(12).text() + "%");          //습도
-                $("#getTemperatureValue").text(getItems.eq(13).text() + " ℃");   //온도
-                $("#getWindDirectionValue").text(getItems.eq(14).text());       //풍향
-                $("#getWindSpeedValue").text(getItems.eq(15).text() +"m/s");    //풍속
-                $("#getRegDt").text(getItems.eq(11).text());                     //등록일시
-                $("#smellComment").text(getItems.eq(16).text());                //비고
+                $("#humidityValue").text(getItems.eq(11).text() + "%");          //습도
+                $("#getTemperatureValue").text(getItems.eq(12).text() + " ℃");   //온도
+                $("#getWindDirectionValue").text(getItems.eq(13).text());       //풍향
+                $("#getWindSpeedValue").text(getItems.eq(14).text() +"m/s");    //풍속
+                $("#getRegDt").text(getItems.eq(10).text());                     //등록일시
+                $("#smellComment").text(getItems.eq(15).text());                //비고
                 /*오른쪽 table에 값 담아주기 END*/
 
                 /*지도 세팅 START*/
-                var gpsX = getItems.eq(17).text();       //gps_x의 값
-                var gpsY = getItems.eq(18).text();       //gps_y의 값
+                var gpsX = getItems.eq(16).text();       //gps_x의 값
+                var gpsY = getItems.eq(17).text();       //gps_y의 값
 
                 var mapContainer = document.getElementById('map'), // 지도를 표시할 div
                     mapOption = {
@@ -138,10 +136,9 @@ var weatherState = '${historyVO.weatherState}'; //검색조건_기상 상태
 
             //데이터 다운로드 클릭 이벤트
             $("#downloadButton").click(function(){
-                showLoader(true);
+
                 document.frm.action = "<c:url value='/historyDataExcelDownload'/>";
                 document.frm.submit();
-                showLoader(false);
             });
 
         });
@@ -323,29 +320,12 @@ function imageDelete(imageIndex){
 <div class="wd100rate h100rate bgc_w scrollView">
     <div class="wd70rate h100rate fl brDeepBlue">
         <table class=" viewTable font_size13">
-            <thead>
-            <colgroup>
-                <col width="5%"/>
-                <col width="5%"/>
-                <col width="8%"/>
-                <col width="7%"/>
-                <col width="5%"/>
-                <col width="7%"/>
-                <col width="7%"/>
-                <col width="7%"/>
-                <col width="12%"/>
-                <col width="5%"/>
-                <col width="5%"/>
-                <col width="10%"/>
-            </colgroup>
-            </thead>
             <tr>
                 <th class="wd5rate">NO</th>
                 <th>기상 상태</th>
                 <th>접수 시간대</th>
                 <th>악취 강도</th>
                 <th>취기</th>
-                <th>지역</th>
                 <th>미세먼지</br>측정소명/장치ID</th>
                 <th>PM10 미세먼지</br>평균 값 (㎍/㎥)</th>
                 <th>미세먼지 데이터</br>수집일시</th>
@@ -360,7 +340,6 @@ function imageDelete(imageIndex){
                 <td>${resultList.smellRegisterTimeName}</td>
                 <td>${resultList.smellValueName}</td>
                 <td>${resultList.smellTypeName}</td>
-                <td>${resultList.userRegion}</td>
                 <td>${resultList.airSensorName}</td>
                 <td>${resultList.pm10Avg}</td>
                 <td>${resultList.airSensingDate}</td>
@@ -412,9 +391,7 @@ function imageDelete(imageIndex){
                 <table class="wd90rate secondViewTable" >
                     <tr>
                         <td class="font_bold">날씨</td>
-                        <td id="getWeatherState"> </td>
-                        <td class="font_bold">지역</td>
-                        <td id="getRegion" name="redID"> </td>
+                        <td colspan="3" id="getWeatherState"></td>
                     </tr>
                     <tr>
                         <td class="font_bold">등록자</td>
@@ -458,7 +435,6 @@ function imageDelete(imageIndex){
         </div>
     </div>
 </form:form>
-</div>
 </div>
 </body>
 </html>

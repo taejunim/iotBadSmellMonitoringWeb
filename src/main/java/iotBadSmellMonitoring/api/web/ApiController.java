@@ -1,6 +1,7 @@
 package iotBadSmellMonitoring.api.web;
 
 import egovframework.rte.psl.dataaccess.util.EgovMap;
+import iotBadSmellMonitoring.common.UtProperty;
 import iotBadSmellMonitoring.history.service.HistoryService;
 import iotBadSmellMonitoring.history.service.HistoryVO;
 import iotBadSmellMonitoring.history.service.RegisterService;
@@ -14,6 +15,7 @@ import org.json.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartResolver;
@@ -22,6 +24,9 @@ import javax.servlet.MultipartConfigElement;
 import javax.servlet.http.HttpServletRequest;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Date;
@@ -42,7 +47,6 @@ import static iotBadSmellMonitoring.common.Constants.dateFormatter;
  * @
  **/
 
-
 @RestController                 // spring 3.2부터 RestController 추가됨..@ResponseBody / Controller 기능을 포함하므로 따로 @ResponseBody를 안써도 됨.
 public class ApiController {
 
@@ -56,6 +60,10 @@ public class ApiController {
     private HistoryService  historyService;                                                                             //HISTORY MASTER / DETAIL SERVICE.
     @Autowired
     private MemberService   memberService;                                                                              //회원관리 SERVICE.
+
+    @Value("${${environment}.kakaoLocationKey}")
+    private String          kakaoLocationKey;
+    private static String   GEOCODE_URL       = "https://dapi.kakao.com/v2/local/geo/coord2address.json?";
 
     /**
      * 회원가입 API
@@ -255,21 +263,37 @@ public class ApiController {
         int    intTime     = Integer.parseInt(strTime);
         String message     = "";
 
-        if(559 < intTime && 900 > intTime)
-            message = registMakeMsg(registerVO);
+        if(!getAddressCheck(registerVO.getGpsX(),registerVO.getGpsY(),registerVO.getRegId())){
 
-        else if(1059 < intTime && 1700 > intTime)
-            message = registMakeMsg(registerVO);
+            message = "{\"result\":\"fail\",\"message\":\"NO REGIST REGION.\"}";
+            return message;
+        }
 
-        else if(1859 < intTime && 2300 > intTime)
-            message = registMakeMsg(registerVO);
+        else if(559 < intTime && 900 > intTime){
 
-        else
+            message = registMakeMsg(registerVO);
+            return message;
+        }
+
+        else if(1059 < intTime && 1700 > intTime) {
+            message = registMakeMsg(registerVO);
+            return message;
+        }
+        else if(1859 < intTime && 2300 > intTime) {
+            message = registMakeMsg(registerVO);
+            return message;
+        }
+        else {
             message = "{\"result\":\"fail\",\"message\":\"NO REGIST TIME.\"}";
-
-        return message;
+            return message;
+        }
     }
 
+    /**
+     * 접수 시간대 체크
+     * @param registerVO    접수 시간대
+     * @return              접수 시간대 체크 결과
+     */
     public String registMakeMsg(RegisterVO registerVO){
 
         String message = "";
@@ -317,7 +341,65 @@ public class ApiController {
         }
 
         return message;
+    }
 
+    /**
+     * 지역 체크
+     * @param gpsX      X 좌표
+     * @param gpsY      Y 좌표
+     * @return          지역 체크 결과
+     */
+    public boolean getAddressCheck(String gpsX, String gpsY, String uerId) {
+
+        URL      obj         = null;
+        boolean  result      = false;
+
+        try {
+
+            String coordinatesystem = "WGS84";
+            obj                     = new URL(GEOCODE_URL + "x=" + gpsX + "&y=" + gpsY + "&input_coord=" + coordinatesystem);
+            HttpURLConnection con   = (HttpURLConnection) obj.openConnection();
+            con.setRequestMethod("GET");
+            con.setRequestProperty("Authorization", kakaoLocationKey);
+            con.setRequestProperty("content-type", "application/json");
+            con.setDoOutput(true);
+            con.setUseCaches(false);
+
+            Charset        charset   = StandardCharsets.UTF_8;
+            BufferedReader in        = new BufferedReader(new InputStreamReader(con.getInputStream(), charset));
+            StringBuilder  response  = new StringBuilder();
+            String         inputLine = null;
+
+            while ((inputLine = in.readLine()) != null) {
+                response.append(inputLine);
+            }
+
+            String         getAddress  = "";
+            getAddress                 = response.toString();
+            JSONObject     jsonObject  = new JSONObject();
+            JSONParser     jsonParser  = new JSONParser();
+            org.json.simple.JSONArray jsonArray   = new org.json.simple.JSONArray();
+
+            System.out.println("주소 변환: "+getAddress);
+            jsonObject                 = (JSONObject)jsonParser.parse(getAddress);
+
+            jsonArray = (org.json.simple.JSONArray) jsonObject.get("documents");
+            jsonObject = (JSONObject) jsonArray.get(0);
+            jsonObject = (JSONObject) jsonObject.get("address");
+
+            String  regRegion    = jsonObject.get("region_3depth_name").toString();
+            EgovMap regRegionMap = memberService.memberGetInfoSelect(uerId);
+            String  dbRegion     = regRegionMap.get("userRegionDetailName").toString();
+
+            if(dbRegion.matches("(.*)"+regRegion+"(.*)"))
+                result = true;
+
+        } catch (Exception e) { // TODO Auto-generated catch block e.printStackTrace();
+
+            e.printStackTrace();
+        }
+
+        return result;
     }
 
     /**

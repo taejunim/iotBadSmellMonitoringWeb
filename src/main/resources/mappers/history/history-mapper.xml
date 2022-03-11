@@ -29,8 +29,7 @@
              , tsr.REG_ID                                               REG_ID
              , tu.USER_NAME                                             USER_NAME
              , DATE_FORMAT(tsr.REG_DT,'%Y-%m-%d %H:%i:%S')              REG_DT
-             , CONCAT(F_GET_CODE_NAME('REM',USER_REGION_MASTER),
-                 ' ',F_GET_CODE_NAME('RGD',USER_REGION_DETAIL) )        USER_REGION
+
           FROM tb_smell_register tsr LEFT OUTER JOIN tb_user tu on tsr.REG_ID = tu.USER_ID
           WHERE 1=1
 
@@ -123,7 +122,7 @@
     <select id="todayHistoryListSelect" parameterType="string" resultType="egovMap">
 
         <![CDATA[
-        SELECT CASE
+                SELECT CASE
                    WHEN STATUS_001 = '001_OK' THEN '001'
                    ELSE CASE
                             WHEN DATE_FORMAT(NOW(), '%H:%i:%s') > '09:00:00'
@@ -134,19 +133,26 @@
                CASE
                    WHEN STATUS_002 = '002_OK' THEN '001'
                    ELSE CASE
-                            WHEN DATE_FORMAT(NOW(), '%H:%i:%s') > '17:00:00'
+                            WHEN DATE_FORMAT(NOW(), '%H:%i:%s') > '14:00:00'
                                 THEN '002'
                             ELSE '003' END END AS STATUS_002,
                TIME_002,
                CASE
                    WHEN STATUS_003 = '003_OK' THEN '001'
                    ELSE CASE
-                            WHEN DATE_FORMAT(NOW(), '%H:%i:%s') > '23:00:00'
+                            WHEN DATE_FORMAT(NOW(), '%H:%i:%s') > '20:00:00'
                                 THEN '002'
                             ELSE '003' END END AS STATUS_003,
-               TIME_003
+               TIME_003,
+               CASE
+                   WHEN STATUS_004 = '004_OK' THEN '001'
+                   ELSE CASE
+                            WHEN DATE_FORMAT(NOW(), '%H:%i:%s') > '24:00:00'
+                                THEN '002'
+                            ELSE '003' END END AS STATUS_004,
+               TIME_004
 
-        FROM (
+                FROM (
                  SELECT IF(EXISTS(SELECT *
                                   FROM tb_smell_register
                                   WHERE SMELL_REGISTER_TIME = '001'
@@ -158,32 +164,44 @@
                            AND DATE_FORMAT(REG_DT, '%Y-%m-%d') = DATE_FORMAT(now(), '%Y-%m-%d')
                            AND REG_ID = #{userId}
                          ORDER BY REG_DT DESC
-                                                                                    LIMIT 1)                                              AS TIME_001,
-             IF(EXISTS(SELECT *
-                       FROM tb_smell_register
-                       WHERE SMELL_REGISTER_TIME = '002'
-                         AND DATE_FORMAT(REG_DT, '%Y-%m-%d') = DATE_FORMAT(now(), '%Y-%m-%d')
-                         AND REG_ID = #{userId}), '002_OK', '002_NO') AS STATUS_002,
-             (SELECT DATE_FORMAT(REG_DT,'%Y-%m-%d %H:%i:%S') REG_DT
-              FROM tb_smell_register
-              WHERE SMELL_REGISTER_TIME = '002'
-                AND DATE_FORMAT(REG_DT, '%Y-%m-%d') = DATE_FORMAT(now(), '%Y-%m-%d')
-                AND REG_ID = #{userId}
-              ORDER BY REG_DT DESC
-                  LIMIT 1)                                              AS TIME_002,
-             IF(EXISTS(SELECT *
-                       FROM tb_smell_register
-                       WHERE SMELL_REGISTER_TIME = '003'
-                         AND DATE_FORMAT(REG_DT, '%Y-%m-%d') = DATE_FORMAT(now(), '%Y-%m-%d')
-                         AND REG_ID = #{userId}), '003_OK', '003_NO') AS STATUS_003,
-             (SELECT DATE_FORMAT(REG_DT,'%Y-%m-%d %H:%i:%S') REG_DT
-              FROM tb_smell_register
-              WHERE SMELL_REGISTER_TIME = '003'
-                AND DATE_FORMAT(REG_DT, '%Y-%m-%d') = DATE_FORMAT(now(), '%Y-%m-%d')
-                AND REG_ID = #{userId}
-              ORDER BY REG_DT DESC
-                  LIMIT 1)                                              AS TIME_003
-            ) AS A
+                         LIMIT 1)                                              AS TIME_001,
+                        IF(EXISTS(SELECT *
+                                  FROM tb_smell_register
+                                  WHERE SMELL_REGISTER_TIME = '002'
+                                    AND DATE_FORMAT(REG_DT, '%Y-%m-%d') = DATE_FORMAT(now(), '%Y-%m-%d')
+                                    AND REG_ID = #{userId}), '002_OK', '002_NO') AS STATUS_002,
+                        (SELECT DATE_FORMAT(REG_DT,'%Y-%m-%d %H:%i:%S') REG_DT
+                         FROM tb_smell_register
+                         WHERE SMELL_REGISTER_TIME = '002'
+                           AND DATE_FORMAT(REG_DT, '%Y-%m-%d') = DATE_FORMAT(now(), '%Y-%m-%d')
+                           AND REG_ID = #{userId}
+                         ORDER BY REG_DT DESC
+                         LIMIT 1)                                              AS TIME_002,
+                        IF(EXISTS(SELECT *
+                                  FROM tb_smell_register
+                                  WHERE SMELL_REGISTER_TIME = '003'
+                                    AND DATE_FORMAT(REG_DT, '%Y-%m-%d') = DATE_FORMAT(now(), '%Y-%m-%d')
+                                    AND REG_ID = #{userId}), '003_OK', '003_NO') AS STATUS_003,
+                        (SELECT DATE_FORMAT(REG_DT,'%Y-%m-%d %H:%i:%S') REG_DT
+                         FROM tb_smell_register
+                         WHERE SMELL_REGISTER_TIME = '003'
+                           AND DATE_FORMAT(REG_DT, '%Y-%m-%d') = DATE_FORMAT(now(), '%Y-%m-%d')
+                           AND REG_ID = #{userId}
+                         ORDER BY REG_DT DESC
+                         LIMIT 1)                                              AS TIME_003,
+                        IF(EXISTS(SELECT *
+                                  FROM tb_smell_register
+                                  WHERE SMELL_REGISTER_TIME = '004'
+                                    AND DATE_FORMAT(REG_DT, '%Y-%m-%d') = DATE_FORMAT(now(), '%Y-%m-%d')
+                                    AND REG_ID = #{userId}), '004_OK', '004_NO') AS STATUS_004,
+                        (SELECT DATE_FORMAT(REG_DT,'%Y-%m-%d %H:%i:%S') REG_DT
+                         FROM tb_smell_register
+                         WHERE SMELL_REGISTER_TIME = '004'
+                           AND DATE_FORMAT(REG_DT, '%Y-%m-%d') = DATE_FORMAT(now(), '%Y-%m-%d')
+                           AND REG_ID = #{userId}
+                         ORDER BY REG_DT DESC
+                         LIMIT 1)                                              AS TIME_004
+             ) AS A
         ]]>
     </select>
 
