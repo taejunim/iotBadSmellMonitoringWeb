@@ -396,6 +396,7 @@ select::-ms-expand{
     left: 50%;
     top: 50%;
     margin-top: -120px;
+    margin-left: -60px;
 }
 .loaderContent{
     position: absolute;

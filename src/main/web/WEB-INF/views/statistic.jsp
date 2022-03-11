@@ -24,7 +24,6 @@
         });
 
         setSearchCondition();
-
         drawChart();
 
     });
@@ -63,7 +62,7 @@
         //검색 조건 유효성 체크
         if(searchStart > searchEnd) return alert("검색조건을 다시 확인하여 주십시오. 검색 시작 시간은 검색 종료 시간을 초과할수 없습니다.");
 
-
+        showLoader(true);
         $.ajax({
             url: "/statisticListSelect",
             type: "POST",
@@ -180,6 +179,8 @@
             error: function (err) {
                 alert("사용자 데이터를 불러오는중 에러가 발생하였습니다.");
             }
+        }).done(function(){
+            showLoader(false);
         });
     }
 

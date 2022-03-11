@@ -141,9 +141,4 @@ var markers = [];
     </div>
   </div>
   </body>
-<div id="loader" class="loaderContainer">
-  <div class="loaderBox">
-    <div class="loaderContent"></div>
-  </div>
-</div>
 </html>

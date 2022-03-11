@@ -29,6 +29,7 @@ var userType = '${joinVO.userType}';        //검색조건_구분
 
         //검색조건 초기화 버튼 클릭 이벤트
         $(".resetBtn").click(function () {
+            showLoader(true);
             $(location).attr('href', '/member.do');
         });
 
@@ -90,6 +91,7 @@ var userType = '${joinVO.userType}';        //검색조건_구분
             }
 
             if(confirm($("#userId").val().trim() + "의 비밀번호를 변경하시겠습니까?"))
+            showLoader(true);
             $.ajax({
                 url: "/memberPasswordUpdate/",
                 type: "POST",
@@ -104,6 +106,8 @@ var userType = '${joinVO.userType}';        //검색조건_구분
                     console.log(err);
                     alert("비밀번호 변경을 실패하였습니다.");
                 }
+            }).done(function () {
+                showLoader(false);
             });
         })
 
@@ -125,6 +129,7 @@ var userType = '${joinVO.userType}';        //검색조건_구분
 
             var con_test = confirm(getUserId+"을 탈퇴시키겠습니까?");
             if(con_test == true){
+                showLoader(true);
                 $.ajax({
                     url: "/memberDelete/",
                     type: "POST",
@@ -138,6 +143,8 @@ var userType = '${joinVO.userType}';        //검색조건_구분
                         console.log(err);
                         alert("회원 탈퇴를 실패하였습니다.");
                     }
+                }).done(function () {
+                    show(false);
                 });
             }
         })
@@ -162,6 +169,7 @@ var userType = '${joinVO.userType}';        //검색조건_구분
         if (userType !=  $("#searchUserType")){
             frm.userType.value = userType;
         }
+        showLoader(true);
         frm.pageIndex.value = pageNo;
         document.frm.action = "<c:url value='/member.do'/>";
         document.frm.submit();
@@ -169,7 +177,7 @@ var userType = '${joinVO.userType}';        //검색조건_구분
 
     //조회
     function fn_search() {
-
+        showLoader(true);
         frm.pageIndex.value = 1;
         document.frm.action = "<c:url value='/member.do'/>";
         document.frm.submit();

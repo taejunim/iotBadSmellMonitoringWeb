@@ -225,6 +225,7 @@ function imageDelete(imageIndex){
 
         //페이지 이동 스크립트
         function fn_page(pageNo) {
+            showLoader(true);
             //vo에 담긴 값이 입력된 값과 다를 경우 강제로 vo에 담긴 값을 form에 넣어주기
             if (regId !=  $("#registerName")){
                 frm.regId.value = regId;
@@ -251,6 +252,7 @@ function imageDelete(imageIndex){
 
         //조회
         function fn_search() {
+            showLoader(true);
             frm.pageIndex.value = 1;
             document.frm.action = "<c:url value='/history.do'/>";
             document.frm.submit();
@@ -258,7 +260,7 @@ function imageDelete(imageIndex){
 
         //초기화
         function fn_reset() {
-
+            showLoader(true);
             $("#registerName").val("");
             $("#searchStartDt").val("");
             $("#searchEndDt").val("");

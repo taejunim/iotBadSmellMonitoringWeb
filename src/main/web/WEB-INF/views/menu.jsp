@@ -1,21 +1,25 @@
 <script type="text/javascript">
 
     $(document).ready(function () {
-
+        showLoader(false);
         //아이콘, 로고, 메인 Click
         $(".mainButton").click(function(){
+            showLoader(true);
             $(location).attr('href', '/main.do');
         });
         //개별접수이력조회 Click
         $("#history").click(function(){
+            showLoader(true);
             $(location).attr('href', '/history.do');
         });
         //통계 Click
         $("#statistic").click(function(){
+            showLoader(true);
             $(location).attr('href', '/statistic.do');
         });
         //회원관리 Click
         $("#member").click(function(){
+            showLoader(true);
             $(location).attr('href', '/member.do');
         });
         //마이페이지 Click -> 임시로 샘플페이지 연결
@@ -25,6 +29,7 @@
         //로그아웃 Click
         $("#logout").click(function(){
             if(confirm("로그아웃 하시겠습니까?")) {
+                showLoader(true);
                 $(location).attr('href', '/login.do');
             }
         });
@@ -54,4 +59,9 @@
     <a id="statistic">통계</a>
     <a id="member">회원관리</a>
     <a id="myPage">마이페이지</a>
+</div>
+<div id="loader" class="loaderContainer">
+    <div class="loaderBox">
+        <div class="loaderContent"></div>
+    </div>
 </div>
