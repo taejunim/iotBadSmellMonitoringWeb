@@ -190,7 +190,7 @@ select::-ms-expand{
     height: 40px;
     background: #fff;
 }
-.subMenu > a {
+.subMenu > a, .dropdown , .dropbtn > a {
     background: #fff;
     line-height: 40px;
     height: 100%;
@@ -200,9 +200,12 @@ select::-ms-expand{
     float: left;
     cursor: pointer;
 }
-.subMenu > a:hover, .selectMenu {
+.dropdown-content > a {
+    font-weight: normal;
+}
+.subMenu > a:hover, .selectMenu, .dropdown:hover , .dropbtn > a:hover{
     background: #10639a !important;
-    color: #fff;
+    color: #fff
 }
 .searchTable {
     width: 100%;
@@ -397,6 +400,8 @@ select::-ms-expand{
     top: 50%;
     margin-top: -120px;
     margin-left: -60px;
+    margin-top: -60px;
+
 }
 .loaderContent{
     position: absolute;
@@ -410,13 +415,31 @@ select::-ms-expand{
     -webkit-animation: loader-1-inner 1.3s cubic-bezier(.58, .58, .58, .58) infinite;
     animation: loader-1-inner 1.3s cubic-bezier(.58, .58, .58, .58) infinite;
 }
-@-webkit-keyframes loader-1-inner {
-    0% {
-        -webkit-transform: rotate(-360deg);
-        transform: rotate(-360deg);
-    }
-    100% {
-        -webkit-transform: rotate(0deg);
-        transform: rotate(0deg);
-    }
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: white;
+    min-width: 150px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
 }
+
+.dropdown-content a {
+    color: black;
+    text-decoration: none;
+    display: block;
+    max-height: 40px;
+    /*border-top: 1px #10639a solid;*/
+    border-top: 1px #ddd solid;
+}
+
+.dropdown-content a:hover {
+    background-color: #ddd;
+    color: white;
+}
+.selectDropMenu{
+    background-color: #ddd;
+    color: white;
+}
+
+.dropdown:hover .dropdown-content {display: block;}

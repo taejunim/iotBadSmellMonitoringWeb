@@ -14,8 +14,8 @@ var userAge = '${joinVO.userAge}';          //검색조건_나이
 var userSex = '${joinVO.userSex}';          //검색조건_성별
 var userType = '${joinVO.userType}';        //검색조건_구분
     $(document).ready(function () {
-        setButton("member");
-        // setDropButton("member3");
+        setButton("member");            //선택된 화면의 메뉴색 변경 CALL
+        setDropButton("memberInfo");    //선택된 드롭다운 메뉴색 변경 CALL
 
         /* 검색 화면 검색어 세팅 START*/
         if (userRegion != "" && userRegion != null)                         //지역

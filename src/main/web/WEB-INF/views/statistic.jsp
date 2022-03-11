@@ -14,6 +14,7 @@
 <script type="text/javascript">
     $(document).ready(function () {
         setButton("statistic");
+        setDropButton("graph");     //선택된 드롭다운 메뉴 색상 변경
         $(".datepicker").datepicker();
 
         $("#type").change(function(){

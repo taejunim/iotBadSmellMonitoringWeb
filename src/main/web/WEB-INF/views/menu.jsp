@@ -1,3 +1,5 @@
+<%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
+<%@include file="/WEB-INF/views/common/resources_common.jsp" %>
 <script type="text/javascript">
 
     $(document).ready(function () {
@@ -12,17 +14,27 @@
             showLoader(true);
             $(location).attr('href', '/history.do');
         });
-        //통계 Click
-        $("#statistic").click(function(){
-            showLoader(true);
+        //그래프 Click
+        $("#graph").click(function(){
             $(location).attr('href', '/statistic.do');
         });
-        //회원관리 Click
-        $("#member").click(function(){
-            showLoader(true);
+        //표 Click
+        $("#statistic3").click(function(){
+            $(location).attr('href', '/statistic.do');
+        });
+        //회원정보 Click
+        $("#memberInfo").click(function(){
             $(location).attr('href', '/member.do');
         });
-        //마이페이지 Click -> 임시로 샘플페이지 연결
+        //회원출석상태 Click
+        $("#attend").click(function(){
+            $(location).attr('href', '/attend.do');
+        });
+        //공지사항 Click -> 임시로 샘플페이지 연결
+        $("#notice").click(function(){
+            $(location).attr('href', '/notice.do');
+        });
+        //마이페이지 Click
         $("#myPage").click(function(){
             $(location).attr('href', '/myPage.do');
         });
@@ -45,6 +57,12 @@
         $("#"+buttonId).addClass('selectMenu');
     }
 
+    //선택된 드롭다운 메뉴색 변경
+    function setDropButton(buttonId) {
+        $(".subMenu>a").removeClass('selectDropMenu');
+        $("#"+buttonId).addClass('selectDropMenu');
+    }
+
 </script>
 <div class="wd100rate h100 mainMenu">
     <div class="titleIcon wd80 h80 fl ml10 mt15 mainButton"></div>
@@ -56,8 +74,21 @@
 <div class="wd100rate subMenu">
     <a id="main" class="mainButton"><i class="bx bxs-home lh40 font_size20"></i></a>
     <a id="history">개별접수이력조회</a>
-    <a id="statistic">통계</a>
-    <a id="member">회원관리</a>
+    <div id="statistic" class="dropdown">
+        <a class="dropbtn">통계</a>
+        <div class="dropdown-content">
+            <a id="graph">그래프</a>
+            <a id="statistic3">표</a>
+        </div>
+    </div>
+    <div id="member" class="dropdown">
+        <a class="dropbtn">회원관리</a>
+        <div class="dropdown-content">
+            <a id="memberInfo">회원정보</a>
+            <a id="attend">회원 출석 상태</a>
+        </div>
+    </div>
+    <a id="notice">공지사항</a>
     <a id="myPage">마이페이지</a>
 </div>
 <div id="loader" class="loaderContainer">
