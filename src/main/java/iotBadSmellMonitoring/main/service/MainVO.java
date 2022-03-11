@@ -20,6 +20,9 @@ public class MainVO {
 
     private String codeGroup;                                                                                           //코드 그룹
 
+    private String referenceCodeGroup;
+
+    private String referenceCodeId;
 
 
 }
