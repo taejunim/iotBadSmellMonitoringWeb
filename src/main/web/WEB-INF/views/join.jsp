@@ -26,7 +26,13 @@
         $("#btnCheck").click(function(){
             idCheck();
         });
+
+        // 지역 클릭 시 해당 지역상세 표출
+        $("#selectRem").on('change',function (){
+            selectUserRegion(this.value);
+        });
     });
+
 
     //회원가입
     function join() {
@@ -48,8 +54,20 @@
         })
 
         //비밀번호 길이 확인
-        if(!fn_chkPwLength($("input[name='userPassword']").val())) {
+        // if(!fn_chkPwLength($("input[name='userPassword']").val())) {
+        //     return;
+        // }
+
+        //비밀번호 체크
+        if (!fn_chkPw_pattern($("input[name='userPassword']").val())) {
             return;
+        }
+
+        //휴대폰 번호 체크
+        if (!fn_chkNumber_pattern($("input[name='btnCheck_phone']").val())) {
+            alert("휴대폰 번호를 바르게 입력해 주세요");
+
+            return false;
         }
 
             //chk이 true일 경우
@@ -88,10 +106,15 @@
 
         var userId = $("input[name='userId']").val();
 
-        //아이디 길이 확인
-        if(!fn_chkIdLength(userId)) {
+        //아이디 체크
+        if (!fn_chkId_pattern(userId)) {
             return;
         }
+
+        //아이디 길이 확인
+        // if(!fn_chkIdLength(userId)) {
+        //     return;
+        // }
 
         if(userId != "") {
             $.ajax({
@@ -111,51 +134,93 @@
             });
         }
     }
+
+    //지역 선택시 해당지역상세 표출
+    function selectUserRegion(referenceCodeId) {
+        $.ajax({
+            url: "/join/userRegionSelect",
+            type: "POST",
+            data: {codeGroup:"RGD", referenceCodeGroup:"REM", referenceCodeId:referenceCodeId },
+            dataType: "JSON",
+            success: function (data) {
+                $('#userRegion option').remove();
+                $.each(data , function(i, val){
+                    $('#userRegion').append("<option value="+ val.codeId+">" + val.codeIdName + "</option>");
+                });
+
+            },
+            error: function (err) {
+                console.log(err)
+            }
+        });
+    }
 </script>
 
 <body>
 <div class="wd100rate h100rate scrollView">
     <div>
         <form:form class="joinForm" name="joinForm">
-        <table class="blueForm wd450 mt200"; >
+        <table class="blueForm wd780 mt130"; >
             <tr><th colspan="2">회원가입</th></tr>
             <tr>
                 <td class="align_l pl20"><label class="tableLabel">* 아이디</label></td>
                 <td><div style="width: 100%; height: 100%">
-                    <input type="text" id="userId" name="userId" class="inputForm mt10 fl wd60rate" placeholder="아이디를 입력해 주십시오." maxlength="20">
+                    <input type="text" id="userId" name="userId" class="inputForm mt10 fl wd66rate" placeholder="아이디는 영문 및 숫자 4~20자리로 입력해주세요." maxlength="20">
                     <a id= "btnCheck" class="subButton mt10">중복체크</a>
                 </div></td>
             </tr>
             <tr>
                 <td class="align_l pl20"><label class="tableLabel">* 비밀번호</label></td>
-                <td><input type="password" name="userPassword" class="inputForm fl" maxlength="20" id="userPassword" placeholder="비밀번호를 입력해 주십시오."></td>
+                <td><input type="password" name="userPassword" class="inputForm fl" maxlength="20" id="userPassword" placeholder="비밀번호는 영문,숫자,특수문자를 최소 한가지씩 4~20자리로 입력해주세요."></td>
             </tr>
             <tr>
                 <td class="align_l pl20"><label class="tableLabel">* 비밀번호 확인</label></td>
-                <td><input type="password" name="userPasswordConfirm" class="inputForm fl" maxlength="20" id="userPasswordConfirm" placeholder="비밀번호를 한번 더 입력해 주십시오."></td>
+                <td><input type="password" name="userPasswordConfirm" class="inputForm fl" maxlength="20" id="userPasswordConfirm" placeholder="비밀번호는 영문,숫자,특수문자를 최소 한가지씩 4~20자리로 입력해주세요."></td>
             </tr>
             <tr>
                 <td class="align_l pl20"><label class="tableLabel">* 이름</label></td>
-                <td><input type="text" name="userName" class="inputForm fl" placeholder="이름을 입력해 주십시오."></td>
+                <td><input type="text" name="userName" class="inputForm fl" placeholder="이름을 입력해 주십시오." maxlength="10"></td>
+            </tr>
+            <tr>
+                <td class="align_l pl20"><label class="tableLabel">* 휴대폰 번호</label></td>
+                <td><div style="width: 100%; height: 100%">
+                    <input type="text" id="" name="btnCheck_phone" class="inputForm mt10 fl wd66rate" placeholder="휴대폰번호를 '-'없이 입력해 주십시오." maxlength="20">
+                    <a id= "btnCheck_phone" class="subButton mt10">인증하기</a>
+                </div></td>
             </tr>
             <tr>
                 <td class="align_l pl20"><label class="tableLabel">* 나이</label></td>
-                <td><input type="text" name="userAge" class="inputForm fl" placeholder="나이를 입력해 주십시오."></td>
+                <td><input type="text" name="userAge" class="inputForm fl" placeholder="나이를 입력해 주십시오." maxlength="3"></td>
             </tr>
             <tr>
                 <td class="align_l pl20"><label class="tableLabel">* 지역</label></td>
                 <td>
-                    <select name="userRegion" class="selectForm fl" >
-                        <c:forEach var="item" items="${CG_RGN}">
+                    <select id="selectRem" name="userArea" class="selectForm fl required" >
+                        <option value="">지역을 선택하여 주세요</option>
+                        <c:forEach var="item" items="${CG_REM}">
                             <option value="${item.codeId}">${item.codeIdName}</option>
                         </c:forEach>
                     </select>
                 </td>
             </tr>
+
+            <tr>
+                <td class="align_l pl20"><label class="tableLabel">* 지역상세</label></td>
+                <td>
+                    <select id="userRegion" name="userRegion" class="selectForm fl required" >
+                        <option value="">상세지역을 선택하여 주세요</option>
+<%--                        <c:forEach var="item" items="${CG_RGN}">--%>
+<%--                            <option value="${item.codeId}">${item.codeIdName}</option>--%>
+<%--                        </c:forEach>--%>
+                    </select>
+                </td>
+            </tr>
+
+
             <tr>
                 <td class="align_l pl20"><label class="tableLabel">* 성별</label></td>
                 <td>
-                    <select name="userSex" class="selectForm fl" >
+                    <select name="userSex" class="selectForm fl required" >
                         <c:forEach var="item" items="${CG_SEX}">
                             <option value="${item.codeId}">${item.codeIdName}</option>
                         </c:forEach>
@@ -165,9 +230,16 @@
             <tr>
                 <td class="align_l pl20"><label class="tableLabel">* 구분</label></td>
                 <td>
-                    <select name="userType" class="selectForm fl">
+                    <select name="userType" class="selectForm fl required" >
                         <c:forEach var="item" items="${CG_UST}">
-                            <option value="${item.codeId}">${item.codeIdName}</option>
+                            <c:choose>
+                                <c:when test="${item.codeGroup eq 'UST' and item.codeId eq '002'}">
+                                    <option value="${item.codeId}" selected>${item.codeIdName}</option>
+                                </c:when>
+                                <c:otherwise>
+                                    <option value="${item.codeId}">${item.codeIdName}</option>
+                                </c:otherwise>
+                            </c:choose>
                         </c:forEach>
                     </select>
                 </td>

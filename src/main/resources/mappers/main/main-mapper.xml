@@ -45,6 +45,16 @@
 
            AND CODE_GROUP = #{codeGroup}
 
+        <if test="referenceCodeGroup != null and !referenceCodeGroup.equals('')" >
+            AND REFERENCE_CODE_GROUP = #{referenceCodeGroup}
+        </if>
+
+        <if test="referenceCodeId != null and !referenceCodeId.equals('')" >
+            AND REFERENCE_CODE_ID = #{referenceCodeId}
+        </if>
+
     </select>
+
+
 
 </mapper>

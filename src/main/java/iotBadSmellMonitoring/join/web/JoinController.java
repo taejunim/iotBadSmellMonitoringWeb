@@ -1,5 +1,6 @@
 package iotBadSmellMonitoring.join.web;
 
+import egovframework.rte.psl.dataaccess.util.EgovMap;
 import iotBadSmellMonitoring.join.service.JoinService;
 import iotBadSmellMonitoring.join.service.JoinVO;
 import iotBadSmellMonitoring.main.service.MainService;
@@ -10,6 +11,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
+import java.util.List;
 
 /**
  * @ Class Name   : JoinController.java
@@ -54,12 +56,18 @@ public class JoinController {
                 session.setAttribute("CG_RGN",mainService.codeListSelect(mainVO));
                 model.addAttribute("CG_RGN",session.getAttribute("CG_RGN"));
 
+                mainVO.setCodeGroup("REM");
+                session.setAttribute("CG_REM",mainService.codeListSelect(mainVO));
+                model.addAttribute("CG_REM",session.getAttribute("CG_REM"));
+
             }
             // 세션에 값을 저장했을 경우 세션값을  model에 넘겨줌
             else{
                 model.addAttribute("CG_UST",session.getAttribute("CG_UST"));
                 model.addAttribute("CG_SEX",session.getAttribute("CG_SEX"));
                 model.addAttribute("CG_RGN",session.getAttribute("CG_RGN"));
+                model.addAttribute("CG_REM",session.getAttribute("CG_REM"));
+
             }
         /*성별, 구분 SETTING END*/
 
@@ -91,6 +99,15 @@ public class JoinController {
         result = joinService.userFindIdSelect(userId);
 
         return result;
+    }
+
+    //지역 선택시 해당지역상세 표출
+    @RequestMapping(value = "/join/userRegionSelect", method = RequestMethod.POST)
+    public @ResponseBody List<EgovMap> userRegionSelect(MainVO mainVO) throws Exception {
+
+        List<EgovMap>   list = mainService.codeListSelect(mainVO);
+
+        return list;
     }
 
 }

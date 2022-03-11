@@ -61,4 +61,42 @@
         }
         else $("#loader").hide();
       }
+
+
+    //아이디 정규식
+    function fn_chkId_pattern(val){
+
+        var regExp = /^[a-z]+[a-z0-9]{3,19}$/g;
+
+        if (!regExp.test(val)) {
+            //alert("아이디는 영문 및 숫자 4 ~ 20 자리로 입력해주세요.");
+            $('#userId').val('');//아이디 입력 초기화
+            return false;
+        }
+        return true;
+    }
+
+    //비밀번호 정규식
+    function fn_chkPw_pattern(val) {
+
+        var regExp = /^(?=.*[a-zA-z])(?=.*[0-9])(?=.*[$`~!@$!%*#^?&\\(\\)\-_=+]).{3,19}$/;
+
+        if (!regExp.test(val)) {
+            //alert("비밀번호는 영문, 숫자, 특수문자를 최소 한가지씩 4 ~ 20 자리로 입력해주세요.");
+            $('#userPassword').val('');//비밀번호 입력 초기화
+            $('#userPasswordConfirm').val('');//비밀번호 확인 입력 초기화
+            return false;
+        }
+        return true;
+    }
+
+    //휴대폰번호 정규식
+    function fn_chkNumber_pattern(val) {
+
+        var regExp =  /^\d{3}\d{3,4}\d{4}$/;
+        if (!regExp.test(val)) {
+            return false;
+        }
+        return true;
+    }
     </script>
