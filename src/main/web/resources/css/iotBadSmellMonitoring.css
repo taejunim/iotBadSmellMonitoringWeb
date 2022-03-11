@@ -422,6 +422,7 @@ select::-ms-expand{
     background-color: white;
     min-width: 150px;
     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 2;
 }
 
 .dropdown-content a {
@@ -429,7 +430,6 @@ select::-ms-expand{
     text-decoration: none;
     display: block;
     max-height: 40px;
-    /*border-top: 1px #10639a solid;*/
     border-top: 1px #ddd solid;
 }
 

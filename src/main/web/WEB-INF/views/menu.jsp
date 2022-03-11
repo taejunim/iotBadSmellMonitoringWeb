@@ -73,6 +73,7 @@
 </div>
 <div class="wd100rate subMenu">
     <a id="main" class="mainButton"><i class="bx bxs-home lh40 font_size20"></i></a>
+    <a id="notice">공지사항</a>
     <a id="history">개별접수이력조회</a>
     <div id="statistic" class="dropdown">
         <a class="dropbtn">통계</a>
@@ -88,7 +89,6 @@
             <a id="attend">회원 출석 상태</a>
         </div>
     </div>
-    <a id="notice">공지사항</a>
     <a id="myPage">마이페이지</a>
 </div>
 <div id="loader" class="loaderContainer">
