@@ -714,4 +714,86 @@ public class ApiController {
         return resultSet;
     }
 
+    /**
+     * REGION LIST API
+     * @param mainVO
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping(value = "/api/getRegionList", method = RequestMethod.GET, consumes="application/json;", produces = "application/json; charset=utf8")
+    public String getRegionList(MainVO mainVO)  throws Exception {
+
+        String message = "";
+
+        JSONParser      jsonParser  = new JSONParser();
+        mainVO.setCodeGroup("REM");
+
+        try {
+
+            List<EgovMap> resulMtList = mainService.codeListSelect(mainVO);                                                  //코드 목록 CALL.
+
+            if(resulMtList != null && !resulMtList.isEmpty()) {                                                               //null CHECK.
+
+                JSONArray     jsonArray        = new JSONArray();
+                List<EgovMap> regionMList      = new ArrayList<>();
+
+                int i = 0;
+
+                for (EgovMap egovMap : resulMtList) {
+
+                    EgovMap mapM = new EgovMap();
+
+                    System.out.println("resultList.get(2).getValue(i).toString(): "+resulMtList.get(i).getValue(3).toString());
+                    mapM.put("M_CODE_ID",resulMtList.get(i).getValue(2).toString());
+                    mapM.put("M_CODE_ID_NAME",resulMtList.get(i).getValue(3).toString());
+
+                    mainVO.setCodeGroup("RGD");
+                    mainVO.setReferenceCodeGroup("REM");
+                    mainVO.setReferenceCodeId(resulMtList.get(i).getValue(2).toString());
+
+                    List<EgovMap> resultDList = mainService.codeListSelect(mainVO);                                         //코드 목록 CALL.
+                    List<EgovMap> regionDList = new ArrayList<>();
+
+                    int j = 0;
+
+                    for(EgovMap dEgovMap : resultDList){
+
+                        EgovMap mapD = new EgovMap();
+
+                        mapD.put("D_CODE_ID",resultDList.get(j).getValue(2).toString());
+                        mapD.put("D_CODE_ID_NAME",resultDList.get(j).getValue(3).toString());
+
+                        regionDList.add(mapD);
+
+                        mapM.put("DETAIL",regionDList);
+
+                        j++;
+                    }
+
+                    regionMList.add(mapM);
+
+                    i++;
+                }
+
+                for (EgovMap egovMap : regionMList) {
+
+                    JSONObject json = new JSONObject(egovMap);
+                    json = (JSONObject) jsonParser.parse(String.valueOf(json).replace("null", "\"\""));//null시 KEY 누락을 막기 위하여.
+                    jsonArray.put(json);
+                }
+
+                message = "{\"result\":\"success\",\"data\":" + jsonArray + "}";
+            }
+            else
+                message = "{\"result\":\"fail\",\"message\":\"NO SEARCH DETAIL HISTORY DATA.\"}";
+
+        }catch (Exception e){
+
+            //System.out.println("Exception: "+e);
+            message = "{\"result\":\"fail\",\"message\":\"ERR SEARCH DETAIL HISTORY DATA.\"}";
+        }
+
+        return message;
+    }
+
 }
