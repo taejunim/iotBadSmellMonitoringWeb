@@ -81,7 +81,9 @@ public class ApiController {
             joinVO.setUserName(jsonObject.get("userName").toString());
             joinVO.setUserSex(jsonObject.get("userSex").toString());
             joinVO.setUserType(jsonObject.get("userType").toString());
-            joinVO.setUserRegion(jsonObject.get("userRegion").toString());
+            joinVO.setUserRegionMaster(jsonObject.get("userRegionMaster").toString());
+            joinVO.setUserRegionDetail(jsonObject.get("userRegionDetail").toString());
+            joinVO.setUserPhone(jsonObject.get("userPhone").toString());
 
             if(joinVO.getUserId().equals("") || joinVO.getUserPassword().equals("") || joinVO.getUserAge().equals("") || joinVO.getUserName().equals("") || joinVO.getUserSex().equals("")|| joinVO.getUserType().equals(""))
                 message = "{\"result\":\"fail\",\"message\":\"NO DB INSERT.\"}";

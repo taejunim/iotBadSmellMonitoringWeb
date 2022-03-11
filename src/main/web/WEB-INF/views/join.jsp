@@ -60,11 +60,13 @@
 
         //비밀번호 체크
         if (!fn_chkPw_pattern($("input[name='userPassword']").val())) {
+            alert("비밀번호는 영문,숫자,특수문자를 최소 한가지씩 4~20자리로 입력해주세요.");
+
             return;
         }
 
         //휴대폰 번호 체크
-        if (!fn_chkNumber_pattern($("input[name='btnCheck_phone']").val())) {
+        if (!fn_chkNumber_pattern($("input[name='userPhone']").val())) {
             alert("휴대폰 번호를 바르게 입력해 주세요");
 
             return false;
@@ -143,9 +145,9 @@
             data: {codeGroup:"RGD", referenceCodeGroup:"REM", referenceCodeId:referenceCodeId },
             dataType: "JSON",
             success: function (data) {
-                $('#userRegion option').remove();
+                $('#userRegionDetail option').remove();
                 $.each(data , function(i, val){
-                    $('#userRegion').append("<option value="+ val.codeId+">" + val.codeIdName + "</option>");
+                    $('#userRegionDetail').append("<option value="+ val.codeId+">" + val.codeIdName + "</option>");
                 });
 
             },
@@ -184,7 +186,7 @@
             <tr>
                 <td class="align_l pl20"><label class="tableLabel">* 휴대폰 번호</label></td>
                 <td><div style="width: 100%; height: 100%">
-                    <input type="text" id="" name="btnCheck_phone" class="inputForm mt10 fl wd66rate" placeholder="휴대폰번호를 '-'없이 입력해 주십시오." maxlength="20">
+                    <input type="text" id="" name="userPhone" class="inputForm mt10 fl wd66rate" placeholder="휴대폰번호를 '-'없이 입력해 주십시오." maxlength="20">
                     <a id= "btnCheck_phone" class="subButton mt10">인증하기</a>
                 </div></td>
             </tr>
@@ -195,7 +197,7 @@
             <tr>
                 <td class="align_l pl20"><label class="tableLabel">* 지역</label></td>
                 <td>
-                    <select id="selectRem" name="userArea" class="selectForm fl required" >
+                    <select id="selectRem" name="userRegionMaster" class="selectForm fl required" >
                         <option value="">지역을 선택하여 주세요</option>
                         <c:forEach var="item" items="${CG_REM}">
                             <option value="${item.codeId}">${item.codeIdName}</option>
@@ -207,7 +209,7 @@
             <tr>
                 <td class="align_l pl20"><label class="tableLabel">* 지역상세</label></td>
                 <td>
-                    <select id="userRegion" name="userRegion" class="selectForm fl required" >
+                    <select id="userRegionDetail" name="userRegionDetail" class="selectForm fl required" >
                         <option value="">상세지역을 선택하여 주세요</option>
 <%--                        <c:forEach var="item" items="${CG_RGN}">--%>
 <%--                            <option value="${item.codeId}">${item.codeIdName}</option>--%>
