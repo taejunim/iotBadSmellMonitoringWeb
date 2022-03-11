@@ -17,10 +17,11 @@
         $("#showId").val('<%=(String)session.getAttribute("userId")%>');                                    //아이디
         $("#userPassword").val("");                                                                         //사용자_비밀번호
         $("#showName").val('<%=(String)session.getAttribute("userName")%>');                                //이름
+        $("#userPhone").val('<%=(String) session.getAttribute("userPhone")%>');                              //전화번호
         $("#showAge").val('<%=(String)session.getAttribute("userAge")%>');                                  //나이
 
         $("#userRegion").empty();                                                                           //지역 구분 이름
-        $("#userRegion").append("<option>"+'<%=(String)session.getAttribute("userRegionName")%>'+"</option>");
+        $("#userRegion").append("<option>"+'<%=(String)session.getAttribute("userRegionMasterName")%>'+"</option>");
 
         $("#userSex").empty();                                                                              //성별 이름
         $("#userSex").append("<option>"+'<%=(String)session.getAttribute("userSexName")%>'+"</option>");
@@ -128,6 +129,10 @@
         <tr>
             <td class="align_l pl20"><label class="tableLabel" >이름</label></td>
             <td><input type="text" id="showName" name="userName" placeholder="이름"disabled></td>
+        </tr>
+        <tr>
+            <td class="align_l pl20"><label class="tableLabel">전화번호</label></td>
+            <td><input type="text" id="userPhone" name="userPhone" disabled></td>
         </tr>
         <tr>
             <td class="align_l pl20"><label class="tableLabel">나이</label></td>
