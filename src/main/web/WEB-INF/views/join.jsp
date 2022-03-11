@@ -53,27 +53,22 @@
             }
         })
 
-        //비밀번호 길이 확인
-        // if(!fn_chkPwLength($("input[name='userPassword']").val())) {
-        //     return;
-        // }
-
-        //비밀번호 체크
-        if (!fn_chkPw_pattern($("input[name='userPassword']").val())) {
-            alert("비밀번호는 영문,숫자,특수문자를 최소 한가지씩 4~20자리로 입력해주세요.");
-
-            return;
-        }
-
-        //휴대폰 번호 체크
-        if (!fn_chkNumber_pattern($("input[name='userPhone']").val())) {
-            alert("휴대폰 번호를 바르게 입력해 주세요");
-
-            return false;
-        }
-
             //chk이 true일 경우
         if(chk) {
+            //비밀번호 체크
+            if (!fn_chkPw_pattern($("input[name='userPassword']").val())) {
+                alert("비밀번호는 영문,숫자,특수문자를 최소 한가지씩 4~20자리로 입력해주세요.");
+
+                return false;
+            }
+
+            //휴대폰 번호 체크
+            if (!fn_chkNumber_pattern($("input[name='userPhone']").val())) {
+                alert("휴대폰 번호를 바르게 입력해 주세요");
+
+                return false;
+            }
+
             if($("input[name='userPassword']").val() != $("input[name='userPasswordConfirm']").val()) {
                 alert("비밀번호가 일치하지 않습니다.");
                 return $("input[name='userPasswordConfirm']").val();
