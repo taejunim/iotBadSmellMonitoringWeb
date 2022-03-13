@@ -55,6 +55,21 @@
 
     </select>
 
+    <!-- 모바일 기상청 데이터를 위한 X,Y-->
+    <select id="getUserWeather" parameterType="string" resultType="egovMap">
+
+        SELECT ADDRESS_X
+             , ADDRESS_Y
+
+          FROM tb_address
+
+         WHERE 1=1
+
+           AND ADDRESS_DEPTH3 = #{userRegion}
+
+    </select>
+
+
 
 
 </mapper>

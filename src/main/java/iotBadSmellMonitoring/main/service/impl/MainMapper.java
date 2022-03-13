@@ -20,7 +20,6 @@ import java.util.List;
 
 public interface MainMapper {
 
-
     /**
      * PC 메인 목록
      * @param mainVO     PC 공통 관련 VO.
@@ -36,5 +35,13 @@ public interface MainMapper {
      * @throws Exception
      */
     List<EgovMap> codeListSelect(MainVO mainVO) throws Exception;
+
+    /**
+     * 모바일 기상청 데이터를 위한 X,Y
+     * @param userRegion    사용자 지역
+     * @return              EgovMap
+     * @throws Exception
+     */
+    EgovMap getUserWeather(String userRegion) throws Exception;
 
 }

@@ -27,7 +27,6 @@ public class MainServiceImpl implements MainService {
     @Autowired
     SqlSession sqlSession;
 
-
     /**
      * PC 메인 목록
      * @param mainVO     PC 공통 관련 VO.
@@ -53,6 +52,20 @@ public class MainServiceImpl implements MainService {
         MainMapper mainMapper = sqlSession.getMapper(MainMapper.class);
 
         return mainMapper.codeListSelect(mainVO);
+    }
+
+    /**
+     * 모바일 기상청 데이터를 위한 X,Y
+     * @param userRegion    사용자 지역
+     * @return              EgovMap
+     * @throws Exception
+     */
+    @Override
+    public EgovMap getUserWeather(String userRegion) throws Exception {
+
+        MainMapper mainMapper = sqlSession.getMapper(MainMapper.class);
+
+        return mainMapper.getUserWeather(userRegion);
     }
 
 }

@@ -782,7 +782,9 @@ public class ApiController {
                     jsonArray.put(json);
                 }
 
-                message = "{\"result\":\"success\",\"data\":" + jsonArray + "}";
+                //message = "{\"result\":\"success\",\"data\":" + jsonArray + "}";
+                message = "{\"result\":\"success\",\"data\":{\"region\":{\"master\":"+ jsonArray +"}}}";
+
             }
             else
                 message = "{\"result\":\"fail\",\"message\":\"NO SEARCH DETAIL HISTORY DATA.\"}";
@@ -791,6 +793,41 @@ public class ApiController {
 
             //System.out.println("Exception: "+e);
             message = "{\"result\":\"fail\",\"message\":\"ERR SEARCH DETAIL HISTORY DATA.\"}";
+        }
+
+        return message;
+    }
+
+    /**
+     * USER WEATHER GET API.
+     * @param request
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping(value = "/api/userWeather", method = RequestMethod.GET, consumes="application/json;", produces = "application/json; charset=utf8")
+    public String userWeather(HttpServletRequest request)  throws Exception {
+
+        String message = "";
+
+        try {
+
+            EgovMap egovMap = mainService.getUserWeather(request.getParameter("userRegion"));                        //모바일 기상청 데이터를 위한 X,Y CALL.
+
+            if(egovMap != null && !egovMap.isEmpty()){
+
+                JSONObject  json        = new JSONObject(egovMap);                                                      //map을 json으로 변환.
+                JSONParser  jsonParser  = new JSONParser();
+
+                json    = (JSONObject) jsonParser.parse(String.valueOf(json).replace("null", "\"\"")); //null시 KEY 누락을 막기 위하여.
+                message = "{\"result\":\"success\",\"data\":" + json + "}";
+
+            }else
+                message = "{\"result\":\"fail\",\"message\":\"NO SEARCH USER WEATHER.\"}";
+
+        }catch (Exception e){
+
+            //System.out.println("Exception: "+e);
+            message = "{\"result\":\"fail\",\"message\":\"ERR SEARCH USER WEATHER.\"}";
         }
 
         return message;
