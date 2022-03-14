@@ -85,22 +85,33 @@
          WHERE USER_ID = #{userId};
     </delete>
 
-
+    <!-- 사용자 정보 -->
     <select id="memberGetInfoSelect" parameterType="string" resultType="egovMap" >
 
-        SELECT USER_ID
-             , USER_NAME
-             , USER_REGION_MASTER
-             , USER_REGION_DETAIL
-             , F_GET_CODE_NAME('REM',USER_REGION_MASTER) USER_REGION_MASTER_NAME
-             , F_GET_CODE_NAME('RGD',USER_REGION_DETAIL) USER_REGION_DETAIL_NAME
+        SELECT t1.USER_ID                               USER_ID
+             , t1.USER_NAME                             USER_NAME
+             , t1.USER_REGION_MASTER                    USER_REGION_MASTER
+             , t1.USER_REGION_MASTER_NAME               USER_REGION_MASTER_NAME
+             , t1.USER_REGION_DETAIL                    USER_REGION_DETAIL
+             , t1.USER_REGION_DETAIL_NAME               USER_REGION_DETAIL_NAME
+             , CASE LENGTH(t1.USER_PHONE)
+               WHEN 11 THEN CONCAT(LEFT(t1.USER_PHONE, 3), '-', MID(t1.USER_PHONE, 4, 4), '-', RIGHT(t1.USER_PHONE, 4))
+                END USER_PHONE
+          FROM (
+                 SELECT USER_ID
+                      , USER_NAME
+                      , USER_PHONE
+                      , USER_REGION_MASTER
+                      , F_GET_CODE_NAME('REM', USER_REGION_MASTER) USER_REGION_MASTER_NAME
+                      , USER_REGION_DETAIL
+                      , F_GET_CODE_NAME('RGD', USER_REGION_DETAIL) USER_REGION_DETAIL_NAME
 
-          FROM tb_user
+                 FROM tb_user
 
-         WHERE 1=1
+                 WHERE 1 = 1
 
-           AND USER_ID = #{userId}
-
+                   AND USER_ID = #{userId}
+                ) t1
     </select>
 
     <select id="todayRegisterListSelect" parameterType="string" resultType="egovMap">
