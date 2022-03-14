@@ -86,4 +86,139 @@
             </otherwise>
         </choose>
     </select>
+
+    <!-- 통계 표 모든 지역 -->
+    <select id="statisticTableAllSelect" parameterType="statisticTableVO" resultType="egovMap">
+        SELECT *,
+               IFNull(result.userRegisterCount/result.userTotalCount*100,0) userRegisterPercentage,
+               IFNull(F_GET_CODE_NAME('SMT', result.mainSmellValue),'')     mainSmellValueName,
+               IFNULL(F_GET_CODE_NAME('STY',result.mainSmellType),'')       mainSmellTypeName,
+               #{smellRegisterTime}                                         smellRegisterTime,
+               ifNull(F_GET_CODE_NAME('REN',#{smellRegisterTime}),'')       smellRegisterTimeName
+        FROM (
+            SELECT (
+            SELECT
+                <choose>
+                    <when test="smellRegisterTime != null and !smellRegisterTime.equals('')" >
+                        COUNT(*) * (DATEDIFF(LAST_DAY(CONCAT(#{searchEnd}, '-01')), CONCAT(#{searchStart}, '-01')) + 1)
+                    </when>
+                    <otherwise>
+                        COUNT(*) * 3 * (DATEDIFF(LAST_DAY(CONCAT(#{searchEnd}, '-01')), CONCAT(#{searchStart}, '-01')) + 1)
+                    </otherwise>
+                </choose>
+                FROM tb_user
+            )        userTotalCount,
+            COUNT(*) userRegisterCount,
+            ifNull((
+                SELECT SMELL_VALUE
+                FROM tb_smell_register
+                WHERE 1 = 1
+                AND DATE_FORMAT(tb_smell_register.REG_DT, '%Y-%m') BETWEEN #{searchStart} AND #{searchEnd}
+                GROUP BY tb_smell_register.SMELL_VALUE
+                ORDER BY COUNT(SMELL_VALUE) DESC LIMIT 1
+            ),'') mainSmellValue,
+            ifNull((
+                SELECT SMELL_TYPE
+                FROM tb_smell_register
+                WHERE 1 = 1
+                AND DATE_FORMAT(tb_smell_register.REG_DT, '%Y-%m') BETWEEN #{searchStart} AND #{searchEnd}
+                GROUP BY tb_smell_register.SMELL_TYPE
+                ORDER BY COUNT(SMELL_TYPE) DESC LIMIT 1
+            ),'') mainSmellType
+            FROM tb_smell_register
+            WHERE 1 = 1
+            AND DATE_FORMAT(REG_DT, '%Y-%m') BETWEEN #{searchStart} AND #{searchEnd}
+        <if test="smellRegisterTime != null and !smellRegisterTime.equals('')" >
+            AND SMELL_REGISTER_TIME = #{smellRegisterTime}
+        </if>
+     ) result
+    </select>
+
+    <!-- 통계 표 지역별 -->
+    <select id="statisticTableRegionSelect" parameterType="statisticTableVO" resultType="egovMap">
+        SELECT *,
+               ifNull(result.userRegisterCount/result.userTotalCount*100,0) userRegisterPercentage,
+               ifNull(F_GET_CODE_NAME('SMT', result.mainSmellValue),'')     mainSmellValueName,
+               IFNULL(F_GET_CODE_NAME('STY',result.mainSmellType),'')       mainSmellTypeName,
+               #{smellRegisterTime}                                         smellRegisterTime,
+               ifNull(F_GET_CODE_NAME('REN',#{smellRegisterTime}),'')       smellRegisterTimeName
+        FROM(
+            SELECT a.REFERENCE_CODE_ID            userRegionMaster,
+                   a.CODE_ID                      userRegionDetail,
+                   a.USER_REGION_MASTER_NAME      userRegionMasterName,
+                   a.USER_REGION_DETAIL_NAME      userRegionDetailName,
+                   (
+                        SELECT
+                        <choose>
+                            <when test="smellRegisterTime != null and !smellRegisterTime.equals('')" >
+                                COUNT(*) * (DATEDIFF(LAST_DAY(CONCAT(#{searchEnd}, '-01')), CONCAT(#{searchStart}, '-01')) + 1)
+                            </when>
+                            <otherwise>
+                                COUNT(*) * 3 * (DATEDIFF(LAST_DAY(CONCAT(#{searchEnd}, '-01')), CONCAT(#{searchStart}, '-01')) + 1)
+                            </otherwise>
+                        </choose>
+                        FROM tb_user
+                        WHERE USER_REGION_MASTER = a.REFERENCE_CODE_ID
+                        AND USER_REGION_DETAIL = a.CODE_ID
+                   ) userTotalCount,
+                   ifnull(b.USER_REGIST_COUNT, 0) userRegisterCount,
+                   ifNull((
+                        SELECT SMELL_VALUE
+                        FROM tb_smell_register, tb_user
+                        WHERE 1 = 1
+                        AND tb_smell_register.REG_ID = tb_user.USER_ID
+                        AND DATE_FORMAT(tb_smell_register.REG_DT, '%Y-%m') BETWEEN #{searchStart} AND #{searchEnd}
+                        <if test="smellRegisterTime != null and !smellRegisterTime.equals('')" >
+                            AND tb_smell_register.SMELL_REGISTER_TIME = #{smellRegisterTime}
+                        </if>
+                        AND tb_user.USER_REGION_MASTER = a.REFERENCE_CODE_ID
+                        AND tb_user.USER_REGION_DETAIL = a.CODE_ID
+                        GROUP BY tb_smell_register.SMELL_VALUE
+                        ORDER BY COUNT(SMELL_VALUE) DESC LIMIT 1
+                    ),'') mainSmellValue,
+                    ifNull((
+                        SELECT SMELL_TYPE
+                        FROM tb_smell_register,tb_user
+                        WHERE 1 = 1
+                        AND tb_smell_register.REG_ID = tb_user.USER_ID
+                        AND DATE_FORMAT(tb_smell_register.REG_DT, '%Y-%m') BETWEEN #{searchStart} AND #{searchEnd}
+                        <if test="smellRegisterTime != null and !smellRegisterTime.equals('')" >
+                            AND tb_smell_register.SMELL_REGISTER_TIME = #{smellRegisterTime}
+                        </if>
+                        AND tb_user.USER_REGION_MASTER = a.REFERENCE_CODE_ID
+                        AND tb_user.USER_REGION_DETAIL = a.CODE_ID
+                        GROUP BY tb_smell_register.SMELL_TYPE
+                        ORDER BY COUNT(SMELL_TYPE) DESC LIMIT 1
+                    ),'') mainSmellType
+            FROM (
+                SELECT REFERENCE_CODE_ID,
+                       CODE_ID,
+                       (
+                        SELECT CODE_ID_NAME
+                        FROM tb_code
+                        WHERE CODE_GROUP = 'REM' AND CODE_ID = tbCode.REFERENCE_CODE_ID
+                        ) USER_REGION_MASTER_NAME,
+                        CODE_ID_NAME USER_REGION_DETAIL_NAME
+                FROM tb_code tbCode
+                WHERE CODE_GROUP = 'RGD') a
+            left outer join (
+                SELECT tb_user.USER_REGION_MASTER,
+                       tb_user.USER_REGION_DETAIL,
+                       COUNT(*) USER_REGIST_COUNT
+                FROM tb_smell_register,
+                     tb_user
+                WHERE 1 = 1
+                AND tb_smell_register.REG_ID = tb_user.USER_ID
+                AND DATE_FORMAT(tb_smell_register.REG_DT, '%Y-%m') BETWEEN #{searchStart} AND #{searchEnd}
+
+                <if test="smellRegisterTime != null and !smellRegisterTime.equals('')" >
+                    AND tb_smell_register.SMELL_REGISTER_TIME = #{smellRegisterTime}
+                </if>
+                GROUP BY tb_user.USER_REGION_MASTER, tb_user.USER_REGION_DETAIL
+            ) b
+            ON a.REFERENCE_CODE_ID = b.USER_REGION_MASTER
+            AND a.CODE_ID = b.USER_REGION_DETAIL
+        ) result
+        ORDER BY result.userRegionMaster, result.userRegionDetail
+    </select>
 </mapper>

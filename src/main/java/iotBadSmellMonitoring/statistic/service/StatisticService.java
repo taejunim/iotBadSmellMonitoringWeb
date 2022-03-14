@@ -13,4 +13,11 @@ public interface StatisticService {
      */
     List<EgovMap> statisticListSelect(StatisticVO statisticVO) throws Exception;
 
+    /**
+     * 통계 표 목록
+     * @return List<EgovMap>
+     * @throws Exception
+     */
+    EgovMap statisticTableSelect(StatisticTableVO statisticTableVO) throws Exception;
+
 }

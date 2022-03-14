@@ -2,6 +2,7 @@ package iotBadSmellMonitoring.statistic.service.impl;
 
 import egovframework.rte.psl.dataaccess.util.EgovMap;
 import iotBadSmellMonitoring.statistic.service.StatisticService;
+import iotBadSmellMonitoring.statistic.service.StatisticTableVO;
 import iotBadSmellMonitoring.statistic.service.StatisticVO;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,4 +40,20 @@ public class StatisticServiceImpl implements StatisticService {
         return statisticMapper.statisticListSelect(statisticVO);
     }
 
+    /**
+     * 통계 표 목록
+     * @return List<EgovMap>
+     * @throws Exception
+     */
+    public EgovMap statisticTableSelect(StatisticTableVO statisticTableVO) throws Exception {
+
+        StatisticMapper statisticMapper = sqlSession.getMapper(StatisticMapper.class);
+
+        //전체 통계 추가
+        EgovMap list = statisticMapper.statisticTableAllSelect(statisticTableVO);
+        //지역별 통계 추가
+        list.put("list", statisticMapper.statisticTableRegionSelect(statisticTableVO));
+
+        return list;
+    }
 }

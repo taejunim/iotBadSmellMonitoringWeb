@@ -1,6 +1,7 @@
 package iotBadSmellMonitoring.statistic.service.impl;
 
 import egovframework.rte.psl.dataaccess.util.EgovMap;
+import iotBadSmellMonitoring.statistic.service.StatisticTableVO;
 import iotBadSmellMonitoring.statistic.service.StatisticVO;
 
 import java.util.List;
@@ -25,5 +26,19 @@ public interface StatisticMapper {
      * @throws Exception
      */
     List<EgovMap> statisticListSelect(StatisticVO statisticVO) throws Exception;
+
+    /**
+     * 통계 표 전체
+     * @return EgovMap
+     * @throws Exception
+     */
+    EgovMap statisticTableAllSelect(StatisticTableVO statisticTableVO) throws Exception;
+
+    /**
+     * 통계 표 지역별
+     * @return List<EgovMap>
+     * @throws Exception
+     */
+    List<EgovMap> statisticTableRegionSelect(StatisticTableVO statisticTableVO) throws Exception;
 
 }
