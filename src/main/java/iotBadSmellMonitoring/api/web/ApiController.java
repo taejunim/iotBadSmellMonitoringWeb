@@ -40,7 +40,7 @@ import static iotBadSmellMonitoring.common.Constants.dateFormatter;
 
 /**
  * @ Class Name   : ApiController.java
- * @ Modification : API SERVICE COTROLLER
+ * @ Notification : API SERVICE COTROLLER
  * @
  * @ 최초 생성일     최초 생성자
  * @ ---------    ---------
@@ -893,6 +893,7 @@ public class ApiController {
 
         CommonFunction cf = new CommonFunction();
         statisticTableVO.setSearchStart(cf.getRealDate("yyyy")+"-"+cf.getRealDate("mm"));                     //시작 월
+
         statisticTableVO.setSearchEnd(cf.getRealDate("yyyy")+"-"+cf.getRealDate("mm"));                       //끝  월
         statisticTableVO.setUserRegionMaster("001");                                                                    //지역  코드
         statisticTableVO.setUserRegionDetail("001");                                                                    //지역 상세 코드

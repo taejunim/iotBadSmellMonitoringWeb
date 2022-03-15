@@ -2,7 +2,7 @@ package iotBadSmellMonitoring.common;
 
 /**
  * @ Class Name   : CommonFunction.java
- * @ Modification : PMS MW COMMON FUNCTION CLASS
+ * @ Notification : PMS WEB COMMON FUNCTION CLASS
  * @
  * @ 최초 생성일      최초 생성자
  * @ ---------    ---------
