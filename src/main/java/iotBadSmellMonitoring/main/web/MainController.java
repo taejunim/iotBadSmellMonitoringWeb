@@ -87,28 +87,6 @@ public class MainController {
         else{
             model.addAttribute("CG_SMT",session.getAttribute("CG_SMT"));
         }
-
-        //KT API 결과 조회 못 할시에 예외 처리, 실패 시엔 화면에 API 응답값이 아닌 '-' 표출
-        RegisterVO registerVO = new RegisterVO();
-        registerVO = registerService.getFineDustInformation(registerVO);
-
-        String airSensingDate = "-";
-
-        if(registerVO.getAirSensingDate() != null && registerVO.getAirSensingDate() != "") {
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
-            Date date = dateFormat.parse(registerVO.getAirSensingDate());
-            dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            airSensingDate = dateFormat.format(date);
-        }
-
-        String airSensorName = (registerVO.getAirSensorName() != null && registerVO.getAirSensorName() != "" )? registerVO.getAirSensorName() : "-";
-        String pm10Avg = (registerVO.getPm10Avg() != null )? registerVO.getPm10Avg().toString() : "-";
-
-        model.addAttribute("airSensorName",airSensorName);
-        model.addAttribute("pm10Avg", pm10Avg);
-        model.addAttribute("airSensingDate" ,airSensingDate);
-
-        System.out.println(mainService.pcMainListSelect(mainVO));
         return "main";
     }
 

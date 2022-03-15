@@ -106,10 +106,6 @@ var markers = [];
   <jsp:include page="/menu"/>
   <div class="bgc_w wd100rate h100rate fl">
     <div id="leftSide" class="dp_inlineBlock" style="width: 30%;">
-      <div class="ml10 mt10 mb10 font_size13 lh37">
-        측정소명/장치ID : ${airSensorName}</br>
-        공기질 수집일시 : ${airSensingDate} / PM10 미세먼지 평균 값(㎍/㎥) : ${pm10Avg}
-      </div>
       <table class="mainForm wd100rate h100rate">
         <tr><th>악취 강도</th></tr>
         <tr><td class="h200">

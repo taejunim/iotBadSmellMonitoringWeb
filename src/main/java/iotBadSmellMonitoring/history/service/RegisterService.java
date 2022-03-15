@@ -23,12 +23,4 @@ public interface RegisterService {
      */
     int registerInsert(RegisterVO registerVO) throws Exception;
 
-    /**
-     * KT API 를 활용하여 미세먼지 데이터 SET
-     * @param registerVO
-     * @return           registerVO
-     * @throws Exception
-     */
-    RegisterVO getFineDustInformation(RegisterVO registerVO) throws Exception;
-
 }
