@@ -20,4 +20,10 @@ public interface StatisticService {
      */
     EgovMap statisticTableSelect(StatisticTableVO statisticTableVO) throws Exception;
 
+    /**
+     * 통계 표 지역별 (단건, API용)
+     * @return EgovMap
+     * @throws Exception
+     */
+    EgovMap statisticTableRegionSelect(StatisticTableVO statisticTableVO) throws Exception;
 }

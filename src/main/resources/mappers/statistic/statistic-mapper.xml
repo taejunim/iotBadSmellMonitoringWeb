@@ -135,7 +135,7 @@
     </select>
 
     <!-- 통계 표 지역별 -->
-    <select id="statisticTableRegionSelect" parameterType="statisticTableVO" resultType="egovMap">
+    <select id="statisticTableRegionListSelect" parameterType="statisticTableVO" resultType="egovMap">
         SELECT *,
                ifNull(result.userRegisterCount/result.userTotalCount*100,0) userRegisterPercentage,
                ifNull(F_GET_CODE_NAME('SMT', result.mainSmellValue),'')     mainSmellValueName,
@@ -220,5 +220,69 @@
             AND a.CODE_ID = b.USER_REGION_DETAIL
         ) result
         ORDER BY result.userRegionMaster, result.userRegionDetail
+    </select>
+    <!-- 통계 표 지역별 (단건, API용) -->
+    <select id="statisticTableRegionSelect" parameterType="statisticTableVO" resultType="egovMap">
+        SELECT *,
+               #{userRegionMaster}                                          userRegionMaster,
+               IFNull(F_GET_CODE_NAME('REM', #{userRegionMaster}),'')       userRegionMasterName,
+               #{userRegionDetail}                                          userRegionDetail,
+               IFNull(F_GET_CODE_NAME('RGD', #{userRegionDetail}),'')       userRegionDetailName,
+               IFNull(result.userRegisterCount/result.userTotalCount*100,0) userRegisterPercentage,
+               IFNull(F_GET_CODE_NAME('SMT', result.mainSmellValue),'')     mainSmellValueName,
+               IFNULL(F_GET_CODE_NAME('STY',result.mainSmellType),'')       mainSmellTypeName,
+               #{smellRegisterTime}                                         smellRegisterTime,
+               ifNull(F_GET_CODE_NAME('REN',#{smellRegisterTime}),'')       smellRegisterTimeName
+        FROM (
+            SELECT (
+            SELECT
+        <choose>
+            <when test="smellRegisterTime != null and !smellRegisterTime.equals('')" >
+                COUNT(*) * (DATEDIFF(LAST_DAY(CONCAT(#{searchEnd}, '-01')), CONCAT(#{searchStart}, '-01')) + 1)
+            </when>
+            <otherwise>
+                COUNT(*) * 3 * (DATEDIFF(LAST_DAY(CONCAT(#{searchEnd}, '-01')), CONCAT(#{searchStart}, '-01')) + 1)
+            </otherwise>
+        </choose>
+                FROM tb_user
+                WHERE USER_REGION_MASTER    = #{userRegionMaster}
+                AND USER_REGION_DETAIL      = #{userRegionDetail}
+            )        userTotalCount,
+            COUNT(*) userRegisterCount,
+            ifNull((
+                SELECT SMELL_VALUE
+                FROM tb_smell_register, tb_user
+                WHERE 1 = 1
+                AND tb_smell_register.REG_ID = tb_user.USER_ID
+                AND DATE_FORMAT(tb_smell_register.REG_DT, '%Y-%m')  BETWEEN #{searchStart} AND #{searchEnd}
+                AND tb_user.USER_REGION_MASTER = #{userRegionMaster}
+                AND tb_user.USER_REGION_DETAIL = #{userRegionDetail}
+        <if test="smellRegisterTime != null and !smellRegisterTime.equals('')" >
+                AND tb_smell_register.SMELL_REGISTER_TIME = #{smellRegisterTime}
+        </if>
+                GROUP BY tb_smell_register.SMELL_VALUE
+                ORDER BY COUNT(SMELL_VALUE) DESC LIMIT 1
+            ),'') mainSmellValue,
+            ifNull((
+                SELECT SMELL_TYPE
+                FROM tb_smell_register, tb_user
+                WHERE 1 = 1
+                AND tb_smell_register.REG_ID = tb_user.USER_ID
+                AND DATE_FORMAT(tb_smell_register.REG_DT, '%Y-%m')  BETWEEN #{searchStart} AND #{searchEnd}
+                AND tb_user.USER_REGION_MASTER = #{userRegionMaster}
+                AND tb_user.USER_REGION_DETAIL = #{userRegionDetail}
+        <if test="smellRegisterTime != null and !smellRegisterTime.equals('')" >
+                AND tb_smell_register.SMELL_REGISTER_TIME = #{smellRegisterTime}
+        </if>
+                GROUP BY tb_smell_register.SMELL_TYPE
+                ORDER BY COUNT(SMELL_TYPE) DESC LIMIT 1
+            ),'') mainSmellType
+            FROM tb_smell_register
+            WHERE 1 = 1
+            AND DATE_FORMAT(REG_DT, '%Y-%m') BETWEEN #{searchStart} AND #{searchEnd}
+        <if test="smellRegisterTime != null and !smellRegisterTime.equals('')" >
+            AND SMELL_REGISTER_TIME = #{smellRegisterTime}
+        </if>
+     ) result
     </select>
 </mapper>

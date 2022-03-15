@@ -52,8 +52,20 @@ public class StatisticServiceImpl implements StatisticService {
         //전체 통계 추가
         EgovMap list = statisticMapper.statisticTableAllSelect(statisticTableVO);
         //지역별 통계 추가
-        list.put("list", statisticMapper.statisticTableRegionSelect(statisticTableVO));
+        list.put("list", statisticMapper.statisticTableRegionListSelect(statisticTableVO));
 
         return list;
+    }
+
+    /**
+     * 통계 표 지역별 (단건, API용)
+     * @return EgovMap
+     * @throws Exception
+     */
+    public EgovMap statisticTableRegionSelect(StatisticTableVO statisticTableVO) throws Exception {
+
+        StatisticMapper statisticMapper = sqlSession.getMapper(StatisticMapper.class);
+
+        return statisticMapper.statisticTableRegionSelect(statisticTableVO);
     }
 }
