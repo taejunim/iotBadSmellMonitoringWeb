@@ -892,11 +892,11 @@ public class ApiController {
     public String myTownSmellInfo(HttpServletRequest request, StatisticTableVO statisticTableVO)  throws Exception {
 
         CommonFunction cf = new CommonFunction();
-        statisticTableVO.setSearchStart(cf.getRealDate("yyyy")+"-"+cf.getRealDate("mm"));                     //시작 월
 
+        statisticTableVO.setSearchStart(cf.getRealDate("yyyy")+"-"+cf.getRealDate("mm"));                     //시작 월
         statisticTableVO.setSearchEnd(cf.getRealDate("yyyy")+"-"+cf.getRealDate("mm"));                       //끝  월
-        statisticTableVO.setUserRegionMaster("001");                                                                    //지역  코드
-        statisticTableVO.setUserRegionDetail("001");                                                                    //지역 상세 코드
+        statisticTableVO.setUserRegionMaster(request.getParameter("regionMaster"));                                  //지역  코드
+        statisticTableVO.setUserRegionDetail(request.getParameter("regionDetail"));                                  //지역 상세 코드
 
         String message = "";
 
