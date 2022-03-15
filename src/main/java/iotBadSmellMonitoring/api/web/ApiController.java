@@ -1,7 +1,6 @@
 package iotBadSmellMonitoring.api.web;
 
 import egovframework.rte.psl.dataaccess.util.EgovMap;
-import iotBadSmellMonitoring.common.UtProperty;
 import iotBadSmellMonitoring.history.service.HistoryService;
 import iotBadSmellMonitoring.history.service.HistoryVO;
 import iotBadSmellMonitoring.history.service.RegisterService;
@@ -11,6 +10,8 @@ import iotBadSmellMonitoring.join.service.JoinVO;
 import iotBadSmellMonitoring.main.service.MainService;
 import iotBadSmellMonitoring.main.service.MainVO;
 import iotBadSmellMonitoring.member.service.MemberService;
+import iotBadSmellMonitoring.notice.service.NoticeService;
+import iotBadSmellMonitoring.notice.service.NoticeVO;
 import org.json.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -60,6 +61,9 @@ public class ApiController {
     private HistoryService  historyService;                                                                             //HISTORY MASTER / DETAIL SERVICE.
     @Autowired
     private MemberService   memberService;                                                                              //회원관리 SERVICE.
+    @Autowired
+    private NoticeService   noticeService;                                                                              //공지사항 SERVICE.
+
 
     @Value("${${environment}.kakaoLocationKey}")
     private String          kakaoLocationKey;
@@ -391,7 +395,7 @@ public class ApiController {
             EgovMap regRegionMap = memberService.memberGetInfoSelect(uerId);
             String  dbRegion     = regRegionMap.get("userRegionDetailName").toString();
 
-            if(dbRegion.matches("(.*)"+regRegion+"(.*)"))
+            if(regRegion.matches("(.*)"+dbRegion+"(.*)"))
                 result = true;
 
         } catch (Exception e) { // TODO Auto-generated catch block e.printStackTrace();
@@ -828,6 +832,47 @@ public class ApiController {
 
             //System.out.println("Exception: "+e);
             message = "{\"result\":\"fail\",\"message\":\"ERR SEARCH USER WEATHER.\"}";
+        }
+
+        return message;
+    }
+
+    /**
+     * NOTICE INFO API.
+     * @param request
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping(value = "/api/noticeInfo", method = RequestMethod.GET, consumes="application/json;", produces = "application/json; charset=utf8")
+    public String noticeInfo(HttpServletRequest request, NoticeVO noticeVO)  throws Exception {
+
+        String message = "";
+        noticeVO.setDeviceGbn("mobile");                                                                                //모바일 default
+
+        try {
+
+            List<EgovMap> resultList = noticeService.noticeListSelect(noticeVO);                                        //공지사항 목록 CALL.
+
+            if(resultList != null && !resultList.isEmpty()){
+
+                EgovMap egovMap = new EgovMap();
+
+                egovMap.put("NOTICE_TITLE",resultList.get(0).getValue(1));
+                egovMap.put("NOTICE_CONTENTS",resultList.get(0).getValue(2));
+
+                JSONObject  json        = new JSONObject(egovMap);                                                      //map을 json으로 변환.
+                JSONParser  jsonParser  = new JSONParser();
+
+                json    = (JSONObject) jsonParser.parse(String.valueOf(json).replace("null", "\"\"")); //null시 KEY 누락을 막기 위하여.
+                message = "{\"result\":\"success\",\"data\":" + json + "}";
+            }
+            else
+                message = "{\"result\":\"fail\",\"message\":\"NO SEARCH NOTICE.\"}";
+
+        }catch (Exception e){
+
+            //System.out.println("Exception: "+e);
+            message = "{\"result\":\"fail\",\"message\":\"ERR SEARCH NOTICE.\"}";
         }
 
         return message;
