@@ -12,12 +12,14 @@
     $(document).ready(function () {
 
         setButton("myPage");                        //선택된 화면의 메뉴색 변경 CALL
+        var phone = '<%=(String) session.getAttribute("userPhone")%>';                              //전화번호
+        phone = phone.substr(0, 3) + "-" + phone.substr(3, 4) + "-" + phone.substr(7,4);            //전화번호에 - 추가
 
         /*세션값 불러오기 START*/
         $("#showId").val('<%=(String)session.getAttribute("userId")%>');                                    //아이디
         $("#userPassword").val("");                                                                         //사용자_비밀번호
         $("#showName").val('<%=(String)session.getAttribute("userName")%>');                                //이름
-        $("#userPhone").val('<%=(String) session.getAttribute("userPhone")%>');                             //전화번호
+        $("#userPhone").val(phone);                                                                         //전화번호
         $("#showAge").val('<%=(String)session.getAttribute("userAge")%>');                                  //나이
         $("#userRegion").val('<%=(String)session.getAttribute("userRegionMasterName")%>');                  //지역
         $("#userSex").val('<%=(String) session.getAttribute("userSexName")%>');                             //성별
@@ -131,7 +133,7 @@
         </tr>
         <tr>
             <td class="align_l pl20"><label class="tableLabel">나이</label></td>
-            <td><input type="text" id="showAge" name="userAge" placeholder="나이"disabled></td>
+            <td><input type="text" id="showAge" name="userAge" disabled></td>
         </tr>
         <tr>
             <td class="align_l pl20"><label class="tableLabel">지역</label></td>
