@@ -84,7 +84,7 @@ table {
 /*    padding: 0;*/
 /*}*/
 
-select , input[type=text], input[type=textarea], input[type=password] , input[type=date] {
+select , textarea ,input[type=text], input[type=textarea], input[type=password] , input[type=date] {
     border: 1px solid #ccc;
     height: 38px;
     border-radius: 7px;
@@ -95,8 +95,11 @@ select , input[type=text], input[type=textarea], input[type=password] , input[ty
 select, input[type=date] {
     padding: 0 10px 0 10px;
 }
-input[type=text] , input[type=password], input[type=textarea] {
+input[type=text] , input[type=password], input[type=textarea], textarea {
     padding: 0 10px 0 10px;
+}
+textarea {
+    padding: 10px 10px 0 10px;
 }
 input[type=password] {
     font-family: 'password' !important;
