@@ -1,6 +1,7 @@
 package iotBadSmellMonitoring.api.web;
 
 import egovframework.rte.psl.dataaccess.util.EgovMap;
+import iotBadSmellMonitoring.common.CommonFunction;
 import iotBadSmellMonitoring.history.service.HistoryService;
 import iotBadSmellMonitoring.history.service.HistoryVO;
 import iotBadSmellMonitoring.history.service.RegisterService;
@@ -12,6 +13,8 @@ import iotBadSmellMonitoring.main.service.MainVO;
 import iotBadSmellMonitoring.member.service.MemberService;
 import iotBadSmellMonitoring.notice.service.NoticeService;
 import iotBadSmellMonitoring.notice.service.NoticeVO;
+import iotBadSmellMonitoring.statistic.service.StatisticService;
+import iotBadSmellMonitoring.statistic.service.StatisticTableVO;
 import org.json.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -52,18 +55,19 @@ import static iotBadSmellMonitoring.common.Constants.dateFormatter;
 public class ApiController {
 
     @Autowired
-    private RegisterService registerService;                                                                            //REGISTER MASTER / DETAIL SERVICE.
+    private RegisterService     registerService;                                                                        //REGISTER MASTER / DETAIL SERVICE.
     @Autowired
-    private JoinService     joinService;                                                                                //회원가입 / 로그인 / 아이디 찾기 관련 SERVICE.
+    private JoinService         joinService;                                                                            //회원가입 / 로그인 / 아이디 찾기 관련 SERVICE.
     @Autowired
-    private MainService     mainService;                                                                                //PC 공통 관련 SERVICE.
+    private MainService         mainService;                                                                            //PC 공통 관련 SERVICE.
     @Autowired
-    private HistoryService  historyService;                                                                             //HISTORY MASTER / DETAIL SERVICE.
+    private HistoryService      historyService;                                                                         //HISTORY MASTER / DETAIL SERVICE.
     @Autowired
-    private MemberService   memberService;                                                                              //회원관리 SERVICE.
+    private MemberService       memberService;                                                                          //회원관리 SERVICE.
     @Autowired
-    private NoticeService   noticeService;                                                                              //공지사항 SERVICE.
-
+    private NoticeService       noticeService;                                                                          //공지사항 SERVICE.
+    @Autowired
+    private StatisticService    statisticService;                                                                       //통계 SERVICE.
 
     @Value("${${environment}.kakaoLocationKey}")
     private String          kakaoLocationKey;
@@ -859,6 +863,47 @@ public class ApiController {
 
                 egovMap.put("NOTICE_TITLE",resultList.get(0).getValue(1));
                 egovMap.put("NOTICE_CONTENTS",resultList.get(0).getValue(2));
+
+                JSONObject  json        = new JSONObject(egovMap);                                                      //map을 json으로 변환.
+                JSONParser  jsonParser  = new JSONParser();
+
+                json    = (JSONObject) jsonParser.parse(String.valueOf(json).replace("null", "\"\"")); //null시 KEY 누락을 막기 위하여.
+                message = "{\"result\":\"success\",\"data\":" + json + "}";
+            }
+            else
+                message = "{\"result\":\"fail\",\"message\":\"NO SEARCH NOTICE.\"}";
+
+        }catch (Exception e){
+
+            //System.out.println("Exception: "+e);
+            message = "{\"result\":\"fail\",\"message\":\"ERR SEARCH NOTICE.\"}";
+        }
+
+        return message;
+    }
+
+    /**
+     * MY TOWN SMELL INFO API.
+     * @param request
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping(value = "/api/myTownSmellInfo", method = RequestMethod.GET, consumes="application/json;", produces = "application/json; charset=utf8")
+    public String myTownSmellInfo(HttpServletRequest request, StatisticTableVO statisticTableVO)  throws Exception {
+
+        CommonFunction cf = new CommonFunction();
+        statisticTableVO.setSearchStart(cf.getRealDate("yyyy")+"-"+cf.getRealDate("mm"));                     //시작 월
+        statisticTableVO.setSearchEnd(cf.getRealDate("yyyy")+"-"+cf.getRealDate("mm"));                       //끝  월
+        statisticTableVO.setUserRegionMaster("001");                                                                    //지역  코드
+        statisticTableVO.setUserRegionDetail("001");                                                                    //지역 상세 코드
+
+        String message = "";
+
+        try {
+
+            EgovMap egovMap = statisticService.statisticTableRegionSelect(statisticTableVO);                            //통계 표 지역별 (단건, API용) CALL.
+
+            if(egovMap != null && !egovMap.isEmpty()){
 
                 JSONObject  json        = new JSONObject(egovMap);                                                      //map을 json으로 변환.
                 JSONParser  jsonParser  = new JSONParser();
