@@ -24,4 +24,5 @@ public class NoticeVO  extends PageVO{
     private String modDt;                  //수정일자
     private String startDate;              //등록일자_시작
     private String endDate;                //등록일자_종료
+    private String deviceGbn;              //web or mobile 구분
 }

@@ -13,7 +13,7 @@
                ,REG_DT
                ,MOD_ID
                ,MOD_DT
-        FROM TB_NOTICE
+        FROM tb_notice
         WHERE 1=1
         <if test="noticeTitle != null and !noticeTitle.equals('')" >
             AND LOWER(REG_ID) LIKE LOWER('%${noticeTitle}%')
@@ -25,8 +25,23 @@
         <if test="endDate != null and !endDate.equals('')" >
             <![CDATA[ AND REG_DT <= CONCAT(#{endDate}, ' 23:59:59') ]]>
         </if>
+
         ORDER BY REG_DT DESC
-            LIMIT #{recordCountPerPage} OFFSET #{firstIndex};
+
+        <choose>
+            <when test="deviceGbn == 'web'">
+
+                LIMIT #{recordCountPerPage} OFFSET #{firstIndex};
+
+            </when>
+            <otherwise>
+
+                LIMIT 1
+
+            </otherwise>
+
+        </choose>
+
     </select>
 
     <!-- 공지사항 목록 TOTAL COUNT -->

@@ -44,6 +44,7 @@ public class NoticeController {
         noticeVO.setFirstIndex(paginationInfo.getFirstRecordIndex());
         noticeVO.setLastIndex(paginationInfo.getLastRecordIndex());
         noticeVO.setRecordCountPerPage(paginationInfo.getRecordCountPerPage());
+        noticeVO.setDeviceGbn("web");                                                                                   //web default
 
         if(noticeVO.getPageIndex() != 1){
             noticeVO.setPageRowIndex(noticeVO.getPageIndex()*10-10);
