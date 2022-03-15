@@ -210,6 +210,21 @@
         document.frm.submit();
     }
 
+    //textarea 글자수 제한
+    function length_check() {
+        var title = $("#getNoticeTitle").val();
+        var contents = $("#noticeContents").val();
+
+        if( title.length > 50 ) {
+            alert("제목은 50자를 초과할 수 없습니다.");
+            $("#getNoticeTitle").val(title.substring(0, 50));
+        }
+        if( contents.length > 100 ) {
+            alert("내용은 100자를 초과할 수 없습니다.");
+            $("#noticeContents").val(contents.substring(0, 100));
+        }
+    }
+
 </script>
 <body>
 <jsp:include page="/menu"/>
@@ -290,11 +305,12 @@
                 <table class="listTable wd95rate">
                     <tr class="h57">
                         <td class="align_l wd130"><label>제목</label></td>
-                        <td><input type="text" class="wd350" name="noticeTitle" id="getNoticeTitle" maxlength="50"></td>
+                        <td><input type="text" onkeyup="length_check();" class="wd350" name="noticeTitle" id="getNoticeTitle" maxlength="50"></td>
                     </tr>
                     <tr class="h57">
                         <td class="align_l"><label>내용</label></td>
-                        <td><textarea class="wd350 h200 textarea" name="noticeContents" id="noticeContents"
+                        <td>
+                            <textarea class="wd350 h200 textarea" onkeyup="length_check();" name="noticeContents" id="noticeContents"
                                       maxlength="100"></textarea></td>
                     </tr>
                     <tr class="h57">
