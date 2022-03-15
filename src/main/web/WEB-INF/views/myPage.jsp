@@ -17,17 +17,12 @@
         $("#showId").val('<%=(String)session.getAttribute("userId")%>');                                    //아이디
         $("#userPassword").val("");                                                                         //사용자_비밀번호
         $("#showName").val('<%=(String)session.getAttribute("userName")%>');                                //이름
-        $("#userPhone").val('<%=(String) session.getAttribute("userPhone")%>');                              //전화번호
+        $("#userPhone").val('<%=(String) session.getAttribute("userPhone")%>');                             //전화번호
         $("#showAge").val('<%=(String)session.getAttribute("userAge")%>');                                  //나이
+        $("#userRegion").val('<%=(String)session.getAttribute("userRegionMasterName")%>');                  //지역
+        $("#userSex").val('<%=(String) session.getAttribute("userSexName")%>');                             //성별
+        $("#userType").val('<%=(String)session.getAttribute("userTypeName")%>');                            //구분
 
-        $("#userRegion").empty();                                                                           //지역 구분 이름
-        $("#userRegion").append("<option>"+'<%=(String)session.getAttribute("userRegionMasterName")%>'+"</option>");
-
-        $("#userSex").empty();                                                                              //성별 이름
-        $("#userSex").append("<option>"+'<%=(String)session.getAttribute("userSexName")%>'+"</option>");
-
-        $("#userType").empty();                                                                             //사용자 구분 이름
-        $("#userType").append("<option>"+'<%=(String)session.getAttribute("userTypeName")%>'+"</option>");
         /*세션값 불러오기 END*/
 
         //비밀번호변경 버튼 클릭 이벤트
@@ -140,15 +135,15 @@
         </tr>
         <tr>
             <td class="align_l pl20"><label class="tableLabel">지역</label></td>
-            <td><select class="bgc_grayC" disabled id="userRegion"></select></td>
+            <td><input type="text" id="userRegion" name="userRegion" disabled></td>
         </tr>
         <tr>
             <td class="align_l pl20"><label class="tableLabel">성별</label></td>
-            <td><select class="bgc_grayC" disabled id="userSex"></select></td>
+            <td><input type="text" id="userSex" name="userSex" disabled></td>
         </tr>
         <tr>
             <td class="align_l pl20"><label class="tableLabel">구분</label></td>
-            <td><select class="bgc_grayC" disabled id="userType"></select></td>
+            <td><input type="text" id="userType" name="userType" disabled></td>
         </tr>
         <tr>
             <td colspan="2">
