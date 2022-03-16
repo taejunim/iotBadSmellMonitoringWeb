@@ -56,11 +56,11 @@
         <if test="userId != null and !userId.equals('')" >
             AND (LOWER(USER_ID) LIKE LOWER('%${userId}%') OR LOWER(USER_NAME) LIKE LOWER('%${userId}%'))
         </if>
-        <if test="userAge != null and !userAge.equals('')" >
-            AND USER_AGE = #{userAge}
-        </if>
         <if test="userRegionMaster != null and !userRegionMaster.equals('')" >
             AND USER_REGION_MASTER = #{userRegionMaster}
+        </if>
+        <if test="userAge != null and !userAge.equals('')" >
+            AND USER_AGE LIKE '%${userAge}%'
         </if>
         <if test="userType != null and !userType.equals('')" >
             AND USER_TYPE = #{userType}

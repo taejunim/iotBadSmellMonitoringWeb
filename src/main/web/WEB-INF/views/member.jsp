@@ -8,11 +8,11 @@ To change this template use File | Settings | File Templates.
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
 <%@include file="/WEB-INF/views/common/resources_common.jsp" %>
 <script type="text/javascript">
-    var userId = '${joinVO.userId}';            //검색조건_아이디/이름
-    var userRegion = '${joinVO.userRegionMaster}';  //검색조건_지역
-    var userAge = '${joinVO.userAge}';           //검색조건_나이
-    var userSex = '${joinVO.userSex}';           //검색조건_성별
-    var userType = '${joinVO.userType}';          //검색조건_구분
+    var userId      = '${joinVO.userId}';               //검색조건_아이디/이름
+    var userRegion  = '${joinVO.userRegionMaster}';     //검색조건_지역
+    var userAge     = '${joinVO.userAge}';              //검색조건_나이
+    var userSex     = '${joinVO.userSex}';              //검색조건_성별
+    var userType    = '${joinVO.userType}';             //검색조건_구분
 
     $(document).ready(function () {
         setButton("member");            //선택된 화면의 메뉴색 변경 CALL
@@ -21,24 +21,14 @@ To change this template use File | Settings | File Templates.
         /* 검색 화면 검색어 세팅 START*/
         if (userRegion != "" && userRegion != null)                         //지역
             $("#searchUserRegion").val(userRegion).prop("selected", true);
-
         if (userSex != "" && userSex != null)                               //성별
             $("#searchUserSex").val(userSex).prop("selected", true);
 
         if (userType != "" && userType != null)                              //구분
             $("#searchUserType").val(userType).prop("selected", true);
+        if (userAge != "" && userAge != null)
+            console.log($("#searchUserAge").val());
         /* 검색 화면 검색어 세팅 END*/
-
-        //검색조건 초기화 버튼 클릭 이벤트
-        $(".resetBtn").click(function () {
-            showLoader(true);
-            $(location).attr('href', '/member.do');
-        });
-
-        //검색 버튼 클릭 이벤트
-        $(".searchBtn").click(function () {
-            fn_search();
-        });
 
         // 테이블 row 클릭 이벤트
         $(".itemRow").click(function () {
@@ -183,6 +173,19 @@ To change this template use File | Settings | File Templates.
         document.frm.submit();
     }
 
+    //초기화
+    function fn_reset() {
+        showLoader(true);
+        $("#searchUserId").val("");
+        $("#searchUserRegion").val("");
+        $("#searchUserAge").val("");
+        $("#searchUserSex").val("");
+        $("#searchUserType").val("");
+
+        frm.pageIndex.value = 1;
+        document.frm.action = "<c:url value='/member.do'/>";
+        document.frm.submit();
+    }
 
 </script>
 <body>
@@ -223,8 +226,8 @@ To change this template use File | Settings | File Templates.
                     </c:forEach>
                 </select>
             </td>
-            <td><a class="button resetBtn bgc_grayC mt10 fr"><i class="bx bx-redo"></i>초기화</a>
-                <a class="button bgcSkyBlue mt10 fr searchBtn"><i class="bx bx-search"></i>조회</a>
+            <td><a class="button resetBtn bgc_grayC mt10 fr" onclick="fn_reset();"><i class="bx bx-redo"></i>초기화</a>
+                <a class="button bgcSkyBlue mt10 fr searchBtn" onclick="fn_search();"><i class="bx bx-search"></i>조회</a>
             </td>
         </tr>
     </table>
