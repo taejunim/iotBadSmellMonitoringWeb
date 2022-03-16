@@ -1,7 +1,6 @@
 package iotBadSmellMonitoring.member.service.impl;
 
 import egovframework.rte.psl.dataaccess.util.EgovMap;
-import iotBadSmellMonitoring.history.service.impl.HistoryMapper;
 import iotBadSmellMonitoring.join.service.JoinVO;
 import iotBadSmellMonitoring.member.service.MemberService;
 import org.apache.ibatis.session.SqlSession;
@@ -9,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @ Class Name   : MemberServiceImpl.java
@@ -96,10 +96,10 @@ public class MemberServiceImpl implements MemberService {
      * @return List<EgovMap>
      * @throws Exception
      */
-    public EgovMap todayRegisterListSelect(String userId) throws Exception {
+    public List<Map<String, Object>> todayRegisterListSelect(Map<String, Object> dataList) throws Exception {
 
         MemberMapper memberMapper = sqlSession.getMapper(MemberMapper.class);
 
-        return memberMapper.todayRegisterListSelect(userId);
+        return memberMapper.todayRegisterListSelect(dataList);
     }
 }

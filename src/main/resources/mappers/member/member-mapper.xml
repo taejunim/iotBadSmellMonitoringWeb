@@ -33,7 +33,7 @@
             AND USER_REGION_MASTER = #{userRegionMaster}
         </if>
         <if test="userAge != null and !userAge.equals('')" >
-            AND USER_AGE = #{userAge}
+            AND USER_AGE LIKE '%${userAge}%'
         </if>
         <if test="userType != null and !userType.equals('')" >
             AND USER_TYPE = #{userType}
@@ -116,49 +116,50 @@
                 ) t1
     </select>
 
-    <select id="todayRegisterListSelect" parameterType="string" resultType="egovMap">
-
+    <select id="todayRegisterListSelect" parameterType="hashmap" statementType="PREPARED" resultType="egovMap">
+        <foreach collection="dataList" item="item" separator="UNION ALL">
         <![CDATA[
         SELECT CASE
-                   WHEN STATUS_001 = '001_OK' THEN '001'
+                   WHEN STATUS_001 = '001_OK' THEN 'O'
                    ELSE CASE
                             WHEN DATE_FORMAT(NOW(), '%H:%i:%s') > '09:00:00'
-                                THEN '002'
-                            ELSE '003' END END AS STATUS_001,
+                                THEN 'X'
+                            ELSE '-' END END AS STATUS_001,
 
 
                CASE
-                   WHEN STATUS_002 = '002_OK' THEN '001'
+                   WHEN STATUS_002 = '002_OK' THEN 'O'
                    ELSE CASE
                             WHEN DATE_FORMAT(NOW(), '%H:%i:%s') > '17:00:00'
-                                THEN '002'
-                            ELSE '003' END END AS STATUS_002,
+                                THEN 'X'
+                            ELSE '-' END END AS STATUS_002,
 
                CASE
-                   WHEN STATUS_003 = '003_OK' THEN '001'
+                   WHEN STATUS_003 = '003_OK' THEN 'O'
                    ELSE CASE
                             WHEN DATE_FORMAT(NOW(), '%H:%i:%s') > '23:00:00'
-                                THEN '002'
-                            ELSE '003' END END AS STATUS_003
+                                THEN 'X'
+                            ELSE '-' END END AS STATUS_003
 
         FROM (
                  SELECT IF(EXISTS(SELECT *
                                   FROM tb_smell_register
                                   WHERE SMELL_REGISTER_TIME = '001'
                                     AND DATE_FORMAT(REG_DT, '%Y-%m-%d') = DATE_FORMAT(now(), '%Y-%m-%d')
-                                    AND REG_ID = #{userId}), '001_OK', '001_NO') AS STATUS_001,
+                                    AND REG_ID = #{item.userId}), '001_OK', '001_NO') AS STATUS_001,
              IF(EXISTS(SELECT *
                        FROM tb_smell_register
                        WHERE SMELL_REGISTER_TIME = '002'
                          AND DATE_FORMAT(REG_DT, '%Y-%m-%d') = DATE_FORMAT(now(), '%Y-%m-%d')
-                         AND REG_ID = #{userId}), '002_OK', '002_NO') AS STATUS_002,
+                         AND REG_ID = #{item.userId}), '002_OK', '002_NO') AS STATUS_002,
              IF(EXISTS(SELECT *
                        FROM tb_smell_register
                        WHERE SMELL_REGISTER_TIME = '003'
                          AND DATE_FORMAT(REG_DT, '%Y-%m-%d') = DATE_FORMAT(now(), '%Y-%m-%d')
-                         AND REG_ID = #{userId}), '003_OK', '003_NO') AS STATUS_003
+                         AND REG_ID = #{item.userId}), '003_OK', '003_NO') AS STATUS_003
 
             ) AS A
         ]]>
+        </foreach>
     </select>
 </mapper>

@@ -8,11 +8,12 @@ To change this template use File | Settings | File Templates.
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
 <%@include file="/WEB-INF/views/common/resources_common.jsp" %>
 <script type="text/javascript">
-var userId = '${joinVO.userId}';            //검색조건_아이디/이름
-var userRegion = '${joinVO.userRegionMaster}';    //검색조건_지역
-var userAge = '${joinVO.userAge}';          //검색조건_나이
-var userSex = '${joinVO.userSex}';          //검색조건_성별
-var userType = '${joinVO.userType}';        //검색조건_구분
+    var userId = '${joinVO.userId}';            //검색조건_아이디/이름
+    var userRegion = '${joinVO.userRegionMaster}';  //검색조건_지역
+    var userAge = '${joinVO.userAge}';           //검색조건_나이
+    var userSex = '${joinVO.userSex}';           //검색조건_성별
+    var userType = '${joinVO.userType}';          //검색조건_구분
+
     $(document).ready(function () {
         setButton("member");            //선택된 화면의 메뉴색 변경 CALL
         setDropButton("memberInfo");    //선택된 드롭다운 메뉴색 변경 CALL
@@ -36,7 +37,7 @@ var userType = '${joinVO.userType}';        //검색조건_구분
 
         //검색 버튼 클릭 이벤트
         $(".searchBtn").click(function () {
-           fn_search();
+            fn_search();
         });
 
         // 테이블 row 클릭 이벤트
@@ -65,12 +66,12 @@ var userType = '${joinVO.userType}';        //검색조건_구분
             var getPw = $("#userPassword").val().trim();
 
             //비밀번호 길이 확인
-            if(!fn_chkPwLength($("input[name='userPassword']").val())) {
+            if (!fn_chkPwLength($("input[name='userPassword']").val())) {
                 return;
             }
 
             // 회원을 선택 했는지 체크
-            if($("#userId").val() === undefined || $("#userId").val().trim() === ""){
+            if ($("#userId").val() === undefined || $("#userId").val().trim() === "") {
                 alert("변경할 회원을 선택해 주세요.");
                 return false;
             }
@@ -80,14 +81,14 @@ var userType = '${joinVO.userType}';        //검색조건_구분
                 return false;
             }
 
-            if(getPw != $("#userPasswordConfirm").val().trim()) {
+            if (getPw != $("#userPasswordConfirm").val().trim()) {
                 alert("비밀번호가 일치하지 않습니다.");
                 $("#userPasswordConfirm").focus();
                 return false;
             }
 
-            if(confirm($("#userId").val().trim() + "의 비밀번호를 변경하시겠습니까?"))
-            showLoader(true);
+            if (confirm($("#userId").val().trim() + "의 비밀번호를 변경하시겠습니까?"))
+                showLoader(true);
             $.ajax({
                 url: "/memberPasswordUpdate/",
                 type: "POST",
@@ -105,6 +106,8 @@ var userType = '${joinVO.userType}';        //검색조건_구분
             }).done(function () {
                 showLoader(false);
             });
+
+
         })
 
         //탈퇴 버튼 클릭 이벤트
@@ -112,19 +115,19 @@ var userType = '${joinVO.userType}';        //검색조건_구분
 
             var getUserId = $("#userId").val().trim();
             // 회원을 선택 했는지 체크
-            if(getUserId === undefined || getUserId === ""){
+            if (getUserId === undefined || getUserId === "") {
                 alert("탈퇴할 회원을 선택해 주세요.");
                 return false;
             }
 
             //로그인한 아이디는 탈퇴 X
-            if(userId === getUserId){
+            if (userId === getUserId) {
                 alert("로그인한 계정 탈퇴는 마이페이지에서 진행 가능합니다.");
                 return false;
             }
 
-            var con_test = confirm(getUserId+"을 탈퇴시키겠습니까?");
-            if(con_test == true){
+            var con_test = confirm(getUserId + "을 탈퇴시키겠습니까?");
+            if (con_test == true) {
                 showLoader(true);
                 $.ajax({
                     url: "/memberDelete/",
@@ -149,20 +152,21 @@ var userType = '${joinVO.userType}';        //검색조건_구분
 
     //페이지 이동 스크립트
     function fn_page(pageNo) {
+        showLoader(true)
         //vo에 담긴 값이 입력된 값과 다를 경우 강제로 vo에 담긴 값을 form에 넣어주기
-        if (userId !=  $("#searchUserId")){
+        if (userId != $("#searchUserId")) {
             frm.userId.value = userId;
         }
-        if (userRegion !=  $("#searchUserRegion")){
-            frm.userRegion.value = userRegion;
+        if (userRegion != $("#searchUserRegion")) {
+            frm.userRegionMaster.value = userRegion;
         }
-        if (userAge !=  $("#searchUserAge")){
+        if (userAge != $("#searchUserAge")) {
             frm.userAge.value = userAge;
         }
-        if (userSex !=  $("#searchUserSex")){
+        if (userSex != $("#searchUserSex")) {
             frm.userSex.value = userSex;
         }
-        if (userType !=  $("#searchUserType")){
+        if (userType != $("#searchUserType")) {
             frm.userType.value = userType;
         }
         showLoader(true);
@@ -179,56 +183,55 @@ var userType = '${joinVO.userType}';        //검색조건_구분
         document.frm.submit();
     }
 
+
 </script>
 <body>
 <jsp:include page="/menu"/>
 <div class="wd100rate h100rate scrollView">
-<table class="searchTable">
-
-    <form:form id="frm" name="frm" method="post">
-    <input type="hidden" id="pageIndex" name="pageIndex" value="${joinVO.pageIndex}">
-    <tr>
-        <th>아이디/이름</th>
-        <td class="wd100"><input type="text" id="searchUserId" name="userId" value="${joinVO.userId}"></td>
-        <th>지역</th>
-        <td class="wd100">
-            <select id="searchUserRegion" name="userRegionMaster" class="wd90">
-                <option value="">전체</option>
-                <c:forEach var="item" items="${CG_RGN}">
-                    <option value="${item.codeId}">${item.codeIdName}</option>
-                </c:forEach>
-            </select>
-        </td>
-        <th>나이</th>
-        <td class="wd100"><input type="text" id="searchUserAge" name="userAge" value="${joinVO.userAge}"></td>
-        <th>성별</th>
-        <td class="wd100">
-            <select id="searchUserSex" name="userSex" class="wd90">
-                <option value="">전체</option>
-                <c:forEach var="item" items="${CG_SEX}">
-                    <option value="${item.codeId}">${item.codeIdName}</option>
-                </c:forEach>
-            </select>
-        </td>
-        <th>구분</th>
-        <td>
-            <select id="searchUserType" name="userType" class="wd90">
-                <option value="">전체</option>
-                <c:forEach var="item" items="${CG_UST}">
-                    <option value="${item.codeId}">${item.codeIdName}</option>
-                </c:forEach>
-            </select>
-        </td>
-        <td><a class="button resetBtn bgc_grayC mt10 fr"><i class="bx bx-redo"></i>초기화</a>
-            <a class="button bgcSkyBlue mt10 fr searchBtn"><i class="bx bx-search"></i>조회</a></td>
-    </tr>
-</table>
-
-<div class="wd100rate h100rate bgc_w">
-
-    <div class="wd70rate h100rate fl brDeepBlue">
-        <table class="viewTable font_size15">
-            <thead>
+    <table class="searchTable">
+        <form:form id="frm" name="frm" method="post">
+        <input type="hidden" id="pageIndex" name="pageIndex" value="${joinVO.pageIndex}">
+        <tr>
+            <th>아이디/이름</th>
+            <td class="wd100"><input type="text" id="searchUserId" name="userId" value="${joinVO.userId}"></td>
+            <th>지역</th>
+            <td class="wd100">
+                <select id="searchUserRegion" name="userRegionMaster" class="wd90">
+                    <option value="">전체</option>
+                    <c:forEach var="item" items="${CG_RGN}">
+                        <option value="${item.codeId}">${item.codeIdName}</option>
+                    </c:forEach>
+                </select>
+            </td>
+            <th>나이</th>
+            <td class="wd100"><input type="text" id="searchUserAge" name="userAge" value="${joinVO.userAge}"></td>
+            <th>성별</th>
+            <td class="wd100">
+                <select id="searchUserSex" name="userSex" class="wd90">
+                    <option value="">전체</option>
+                    <c:forEach var="item" items="${CG_SEX}">
+                        <option value="${item.codeId}">${item.codeIdName}</option>
+                    </c:forEach>
+                </select>
+            </td>
+            <th>구분</th>
+            <td>
+                <select id="searchUserType" name="userType" class="wd90">
+                    <option value="">전체</option>
+                    <c:forEach var="item" items="${CG_UST}">
+                        <option value="${item.codeId}">${item.codeIdName}</option>
+                    </c:forEach>
+                </select>
+            </td>
+            <td><a class="button resetBtn bgc_grayC mt10 fr"><i class="bx bx-redo"></i>초기화</a>
+                <a class="button bgcSkyBlue mt10 fr searchBtn"><i class="bx bx-search"></i>조회</a>
+            </td>
+        </tr>
+    </table>
+    <div class="wd100rate h100rate bgc_w">
+        <div class="wd70rate h100rate fl brDeepBlue">
+            <table class="viewTable font_size15">
+                <thead>
                 <colgroup>
                     <col width="5%"/>
                     <col width="7%"/>
@@ -240,108 +243,119 @@ var userType = '${joinVO.userType}';        //검색조건_구분
                     <col width="5%"/>
                     <col width="10%"/>
                     <col width="10%"/>
-
                 </colgroup>
-            </thead>
-            <tr>
-                <th class="wd5rate">NO</th>
-                <th>구분</th>
-                <th>아이디</th>
-                <th>이름</th>
-                <th>지역</th>
-                <th>전화번호</th>
-                <th>나이</th>
-                <th>성별</th>
-                <th class="wd20rate">등록일시</th>
-                <th>당일 출석 완료 여부</th>
-
-            </tr>
-            <c:forEach var="resultList" items="${resultList}" varStatus="status">
-                <tr class="cursor_pointer itemRow h40">
-                    <td>${paginationInfo.totalRecordCount - ((joinVO.pageIndex-1) * 10) - status.index}</td>
-                    <td>${resultList.userTypeName}</td>
-                    <td>${resultList.userId}</td>
-                    <td>${resultList.userName}</td>
-                    <td>${resultList.userRegionName}</td>
-                    <td>${resultList.userPhone}</td>
-                    <td>${resultList.userAge}</td>
-                    <td>${resultList.userSexName}</td>
-                    <td><fmt:formatDate value="${resultList.regDt}" pattern="yyyy-MM-dd HH:mm:ss"/></td>
-                    <td>
-                        <c:forEach var="status" items="${statusToday}">
-                            ${status}
-                        </c:forEach>
-                    </td>
-                </tr>
-            </c:forEach>
-            <c:if test="${empty resultList}">
+                </thead>
                 <tr>
-                    <td align="center" colspan="10" rowspan="10">- 해당 데이터가 존재하지 않습니다. -</td>
+                    <th class="wd5rate">NO</th>
+                    <th>구분</th>
+                    <th>아이디</th>
+                    <th>이름</th>
+                    <th>지역</th>
+                    <th>전화번호</th>
+                    <th>나이</th>
+                    <th>성별</th>
+                    <th class="wd20rate">등록일시</th>
+                    <th>당일 출석 여부</th>
                 </tr>
-            </c:if>
-            <c:if test="${!empty resultList && resultList.size() ne 10}">
-                <tr style="background-color: rgba(255,255,255,0)">
-                    <td align="center" colspan="10" rowspan="${10-resultList.size()}"></td>
-                </tr>
-            </c:if>
-        </table>
-
-        <div id="pagination" class="pagingBox align_c">
-            <ui:pagination paginationInfo="${paginationInfo}" type="image" jsFunction="fn_page"/>
-        </div>
-
-    </div>
-    </form:form>
-    <div class="h100rate fr wd28rate">
-        <h2 class="mt50"><strong>회원정보</strong></h2>
-        <form:form id="memberInfo" method="post">
-            <table class="listTable wd95rate">
-                <tr class="h57">
-                    <td class="align_l wd130"><label>아이디</label></td>
-                    <td><input type="text" readonly class="wd210" name="userId" id="userId" disabled></td>
-                </tr>
-                <tr class="h57">
-                    <td class="align_l"><label>비밀번호</label></td>
-                    <td><input type="password" class="wd210" name="userPassword" id="userPassword" maxlength="20"></td>
-                </tr>
-                <tr class="h57">
-                    <td class="align_l"><label>비밀번호 확인</label></td>
-                    <td><input type="password" class="wd210" name="userPassword" id="userPasswordConfirm" maxlength="20"></td>
-                </tr>
-                <tr class="h57">
-                    <td class="align_l"><label>이름</label></td>
-                    <td><input type="text" readonly class="wd210" id="userName" disabled></td>
-                </tr>
-                <tr class="h57">
-                    <td class="align_l"><label>전화번호</label></td>
-                    <td><input type="text" readonly class="wd210" id="userPhone" disabled></td>
-                </tr>
-                <tr class="h57">
-                    <td class="align_l"><label>나이</label></td>
-                    <td><input type="text" readonly class="wd210" id="userAge" disabled></td>
-                </tr>
-                <tr class="h57">
-                    <td class="align_l"><label>지역</label></td>
-                    <td><input type="text" readonly class="wd210" id="userRegion" disabled></td>
-                </tr>
-                <tr class="h57">
-                    <td class="align_l"><label>성별</label></td>
-                    <td><input type="text" readonly class="wd210" id="userSex" disabled></td>
-                </tr>
-                <tr class="h57">
-                    <td class="align_l"><label>구분</label></td>
-                    <td><input type="text" readonly class="wd210" id="userType" disabled></td>
-                </tr>
-                <tr class="h80">
-                    <td colspan="2" class="align_c">
-                        <a class="button bgcDeepBlue" id="memberSaveBtn"><i class="bx bxs-save"></i><strong>저장</strong></a>
-                        <a class="button bgcDeepRed" id="memberDeleteBtn"><i class="bx bx-minus-circle"></i>탈퇴</a>
-                    </td>
-                </tr>
+                <c:forEach var="resultList" items="${resultList}" varStatus="status">
+                    <tr class="cursor_pointer itemRow h40">
+                        <td>${paginationInfo.totalRecordCount - ((joinVO.pageIndex-1) * 10) - status.index}</td>
+                        <td>${resultList.userTypeName}</td>
+                        <td>${resultList.userId}</td>
+                        <td>${resultList.userName}</td>
+                        <td>${resultList.userRegionName}</td>
+                        <td>${resultList.userPhone}</td>
+                        <td>${resultList.userAge}</td>
+                        <td>${resultList.userSexName}</td>
+                        <td><fmt:formatDate value="${resultList.regDt}" pattern="yyyy-MM-dd HH:mm:ss"/></td>
+                        <td>
+                            <c:forEach var="registerGbn" items="${registerList[status.index]}" varStatus="registerGbn">
+                                <c:set var="timeStatus"
+                                       value="status00${registerGbn.index+1}"/> <!--status00 이후 값 동적 세팅-->
+                                <c:choose>
+                                    <c:when test="${registerList[status.index][timeStatus] eq 'X'}">
+                                        <i class="bx bx-x-circle xCircleBx"></i>
+                                    </c:when>
+                                    <c:when test="${registerList[status.index][timeStatus] eq 'O'}">
+                                        <i class="bx bx-check-circle checkBx"></i>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <i class="bx bx-minus-circle"></i>
+                                    </c:otherwise>
+                                </c:choose>
+                            </c:forEach>
+                        </td>
+                    </tr>
+                </c:forEach>
+                <c:if test="${empty resultList}">
+                    <tr>
+                        <td align="center" colspan="10" rowspan="10">- 해당 데이터가 존재하지 않습니다. -</td>
+                    </tr>
+                </c:if>
+                <c:if test="${!empty resultList && resultList.size() ne 10}">
+                    <tr style="background-color: rgba(255,255,255,0)">
+                        <td align="center" colspan="10" rowspan="${10-resultList.size()}"></td>
+                    </tr>
+                </c:if>
             </table>
+            <div id="pagination" class="pagingBox align_c">
+                <ui:pagination paginationInfo="${paginationInfo}" type="image" jsFunction="fn_page"/>
+            </div>
+        </div>
         </form:form>
+        <div class="h100rate fr wd28rate">
+            <h2 class="mt50"><strong>회원정보</strong></h2>
+            <form:form id="memberInfo" method="post">
+                <table class="listTable wd95rate">
+                    <tr class="h57">
+                        <td class="align_l wd130"><label>아이디</label></td>
+                        <td><input type="text" readonly class="wd210" name="userId" id="userId" disabled></td>
+                    </tr>
+                    <tr class="h57">
+                        <td class="align_l"><label>비밀번호</label></td>
+                        <td><input type="password" class="wd210" name="userPassword" id="userPassword" maxlength="20">
+                        </td>
+                    </tr>
+                    <tr class="h57">
+                        <td class="align_l"><label>비밀번호 확인</label></td>
+                        <td><input type="password" class="wd210" name="userPassword" id="userPasswordConfirm"
+                                   maxlength="20"></td>
+                    </tr>
+                    <tr class="h57">
+                        <td class="align_l"><label>이름</label></td>
+                        <td><input type="text" readonly class="wd210" id="userName" disabled></td>
+                    </tr>
+                    <tr class="h57">
+                        <td class="align_l"><label>전화번호</label></td>
+                        <td><input type="text" readonly class="wd210" id="userPhone" disabled></td>
+                    </tr>
+                    <tr class="h57">
+                        <td class="align_l"><label>나이</label></td>
+                        <td><input type="text" readonly class="wd210" id="userAge" disabled></td>
+                    </tr>
+                    <tr class="h57">
+                        <td class="align_l"><label>지역</label></td>
+                        <td><input type="text" readonly class="wd210" id="userRegion" disabled></td>
+                    </tr>
+                    <tr class="h57">
+                        <td class="align_l"><label>성별</label></td>
+                        <td><input type="text" readonly class="wd210" id="userSex" disabled></td>
+                    </tr>
+                    <tr class="h57">
+                        <td class="align_l"><label>구분</label></td>
+                        <td><input type="text" readonly class="wd210" id="userType" disabled></td>
+                    </tr>
+                    <tr class="h80">
+                        <td colspan="2" class="align_c">
+                            <a class="button bgcDeepBlue" id="memberSaveBtn"><i
+                                    class="bx bxs-save"></i><strong>저장</strong></a>
+                            <a class="button bgcDeepRed" id="memberDeleteBtn"><i class="bx bx-minus-circle"></i>탈퇴</a>
+                        </td>
+                    </tr>
+                </table>
+            </form:form>
+        </div>
     </div>
-</div>
 </div>
 </body>
 </html>

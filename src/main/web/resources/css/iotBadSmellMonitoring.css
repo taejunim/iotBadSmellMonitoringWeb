@@ -107,6 +107,12 @@ input[type=password] {
 input[type=date] {
     background: url("../image/calendar2.png") no-repeat 98% 50%;
 }
+.xCircleBx{
+    color: red;
+}
+.checkBx{
+    color: green;
+}
 select {
     background: url("../image/sort.png") no-repeat 98% 50%;
 }

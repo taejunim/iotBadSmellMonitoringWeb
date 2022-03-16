@@ -5,6 +5,7 @@ import egovframework.rte.psl.dataaccess.util.EgovMap;
 import iotBadSmellMonitoring.join.service.JoinVO;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @ Class Name   : MemberService.java
@@ -67,5 +68,5 @@ public interface MemberService {
      * @return List<EgovMap>
      * @throws Exception
      */
-    EgovMap todayRegisterListSelect(String userId) throws Exception;
+    List<Map<String, Object>> todayRegisterListSelect(Map<String, Object> dataList) throws Exception;
 }

@@ -16,26 +16,32 @@
         });
         //그래프 Click
         $("#graph").click(function(){
+            showLoader(true);
             $(location).attr('href', '/statistic.do');
         });
         //표 Click
         $("#statistic3").click(function(){
+            showLoader(true);
             $(location).attr('href', '/statistic.do');
         });
         //회원정보 Click
         $("#memberInfo").click(function(){
+            showLoader(true);
             $(location).attr('href', '/member.do');
         });
         //회원출석상태 Click
         $("#attend").click(function(){
+            showLoader(true);
             $(location).attr('href', '/attend.do');
         });
-        //공지사항 Click -> 임시로 샘플페이지 연결
+        //공지사항 Click
         $("#notice").click(function(){
+            showLoader(true);
             $(location).attr('href', '/notice.do');
         });
         //마이페이지 Click
         $("#myPage").click(function(){
+            showLoader(true);
             $(location).attr('href', '/myPage.do');
         });
         //로그아웃 Click
