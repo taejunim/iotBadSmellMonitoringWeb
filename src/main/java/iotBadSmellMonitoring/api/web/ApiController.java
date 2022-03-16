@@ -913,12 +913,37 @@ public class ApiController {
                 message = "{\"result\":\"success\",\"data\":" + json + "}";
             }
             else
-                message = "{\"result\":\"fail\",\"message\":\"NO SEARCH NOTICE.\"}";
+                message = "{\"result\":\"fail\",\"message\":\"NO SEARCH DATA.\"}";
 
         }catch (Exception e){
 
             //System.out.println("Exception: "+e);
-            message = "{\"result\":\"fail\",\"message\":\"ERR SEARCH NOTICE.\"}";
+            message = "{\"result\":\"fail\",\"message\":\"ERR SEARCH DATA.\"}";
+        }
+
+        return message;
+    }
+
+    /**
+     * 모바일 회원가입을 위한 인증번호 API.
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping(value = "/api/getNumberGen", method = RequestMethod.GET, consumes="application/json;", produces = "application/json; charset=utf8")
+    public String getNumberGen()  throws Exception {
+
+        CommonFunction cf      = new CommonFunction();
+        String         message = "";
+
+        try {
+
+
+            message = "{\"result\":\"success\",\"data\":{\"authNum\":\""+cf.getNumberGen()+"\"}}";
+
+        }catch (Exception e){
+
+            //System.out.println("Exception: "+e);
+            message = "{\"result\":\"fail\",\"message\":\"ERR GET AUTH NUM.\"}";
         }
 
         return message;
