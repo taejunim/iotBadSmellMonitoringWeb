@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="iotBadSmellMonitoring.member.service.impl.AttendMapper">
+    <!--회원 리스트 목록-->
+    <select id="memberListSelect" parameterType="joinVO" resultType="egovMap">
+
+        SELECT USER_ID
+        , USER_NAME
+        , USER_REGION_MASTER
+        , USER_REGION_DETAIL
+        , CONCAT(F_GET_CODE_NAME('REM',USER_REGION_MASTER),
+        ' ',F_GET_CODE_NAME('RGD',USER_REGION_DETAIL) )        USER_REGION_NAME
+        FROM tb_user
+        WHERE 1=1
+
+        <if test="userName != null and !userName.equals('')" >
+            AND LOWER(USER_NAME) LIKE LOWER('%${userName}%')
+        </if>
+        <if test="userRegionMaster != null and !userRegionMaster.equals('')" >
+            AND USER_REGION_MASTER = #{userRegionMaster}
+        </if>
+        <if test="userRegionDetail != null and !userRegionDetail.equals('')" >
+            AND USER_REGION_DETAIL = #{userRegionDetail}
+        </if>
+        ORDER BY USER_ID DESC
+        <if test="searchCondition != null and !searchCondition.equals('')" >
+            LIMIT #{recordCountPerPage} OFFSET #{firstIndex};
+        </if>
+    </select>
+
+    <!--회원 전체 리스트 목록-->
+    <select id="memberListSelectTotal" parameterType="joinVO" resultType="egovMap">
+
+        SELECT USER_ID
+        , USER_NAME
+        , CONCAT(F_GET_CODE_NAME('REM',USER_REGION_MASTER),
+        ' ',F_GET_CODE_NAME('RGD',USER_REGION_DETAIL) )        USER_REGION_NAME
+        FROM tb_user
+        WHERE 1=1
+    </select>
+
+    <!--회원 리스트 count 조회-->
+    <select id="memberListTotalCnt" parameterType="joinVO" resultType="int">
+
+        SELECT COUNT(*) cnt
+        FROM tb_user
+        WHERE 1=1
+        <if test="userName != null and !userName.equals('')" >
+            AND LOWER(USER_NAME) LIKE LOWER('%${userName}%')
+        </if>
+        <if test="userRegionMaster != null and !userRegionMaster.equals('')" >
+            AND USER_REGION_MASTER = #{userRegionMaster}
+        </if>
+        <if test="userRegionDetail != null and !userRegionDetail.equals('')" >
+            AND USER_REGION_DETAIL = #{userRegionDetail}
+        </if>
+    </select>
+
+    <!--날짜 데이터 , 접수 데이터 매칭-->
+    <select id="attendListSelect" parameterType="Map" resultType="egovMap">
+        SELECT IF ( tsr.CNT = 3, 'o' , 'x') cnt
+        FROM (
+                 SELECT count(*) as CNT
+                 FROM tb_smell_register
+                 WHERE REG_ID = #{regId}
+                   AND DATE_FORMAT(REG_DT, '%Y-%m-%d') = DATE_FORMAT(#{regDt}, '%Y-%m-%d')
+                 ) AS TSR
+        WHERE 1=1
+    </select>
+
+
+
+</mapper>
