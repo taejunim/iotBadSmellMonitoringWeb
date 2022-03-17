@@ -471,7 +471,7 @@ public class ApiController {
 
                 /*USER TODAY REGISTER DATA MAKE START*/
                 resultMap.put("smellRegisterTime","001");
-                resultMap.put("smellRegisterTimeName","07:00 ~ 09:00");
+                resultMap.put("smellRegisterTimeName","06:00 ~ 09:00");
                 resultMap.put("resultCode",egovMap.getValue(0).toString());
                 if(egovMap.getValue(1) != null)
                     resultMap.put("regDt",egovMap.getValue(1).toString());
@@ -484,7 +484,7 @@ public class ApiController {
                 resultMap = new EgovMap();
 
                 resultMap.put("smellRegisterTime","002");
-                resultMap.put("smellRegisterTimeName","12:00 ~ 14:00");
+                resultMap.put("smellRegisterTimeName","11:00 ~ 17:00");
                 resultMap.put("resultCode",egovMap.getValue(2).toString());
                 if(egovMap.getValue(3) != null)
                     resultMap.put("regDt",egovMap.getValue(3).toString());
@@ -497,25 +497,11 @@ public class ApiController {
                 resultMap = new EgovMap();
 
                 resultMap.put("smellRegisterTime","003");
-                resultMap.put("smellRegisterTimeName","18:00 ~ 20:00");
+                resultMap.put("smellRegisterTimeName","19:00 ~ 23:00");
                 resultMap.put("resultCode",egovMap.getValue(4).toString());
 
                 if(egovMap.getValue(5) != null)
                     resultMap.put("regDt",egovMap.getValue(5).toString());
-
-                else
-                    resultMap.put("regDt",null);
-
-                resultList.add(resultMap);
-
-                resultMap = new EgovMap();
-
-                resultMap.put("smellRegisterTime","004");
-                resultMap.put("smellRegisterTimeName","22:00 ~ 00:00");
-                resultMap.put("resultCode",egovMap.getValue(6).toString());
-
-                if(egovMap.getValue(7) != null)
-                    resultMap.put("regDt",egovMap.getValue(7).toString());
 
                 else
                     resultMap.put("regDt",null);
