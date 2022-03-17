@@ -13,9 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpSession;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * @ Class Name   : StatisticTableController.java
@@ -114,7 +112,33 @@ public class StatisticTableController {
     //엑셀 다운로드 - 시간 없이 전체만 구한다.
     @RequestMapping(value = "/statisticTableDataExcelDownload")
     public String staitsticTableDataExcelDownload(StatisticTableVO statisticTableVO, ModelMap modelMap) throws Exception {
+
+        EgovMap result = statisticService.statisticTableSelect(statisticTableVO);
+
+        List<EgovMap> list = (List<EgovMap>) result.get("list");
+
+        Map<String,Object> regionCountMap = new HashMap<>();
+        String regionMaster = "";
+        int regionMasterCount = 0;
+
+        //자바스크립트 사용을 할수 없어 rowspan을 하기 위한 처리
+        for(int i = 0 ;i < list.size() ; i ++){
+
+            if(i == 0) regionMaster = list.get(i).get("userRegionMaster").toString();
+
+            System.out.println(list.get(i).get("userRegionMaster").equals(regionMaster));
+
+            if(list.get(i).get("userRegionMaster").equals(regionMaster)){
+                regionMasterCount ++;
+            } else {
+                regionCountMap.put(regionMaster,regionMasterCount);
+                regionMaster = list.get(i).get("userRegionMaster").toString();
+                regionMasterCount = 1;
+            }
+        }
+
         modelMap.addAttribute("result",statisticService.statisticTableSelect(statisticTableVO));
+        modelMap.addAttribute("regionCountMap",regionCountMap);
         return "statisticTableDataExcelDownload";
     }
 }

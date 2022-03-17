@@ -17,9 +17,15 @@
         setDropButton("graph");     //선택된 드롭다운 메뉴 색상 변경
         $(".datepicker").datepicker();
 
+        // 지역 클릭 시 해당 지역상세 표출
+        $("#userRegionMaster").change(function (){
+            selectUserRegion($(this).val());
+        });
+
         $("#type").change(function(){
             setSearchCondition();
         });
+
         $("#searchBtn").click(function(){
             drawChart();
         });
@@ -184,6 +190,27 @@
             }
         }).done(function(){
             showLoader(false);
+        });
+    }
+
+    //지역 선택시 해당지역상세 표출
+    function selectUserRegion(referenceCodeId) {
+        console.log(referenceCodeId);
+        $.ajax({
+            url: "/attend/userRegionSelect",
+            type: "POST",
+            data: {codeGroup:"RGD", referenceCodeGroup:"REM", referenceCodeId:referenceCodeId },
+            dataType: "JSON",
+            success: function (data) {
+                $('#userRegionDetail option').remove();
+                $.each(data , function(i, val){
+                    $('#userRegionDetail').append("<option value="+ val.codeId+">" + val.codeIdName + "</option>");
+                });
+
+            },
+            error: function (err) {
+                console.log(err)
+            }
         });
     }
 

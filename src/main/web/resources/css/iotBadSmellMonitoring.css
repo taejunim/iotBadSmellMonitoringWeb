@@ -334,9 +334,6 @@ select::-ms-expand{
     border-bottom: 2px solid #888;
     font-weight: bold;
 }
-.statisticTable tr:hover{
-    background-color: rgb(217,239,255);
-}
 .statisticTable td{
     border: 1px solid #ccc;
     height: 40px;
@@ -452,6 +449,17 @@ select::-ms-expand{
     border-top-color: transparent;
     -webkit-animation: loader-1-inner 1.3s cubic-bezier(.58, .58, .58, .58) infinite;
     animation: loader-1-inner 1.3s cubic-bezier(.58, .58, .58, .58) infinite;
+}
+
+@-webkit-keyframes loader-1-inner {
+    0% {
+        -webkit-transform: rotate(-360deg);
+        transform: rotate(-360deg);
+    }
+    100% {
+        -webkit-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
 }
 
 .dropdown-content {
