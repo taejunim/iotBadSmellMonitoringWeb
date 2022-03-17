@@ -5,6 +5,14 @@ import iotBadSmellMonitoring.join.service.JoinService;
 import iotBadSmellMonitoring.join.service.JoinVO;
 import iotBadSmellMonitoring.main.service.MainService;
 import iotBadSmellMonitoring.main.service.MainVO;
+import net.nurigo.sdk.NurigoApp;
+import net.nurigo.sdk.message.model.KakaoOption;
+import net.nurigo.sdk.message.model.Message;
+import net.nurigo.sdk.message.request.MultipleMessageSendingRequest;
+import net.nurigo.sdk.message.request.SingleMessageSendingRequest;
+import net.nurigo.sdk.message.response.MultipleMessageSentResponse;
+import net.nurigo.sdk.message.response.SingleMessageSentResponse;
+import net.nurigo.sdk.message.service.DefaultMessageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -12,6 +20,12 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 import java.util.List;
+import java.io.BufferedReader;
+import java.io.DataOutputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.ArrayList;
 
 /**
  * @ Class Name   : JoinController.java
@@ -27,6 +41,15 @@ import java.util.List;
  **/
 @Controller
 public class JoinController {
+
+    private final DefaultMessageService messageService;
+
+    /**
+     * 발급받은 API KEY와 API Secret Key를 사용해주세요.
+     */
+    public JoinController() {
+        this.messageService = NurigoApp.INSTANCE.initialize("NCSIBRLPU8MXHJSZ", "WNIG3XTACTIFD1QIIEYN4RIBQU6O1LFE", "https://api.solapi.com");
+    }
 
     @Autowired
     private MainService mainService;
@@ -97,6 +120,91 @@ public class JoinController {
 
         String result = "";
         result = joinService.userFindIdSelect(userId);
+
+        /*Message message = new Message();
+        message.setFrom("01050541386");
+        message.setTo("01033591522");
+        message.setText("한글 45자, 영자 90자 이하 입력되면 자동으로 SMS타입의 메시지가 추가됩니다.");
+
+        SingleMessageSentResponse response = this.messageService.sendOne(new SingleMessageSendingRequest(message));
+        System.out.println(response);*/
+
+        /*ArrayList<Message> messageList = new ArrayList<>();
+
+        String[] a = new String[]{"01033591522", "01068936803" , "01037288621"};
+
+        for (int i = 0; i < 3; i++) {
+            Message message = new Message();
+            message.setFrom("01050541386");
+            message.setTo(a[i]);
+            message.setText("문자 테스트"+i);
+
+            messageList.add(message);
+        }
+        MultipleMessageSendingRequest request = new MultipleMessageSendingRequest(messageList);
+        // allowDuplicates를 true로 설정하실 경우 중복으로 수신번호를 입력해도 각각 발송됩니다.
+        // request.setAllowDuplicates(true);
+
+        MultipleMessageSentResponse response = this.messageService.sendMany(request);
+        System.out.println(response);*/
+
+
+
+
+        /*KakaoOption kakaoOption = new KakaoOption();
+        // disableSms를 true로 설정하실 경우 문자로 대체발송 되지 않습니다.
+        // kakaoOption.setDisableSms(true);
+
+        // 등록하신 카카오 비즈니스 채널의 pfId를 입력해주세요.
+        kakaoOption.setPfId("KA01PF190227072057634pRBhbpAw1w1");
+        // 등록하신 카카오 알림톡 템플릿의 templateId를 입력해주세요.
+        kakaoOption.setTemplateId("test_2019030716320324334488000");
+
+        // 알림톡 템플릿 내에 #{변수} 형태가 존재할 경우 variables를 설정해주세요.
+        *//*
+        HashMap<String, String> variables = new HashMap<>();
+        variables.put("#{변수명1}", "테스트");
+        variables.put("#{변수명2}", "치환문구 테스트2");
+        kakaoOption.setVariables(variables);
+        *//*
+
+        Message message = new Message();
+        message.setFrom("029302266");
+        message.setTo("01050541386");
+        message.setKakaoOptions(kakaoOption);
+
+        SingleMessageSentResponse response = this.messageService.sendOne(new SingleMessageSendingRequest(message));
+        System.out.println(response);*/
+
+
+        String targetUrl = "http://api.solapi.com/messages/v4/send";
+        String parameters = "{\"message\":{\"to\":\"01050541386\",\"from\":\"029302266\",\"text\":\"#{홍길동}님이 요청하신 출금 요청 처리가 완료되어 아래 정보로 입금 처리되었습니다. #{입금정보} 관련하여 문의 있으시다면'1:1문의하기'를이용부탁드립니다. 감사합니다.\",\"type\":\"ATA\",\"kakaoOptions\":{\"pfId\":\"KA01PF190227072057634pRBhbpAw1w1\",\"templateId\":\"test_2019030716320324334488000\",\"buttons\":[{\"buttonType\":\"WL\",\"buttonName\":\"1:1문의\",\"linkMo\":\"https://www.example.com\"}]}}}";
+
+        URL url = new URL(targetUrl);
+        HttpURLConnection con = (HttpURLConnection) url.openConnection();
+
+        con.setRequestMethod("POST");
+
+        con.setRequestProperty("Authorization", "HMAC-SHA256 apiKey=NCSAYU7YDBXYORXC, date=2019-07-01T00:41:48Z, salt=jqsba2jxjnrjor, signature=1779eac71a24cbeeadfa7263cb84b7ea0af1714f5c0270aa30ffd34600e363b4");
+        con.setRequestProperty("Content-Type", "application/json");
+
+        con.setDoOutput(true);
+        DataOutputStream wr = new DataOutputStream(con.getOutputStream());
+        wr.writeBytes(parameters);
+        wr.flush();
+        wr.close();
+
+        int responseCode = con.getResponseCode();
+        BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+        String line;
+        StringBuffer response = new StringBuffer();
+        while ((line = in.readLine()) != null) {
+            response.append(line);
+        }
+        in.close();
+
+        System.out.println("HTTP response code : " + responseCode);
+        System.out.println("HTTP body : " + response.toString());
 
         return result;
     }

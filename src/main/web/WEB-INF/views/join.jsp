@@ -112,6 +112,9 @@
         // if(!fn_chkIdLength(userId)) {
         //     return;
         // }
+        /*if(!fn_chkIdLength(userId)) {
+            return;
+        }*/
 
         if(userId != "") {
             $.ajax({
