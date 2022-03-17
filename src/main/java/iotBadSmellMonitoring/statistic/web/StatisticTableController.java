@@ -84,7 +84,7 @@ public class StatisticTableController {
         else{
             model.addAttribute("CG_RGD",session.getAttribute("CG_RGD"));
         }
-        
+
         //날짜 파라미터 없을경우 현재 월로 검색
         if(statisticTableVO.getSearchStart() == null || statisticTableVO.getSearchEnd() == null) {
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM");
@@ -109,5 +109,12 @@ public class StatisticTableController {
         model.addAttribute("resultList",resultList);
 
         return "statisticTable";
+    }
+
+    //엑셀 다운로드 - 시간 없이 전체만 구한다.
+    @RequestMapping(value = "/statisticTableDataExcelDownload")
+    public String staitsticTableDataExcelDownload(StatisticTableVO statisticTableVO, ModelMap modelMap) throws Exception {
+        modelMap.addAttribute("result",statisticService.statisticTableSelect(statisticTableVO));
+        return "statisticTableDataExcelDownload";
     }
 }

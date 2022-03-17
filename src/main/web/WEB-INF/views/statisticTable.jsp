@@ -9,7 +9,7 @@
 <%@include file="/WEB-INF/views/common/resources_common.jsp" %>
 <script type="text/javascript">
     $(document).ready(function () {
-        //setButton("statistic");
+        setButton("statistic");
         $(".statisticTable").each(function () {
             $(this).find(".userRegionMaster").each(function() {
                 var rows = $(this).parent().parent().find(".userRegionMaster:contains('" + $(this).text() + "')");
@@ -25,8 +25,7 @@
 
             var searchStart = $("#startYearSelect").val() + "-" + $("#startMonthSelect").val();
             var searchEnd = $("#endYearSelect").val() + "-" + $("#endMonthSelect").val();
-            console.log(searchStart);
-            console.log(searchEnd);
+
             if(searchStart > searchEnd) return alert("검색조건을 다시 확인하여 주십시오. 검색 시작 시간은 검색 종료 시간을 초과할수 없습니다.");
 
             frm.searchStart.value = searchStart;
@@ -42,9 +41,8 @@
         });
         //데이터 다운로드 클릭 이벤트
         $("#downloadButton").click(function(){
-            alert("엑셀");
-           /* document.frm.action = "<c:url value='/historyDataExcelDownload'/>";
-            document.frm.submit();*/
+            document.frm.action = "<c:url value='/statisticTableDataExcelDownload'/>";
+            document.frm.submit();
         });
 
         setSearchCondition();
@@ -84,8 +82,8 @@
             <tr>
                 <th class="wd90">기간</th>
                 <td>
-                    <input type = "hidden" id="searchStart" name="searchStart" value="${historyTableVO.searchStart}"/>
-                    <input type = "hidden" id="searchEnd" name="searchEnd" value="${historyTableVO.searchEnd}"/>
+                    <input type = "hidden" id="searchStart" name="searchStart" value="${statisticTableVO.searchStart}"/>
+                    <input type = "hidden" id="searchEnd" name="searchEnd" value="${statisticTableVO.searchEnd}"/>
                     <div class="monthInput">
                         <select class="wd100 monthYearSelect yearSelect" id="startYearSelect">
                         </select>

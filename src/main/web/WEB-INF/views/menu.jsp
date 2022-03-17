@@ -1,9 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
 <%@include file="/WEB-INF/views/common/resources_common.jsp" %>
 <script type="text/javascript">
+    $(window).bind("pageshow", function (event) {
+        showLoader(false);
+    });
 
     $(document).ready(function () {
-        showLoader(false);
         //아이콘, 로고, 메인 Click
         $(".mainButton").click(function(){
             showLoader(true);
