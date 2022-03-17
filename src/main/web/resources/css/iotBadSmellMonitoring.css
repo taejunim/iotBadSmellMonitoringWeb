@@ -318,6 +318,35 @@ select::-ms-expand{
     border: 1px solid #ccc;
     height: 40px;
 }
+.statisticTable{
+    margin: 1% auto 3% auto;
+    text-align: center;
+    width: 95%;
+    height: 480px!important;
+    border: 2px solid #888;
+    font-size: 13px;
+}
+.statisticTable th{
+    height: 40px;
+    background: #eaeaea;
+    border: 1px solid #ccc;
+    border-top: 2px solid #888;
+    border-bottom: 2px solid #888;
+    font-weight: bold;
+}
+.statisticTable tr:hover{
+    background-color: rgb(217,239,255);
+}
+.statisticTable td{
+    border: 1px solid #ccc;
+    height: 40px;
+}
+.statisticTableVerticalTh {
+    border-right: 2px solid #888 !important;
+}
+.statisticTableLabel {
+    margin-left : 3%;
+}
 .mainForm th {
     background-color: #61ade1;
     height: 40px;

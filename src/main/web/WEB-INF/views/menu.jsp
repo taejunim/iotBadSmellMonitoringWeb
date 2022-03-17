@@ -22,7 +22,8 @@
         //표 Click
         $("#statistic3").click(function(){
             showLoader(true);
-            $(location).attr('href', '/statistic.do');
+            $(location).attr('href', '/statisticTable.do');
+
         });
         //회원정보 Click
         $("#memberInfo").click(function(){

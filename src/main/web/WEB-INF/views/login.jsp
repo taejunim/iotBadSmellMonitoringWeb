@@ -67,6 +67,8 @@
         error: function (err) {
           alert("로그인에 실패하셨습니다.");
         }
+      }).done(function () {
+        showLoader(false);
       });
     }
   }
