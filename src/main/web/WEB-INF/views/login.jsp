@@ -44,9 +44,10 @@
         alert(txt +"를 입력해 주세요.");
         chk = false;
         return chk;
-      }
+      }   else if($(obj).attr("id") == "password") chk = fn_chkPwLength($(obj).val());
 
-    });
+
+  });
 
     if(chk) {
       var formData = $(".loginForm").serialize();

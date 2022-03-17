@@ -115,7 +115,7 @@ To change this template use File | Settings | File Templates.
                 return false;
             }
 
-            var con_test = confirm(getUserId + "을 탈퇴시키겠습니까?");
+            var con_test = confirm(getUserId + "을(를) 탈퇴시키겠습니까?");
 
             if (con_test == true) {
                 showLoader(true);

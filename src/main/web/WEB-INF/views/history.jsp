@@ -81,21 +81,21 @@ var weatherState = '${historyVO.weatherState}'; //검색조건_기상 상태
                 var getItems = $(this).find("td");  //viewTable의 row
 
                 $("#getWeatherState").text(getItems.eq(1).text());              //기상 상태
-                $("#getRegId").text(getItems.eq(8).text());                     //등록자 아이디
-                $("#getRegName").text(getItems.eq(9).text());                   //등록자
+                $("#getRegId").text(getItems.eq(5).text());                     //등록자 아이디
+                $("#getRegName").text(getItems.eq(6).text());                   //등록자
                 $("#getSmellType").text(getItems.eq(4).text());                 //취기
                 $("#getSmellValue").text(getItems.eq(3).text());                //악취 강도
-                $("#humidityValue").text(getItems.eq(11).text() + "%");          //습도
-                $("#getTemperatureValue").text(getItems.eq(12).text() + " ℃");   //온도
-                $("#getWindDirectionValue").text(getItems.eq(13).text());       //풍향
-                $("#getWindSpeedValue").text(getItems.eq(14).text() +"m/s");    //풍속
-                $("#getRegDt").text(getItems.eq(10).text());                     //등록일시
-                $("#smellComment").text(getItems.eq(15).text());                //비고
+                $("#humidityValue").text(getItems.eq(8).text() + "%");          //습도
+                $("#getTemperatureValue").text(getItems.eq(9).text() + " ℃");   //온도
+                $("#getWindDirectionValue").text(getItems.eq(10).text());       //풍향
+                $("#getWindSpeedValue").text(getItems.eq(11).text() +"m/s");    //풍속
+                $("#getRegDt").text(getItems.eq(7).text());                     //등록일시
+                $("#smellComment").text(getItems.eq(12).text());                //비고
                 /*오른쪽 table에 값 담아주기 END*/
 
                 /*지도 세팅 START*/
-                var gpsX = getItems.eq(16).text();       //gps_x의 값
-                var gpsY = getItems.eq(17).text();       //gps_y의 값
+                var gpsX = getItems.eq(13).text();       //gps_x의 값
+                var gpsY = getItems.eq(14).text();       //gps_y의 값
 
                 var mapContainer = document.getElementById('map'), // 지도를 표시할 div
                     mapOption = {
