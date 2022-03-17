@@ -76,26 +76,30 @@ public class MemberController {
         /*페이징 SETTING END*/
 
         /*당일출석 완료여부 SETTING START*/
-        List<EgovMap> resultList = memberService.memberListSelect(joinVO);     //회원관리 목록 조회
 
-        Map<String, Object> dataMap;
-        List<Map<String, Object>> dataList = new ArrayList<>();
+        List<EgovMap> resultList = memberService.memberListSelect(joinVO);      //회원관리 목록 조회
+        if (!resultList.isEmpty()) {                                            //회원정보가 존재할 경우만 실행
+            Map<String, Object> dataMap;
+            List<Map<String, Object>> dataList = new ArrayList<>();
 
-        for (int i = 0; i < resultList.size(); i++) {
+            for (int i = 0; i < resultList.size(); i++) {
 
-            dataMap = new HashMap<>();
-            String userId = resultList.get(i).get("userId").toString();       //회원관리 목록에서 사용자 아이디 추출
+                dataMap = new HashMap<>();
+                String userId = resultList.get(i).get("userId").toString();     //회원관리 목록에서 사용자 아이디 추출
 
-            dataMap.put("userId", userId);
-            dataList.add(dataMap);
+                dataMap.put("userId", userId);
+                dataList.add(dataMap);
+            }
+            Map<String, Object> userIdMap = new HashMap<>();
+
+            userIdMap.put("dataList", dataList);
+            model.addAttribute("registerList", memberService.todayRegisterListSelect(userIdMap));   //출석 상태
         }
-        Map<String, Object> userIdMap = new HashMap<>();
 
-        userIdMap.put("dataList", dataList);
-        model.addAttribute("registerList", memberService.todayRegisterListSelect(userIdMap));   //출석 상태
-        /*당일출석 완료여부 SETTING END*/
+            /*당일출석 완료여부 SETTING END*/
 
-        return "member";
+            return "member";
+
     }
 
     //회원 비밀번호 변경

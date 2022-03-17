@@ -272,7 +272,7 @@ select::-ms-expand{
     background: #fff;
 }
 .whiteForm > tbody > tr> td  input {
-    width: 85%;
+    width: 90%;
 }
 .whiteForm > tbody > tr> td  select {
     width: 93%;

@@ -30,26 +30,17 @@
         //비밀번호변경 버튼 클릭 이벤트
         $("#updateBtn").click(function () {
 
-            //비밀번호 길이 확인
-            if(!fn_chkPwLength($("input[name='userPassword']").val())) {
-                return;
-            }
+            var getPw = $("#userPassword").val().trim();
 
-            var getPw = $("#userPassword").val();
-            var chkPw = $("#userPasswordConfirm").val();
-
-            //변경할 비밀번호 값 입력 안했을 경우
-            if (getPw === undefined || getPw === "") {
-                alert("변경할 비밀번호를 입력해 주십시오.");
-                return false;
-            //비밀번호 확인 값 입력 안했을 경우
-            }else if (chkPw === undefined || chkPw === ""){
-                alert("비밀번호 확인을 입력해 주십시오.");
+            //비밀번호 정규식
+            if (!fn_chkPw_pattern(getPw)) {
+                alert("비밀번호는 영문,숫자,특수문자를 최소 한가지씩 4~20자리로 입력해주세요.");
+                $("#userPassword").focus();
                 return false;
             }
 
-            //비밀번호 확인 값 일치하지 않을 경우
-            if(getPw != $("#userPasswordConfirm").val().trim()) {
+            //비밀번호 일치 확인
+            if (getPw != $("#userPasswordConfirm").val().trim()) {
                 alert("비밀번호가 일치하지 않습니다.");
                 $("#userPasswordConfirm").focus();
                 return false;
@@ -109,7 +100,7 @@
 <jsp:include page="/menu"/>
 <div>
     <form:form method="post">
-        <table class="whiteForm wd30rate h70rate mt4rate mt130">
+        <table class="whiteForm wd35rate h70rate mt4rate mt100">
         <tr><th colspan="2"></th></tr>
         <tr>
             <td class="align_l pl20"><label class="tableLabel">아이디</label></td>
@@ -117,11 +108,11 @@
         </tr>
         <tr>
             <td class="align_l pl20"><label class="tableLabel" >비밀번호</label></td>
-            <td><input type="password" id="userPassword" name="userPassword"  placeholder="비밀번호"></td>
+            <td><input type="password" id="userPassword" name="userPassword" placeholder="영문,숫자,특수문자를 최소 한가지씩 4~20자리로 입력해주세요."></td>
         </tr>
         <tr>
             <td class="align_l pl20"><label class="tableLabel" >비밀번호 확인</label></td>
-            <td><input type="password" id="userPasswordConfirm" placeholder="비밀번호" ></td>
+            <td><input type="password" id="userPasswordConfirm" placeholder="영문,숫자,특수문자를 최소 한가지씩 4~20자리로 입력해주세요." ></td>
         </tr>
         <tr>
             <td class="align_l pl20"><label class="tableLabel" >이름</label></td>

@@ -26,8 +26,6 @@ To change this template use File | Settings | File Templates.
 
         if (userType != "" && userType != null)                              //구분
             $("#searchUserType").val(userType).prop("selected", true);
-        if (userAge != "" && userAge != null)
-            console.log($("#searchUserAge").val());
         /* 검색 화면 검색어 세팅 END*/
 
         // 테이블 row 클릭 이벤트
@@ -52,58 +50,59 @@ To change this template use File | Settings | File Templates.
 
         //저장 버튼 클릭 이벤트
         $("#memberSaveBtn").click(function () {
-
-            var getPw = $("#userPassword").val().trim();
-
-            //비밀번호 길이 확인
-            if (!fn_chkPwLength($("input[name='userPassword']").val())) {
-                return;
-            }
+            var userId = $("#userId").val().trim();
 
             // 회원을 선택 했는지 체크
-            if ($("#userId").val() === undefined || $("#userId").val().trim() === "") {
+            if (userId === undefined || userId === "") {
                 alert("변경할 회원을 선택해 주세요.");
                 return false;
             }
 
-            if (getPw === undefined || getPw === "") {
-                alert("변경할 비밀번호를 입력해 주세요.");
+            var getPw = $("#userPassword").val().trim();
+
+            //비밀번호 정규식
+            if (!fn_chkPw_pattern(getPw)) {
+                alert("비밀번호는 영문,숫자,특수문자를 최소 한가지씩 4~20자리로 입력해주세요.");
+                $("#userPassword").focus();
                 return false;
             }
 
+            //비밀번호 일치 확인
             if (getPw != $("#userPasswordConfirm").val().trim()) {
                 alert("비밀번호가 일치하지 않습니다.");
                 $("#userPasswordConfirm").focus();
                 return false;
             }
 
-            if (confirm($("#userId").val().trim() + "의 비밀번호를 변경하시겠습니까?"))
+            var con_test = confirm($("#userId").val().trim() + "의 비밀번호를 변경하시겠습니까?");
+
+            if (con_test == true) {
                 showLoader(true);
-            $.ajax({
-                url: "/memberPasswordUpdate/",
-                type: "POST",
-                data: {userPassword: $("#userPassword").val(), userId: $("#userId").val()},
-                dataType: "text",
-                success: function (data) {
-                    alert("비밀번호를 변경하였습니다.");
-                    $("#userPassword").val("");
-                    $("#userPasswordConfirm").val("");
-                },
-                error: function (err) {
-                    console.log(err);
-                    alert("비밀번호 변경을 실패하였습니다.");
-                }
-            }).done(function () {
-                showLoader(false);
-            });
-
-
+                $.ajax({
+                    url: "/memberPasswordUpdate/",
+                    type: "POST",
+                    data: {userPassword: $("#userPassword").val(), userId: $("#userId").val()},
+                    dataType: "text",
+                    success: function (data) {
+                        alert("비밀번호를 변경하였습니다.");
+                        $("#userPassword").val("");
+                        $("#userPasswordConfirm").val("");
+                    },
+                    error: function (err) {
+                        console.log(err);
+                        alert("비밀번호 변경을 실패하였습니다.");
+                    }
+                }).done(function () {
+                    showLoader(false);
+                });
+            }
         })
 
         //탈퇴 버튼 클릭 이벤트
         $("#memberDeleteBtn").click(function () {
 
             var getUserId = $("#userId").val().trim();
+
             // 회원을 선택 했는지 체크
             if (getUserId === undefined || getUserId === "") {
                 alert("탈퇴할 회원을 선택해 주세요.");
@@ -117,6 +116,7 @@ To change this template use File | Settings | File Templates.
             }
 
             var con_test = confirm(getUserId + "을 탈퇴시키겠습니까?");
+
             if (con_test == true) {
                 showLoader(true);
                 $.ajax({
@@ -137,7 +137,6 @@ To change this template use File | Settings | File Templates.
                 });
             }
         })
-
     });
 
     //페이지 이동 스크립트

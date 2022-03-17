@@ -139,17 +139,18 @@
         })
         /* 저장 버튼 클릭 이벤트 END*/
 
-        /* 탈퇴 버튼 클릭 이벤트 START*/
+        /* 삭제 버튼 클릭 이벤트 START*/
         $("#memberDeleteBtn").click(function () {
 
             var noticeTitle = $("#getNoticeTitle").val().trim();
-            var con_test = confirm("공지사항을 삭제하시겠습니까?");
 
             //공지사항을 선택 했는지 체크
             if (noticeTitle === undefined || noticeTitle === "") {
                 alert("삭제할 공지사항을 선택해 주세요.");
                 return false;
             }
+
+            var con_test = confirm("공지사항을 삭제하시겠습니까?");
 
             if (con_test == true) {
                 showLoader(true);

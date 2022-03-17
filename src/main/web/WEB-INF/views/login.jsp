@@ -11,20 +11,19 @@
 
   $(document).ready(function () {
     showLoader(false);
+
     //회원가입 Click
     $("#join").click(function(){
       $(location).attr('href', '/join.do');
     });
-    //로그인 Click
-    $("#login").click(function(){
-      login();
-    });
+
     //비밀번호 입력창에서 엔터
     $("#password").keydown(function (key) {
       if (key.keyCode == 13) {
         login();
       }
     });
+
     //비밀번호 분실 Click
     $("#lostPassword").click(function(){
       alert("비밀번호 분실시에는 관리자에게 문의 바랍니다.");
@@ -45,7 +44,8 @@
         alert(txt +"를 입력해 주세요.");
         chk = false;
         return chk;
-      } else if($(obj).attr("id") == "password") chk = fn_chkPwLength($(obj).val());
+      }
+
     });
 
     if(chk) {
@@ -83,7 +83,7 @@
       <tr><td><input type="password" name="userPassword" placeholder="비밀번호" class="formInput" id="password"></td></tr>
       <tr><td><label id="lostPassword">비밀번호를 잃어버리셨습니까?</label></td></tr>
       <tr><td>
-        <a id = "login" class="button bgcDeepBlue wd60 font_bold fr">로그인</a>
+        <a id = "login" class="button bgcDeepBlue wd60 font_bold fr" onclick="login();">로그인</a>
         <a id = "join" class="button bgcSkyBlue wd60 font_bold fr">회원가입</a>
       </td></tr>
     </table>

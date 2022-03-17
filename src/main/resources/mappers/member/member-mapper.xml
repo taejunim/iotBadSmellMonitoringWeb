@@ -35,12 +35,13 @@
         <if test="userAge != null and !userAge.equals('')" >
             AND USER_AGE LIKE '%${userAge}%'
         </if>
-        <if test="userType != null and !userType.equals('')" >
-            AND USER_TYPE = #{userType}
-        </if>
         <if test="userSex != null and !userSex.equals('')" >
             AND USER_SEX = #{userSex}
         </if>
+        <if test="userType != null and !userType.equals('')" >
+            AND USER_TYPE = #{userType}
+        </if>
+
 
         ORDER BY REG_DT DESC
         LIMIT #{recordCountPerPage} OFFSET #{firstIndex};
@@ -62,12 +63,13 @@
         <if test="userAge != null and !userAge.equals('')" >
             AND USER_AGE LIKE '%${userAge}%'
         </if>
-        <if test="userType != null and !userType.equals('')" >
-            AND USER_TYPE = #{userType}
-        </if>
         <if test="userSex != null and !userSex.equals('')" >
             AND USER_SEX = #{userSex}
         </if>
+        <if test="userType != null and !userType.equals('')" >
+            AND USER_TYPE = #{userType}
+        </if>
+
 
     </select>
 
