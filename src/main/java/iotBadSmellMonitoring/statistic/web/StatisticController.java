@@ -62,15 +62,25 @@ public class StatisticController {
         else{
             model.addAttribute("CG_REN",session.getAttribute("CG_REN"));
         }
-        //지역
-        if(session.getAttribute("CG_RGN") == null){
-            mainVO.setCodeGroup("RGD");
-            session.setAttribute("CG_RGN",mainService.codeListSelect(mainVO));
-            model.addAttribute("CG_RGN",session.getAttribute("CG_RGN"));
+        //지역 마스터
+        if(session.getAttribute("CG_REM") == null){
+            mainVO.setCodeGroup("REM");
+            session.setAttribute("CG_REM",mainService.codeListSelect(mainVO));
+            model.addAttribute("CG_REM",session.getAttribute("CG_REM"));
         }
         // 세션에 값을 저장했을 경우 세션값을  model에 넘겨줌
         else{
-            model.addAttribute("CG_RGN",session.getAttribute("CG_RGN"));
+            model.addAttribute("CG_REM",session.getAttribute("CG_REM"));
+        }
+        //지역 디테일
+        if(session.getAttribute("CG_RGD") == null){
+            mainVO.setCodeGroup("RGD");
+            session.setAttribute("CG_RGD",mainService.codeListSelect(mainVO));
+            model.addAttribute("CG_RGD",session.getAttribute("CG_RGD"));
+        }
+        // 세션에 값을 저장했을 경우 세션값을  model에 넘겨줌
+        else{
+            model.addAttribute("CG_RGD",session.getAttribute("CG_RGD"));
         }
 
         return "statistic";
