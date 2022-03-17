@@ -23,7 +23,8 @@ public class StatisticVO {
     private String smellRegisterTime003 = "Y";                                                                          //냄새 접수 시간대(코드 테이블 참조) 18:00 ~ 20:00
     private String smellRegisterTime004 = "Y";                                                                          //냄새 접수 시간대(코드 테이블 참조) 22:00 ~ 00:00
     private String searchGbn;                                                                                           //조회 구분(당일:today,일:day,월:month,연:year)
-    private String region;                                                                                              //지역
+    private String userRegionMaster;                                                                                    //지역 마스터
+    private String userRegionDetail;                                                                                    //지역 디테일
     private String searchStart;                                                                                         //조회 시작
     private String searchEnd;                                                                                           //조회 끝
 

@@ -35,7 +35,8 @@
         var arrays = [['x'],['${CG_SMT[0].codeIdName}'],['${CG_SMT[1].codeIdName}'],['${CG_SMT[2].codeIdName}'],['${CG_SMT[3].codeIdName}'],['${CG_SMT[4].codeIdName}'],['${CG_SMT[5].codeIdName}']];
 
         var searchGbn = $("#type").val();
-        var region = $("#region").val();
+        var userRegionMaster = $("#userRegionMaster").val();
+        var userRegionDetail = $("#userRegionDetail").val();
         var searchStart = "";
         var searchEnd   = "";
         var tickFormat  = "";
@@ -72,7 +73,8 @@
                 searchGbn   : searchGbn,
                 searchStart : searchStart,
                 searchEnd   :  searchEnd,
-                region      : region
+                userRegionMaster      : userRegionMaster,
+                userRegionDetail      : userRegionDetail
             },
             success: function (data) {
 
@@ -174,7 +176,7 @@
                     //새로 그릴떄마다 resize 해줘야함.
                     chart1.resize({height:600})
                     chart2.resize({height:600})
-                    $("#pieChartTitle").text($("#region option:selected").text());
+                    $("#pieChartTitle").text($("#userRegionMaster option:selected").text()+" "+$("#userRegionDetail option:selected").text());
                 }
             },
             error: function (err) {
@@ -250,10 +252,16 @@
     <table class="searchTable">
         <tr>
             <th class="wd90">구분</th>
-            <td class="wd210" >
-                <select id="region" class="wd100">
+            <td class="wd350" >
+                <select id="userRegionMaster" class="wd100">
                     <option value="">전체</option>
-                    <c:forEach var="item" items="${CG_RGN}">
+                    <c:forEach var="item" items="${CG_REM}">
+                        <option value="${item.codeId}">${item.codeIdName}</option>
+                    </c:forEach>
+                </select>
+                <select id="userRegionDetail" class="wd100">
+                    <option value="">전체</option>
+                    <c:forEach var="item" items="${CG_RGD}">
                         <option value="${item.codeId}">${item.codeIdName}</option>
                     </c:forEach>
                 </select>
