@@ -17,14 +17,13 @@
 
         /*세션값 불러오기 START*/
         $("#showId").val('<%=(String)session.getAttribute("userId")%>');                                    //아이디
-        $("#userPassword").val("");                                                                         //사용자_비밀번호
+        // $("#userPassword").val("");                                                                         //사용자_비밀번호
         $("#showName").val('<%=(String)session.getAttribute("userName")%>');                                //이름
         $("#userPhone").val(phone);                                                                         //전화번호
         $("#showAge").val('<%=(String)session.getAttribute("userAge")%>');                                  //나이
         $("#userRegion").val('<%=(String)session.getAttribute("userRegionMasterName")%>');                  //지역
         $("#userSex").val('<%=(String) session.getAttribute("userSexName")%>');                             //성별
         $("#userType").val('<%=(String)session.getAttribute("userTypeName")%>');                            //구분
-
         /*세션값 불러오기 END*/
 
         //비밀번호변경 버튼 클릭 이벤트
@@ -94,6 +93,16 @@
             }
         })
     });
+
+    //비밀번호 글자수 제한
+    function length_check() {
+        var title = $("#userPassword").val();
+
+        if( title.length > 20 ) {
+            alert("비밀번호는 20자를 초과할 수 없습니다.");
+            $("#userPassword").val(title.substring(0, 20));
+        }
+    }
 </script>
 <body>
 <div class="wd100rate h100rate scrollView">
@@ -108,11 +117,11 @@
         </tr>
         <tr>
             <td class="align_l pl20"><label class="tableLabel" >비밀번호</label></td>
-            <td><input type="password" id="userPassword" name="userPassword" placeholder="영문,숫자,특수문자를 최소 한가지씩 4~20자리로 입력해주세요."></td>
+            <td><input type="password" id="userPassword" name="userPassword" onkeyup="length_check();" placeholder="영문,숫자,특수문자를 최소 한가지씩 4~20자리로 입력해주세요."></td>
         </tr>
         <tr>
             <td class="align_l pl20"><label class="tableLabel" >비밀번호 확인</label></td>
-            <td><input type="password" id="userPasswordConfirm" placeholder="영문,숫자,특수문자를 최소 한가지씩 4~20자리로 입력해주세요." ></td>
+            <td><input type="password" id="userPasswordConfirm" onkeyup="length_check();" placeholder="영문,숫자,특수문자를 최소 한가지씩 4~20자리로 입력해주세요." ></td>
         </tr>
         <tr>
             <td class="align_l pl20"><label class="tableLabel" >이름</label></td>
