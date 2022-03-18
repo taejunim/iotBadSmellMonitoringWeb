@@ -489,3 +489,6 @@ select::-ms-expand{
 }
 
 .dropdown:hover .dropdown-content {display: block;}
+.ui-datepicker-current {
+    display: none;
+}

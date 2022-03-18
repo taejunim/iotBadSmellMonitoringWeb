@@ -299,9 +299,12 @@
                 GROUP BY tb_smell_register.SMELL_TYPE
                 ORDER BY COUNT(SMELL_TYPE) DESC LIMIT 1
             ),'') mainSmellType
-            FROM tb_smell_register
+            FROM tb_smell_register, tb_user
             WHERE 1 = 1
-            AND DATE_FORMAT(REG_DT, '%Y-%m') BETWEEN #{searchStart} AND #{searchEnd}
+            AND tb_smell_register.REG_ID = tb_user.USER_ID
+            AND DATE_FORMAT(tb_smell_register.REG_DT, '%Y-%m') BETWEEN #{searchStart} AND #{searchEnd}
+            AND tb_user.USER_REGION_MASTER = #{userRegionMaster}
+            AND tb_user.USER_REGION_DETAIL = #{userRegionDetail}
         <if test="smellRegisterTime != null and !smellRegisterTime.equals('')" >
             AND SMELL_REGISTER_TIME = #{smellRegisterTime}
         </if>

@@ -25,7 +25,7 @@
              , REG_DT
           FROM tb_user
          WHERE 1=1
-
+         AND USER_TYPE != '002'
         <if test="userId != null and !userId.equals('')" >
             AND (LOWER(USER_ID) LIKE LOWER('%${userId}%') OR LOWER(USER_NAME) LIKE LOWER('%${userId}%'))
         </if>
@@ -53,7 +53,7 @@
         SELECT COUNT(*) cnt
         FROM tb_user
         WHERE 1=1
-
+        AND USER_TYPE != '002'
         <if test="userId != null and !userId.equals('')" >
             AND (LOWER(USER_ID) LIKE LOWER('%${userId}%') OR LOWER(USER_NAME) LIKE LOWER('%${userId}%'))
         </if>
