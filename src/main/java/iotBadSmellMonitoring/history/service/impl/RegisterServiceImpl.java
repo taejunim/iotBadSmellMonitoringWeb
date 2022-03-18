@@ -32,6 +32,9 @@ public class RegisterServiceImpl implements RegisterService {
     @Value("${${environment}.server.ip}")
     private String serverIp;
 
+    @Value("${${environment}.server.port}")
+    private String serverPort;
+
     @Value("${${environment}.server.path}")
     private String serverPath;
 
@@ -89,7 +92,7 @@ public class RegisterServiceImpl implements RegisterService {
                     String extension = oFileName.substring(oFileName.lastIndexOf(".") + 1);                         //NEW FILE NAME을 위한 확장자 분리.
                     String fileSeq   = String.valueOf(i+1);                                                             //FILE 관리를 위한 시퀀스.
 
-                    registerVO.setSmellImagePath("http://"+serverIp+":8080/iotBadSmellMonitoringWebImg/"+registerVO.getSmellRegisterNo()+"/"+registerVO.getSmellRegisterNo()+"_"+fileSeq+"."+extension);
+                    registerVO.setSmellImagePath("http://"+serverIp+":"+serverPort+"/iotBadSmellMonitoringWebImg/"+registerVO.getSmellRegisterNo()+"/"+registerVO.getSmellRegisterNo()+"_"+fileSeq+"."+extension);
                     /*API에서 전송되는 MULTIPART FILE을 FILE / NAME / DIR 등의 관리를 위한 로직 END*/
 
                     registerVO.setSmellOriginalPath(serverPath+registerVO.getSmellRegisterNo()+"/"+registerVO.getSmellRegisterNo()+"_"+fileSeq+"."+extension);
