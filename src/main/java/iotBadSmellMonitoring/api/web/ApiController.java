@@ -118,7 +118,7 @@ public class ApiController {
         }catch (Exception e){
 
             //System.out.println("Exception: "+e);
-            message = "{\"result\":\"fail\",\"message\":\"ERR DB INSERT.\"}";
+            message = "{\"result\":\"error\",\"message\":\"ERR DB INSERT.\"}";
         }
 
         return message;
@@ -160,7 +160,7 @@ public class ApiController {
         }catch (Exception e){
 
             //System.out.println("Exception: "+e);
-            message = "{\"result\":\"fail\",\"message\": \"ERR ID/PASSWORD.\"}";
+            message = "{\"result\":\"error\",\"message\": \"ERR ID/PASSWORD.\"}";
         }
 
         return message;
@@ -196,7 +196,7 @@ public class ApiController {
         }catch (Exception e){
 
             //System.out.println("Exception: "+e);
-            message = "{\"result\":\"fail\",\"message\": \"ERR USER ID CHECK.\"}";
+            message = "{\"result\":\"error\",\"message\": \"ERR USER ID CHECK.\"}";
         }
 
         return message;
@@ -240,7 +240,7 @@ public class ApiController {
         }catch (Exception e){
 
             //System.out.println("Exception: "+e);
-            message = "{\"result\":\"fail\",\"message\":\"ERR FIND SEARCH CODE.\"}";
+            message = "{\"result\":\"error\",\"message\":\"ERR FIND SEARCH CODE.\"}";
         }
 
         return message;
@@ -345,7 +345,7 @@ public class ApiController {
         }catch (Exception e){
 
             //System.out.println("Exception: "+e);
-            message = "{\"result\":\"fail\",\"message\":\"ERR DB INSERT / FILE UPLOAD.\"}";
+            message = "{\"result\":\"error\",\"message\":\"ERR DB INSERT / FILE UPLOAD.\"}";
         }
 
         return message;
@@ -439,7 +439,7 @@ public class ApiController {
         }catch (Exception e){
 
             //System.out.println("Exception: "+e);
-            message = "{\"result\":\"fail\",\"message\":\"ERR SEARCH USER INFO.\"}";
+            message = "{\"result\":\"error\",\"message\":\"ERR SEARCH USER INFO.\"}";
         }
 
         return message;
@@ -524,7 +524,7 @@ public class ApiController {
         }catch (Exception e){
 
             //System.out.println("Exception: "+e);
-            message = "{\"result\":\"fail\",\"message\":\"ERR SEARCH USER REGISTER INFO.\"}";
+            message = "{\"result\":\"error\",\"message\":\"ERR SEARCH USER REGISTER INFO.\"}";
         }
 
         return message;
@@ -570,7 +570,7 @@ public class ApiController {
         }catch (Exception e){
 
             //System.out.println("Exception: "+e);
-            message = "{\"result\":\"fail\",\"message\":\"ERR SEARCH MASTER HISTORY DATA.\"}";
+            message = "{\"result\":\"error\",\"message\":\"ERR SEARCH MASTER HISTORY DATA.\"}";
         }
 
         return message;
@@ -615,7 +615,7 @@ public class ApiController {
         }catch (Exception e){
 
             //System.out.println("Exception: "+e);
-            message = "{\"result\":\"fail\",\"message\":\"ERR SEARCH DETAIL HISTORY DATA.\"}";
+            message = "{\"result\":\"error\",\"message\":\"ERR SEARCH DETAIL HISTORY DATA.\"}";
         }
 
         return message;
@@ -653,7 +653,7 @@ public class ApiController {
         }catch (Exception e){
 
             //System.out.println("Exception: "+e);
-            message = "{\"result\":\"fail\",\"message\":\"ERR PASSWORD CHANGE.\"}";
+            message = "{\"result\":\"error\",\"message\":\"ERR PASSWORD CHANGE.\"}";
         }
 
         return message;
@@ -679,7 +679,7 @@ public class ApiController {
         } catch (Exception e){
 
             //System.out.println("Exception: "+e);
-            message = "{\"result\":\"fail\",\"message\": \"GET DATE TIME ERR.\"}";
+            message = "{\"result\":\"error\",\"message\": \"GET DATE TIME ERR.\"}";
         }
 
         return message;
@@ -786,7 +786,7 @@ public class ApiController {
         }catch (Exception e){
 
             //System.out.println("Exception: "+e);
-            message = "{\"result\":\"fail\",\"message\":\"ERR SEARCH DETAIL HISTORY DATA.\"}";
+            message = "{\"result\":\"error\",\"message\":\"ERR SEARCH DETAIL HISTORY DATA.\"}";
         }
 
         return message;
@@ -821,7 +821,7 @@ public class ApiController {
         }catch (Exception e){
 
             //System.out.println("Exception: "+e);
-            message = "{\"result\":\"fail\",\"message\":\"ERR SEARCH USER WEATHER.\"}";
+            message = "{\"result\":\"error\",\"message\":\"ERR SEARCH USER WEATHER.\"}";
         }
 
         return message;
@@ -862,7 +862,7 @@ public class ApiController {
         }catch (Exception e){
 
             //System.out.println("Exception: "+e);
-            message = "{\"result\":\"fail\",\"message\":\"ERR SEARCH NOTICE.\"}";
+            message = "{\"result\":\"error\",\"message\":\"ERR SEARCH NOTICE.\"}";
         }
 
         return message;
@@ -904,7 +904,7 @@ public class ApiController {
         }catch (Exception e){
 
             //System.out.println("Exception: "+e);
-            message = "{\"result\":\"fail\",\"message\":\"ERR SEARCH DATA.\"}";
+            message = "{\"result\":\"error\",\"message\":\"ERR SEARCH DATA.\"}";
         }
 
         return message;
@@ -916,20 +916,24 @@ public class ApiController {
      * @throws Exception
      */
     @RequestMapping(value = "/api/getNumberGen", method = RequestMethod.GET, consumes="application/json;", produces = "application/json; charset=utf8")
-    public String getNumberGen()  throws Exception {
+    public String getNumberGen(HttpServletRequest request)  throws Exception {
 
         CommonFunction cf      = new CommonFunction();
         String         message = "";
 
         try {
 
+             EgovMap egovMap = memberService.userPhoneCheck(request.getParameter("userPhone"));
 
-            message = "{\"result\":\"success\",\"data\":{\"authNum\":\""+cf.getNumberGen()+"\"}}";
+            if(egovMap != null && !egovMap.isEmpty())
+                message = "{\"result\":\"fail\",\"message\":\"THIS IS A REGISTERED MOBILE NUMBER.\"}";
+            else
+                message = "{\"result\":\"success\",\"data\":{\"authNum\":\""+cf.getNumberGen()+"\"}}";
 
         }catch (Exception e){
 
             //System.out.println("Exception: "+e);
-            message = "{\"result\":\"fail\",\"message\":\"ERR GET AUTH NUM.\"}";
+            message = "{\"result\":\"error\",\"message\":\"ERR GET AUTH NUM.\"}";
         }
 
         return message;
