@@ -105,7 +105,7 @@ var markers = [];
   <body>
   <jsp:include page="/menu"/>
   <div class="bgc_w wd100rate h100rate fl">
-    <div id="leftSide" class="dp_inlineBlock" style="width: 30%;">
+    <div id="leftSide" class="dp_inlineBlock" style="width: 20%;">
       <table class="mainForm wd100rate h100rate">
         <tr><th>악취 강도</th></tr>
         <tr><td class="h200">
@@ -132,7 +132,7 @@ var markers = [];
         </td></tr>
       </table>
     </div>
-    <div id="rightSide" class="fr" style="width:70%; height: 100%; border-left: 1px solid #10639a; margin-left: -1px; ">
+    <div id="rightSide" class="fr" style="width:80%; height: 100%; border-left: 1px solid #10639a; margin-left: -1px; ">
       <div id="map" class="wd90rate h80rate mg0auto" style="top:2%; z-index: 1;"></div>
     </div>
   </div>

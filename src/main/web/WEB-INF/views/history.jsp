@@ -275,7 +275,7 @@ function imageDelete(imageIndex){
 </script>
 <body>
 <jsp:include page="/menu"/>
-<div class="wd100rate h100rate bgc_w scrollView">
+<div class="wd100rate h100rate bgc_w">
 <table class="searchTable">
 
     <form:form id="frm" name="frm" method="post">
@@ -317,7 +317,7 @@ function imageDelete(imageIndex){
             <a class="button bgcDeepBlue mt10 fr" id="downloadButton"><i class="bx bx-download"></i>엑셀</a></td>
     </tr>
 </table>
-<div class="wd100rate h100rate bgc_w scrollView">
+<div class="wd100rate h100rate bgc_w">
     <div class="wd70rate h100rate fl brDeepBlue">
         <table class=" viewTable font_size13">
             <tr>
@@ -381,7 +381,7 @@ function imageDelete(imageIndex){
                 </tr>
             </table>
             <div id="map" class="wd90rate h80rate" style="margin:auto;"></div>
-            <div>
+            <div style="overflow: auto;">
                 <table class="wd90rate secondViewTable" >
                     <tr>
                         <td class="font_bold">날씨</td>

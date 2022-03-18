@@ -24,10 +24,6 @@
       }
     });
 
-    //비밀번호 분실 Click
-    $("#lostPassword").click(function(){
-      alert("비밀번호 분실시에는 관리자에게 문의 바랍니다.");
-    });
   });
   function login() {
 
@@ -82,7 +78,7 @@
       <tr><td class="h20"></td></tr>
       <tr><td><input type="text" name="userId" placeholder="아이디" class="formInput"></td></tr>
       <tr><td><input type="password" name="userPassword" placeholder="비밀번호" class="formInput" id="password"></td></tr>
-      <tr><td><label id="lostPassword">비밀번호를 잃어버리셨습니까?</label></td></tr>
+      <tr><td></td></tr>
       <tr><td>
         <a id = "login" class="button bgcDeepBlue wd60 font_bold fr" onclick="login();">로그인</a>
         <a id = "join" class="button bgcSkyBlue wd60 font_bold fr">회원가입</a>

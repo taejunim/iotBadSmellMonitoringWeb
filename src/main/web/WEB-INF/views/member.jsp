@@ -189,7 +189,7 @@ To change this template use File | Settings | File Templates.
 </script>
 <body>
 <jsp:include page="/menu"/>
-<div class="wd100rate h100rate scrollView">
+<div class="wd100rate h100rate">
     <table class="searchTable">
         <form:form id="frm" name="frm" method="post">
         <input type="hidden" id="pageIndex" name="pageIndex" value="${joinVO.pageIndex}">
