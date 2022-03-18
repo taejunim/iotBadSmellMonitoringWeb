@@ -62,6 +62,7 @@ public class AttendController {
 //            attendMap.put(monthList.get(i), numOfList);
 //        }  // 수정해볼꺼
 
+
         /*페이징 SETTING START*/
         PaginationInfo paginationInfo = new PaginationInfo();
 
