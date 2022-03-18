@@ -67,4 +67,13 @@ public interface MemberMapper {
      * @throws Exception
      */
     List<Map<String, Object>> todayRegisterListSelect(Map<String, Object> dataList) throws Exception;
+
+    /**
+     * USER PHONE CHECK
+     * @param userPhone     휴대폰 번호
+     * @return              EgovMap
+     * @throws Exception
+     */
+    EgovMap userPhoneCheck(String userPhone) throws Exception;
+
 }

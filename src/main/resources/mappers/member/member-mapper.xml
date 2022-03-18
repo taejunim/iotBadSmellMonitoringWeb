@@ -164,4 +164,20 @@
         ]]>
         </foreach>
     </select>
+
+    <!--사용자 모바일 체크-->
+    <select id="userPhoneCheck" parameterType="string" resultType="egovMap">
+
+        SELECT USER_ID
+             , USER_TYPE
+             , USER_NAME
+
+          FROM  tb_user
+
+         WHERE 1=1
+
+           AND USER_PHONE = #{userPhone}
+
+    </select>
+
 </mapper>

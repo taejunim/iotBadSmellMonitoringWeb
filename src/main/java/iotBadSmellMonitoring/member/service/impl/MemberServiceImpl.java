@@ -102,4 +102,18 @@ public class MemberServiceImpl implements MemberService {
 
         return memberMapper.todayRegisterListSelect(dataList);
     }
+
+    /**
+     * USER PHONE CHECK
+     * @param userPhone     휴대폰 번호
+     * @return              EgovMap
+     * @throws Exception
+     */
+    public EgovMap userPhoneCheck(String userPhone) throws Exception {
+
+        MemberMapper memberMapper = sqlSession.getMapper(MemberMapper.class);
+
+        return memberMapper.userPhoneCheck(userPhone);
+    }
+
 }
