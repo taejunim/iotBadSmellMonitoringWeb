@@ -46,15 +46,12 @@ public class AttendController {
         monthDate = fnMonthDateMap(joinVO, monthDate);                                              // 월 데이터 set
         List<EgovMap> memberList = attendService.memberListSelectTotal(joinVO);                     // 전체 회원 리스트
 
-        Set<String> keys = monthDate.keySet();
-        Iterator<String> iter = keys.iterator();                                                    //월 데이터 뽑기
-
         for (int i=0; i< memberList.size(); i++) {
-            while (iter.hasNext()) {
-                String key = iter.next();
+            for (String key : monthDate.keySet()) {
+                String value = monthDate.get(key);
                 parameter.put("regId", (memberList.get(i).get("userId").toString()));
                 parameter.put("regDt", key);
-                monthDateMap.put(monthDate.get(key) ,attendService.attendListSelect(parameter));    //회원 데이터, 접수 count
+                monthDateMap.put( value ,attendService.attendListSelect(parameter));    //회원 데이터, 접수 count
             }
             attendMap.put(memberList.get(i).get("userId").toString(), monthDateMap);                //날짜 데이터, 출석여부
         }
@@ -63,7 +60,7 @@ public class AttendController {
 //
 //            numOfList = attendService.attendListSelect(monthList.get(i));
 //            attendMap.put(monthList.get(i), numOfList);
-//        }
+//        }  // 수정해볼꺼
 
         /*페이징 SETTING START*/
         PaginationInfo paginationInfo = new PaginationInfo();
