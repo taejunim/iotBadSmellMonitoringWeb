@@ -16,6 +16,7 @@
         setButton("statistic");
         setDropButton("graph");     //선택된 드롭다운 메뉴 색상 변경
         $(".datepicker").datepicker();
+        $("#userRegionDetail").attr("disabled", true);  //처음화면 지역 detail disabled
 
         // 지역 클릭 시 해당 지역상세 표출
         $("#userRegionMaster").change(function (){
@@ -196,6 +197,14 @@
     //지역 선택시 해당지역상세 표출
     function selectUserRegion(referenceCodeId) {
         console.log(referenceCodeId);
+
+        // 지역 master에 따른 detail 선택 가능 여부
+        if($("#userRegionMaster").val() !== "" ){
+            $("#userRegionDetail").attr("disabled", false);
+        }else{
+            $("#userRegionDetail").attr("disabled", true);
+        }
+
         $.ajax({
             url: "/attend/userRegionSelect",
             type: "POST",
@@ -203,6 +212,8 @@
             dataType: "JSON",
             success: function (data) {
                 $('#userRegionDetail option').remove();
+                $('#userRegionDetail').append("<option value=''>전체</option>");
+
                 $.each(data , function(i, val){
                     $('#userRegionDetail').append("<option value="+ val.codeId+">" + val.codeIdName + "</option>");
                 });
