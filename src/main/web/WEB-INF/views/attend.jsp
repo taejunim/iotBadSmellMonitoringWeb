@@ -9,6 +9,12 @@
 <%@include file="/WEB-INF/views/common/resources_common.jsp" %>
 <script type="text/javascript">
 
+    var userName          = '${joinVO.userName}';               //검색조건_아이디/이름
+    var userRegionMaster  = '${joinVO.userRegionMaster}';       //검색조건_지역
+    var userRegionDetail  = '${joinVO.userRegionDetail}';       //검색조건_지역_상세
+    var searchYear        = '${joinVO.searchYear}';             //검색조건_연
+    var searchMonth       = '${joinVO.searchMonth}';            //검색조건_월
+
     $(document).ready(function () {
 
         setButton("member");             //선택된 화면의 메뉴색 변경 CALL
@@ -17,12 +23,18 @@
 
         /* 검색 화면 검색어 세팅 START*/
         //지역
-        if (userRegionMaster != "" && userRegionMaster != null)
+        if (userRegionMaster != "" && userRegionMaster != null) {
             $("#userRegionMaster").val(userRegionMaster).prop("selected", true);                        //VO 값 선택
+            selectUserRegion(userRegionMaster);
+        }
 
-        //상세지역
-        if (userRegionDetail != "" && userRegionDetail != null)
-            $("#userRegionDetail").val(userRegionDetail).prop("selected", true);                        //VO 값 선택
+        if (searchYear != "" && searchYear != null) {
+            $("#searchYear").val(searchYear).prop("selected", true);                        //VO 값 선택
+        }
+
+        if (searchMonth != "" && searchMonth != null) {
+            $("#searchMonth").val(searchMonth).prop("selected", true);                        //VO 값 선택
+        }
 
         /* 검색 화면 검색어 세팅 END*/
 
@@ -42,16 +54,18 @@
 
     //페이지 이동 스크립트
     function fn_page(pageNo) {
+
         showLoader(true);
+
         //vo에 담긴 값이 입력된 값과 다를 경우 강제로 vo에 담긴 값을 form에 넣어주기
         if (userName !=  $("#userName")){
             frm.userName.value = userName;
         }
-        if (srtDate !=  $("#srtDate")){
-            frm.srtDate.value = srtDate;
+        if (searchYear !=  $("#searchYear")){
+            frm.searchYear.value = searchYear;
         }
-        if (endDate !=  $("#endDate")){
-            frm.endDate.value = endDate;
+        if (searchMonth !=  $("#searchMonth")){
+            frm.searchMonth.value = searchMonth;
         }
         if (userRegionMaster !=  $("#userRegionMaster")){
             frm.userRegionMaster.value = userRegionMaster;
@@ -59,10 +73,10 @@
         if (userRegionDetail !=  $("#userRegionDetail")){
             frm.userRegionDetail.value = userRegionDetail;
         }
+
         frm.pageIndex.value = pageNo;
         document.frm.action = "<c:url value='/attend.do'/>";
         document.frm.submit();
-
     }
 
     //조회
@@ -79,8 +93,8 @@
 
         showLoader(true);
         $("#userName").val("");
-        $("#srtDate").val("");
-        $("#endDate").val("");
+        $("#searchYear").val("");
+        $("#searchMonth").val("");
         $("#userRegionMaster").val("");
         $("#userRegionDetail").val("");
 
@@ -91,6 +105,7 @@
 
     //지역 선택시 해당지역상세 표출
     function selectUserRegion(referenceCodeId) {
+
         if (referenceCodeId) {
             $.ajax({
                 url: "/attend/userRegionSelect",
@@ -98,17 +113,25 @@
                 data: {codeGroup:"RGD", referenceCodeGroup:"REM", referenceCodeId:referenceCodeId },
                 dataType: "JSON",
                 success: function (data) {
-                    $('#userRegionDetail option').remove();
-                    $('#userRegionDetail').append("<option value=''>전체</option>");
 
-                    $.each(data , function(i, val){
-                        $('#userRegionDetail').append("<option value="+ val.codeId+">" + val.codeIdName + "</option>");
-                    });
                 },
                 error: function (err) {
                     console.log(err)
                 }
-            });
+            }).done(function (data) {
+
+                $('#userRegionDetail option').remove();
+                $('#userRegionDetail').append("<option value=''>전체</option>");
+
+                $.each(data , function(i, val){
+                    $('#userRegionDetail').append("<option value="+ val.codeId+">" + val.codeIdName + "</option>");
+                });
+
+                //상세지역
+                if (userRegionDetail != "" && userRegionDetail != null)
+                    $("#userRegionDetail").val(userRegionDetail).prop("selected", true);                                //VO 값 선택
+            })
+            ;
         } else {
             $('#userRegionDetail option').remove();
             $('#userRegionDetail').append("<option value=''>전체</option>");
@@ -135,12 +158,13 @@
     }
 
 </script>
-<body onload="onsubmit">
+<body>
 <jsp:include page="/menu"/>
 <div class="wd100rate h100rate scrollView">
-    <form:form id="frm" name="frm" method="post" >
-    <table class="searchTable">
+    <form:form id="frm" name="frm" method="post">
         <input type="hidden" id="pageIndex" name="pageIndex" value="${joinVO.pageIndex}">
+    <table class="searchTable">
+
         <tr>
             <th>이름</th>
             <td><input type="text" id="userName" name="userName" value="${joinVO.userName}" class="wd100"></td>
@@ -188,7 +212,7 @@
                 </tr>
                 <c:forEach var="resultList" items="${resultList}" varStatus="status">
                 <tr>
-                    <td>1</td>
+                    <td>${paginationInfo.totalRecordCount - ((joinVO.pageIndex-1) * 10) - status.index}</td>
                     <td>
                         ${resultList.userName}
                     </td>
@@ -218,12 +242,12 @@
                     </tr>
                 </c:if>
             </table>
-           <div id="pagination" class="pagingBox align_c">
+            <div id="pagination" class="pagingBox align_c">
                 <ui:pagination paginationInfo="${paginationInfo}" type="image" jsFunction="fn_page"/>
             </div>
         </div>
     </div>
+    </form:form>
 </div>
-</form:form>
 </body>
 </html>

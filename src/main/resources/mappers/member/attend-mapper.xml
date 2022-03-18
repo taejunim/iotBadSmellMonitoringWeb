@@ -19,6 +19,16 @@
 
         AND USER_TYPE NOT IN ('002')
 
+        <if test="userName != null and !userName.equals('')" >
+            AND LOWER(USER_NAME) LIKE LOWER('%${userName}%')
+        </if>
+        <if test="userRegionMaster != null and !userRegionMaster.equals('')" >
+            AND USER_REGION_MASTER = #{userRegionMaster}
+        </if>
+        <if test="userRegionDetail != null and !userRegionDetail.equals('')" >
+            AND USER_REGION_DETAIL = #{userRegionDetail}
+        </if>
+
    ORDER BY USER_NAME ASC
 
       LIMIT #{recordCountPerPage} OFFSET #{firstIndex}
@@ -36,7 +46,15 @@
 
         AND USER_TYPE NOT IN ('002')
 
-      LIMIT #{recordCountPerPage} OFFSET #{firstIndex}
+        <if test="userName != null and !userName.equals('')" >
+            AND LOWER(USER_NAME) LIKE LOWER('%${userName}%')
+        </if>
+        <if test="userRegionMaster != null and !userRegionMaster.equals('')" >
+            AND USER_REGION_MASTER = #{userRegionMaster}
+        </if>
+        <if test="userRegionDetail != null and !userRegionDetail.equals('')" >
+            AND USER_REGION_DETAIL = #{userRegionDetail}
+        </if>
 
     </select>
 
