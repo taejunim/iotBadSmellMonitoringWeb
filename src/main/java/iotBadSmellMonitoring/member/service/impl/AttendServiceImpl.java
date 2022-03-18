@@ -42,6 +42,21 @@ public class AttendServiceImpl implements AttendService {
     }
 
     /**
+     * 출석 회원 총 카운트
+     * @param joinVO
+     * @return
+     * @throws Exception
+     */
+    @Override
+    public int attendUserTotalCnt(JoinVO joinVO) throws Exception {
+
+        AttendMapper mapper = sqlSession.getMapper(AttendMapper.class);
+
+        return mapper.attendUserTotalCnt(joinVO);
+    }
+
+
+    /**
      * 출석 여부 확인 리스트 목록
      * @param joinVO
      * @return

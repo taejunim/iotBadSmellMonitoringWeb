@@ -29,6 +29,14 @@ public interface AttendService {
     List<EgovMap> attendUserList(JoinVO joinVO) throws Exception;
 
     /**
+     * 출석 회원 총 카운트
+     * @param joinVO
+     * @return
+     * @throws Exception
+     */
+    int attendUserTotalCnt(JoinVO joinVO) throws Exception;
+
+    /**
      * 출석 여부 확인 리스트 목록
      * @param joinVO
      * @return

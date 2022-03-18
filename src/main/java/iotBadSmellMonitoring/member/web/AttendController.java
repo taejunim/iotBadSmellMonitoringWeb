@@ -1,6 +1,7 @@
 package iotBadSmellMonitoring.member.web;
 
 import egovframework.rte.psl.dataaccess.util.EgovMap;
+import egovframework.rte.ptl.mvc.tags.ui.pagination.PaginationInfo;
 import iotBadSmellMonitoring.join.service.JoinVO;
 import iotBadSmellMonitoring.member.service.AttendService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -119,9 +120,27 @@ public class AttendController {
             resultList.add(attendCheckMap);
         }
 
+        /*페이징 SETTING START*/
+        PaginationInfo paginationInfo = new PaginationInfo();
+
+        paginationInfo.setCurrentPageNo(joinVO.getPageIndex());
+        paginationInfo.setRecordCountPerPage(joinVO.getPageUnit());
+        paginationInfo.setPageSize(joinVO.getPageSize());
+
+        joinVO.setFirstIndex(paginationInfo.getFirstRecordIndex());
+        joinVO.setLastIndex(paginationInfo.getLastRecordIndex());
+        joinVO.setRecordCountPerPage(paginationInfo.getRecordCountPerPage());
+
+        if (joinVO.getPageIndex() != 1)
+            joinVO.setPageRowIndex(joinVO.getPageIndex() * 10 - 10);
+
+        paginationInfo.setTotalRecordCount(attendService.attendUserTotalCnt(joinVO));                                   //출석 회원 총 카운트 CALL.
+
         model.addAttribute("dateList", dateList);
         model.addAttribute("dateCount",dateList.size());
         model.addAttribute("resultList", resultList);
+        model.addAttribute("paginationInfo", paginationInfo);
+        /*페이징 SETTING END*/
 
         return "attend";
     }

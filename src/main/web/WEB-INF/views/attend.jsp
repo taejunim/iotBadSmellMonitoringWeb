@@ -218,9 +218,9 @@
                     </tr>
                 </c:if>
             </table>
-<%--            <div id="pagination" class="pagingBox align_c">
+           <div id="pagination" class="pagingBox align_c">
                 <ui:pagination paginationInfo="${paginationInfo}" type="image" jsFunction="fn_page"/>
-            </div>--%>
+            </div>
         </div>
     </div>
 </div>

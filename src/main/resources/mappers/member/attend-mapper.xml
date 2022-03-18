@@ -6,20 +6,37 @@
     <!--출석 회원 리스트 목록-->
     <select id="attendUserList" parameterType="joinVO" resultType="egovMap">
 
-     SELECT t1.USER_ID                                      USER_ID
-          , t1.USER_NAME                                    USER_NAME
-          , t1.USER_REGION_MASTER                           USER_REGION_MASTER
-          , t1.USER_REGION_DETAIL                           USER_REGION_DETAIL
-          , F_GET_CODE_NAME('REM',t1.USER_REGION_MASTER)    USER_REGION_MASTER_NAME
-          , F_GET_CODE_NAME('RGD', t1.USER_REGION_DETAIL)   USER_REGION_DETAIL_NAME
+     SELECT USER_ID                                      USER_ID
+          , USER_NAME                                    USER_NAME
+          , USER_REGION_MASTER                           USER_REGION_MASTER
+          , USER_REGION_DETAIL                           USER_REGION_DETAIL
+          , F_GET_CODE_NAME('REM', USER_REGION_MASTER)   USER_REGION_MASTER_NAME
+          , F_GET_CODE_NAME('RGD', USER_REGION_DETAIL)   USER_REGION_DETAIL_NAME
 
-       FROM tb_user t1
+       FROM tb_user
 
       WHERE 1 = 1
 
-        AND t1.USER_TYPE NOT IN ('002')
+        AND USER_TYPE NOT IN ('002')
 
    ORDER BY USER_NAME ASC
+
+      LIMIT #{recordCountPerPage} OFFSET #{firstIndex}
+
+    </select>
+
+    <!--출석 회원 총 카운트-->
+    <select id="attendUserTotalCnt" parameterType="joinVO" resultType="int">
+
+     SELECT COUNT(USER_ID)  USER_CNT
+
+       FROM tb_user
+
+      WHERE 1 = 1
+
+        AND USER_TYPE NOT IN ('002')
+
+      LIMIT #{recordCountPerPage} OFFSET #{firstIndex}
 
     </select>
 
@@ -27,98 +44,100 @@
     <select id="attendUserCheckList" parameterType="joinVO" resultType="egovMap">
 
         <![CDATA[
-                    SELECT          t2.DATE_YMD DATE_YMD
-                                  , t2.REG_COUNT REG_COUNT
-                                  , (CASE
-                                    WHEN DATE_FORMAT(t2.DATE_YMD, '%Y-%m-%d') > DATE_FORMAT(now(), '%Y-%m-%d') THEN '-'
-                                    WHEN REG_COUNT = 3 THEN 'O'
-                                    WHEN REG_COUNT < 3 THEN 'X' END) AS CHECK_RESULT
 
-                    FROM (
-                             SELECT t1.date_ymd                                DATE_YMD
-                                  , COUNT(DATE_FORMAT(tsr.REG_DT, '%Y-%m-%d')) REG_COUNT
+                SELECT          t2.DATE_YMD DATE_YMD
+                              , t2.REG_COUNT REG_COUNT
+                              , (CASE
+                                WHEN DATE_FORMAT(t2.DATE_YMD, '%Y-%m-%d') > DATE_FORMAT(now(), '%Y-%m-%d') THEN '-'
+                                WHEN REG_COUNT >= 3 THEN 'O'
+                                WHEN REG_COUNT < 3 THEN 'X' END) AS CHECK_RESULT
 
-                             FROM tb_smell_register tsr
-                                      RIGHT JOIN
+                FROM (
+                         SELECT t1.date_ymd                                DATE_YMD
+                              , COUNT(DATE_FORMAT(tsr.REG_DT, '%Y-%m-%d')) REG_COUNT
 
-                                  (
-                                      SELECT a.date_ymd
-                                      FROM (
-                                               SELECT #{regDt} - INTERVAL (a.a + (10 * b.a) + (100 * c.a)) DAY as date_ymd
-                                               FROM (
-                                                        SELECT 0 AS a
-                                                        UNION ALL
-                                                        SELECT 1
-                                                        UNION ALL
-                                                        SELECT 2
-                                                        UNION ALL
-                                                        SELECT 3
-                                                        UNION ALL
-                                                        SELECT 4
-                                                        UNION ALL
-                                                        SELECT 5
-                                                        UNION ALL
-                                                        SELECT 6
-                                                        UNION ALL
-                                                        SELECT 7
-                                                        UNION ALL
-                                                        SELECT 8
-                                                        UNION ALL
-                                                        SELECT 9
-                                                    ) AS a
+                         FROM tb_smell_register tsr
+                                  RIGHT JOIN
 
-                                                        CROSS JOIN (
-                                                   SELECT 0 AS a
-                                                   UNION ALL
-                                                   SELECT 1
-                                                   UNION ALL
-                                                   SELECT 2
-                                                   UNION ALL
-                                                   SELECT 3
-                                                   UNION ALL
-                                                   SELECT 4
-                                                   UNION ALL
-                                                   SELECT 5
-                                                   UNION ALL
-                                                   SELECT 6
-                                                   UNION ALL
-                                                   SELECT 7
-                                                   UNION ALL
-                                                   SELECT 8
-                                                   UNION ALL
-                                                   SELECT 9
-                                               ) AS b
+                              (
+                                  SELECT a.date_ymd
+                                  FROM (
+                                           SELECT #{regDt} - INTERVAL (a.a + (10 * b.a) + (100 * c.a)) DAY as date_ymd
+                                           FROM (
+                                                    SELECT 0 AS a
+                                                    UNION ALL
+                                                    SELECT 1
+                                                    UNION ALL
+                                                    SELECT 2
+                                                    UNION ALL
+                                                    SELECT 3
+                                                    UNION ALL
+                                                    SELECT 4
+                                                    UNION ALL
+                                                    SELECT 5
+                                                    UNION ALL
+                                                    SELECT 6
+                                                    UNION ALL
+                                                    SELECT 7
+                                                    UNION ALL
+                                                    SELECT 8
+                                                    UNION ALL
+                                                    SELECT 9
+                                                ) AS a
 
-                                                        CROSS JOIN (
-                                                   SELECT 0 as a
-                                                   UNION ALL
-                                                   SELECT 1
-                                                   UNION ALL
-                                                   SELECT 2
-                                                   UNION ALL
-                                                   SELECT 3
-                                                   UNION ALL
-                                                   SELECT 4
-                                                   UNION ALL
-                                                   SELECT 5
-                                                   UNION ALL
-                                                   SELECT 6
-                                                   UNION ALL
-                                                   SELECT 7
-                                                   UNION ALL
-                                                   SELECT 8
-                                                   UNION ALL
-                                                   SELECT 9
-                                               ) AS c
-                                           ) AS a
-                                      WHERE 1 = 1
-                                        AND a.date_ymd LIKE CONCAT(#{searchYear},'-',#{searchMonth},'-%') -- 한달만 검색 하려고 하는경우
-                                  ) t1 ON t1.date_ymd = DATE_FORMAT(tsr.REG_DT, '%Y-%m-%d')
-                                      AND REG_ID = #{userId}
+                                                    CROSS JOIN (
+                                               SELECT 0 AS a
+                                               UNION ALL
+                                               SELECT 1
+                                               UNION ALL
+                                               SELECT 2
+                                               UNION ALL
+                                               SELECT 3
+                                               UNION ALL
+                                               SELECT 4
+                                               UNION ALL
+                                               SELECT 5
+                                               UNION ALL
+                                               SELECT 6
+                                               UNION ALL
+                                               SELECT 7
+                                               UNION ALL
+                                               SELECT 8
+                                               UNION ALL
+                                               SELECT 9
+                                           ) AS b
 
-                             GROUP BY t1.date_ymd
-                             ORDER BY t1.date_ymd ASC
-                         ) t2
+                                                    CROSS JOIN (
+                                               SELECT 0 as a
+                                               UNION ALL
+                                               SELECT 1
+                                               UNION ALL
+                                               SELECT 2
+                                               UNION ALL
+                                               SELECT 3
+                                               UNION ALL
+                                               SELECT 4
+                                               UNION ALL
+                                               SELECT 5
+                                               UNION ALL
+                                               SELECT 6
+                                               UNION ALL
+                                               SELECT 7
+                                               UNION ALL
+                                               SELECT 8
+                                               UNION ALL
+                                               SELECT 9
+                                           ) AS c
+                                       ) AS a
+                                  WHERE 1 = 1
+                                    AND a.date_ymd LIKE CONCAT(#{searchYear},'-',#{searchMonth},'-%') -- 한달만 검색 하려고 하는경우
+                              ) t1 ON t1.date_ymd = DATE_FORMAT(tsr.REG_DT, '%Y-%m-%d')
+                                  AND REG_ID = #{userId}
+
+                         GROUP BY t1.date_ymd
+                         ORDER BY t1.date_ymd ASC
+                     ) t2
+
         ]]>
 
     </select>
