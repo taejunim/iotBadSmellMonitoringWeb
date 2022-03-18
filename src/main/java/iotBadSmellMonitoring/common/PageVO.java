@@ -8,7 +8,9 @@ import java.io.Serializable;
  * @Class Name : ComDefaultVO.java
  * @Description : ComDefaultVO class
  * @Modification Information
- * @ @ 수정일 수정자 수정내용 @ ------- -------- --------------------------- @ 2009.02.01 조재영 최초 생성
+ * @ @ 수정일 수정자 수정내용
+ * @ ------- -------- ---------------------------
+ * @ 2009.02.01 조재영 최초 생성
  *
  * @author 공통서비스 개발팀 조재영
  * @since 2009.02.01
@@ -19,12 +21,11 @@ import java.io.Serializable;
 @SuppressWarnings("serial")
 public class PageVO implements Serializable {
 
-
   /* 달력검색 */
   private String srtDate;
   private String endDate;
-  private String searchYear;
-  private String searchMonth;
+  private String searchYear;                                                                                            //검색 연
+  private String searchMonth;                                                                                           //검색 월
 
   public String getSrtDate() {
     return srtDate;
