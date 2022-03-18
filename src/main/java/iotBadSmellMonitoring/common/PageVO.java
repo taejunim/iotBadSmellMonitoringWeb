@@ -23,6 +23,8 @@ public class PageVO implements Serializable {
   /* 달력검색 */
   private String srtDate;
   private String endDate;
+  private String searchYear;
+  private String searchMonth;
 
   public String getSrtDate() {
     return srtDate;
@@ -86,7 +88,7 @@ public class PageVO implements Serializable {
 	return pageRowIndex;
  }
 
- public void setPageRowIndex(int pageRowIndex) {
+  public void setPageRowIndex(int pageRowIndex) {
 	this.pageRowIndex = pageRowIndex;
  }
 
@@ -201,6 +203,22 @@ public class PageVO implements Serializable {
   public void setPageSize(int pageSize) {
     this.pageSize = pageSize;
   }
+
+  public String getSearchYear() {
+        return searchYear;
+    }
+
+  public void setSearchYear(String searchYear) {
+        this.searchYear = searchYear;
+    }
+
+  public String getSearchMonth() {
+    return searchMonth;
+}
+
+  public void setSearchMonth(String searchMonth) {
+    this.searchMonth = searchMonth;
+}
 
   @Override
   public String toString() {
