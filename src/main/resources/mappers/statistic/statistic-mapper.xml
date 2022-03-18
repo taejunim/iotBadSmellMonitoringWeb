@@ -129,6 +129,7 @@
                 SELECT SMELL_VALUE
                 FROM tb_smell_register
                 WHERE 1 = 1
+                AND SMELL_VALUE != '001'
                 AND DATE_FORMAT(tb_smell_register.REG_DT, '%Y-%m') BETWEEN #{searchStart} AND #{searchEnd}
                 GROUP BY tb_smell_register.SMELL_VALUE
                 ORDER BY COUNT(SMELL_VALUE) DESC LIMIT 1
@@ -137,6 +138,7 @@
                 SELECT SMELL_TYPE
                 FROM tb_smell_register
                 WHERE 1 = 1
+                AND SMELL_TYPE != '008'
                 AND DATE_FORMAT(tb_smell_register.REG_DT, '%Y-%m') BETWEEN #{searchStart} AND #{searchEnd}
                 GROUP BY tb_smell_register.SMELL_TYPE
                 ORDER BY COUNT(SMELL_TYPE) DESC LIMIT 1
@@ -182,6 +184,7 @@
                         SELECT SMELL_VALUE
                         FROM tb_smell_register, tb_user
                         WHERE 1 = 1
+                        AND tb_smell_register.SMELL_VALUE != '001'
                         AND tb_smell_register.REG_ID = tb_user.USER_ID
                         AND DATE_FORMAT(tb_smell_register.REG_DT, '%Y-%m') BETWEEN #{searchStart} AND #{searchEnd}
                         <if test="smellRegisterTime != null and !smellRegisterTime.equals('')" >
@@ -196,6 +199,7 @@
                         SELECT SMELL_TYPE
                         FROM tb_smell_register,tb_user
                         WHERE 1 = 1
+                        AND tb_smell_register.SMELL_TYPE != '008'
                         AND tb_smell_register.REG_ID = tb_user.USER_ID
                         AND DATE_FORMAT(tb_smell_register.REG_DT, '%Y-%m') BETWEEN #{searchStart} AND #{searchEnd}
                         <if test="smellRegisterTime != null and !smellRegisterTime.equals('')" >
@@ -269,6 +273,7 @@
                 SELECT SMELL_VALUE
                 FROM tb_smell_register, tb_user
                 WHERE 1 = 1
+                AND tb_smell_register.SMELL_VALUE != '001'
                 AND tb_smell_register.REG_ID = tb_user.USER_ID
                 AND DATE_FORMAT(tb_smell_register.REG_DT, '%Y-%m')  BETWEEN #{searchStart} AND #{searchEnd}
                 AND tb_user.USER_REGION_MASTER = #{userRegionMaster}
@@ -283,6 +288,7 @@
                 SELECT SMELL_TYPE
                 FROM tb_smell_register, tb_user
                 WHERE 1 = 1
+                AND tb_smell_register.SMELL_TYPE != '008'
                 AND tb_smell_register.REG_ID = tb_user.USER_ID
                 AND DATE_FORMAT(tb_smell_register.REG_DT, '%Y-%m')  BETWEEN #{searchStart} AND #{searchEnd}
                 AND tb_user.USER_REGION_MASTER = #{userRegionMaster}
