@@ -402,7 +402,7 @@ select::-ms-expand{
     height: 50px;
     line-height: 50px;
     margin-left: 10px;
-    font-size: 14px;
+    font-size: 12px;
 }
 .mapLegendLabelSmall{
     float:left;

@@ -76,7 +76,7 @@
 </script>
 <body>
 <jsp:include page="/menu"/>
-<div class="bgc_w wd100rate h120rate fl">
+<div class="bgc_w wd100rate scrollView fl" style="height: 85%;">
     <form:form id="frm" name="frm" method="post">
         <table class="searchTable">
             <tr>
@@ -102,12 +102,12 @@
             </tr>
         </table>
     </form:form>
-    <div  class="dp_inlineBlock borderRight scroll_y wd100rate h100rate">
-        <div class="wd100rate" style="height: 200%;">
+    <div  class="dp_inlineBlock borderRight wd100rate">
+        <div class="wd100rate" style="overflow: auto;">
             <c:forEach var="item" items="${resultList}" varStatus="status">
                 <c:set var="result" value="${resultList.get(status.index)}"/>
                 <div class="wd50rate fl p_re pt20">
-                    <Label for = "table${status.index}" class="statisticTableLabel">* 주민 참여형 악취 모니터링 결과 (
+                    <Label for = "table${status.index}" class="statisticTableLabel">* 주민 참여형 악취 모니터링 결과 (접수 시간대 -
                         <c:choose>
                             <c:when test="${result.smellRegisterTimeName ne ''}">${result.smellRegisterTimeName}</c:when>
                             <c:otherwise>전체</c:otherwise>
