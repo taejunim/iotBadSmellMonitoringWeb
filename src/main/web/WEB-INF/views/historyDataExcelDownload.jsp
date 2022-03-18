@@ -1,7 +1,8 @@
 <%@ page language="java" contentType="application/vnd.ms-excel;" pageEncoding="UTF-8"%>
 <meta http-equiv="content-type" content="application/vnd.ms-excel; charset=utf-8">
 <%
-    response.setHeader("Content-Disposition", "attachment; filename=LIST.xls");
+    String filename = new String("주민악취접수이력".getBytes(), "8859_1");
+    response.setHeader("Content-Disposition", "attachment; filename="+ filename + ".xls");
     response.setHeader("Content-Description", "JSP Generated Data");
 %>
 <head>
