@@ -65,10 +65,22 @@
                  FROM tb_smell_register
                  WHERE REG_ID = #{regId}
                    AND DATE_FORMAT(REG_DT, '%Y-%m-%d') = DATE_FORMAT(#{regDt}, '%Y-%m-%d')
-                 ) AS TSR
+                 ) AS tsr
         WHERE 1=1
     </select>
 
-
+<!--    <select id="attendListSelect" parameterType="int" resultType="arraylist">-->
+<!--        select x.cnt, tb.USER_ID-->
+<!--        from tb_user tb-->
+<!--                 left join (-->
+<!--            select REG_ID, REG_DT, count(*) as cnt-->
+<!--            from tb_smell_register-->
+<!--            where 1=1-->
+<!--            group by date_format(REG_DT,'%Y-%m-%d'), REG_ID-->
+<!--            having date_format(REG_DT,'%Y-%m-%d') = date_format(#{monthDate}, '%Y-%m-%d')-->
+<!--        ) as x on x.REG_ID = tb.USER_ID-->
+<!--        where 1=1-->
+<!--        order by tb.USER_ID DESC;-->
+<!--    </select>-->
 
 </mapper>

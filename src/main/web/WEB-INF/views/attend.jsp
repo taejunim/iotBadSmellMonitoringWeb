@@ -71,6 +71,7 @@
         frm.pageIndex.value = pageNo;
         document.frm.action = "<c:url value='/attend.do'/>";
         document.frm.submit();
+
     }
 
     //조회
@@ -206,7 +207,7 @@
                                 <c:choose>
                                     <c:when test="${!empty memberMap.value}">
                                         <c:forEach items="${memberMap.value}" var="cnt">
-                                            <td><c:out value="${status.index}"/> ${cnt.cnt}</td>
+                                            <td>${cnt.cnt}</td>
                                             <c:if test="${cnt.cnt eq 'o'}">
                                                 <c:set var= "sum" value="${sum + 1}"/>
                                             </c:if>

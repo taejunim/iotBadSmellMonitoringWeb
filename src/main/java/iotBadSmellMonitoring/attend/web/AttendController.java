@@ -31,14 +31,13 @@ public class AttendController {
     @RequestMapping("/attend")
     public String attend(@ModelAttribute("joinVO") JoinVO joinVO, ModelMap model) throws Exception {
         Map<String, String> monthDate = new LinkedHashMap<>();
+        Map<String, Object> monthDateMap = new LinkedHashMap<>();
+        Map<String, Object> attendMap = new LinkedHashMap<>();
+        Map<String, String> parameter = new LinkedHashMap<>();
 
         MainVO mainVO = new MainVO();
 
         joinVO.setSearchCondition("1");                                                              //페이징여부
-
-        Map<String, Object> monthDateMap = new LinkedHashMap<>();
-        Map<String, Object> attendMap = new HashMap<>();
-        Map<String, String> parameter = new HashMap<>();
 
         /*검색조건 SETTING START*/
         mainVO.setCodeGroup("REM");
@@ -60,17 +59,12 @@ public class AttendController {
             attendMap.put(memberList.get(i).get("userId").toString(), monthDateMap);                //날짜 데이터, 출석여부
         }
 
-
-
-//        while (iter.hasNext()) {
-//            String key = iter.next();
-//            for (int i=0; i< memberList.size(); i++) {
-//                parameter.put("regId", (memberList.get(i).get("userId").toString()));
-//                parameter.put("regDt", key);
-//                monthDateMap.put(memberList.get(i).get("userId").toString() ,attendService.attendListSelect(parameter));
-//            }
-//            attendMap.put(monthDate.get(key), monthDateMap);
+//        for (int i=0; i<monthList.size(); i++) {
+//
+//            numOfList = attendService.attendListSelect(monthList.get(i));
+//            attendMap.put(monthList.get(i), numOfList);
 //        }
+
         /*페이징 SETTING START*/
         PaginationInfo paginationInfo = new PaginationInfo();
 
@@ -146,23 +140,22 @@ public class AttendController {
 
         int year = calendar.get(Calendar.YEAR);
         int month = calendar.get(calendar.MONTH);
-        int end = calendar.getActualMaximum(Calendar.DATE);
+        int end = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
 
-        calendar.set(year, month, 0);
+        calendar.set(year, month, 1);
 
         if (JoinVO.getSrtDate() != null && JoinVO.getSrtDate() != "") {  //검색 날짜 있으면 해당 날짜 월 데이터
             year = Integer.parseInt(JoinVO.getSrtDate());
-            month = Integer.parseInt(JoinVO.getEndDate());
+            month = Integer.parseInt(JoinVO.getEndDate()) - 1;
 
-            calendar.set(year, month, 0);
-
+            calendar.set(year, month , 1);
             end = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
         }
 
 
         for (int i=1; i<= end; i++) {   // map(2021-00-01, 01) 형태
-            calendar.add(Calendar.DAY_OF_MONTH, + 1);
             monthDate.put(format.format(calendar.getTime()), format.format(calendar.getTime()).substring(8));
+            calendar.add(Calendar.DAY_OF_MONTH, 1);
         }
 
         return monthDate;
