@@ -12,15 +12,15 @@ import java.util.Map;
 
 /**
  * @ Class Name   : AttendServiceImpl.java
- * @ Modification : 출석일지 SERVICE IMPL
+ * @ Modification : USER ATTEND SERVICEIMPL.
  * @
  * @ 최초 생성일     최초 생성자
  * @ ---------    ---------
  * @ 2022.03.17.    허지명
  * @
- * @   수정일         수정자
+ * @  수정일           수정자
  * @ ---------    ---------
- * @
+ * @ 2022.03.18     고재훈
  **/
 @Service
 public class AttendServiceImpl implements AttendService {
@@ -28,57 +28,31 @@ public class AttendServiceImpl implements AttendService {
     SqlSession sqlSession;
 
     /**
-     * 회원 리스트 조회
+     * 출석 회원 리스트 목록
      * @param joinVO
      * @return
      * @throws Exception
      */
     @Override
-    public List<EgovMap> memberListSelect(JoinVO joinVO) throws Exception {
+    public List<EgovMap> attendUserList(JoinVO joinVO) throws Exception {
 
         AttendMapper mapper = sqlSession.getMapper(AttendMapper.class);
 
-        return mapper.memberListSelect(joinVO);
+        return mapper.attendUserList(joinVO);
     }
 
     /**
-     * 회원 전체 리스트 조회
+     * 출석 여부 확인 리스트 목록
      * @param joinVO
      * @return
      * @throws Exception
      */
     @Override
-    public List<EgovMap> memberListSelectTotal(JoinVO joinVO) throws Exception {
+    public List<EgovMap> attendUserCheckList(JoinVO joinVO) throws Exception {
 
         AttendMapper mapper = sqlSession.getMapper(AttendMapper.class);
 
-        return mapper.memberListSelectTotal(joinVO);
+        return mapper.attendUserCheckList(joinVO);
     }
 
-    /**
-     * 회원 리스트 TOTAL COUNT 조회
-     * @param joinVO
-     * @return
-     * @throws Exception
-     */
-    @Override
-    public int memberListTotalCnt(JoinVO joinVO) throws Exception {
-
-        AttendMapper mapper = sqlSession.getMapper(AttendMapper.class);
-
-        return mapper.memberListTotalCnt(joinVO);
-    }
-
-    /**
-     * 날짜 데이터, 접수 데이터 매칭
-     * @param parameter
-     * @return
-     * @throws Exception
-     */
-    public List<EgovMap> attendListSelect(Map<String, String> parameter) throws Exception {
-
-        AttendMapper AttendMapper = sqlSession.getMapper(AttendMapper.class);
-
-        return AttendMapper.attendListSelect(parameter);
-    }
 }

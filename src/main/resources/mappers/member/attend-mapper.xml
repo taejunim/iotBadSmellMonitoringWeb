@@ -2,85 +2,125 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="iotBadSmellMonitoring.member.service.impl.AttendMapper">
-    <!--회원 리스트 목록-->
-    <select id="memberListSelect" parameterType="joinVO" resultType="egovMap">
 
-        SELECT USER_ID
-        , USER_NAME
-        , USER_REGION_MASTER
-        , USER_REGION_DETAIL
-        , CONCAT(F_GET_CODE_NAME('REM',USER_REGION_MASTER),
-        ' ',F_GET_CODE_NAME('RGD',USER_REGION_DETAIL) )        USER_REGION_NAME
-        FROM tb_user
-        WHERE 1=1
+    <!--출석 회원 리스트 목록-->
+    <select id="attendUserList" parameterType="joinVO" resultType="egovMap">
 
-        <if test="userName != null and !userName.equals('')" >
-            AND LOWER(USER_NAME) LIKE LOWER('%${userName}%')
-        </if>
-        <if test="userRegionMaster != null and !userRegionMaster.equals('')" >
-            AND USER_REGION_MASTER = #{userRegionMaster}
-        </if>
-        <if test="userRegionDetail != null and !userRegionDetail.equals('')" >
-            AND USER_REGION_DETAIL = #{userRegionDetail}
-        </if>
-        ORDER BY USER_ID DESC
-        <if test="searchCondition != null and !searchCondition.equals('')" >
-            LIMIT #{recordCountPerPage} OFFSET #{firstIndex};
-        </if>
+     SELECT t1.USER_ID                                      USER_ID
+          , t1.USER_NAME                                    USER_NAME
+          , t1.USER_REGION_MASTER                           USER_REGION_MASTER
+          , t1.USER_REGION_DETAIL                           USER_REGION_DETAIL
+          , F_GET_CODE_NAME('REM',t1.USER_REGION_MASTER)    USER_REGION_MASTER_NAME
+          , F_GET_CODE_NAME('RGD', t1.USER_REGION_DETAIL)   USER_REGION_DETAIL_NAME
+
+       FROM tb_user t1
+
+      WHERE 1 = 1
+
+        AND t1.USER_TYPE NOT IN ('002')
+
+   ORDER BY USER_NAME ASC
+
     </select>
 
-    <!--회원 전체 리스트 목록-->
-    <select id="memberListSelectTotal" parameterType="joinVO" resultType="egovMap">
+    <!--출석 여부 확인 리스트 목록-->
+    <select id="attendUserCheckList" parameterType="joinVO" resultType="egovMap">
 
-        SELECT USER_ID
-        , USER_NAME
-        , CONCAT(F_GET_CODE_NAME('REM',USER_REGION_MASTER),
-        ' ',F_GET_CODE_NAME('RGD',USER_REGION_DETAIL) )        USER_REGION_NAME
-        FROM tb_user
-        WHERE 1=1
+        <![CDATA[
+                    SELECT          t2.DATE_YMD DATE_YMD
+                                  , t2.REG_COUNT REG_COUNT
+                                  , (CASE
+                                    WHEN DATE_FORMAT(t2.DATE_YMD, '%Y-%m-%d') > DATE_FORMAT(now(), '%Y-%m-%d') THEN '-'
+                                    WHEN REG_COUNT = 3 THEN 'O'
+                                    WHEN REG_COUNT < 3 THEN 'X' END) AS CHECK_RESULT
+
+                    FROM (
+                             SELECT t1.date_ymd                                DATE_YMD
+                                  , COUNT(DATE_FORMAT(tsr.REG_DT, '%Y-%m-%d')) REG_COUNT
+
+                             FROM tb_smell_register tsr
+                                      RIGHT JOIN
+
+                                  (
+                                      SELECT a.date_ymd
+                                      FROM (
+                                               SELECT #{regDt} - INTERVAL (a.a + (10 * b.a) + (100 * c.a)) DAY as date_ymd
+                                               FROM (
+                                                        SELECT 0 AS a
+                                                        UNION ALL
+                                                        SELECT 1
+                                                        UNION ALL
+                                                        SELECT 2
+                                                        UNION ALL
+                                                        SELECT 3
+                                                        UNION ALL
+                                                        SELECT 4
+                                                        UNION ALL
+                                                        SELECT 5
+                                                        UNION ALL
+                                                        SELECT 6
+                                                        UNION ALL
+                                                        SELECT 7
+                                                        UNION ALL
+                                                        SELECT 8
+                                                        UNION ALL
+                                                        SELECT 9
+                                                    ) AS a
+
+                                                        CROSS JOIN (
+                                                   SELECT 0 AS a
+                                                   UNION ALL
+                                                   SELECT 1
+                                                   UNION ALL
+                                                   SELECT 2
+                                                   UNION ALL
+                                                   SELECT 3
+                                                   UNION ALL
+                                                   SELECT 4
+                                                   UNION ALL
+                                                   SELECT 5
+                                                   UNION ALL
+                                                   SELECT 6
+                                                   UNION ALL
+                                                   SELECT 7
+                                                   UNION ALL
+                                                   SELECT 8
+                                                   UNION ALL
+                                                   SELECT 9
+                                               ) AS b
+
+                                                        CROSS JOIN (
+                                                   SELECT 0 as a
+                                                   UNION ALL
+                                                   SELECT 1
+                                                   UNION ALL
+                                                   SELECT 2
+                                                   UNION ALL
+                                                   SELECT 3
+                                                   UNION ALL
+                                                   SELECT 4
+                                                   UNION ALL
+                                                   SELECT 5
+                                                   UNION ALL
+                                                   SELECT 6
+                                                   UNION ALL
+                                                   SELECT 7
+                                                   UNION ALL
+                                                   SELECT 8
+                                                   UNION ALL
+                                                   SELECT 9
+                                               ) AS c
+                                           ) AS a
+                                      WHERE 1 = 1
+                                        AND a.date_ymd LIKE CONCAT(#{searchYear},'-',#{searchMonth},'-%') -- 한달만 검색 하려고 하는경우
+                                  ) t1 ON t1.date_ymd = DATE_FORMAT(tsr.REG_DT, '%Y-%m-%d')
+                                      AND REG_ID = #{userId}
+
+                             GROUP BY t1.date_ymd
+                             ORDER BY t1.date_ymd ASC
+                         ) t2
+        ]]>
+
     </select>
-
-    <!--회원 리스트 count 조회-->
-    <select id="memberListTotalCnt" parameterType="joinVO" resultType="int">
-
-        SELECT COUNT(*) cnt
-        FROM tb_user
-        WHERE 1=1
-        <if test="userName != null and !userName.equals('')" >
-            AND LOWER(USER_NAME) LIKE LOWER('%${userName}%')
-        </if>
-        <if test="userRegionMaster != null and !userRegionMaster.equals('')" >
-            AND USER_REGION_MASTER = #{userRegionMaster}
-        </if>
-        <if test="userRegionDetail != null and !userRegionDetail.equals('')" >
-            AND USER_REGION_DETAIL = #{userRegionDetail}
-        </if>
-    </select>
-
-    <!--날짜 데이터 , 접수 데이터 매칭-->
-    <select id="attendListSelect" parameterType="Map" resultType="egovMap">
-        SELECT IF ( tsr.CNT = 3, 'o' , 'x') cnt
-        FROM (
-                 SELECT count(*) as CNT
-                 FROM tb_smell_register
-                 WHERE REG_ID = #{regId}
-                   AND DATE_FORMAT(REG_DT, '%Y-%m-%d') = DATE_FORMAT(#{regDt}, '%Y-%m-%d')
-                 ) AS tsr
-        WHERE 1=1
-    </select>
-
-<!--    <select id="attendListSelect" parameterType="int" resultType="arraylist">-->
-<!--        select x.cnt, tb.USER_ID-->
-<!--        from tb_user tb-->
-<!--                 left join (-->
-<!--            select REG_ID, REG_DT, count(*) as cnt-->
-<!--            from tb_smell_register-->
-<!--            where 1=1-->
-<!--            group by date_format(REG_DT,'%Y-%m-%d'), REG_ID-->
-<!--            having date_format(REG_DT,'%Y-%m-%d') = date_format(#{monthDate}, '%Y-%m-%d')-->
-<!--        ) as x on x.REG_ID = tb.USER_ID-->
-<!--        where 1=1-->
-<!--        order by tb.USER_ID DESC;-->
-<!--    </select>-->
 
 </mapper>

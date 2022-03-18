@@ -1,0 +1,136 @@
+package iotBadSmellMonitoring.member.web;
+
+import egovframework.rte.psl.dataaccess.util.EgovMap;
+import iotBadSmellMonitoring.join.service.JoinVO;
+import iotBadSmellMonitoring.member.service.AttendService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+
+/**
+ * @ Class Name   : AttendController.java
+ * @ Notification : USER ATTEND CONTROLLER
+ * @
+ * @ 최초 생성일      최초 생성자
+ * @ ---------    ---------
+ * @ 2021.03.18.    고재훈
+ * @
+ * @   수정일         수정자
+ * @ ---------    ---------
+ * @
+ **/
+@Controller
+public class AttendController {
+
+    @Autowired
+    private AttendService attendService;
+
+    //회원 출석 상태 화면
+    @RequestMapping("/attend")
+    public String attendView(@ModelAttribute("joinVO") JoinVO joinVO, ModelMap model) throws Exception {
+
+        String serachYear  = "";                                                                                        // 검색 연.
+        String serachMonth = "";                                                                                        // 검색 월.
+        int    lastDay     = 0;                                                                                         // 검색 연 월의 마지막 일을 알기 위한 변수.
+
+        if(joinVO.getSearchYear() == null && joinVO.getSearchMonth() == null){                                          // 첫 페이지 load 시 VO에 값이 없으므로 SET을 위한.
+
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy");
+            Date             now        = new Date();
+            serachYear                  = dateFormat.format(now);
+
+            dateFormat                  = new SimpleDateFormat("MM");
+            now                         = new Date();
+            serachMonth                 = dateFormat.format(now);
+
+            joinVO.setSearchYear(serachYear);
+            joinVO.setSearchMonth(serachMonth);
+
+        }else{                                                                                                          // VO에 값이 있을 떄.
+
+            serachYear                  = joinVO.getSearchYear();
+            serachMonth                 = joinVO.getSearchMonth();
+        }
+
+        Calendar cal                    = Calendar.getInstance();
+        cal.set(Integer.parseInt(serachYear), Integer.parseInt(serachMonth)-1, 1);                          // 월은 -1해줘야 해당월로 인식.
+
+        lastDay                         = cal.getActualMaximum(Calendar.DAY_OF_MONTH);                                  // 검색 연 월의 일 GET.
+        List<EgovMap> dateList          = new ArrayList<>();                                                            // HEARDER 일수 SETTING을 위한 LIST MAP 변수.
+        List<EgovMap> resultList        = new ArrayList<>();                                                            // 사용자 체크 리스트 SETTING을 위한 LIST MAP 변수.
+
+        for(int i =0; i < lastDay; i ++){                                                                               // HEARDER 일수 SETTING을 위한 반복문.
+
+            EgovMap egovMap             = new EgovMap();
+            egovMap.put("DAY",i+1);
+            dateList.add(egovMap);
+        }
+
+        /*
+         * 1. 회원 목록을 가져온다.(attendUserList)
+         * 2. 회원 별, 검색 연 / 월에 선택된 일수별 하루 3번 체크 목록을 가져온다.(attendUserCheckList)
+         * 3. attendUserCheckList를 EgovMap에 담아서 attendUserList add 시킨다.
+         * 4. 위 결과 resultList를 model에 담아서 View에서 뿌려준다.
+         */
+        List<EgovMap> attendUserList   = attendService.attendUserList(joinVO);                                          // 출석 회원 리스트 목록 CALL.
+
+        joinVO.setRegDt(serachYear+"-"+serachMonth+"-"+lastDay);
+
+        for(int i = 0; i < attendUserList.size(); i++){
+
+            joinVO.setUserId(attendUserList.get(i).getValue(0).toString());
+
+            List<EgovMap> attendUserCheckList   = attendService.attendUserCheckList(joinVO);                            // 출석 여부 확인 리스트 목록 CALL.
+            EgovMap       attendCheckMap        = new EgovMap();
+
+            attendCheckMap.put("USER_ID",attendUserList.get(i).getValue(0));
+            attendCheckMap.put("USER_NAME",attendUserList.get(i).getValue(1));
+            attendCheckMap.put("USER_REGION_MASTER",attendUserList.get(i).getValue(2));
+            attendCheckMap.put("USER_REGION_DETAIL",attendUserList.get(i).getValue(3));
+            attendCheckMap.put("USER_REGION_MASTER_NAME",attendUserList.get(i).getValue(4));
+            attendCheckMap.put("USER_REGION_DETAIL_NAME",attendUserList.get(i).getValue(5));
+
+            int regDayCount = 0;                                                                                        // 1일 3회 24일 이상 출석을 위한 변수.
+
+            for(int j = 0; j < attendUserCheckList.size(); j++) {
+
+                String result = String.valueOf(attendUserCheckList.get(j).getValue(2));
+                attendCheckMap.put("DAY_" + j, result);
+
+                if(result.equals("O"))
+                    regDayCount ++;
+            }
+
+            attendCheckMap.put("USER_REG_COUNT",regDayCount+"/"+lastDay);
+
+            if(regDayCount<23)                                                                                          // 24일 이상일 경우 수당 지금 여부 O.
+                attendCheckMap.put("USER_DAY_CHECK","O");
+            else
+                attendCheckMap.put("USER_DAY_CHECK","X");
+
+            resultList.add(attendCheckMap);
+        }
+
+        model.addAttribute("dateList", dateList);
+        model.addAttribute("dateCount",dateList.size());
+        model.addAttribute("resultList", resultList);
+
+        return "attend";
+    }
+
+    //엑셀 다운로드
+    @RequestMapping(value = "/attendDataExcelDownload")
+    public String attendDataExcelDownload(JoinVO joinVO,ModelMap modelMap) throws Exception {
+
+        return "attendDataExcelDownload";
+    }
+
+}
