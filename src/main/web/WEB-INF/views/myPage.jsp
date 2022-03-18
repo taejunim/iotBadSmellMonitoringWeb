@@ -12,16 +12,20 @@
     $(document).ready(function () {
 
         setButton("myPage");                        //선택된 화면의 메뉴색 변경 CALL
-        var phone = '<%=(String) session.getAttribute("userPhone")%>';                              //전화번호
-        phone = phone.substr(0, 3) + "-" + phone.substr(3, 4) + "-" + phone.substr(7,4);            //전화번호에 - 추가
 
         /*세션값 불러오기 START*/
-        $("#showId").val('<%=(String)session.getAttribute("userId")%>');                                    //아이디
-        // $("#userPassword").val("");                                                                         //사용자_비밀번호
+        //전화번호
+        var phone = '<%=(String) session.getAttribute("userPhone")%>';
+
+        if(nullCheck(phone) != '-')
+            phone = phone.substr(0, 3) + "-" + phone.substr(3, 4) + "-" + phone.substr(7,4);            //전화번호에 - 추가
+        else phone = '-';
+        
+        $("#showId").val(nullCheck('<%=(String)session.getAttribute("userId")%>'));                                    //아이디         //사용자_비밀번호
         $("#showName").val('<%=(String)session.getAttribute("userName")%>');                                //이름
         $("#userPhone").val(phone);                                                                         //전화번호
-        $("#showAge").val('<%=(String)session.getAttribute("userAge")%>');                                  //나이
-        $("#userRegion").val('<%=(String)session.getAttribute("userRegionMasterName")%>');                  //지역
+        $("#showAge").val(nullCheck('<%=(String)session.getAttribute("userAge")%>'));                                  //나이
+        $("#userRegion").val(nullCheck('<%=(String)session.getAttribute("userRegionMasterName")%>'));                  //지역
         $("#userSex").val('<%=(String) session.getAttribute("userSexName")%>');                             //성별
         $("#userType").val('<%=(String)session.getAttribute("userTypeName")%>');                            //구분
         /*세션값 불러오기 END*/
@@ -93,6 +97,12 @@
             }
         })
     });
+
+    //값 뿌리기 전 null을 체크
+    function nullCheck(value){
+        if(value == "null" || value == "") return "-";
+        else return value;
+    }
 
     //비밀번호 글자수 제한
     function length_check() {
