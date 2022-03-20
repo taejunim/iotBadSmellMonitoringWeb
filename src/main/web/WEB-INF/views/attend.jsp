@@ -40,7 +40,7 @@
 
         //데이터 다운로드 클릭 이벤트
         $("#downloadButton").click(function(){
-            //showLoader(true);
+
             document.frm.action = "<c:url value='/attendDataExcelDownload'/>";
             document.frm.submit();
         });

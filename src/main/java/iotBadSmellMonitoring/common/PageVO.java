@@ -26,22 +26,7 @@ public class PageVO implements Serializable {
   private String endDate;
   private String searchYear;                                                                                            //검색 연
   private String searchMonth;                                                                                           //검색 월
-
-  public String getSrtDate() {
-    return srtDate;
-  }
-
-  public void setSrtDate(String srtDate) {
-    this.srtDate = srtDate;
-  }
-
-  public String getEndDate() {
-    return endDate;
-  }
-
-  public void setEndDate(String endDate) {
-    this.endDate = endDate;
-  }
+  private String commonGbn1;                                                                                            //구분 1
 
   /** 검색조건 */
   private String searchCondition = "";
@@ -205,6 +190,14 @@ public class PageVO implements Serializable {
     this.pageSize = pageSize;
   }
 
+  public String getSrtDate() { return srtDate; }
+
+  public void setSrtDate(String srtDate) { this.srtDate = srtDate; }
+
+  public String getEndDate() { return endDate; }
+
+  public void setEndDate(String endDate) { this.endDate = endDate; }
+
   public String getSearchYear() {
         return searchYear;
     }
@@ -220,6 +213,14 @@ public class PageVO implements Serializable {
   public void setSearchMonth(String searchMonth) {
     this.searchMonth = searchMonth;
 }
+
+  public String getCommonGbn1() {
+        return commonGbn1;
+    }
+
+  public void setCommonGbn1(String commonGbn1) {
+        this.commonGbn1 = commonGbn1;
+    }
 
   @Override
   public String toString() {

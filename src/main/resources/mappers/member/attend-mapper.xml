@@ -19,19 +19,30 @@
 
         AND USER_TYPE NOT IN ('002')
 
-        <if test="userName != null and !userName.equals('')" >
-            AND LOWER(USER_NAME) LIKE LOWER('%${userName}%')
-        </if>
-        <if test="userRegionMaster != null and !userRegionMaster.equals('')" >
-            AND USER_REGION_MASTER = #{userRegionMaster}
-        </if>
-        <if test="userRegionDetail != null and !userRegionDetail.equals('')" >
-            AND USER_REGION_DETAIL = #{userRegionDetail}
-        </if>
+        <choose>
+            <when test="commonGbn1 == 'view' and commonGbn1.equals('view')">                        <!--VIEW -->
 
-   ORDER BY USER_NAME ASC
+                <if test="userName != null and !userName.equals('')" >
+                    AND LOWER(USER_NAME) LIKE LOWER('%${userName}%')
+                </if>
+                <if test="userRegionMaster != null and !userRegionMaster.equals('')" >
+                    AND USER_REGION_MASTER = #{userRegionMaster}
+                </if>
+                <if test="userRegionDetail != null and !userRegionDetail.equals('')" >
+                    AND USER_REGION_DETAIL = #{userRegionDetail}
+                </if>
 
-      LIMIT #{recordCountPerPage} OFFSET #{firstIndex}
+                ORDER BY USER_NAME ASC
+
+                LIMIT #{recordCountPerPage} OFFSET #{firstIndex}
+
+            </when>
+            <otherwise>                                                                             <!--EXCEL -->
+
+                ORDER BY USER_NAME ASC
+
+            </otherwise>
+        </choose>
 
     </select>
 
@@ -66,9 +77,9 @@
                 SELECT          t2.DATE_YMD DATE_YMD
                               , t2.REG_COUNT REG_COUNT
                               , (CASE
-                                WHEN DATE_FORMAT(t2.DATE_YMD, '%Y-%m-%d') > DATE_FORMAT(now(), '%Y-%m-%d') THEN '-'
-                                WHEN REG_COUNT >= 3 THEN 'O'
-                                WHEN REG_COUNT < 3 THEN 'X' END) AS CHECK_RESULT
+                                    WHEN DATE_FORMAT(t2.DATE_YMD, '%Y-%m-%d') > DATE_FORMAT(now(), '%Y-%m-%d') THEN '-'
+                                    WHEN REG_COUNT >= 3 THEN 'O'
+                                    WHEN REG_COUNT < 3 THEN 'X' END) AS CHECK_RESULT
 
                 FROM (
                          SELECT t1.date_ymd                                DATE_YMD
