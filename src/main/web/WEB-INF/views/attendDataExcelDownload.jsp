@@ -1,6 +1,7 @@
 <%@ page import="static iotBadSmellMonitoring.member.web.AttendController.exceclYear" %>
 <%@ page import="static iotBadSmellMonitoring.member.web.AttendController.exceclMonth" %>
 <%@ page language="java" contentType="application/vnd.ms-excel;" pageEncoding="UTF-8"%>
+
 <meta http-equiv="content-type" content="application/vnd.ms-excel; charset=utf-8">
 <%
     String filename = exceclYear + new String("년".getBytes(), "8859_1") + exceclMonth + new String("월".getBytes(), "8859_1") + new String(" 모니터링 요원 출석일지".getBytes(), "8859_1");

@@ -9,37 +9,42 @@
 <%@include file="/WEB-INF/views/common/resources_common.jsp" %>
 <script type="text/javascript">
 
-    var userName          = '${joinVO.userName}';               //검색조건_아이디/이름
-    var userRegionMaster  = '${joinVO.userRegionMaster}';       //검색조건_지역
-    var userRegionDetail  = '${joinVO.userRegionDetail}';       //검색조건_지역_상세
-    var searchYear        = '${joinVO.searchYear}';             //검색조건_연
-    var searchMonth       = '${joinVO.searchMonth}';            //검색조건_월
+    var userName          = '${joinVO.userName}';                                                                       //검색조건_아이디/이름
+    var userRegionMaster  = '${joinVO.userRegionMaster}';                                                               //검색조건_지역
+    var userRegionDetail  = '${joinVO.userRegionDetail}';                                                               //검색조건_지역_상세
+    var searchYear        = '${joinVO.searchYear}';                                                                     //검색조건_연
+    var searchMonth       = '${joinVO.searchMonth}';                                                                    //검색조건_월
 
     $(document).ready(function () {
 
-        setButton("member");             //선택된 화면의 메뉴색 변경 CALL
-        setDropButton("attend");         //선택된 드롭다운 메뉴색 변경 CALL
-        monthDate();                     //월, 일자 셋팅 CALL
+        setButton("member");                                                                                            //선택된 화면의 메뉴색 변경 CALL
+        setDropButton("attend");                                                                                        //선택된 드롭다운 메뉴색 변경 CALL
+        monthDate();                                                                                                    //월, 일자 셋팅 CALL
 
         /* 검색 화면 검색어 세팅 START*/
         //지역
         if (userRegionMaster != "" && userRegionMaster != null) {
-            $("#userRegionMaster").val(userRegionMaster).prop("selected", true);                        //VO 값 선택
+            $("#userRegionMaster").val(userRegionMaster).prop("selected", true);                                        //VO 값 선택
             selectUserRegion(userRegionMaster);
         }
 
         if (searchYear != "" && searchYear != null) {
-            $("#searchYear").val(searchYear).prop("selected", true);                        //VO 값 선택
+            $("#searchYear").val(searchYear).prop("selected", true);                                                    //VO 값 선택
         }
 
         if (searchMonth != "" && searchMonth != null) {
-            $("#searchMonth").val(searchMonth).prop("selected", true);                        //VO 값 선택
+            $("#searchMonth").val(searchMonth).prop("selected", true);                                                  //VO 값 선택
         }
 
         /* 검색 화면 검색어 세팅 END*/
 
         //데이터 다운로드 클릭 이벤트
         $("#downloadButton").click(function(){
+
+            setCookie("loading","false");                                                                               //호출
+            checkDownloadCheck();
+
+            showLoader(true);
 
             document.frm.action = "<c:url value='/attendDataExcelDownload'/>";
             document.frm.submit();

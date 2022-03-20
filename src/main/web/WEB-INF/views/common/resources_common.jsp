@@ -54,14 +54,6 @@
           return true;
       }
 
-      //로딩바 표시/제거
-      function showLoader(show) {
-        if(show){
-            $("#loader").show();
-        }
-        else $("#loader").hide();
-      }
-
 
     //아이디 정규식
     function fn_chkId_pattern(val){

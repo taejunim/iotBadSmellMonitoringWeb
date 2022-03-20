@@ -51,3 +51,39 @@ function addUnit(text, unit){
 
     return text;
 }
+
+//로딩바 표시/제거
+function showLoader(show) {
+    if(show){
+        $("#loader").show();
+    }
+    else $("#loader").hide();
+}
+
+/*
+ * 쿠키를 이용한 로딩바 SET START
+ */
+function setCookie(c_name,value){
+
+    var c_value = escape(value);
+    document.cookie=c_name + "=" + c_value + "; path=/";
+}
+
+function checkDownloadCheck(){
+
+    if (document.cookie.indexOf("loading=true") != -1) {
+
+        var date = new Date(1000);
+
+        document.cookie = "loading=; expires=" + date.toUTCString() + "; path=/";
+
+        showLoader(false);
+
+        return;
+    }
+
+    setTimeout(checkDownloadCheck , 100);
+}
+/*
+ * 쿠키를 이용한 로딩바 SET END
+ */

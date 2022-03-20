@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -184,7 +186,13 @@ public class AttendController {
 
     //엑셀 다운로드
     @RequestMapping(value = "/attendDataExcelDownload")
-    public String attendDataExcelDownload(@ModelAttribute("joinVO") JoinVO joinVO,ModelMap model) throws Exception {
+    public String  attendDataExcelDownload(@ModelAttribute("joinVO") JoinVO joinVO, ModelMap model, HttpServletResponse response) throws Exception {
+
+        /* 쿠키를 이용한 로딩 START */
+        Cookie cookie = new Cookie("loading", "true");
+        cookie.setPath("/");
+        response.addCookie(cookie);
+        /* 쿠키를 이용한 로딩 END */
 
         String serachYear  = "";                                                                                        // 검색 연.
         String serachMonth = "";                                                                                        // 검색 월.
@@ -259,6 +267,8 @@ public class AttendController {
         model.addAttribute("dateList", dateList);
         model.addAttribute("dateCount",dateList.size());
         model.addAttribute("resultList", resultList);
+
+
 
         return "attendDataExcelDownload";
     }
