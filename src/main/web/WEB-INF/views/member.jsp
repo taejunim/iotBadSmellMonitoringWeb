@@ -317,7 +317,7 @@ To change this template use File | Settings | File Templates.
         </div>
         </form:form>
         <div class="h100rate fr wd28rate">
-            <h2 class="mt50"><strong>회원정보</strong></h2>
+            <h2 class="mt50"><strong>상세</strong></h2>
             <form:form id="memberInfo" method="post">
                 <table class="listTable wd95rate">
                     <tr class="h57">

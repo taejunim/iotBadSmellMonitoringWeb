@@ -323,7 +323,7 @@
         </div>
         </form:form>
         <div class="h100rate fr wd32rate">
-            <h2 class="mt50"><strong>공지사항</strong></h2>
+            <h2 class="mt50"><strong>상세</strong></h2>
             <form:form id="memberInfo" method="post">
                 <table class="listTable wd95rate">
                     <tr class="h57">

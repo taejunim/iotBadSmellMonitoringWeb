@@ -376,8 +376,8 @@ function imageDelete(imageIndex){
             <ui:pagination paginationInfo="${paginationInfo}" type="image" jsFunction="fn_page"/>
         </div>
     </div>
-
     <div class="scrollView">
+        <h2 class="mt50" style="position: relative;left: 30px;"><strong>상세</strong></h2>
         <div id="rightSide" class="fr wd100rate h40rate">
             <table class="border_none mg0auto wd90rate mb20">
                 <tr>
