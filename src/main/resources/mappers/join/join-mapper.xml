@@ -13,20 +13,14 @@
                                 , USER_NAME
                                 , USER_SEX
                                 , USER_AGE
-                                , USER_REGION_MASTER
-                                , USER_REGION_DETAIL
-                                , USER_PHONE
                              )
                      VALUES (
                                 #{userId}
                                 , password(#{userPassword})
-                                , #{userType}
+                                , '002'                                                                                 <!-- WEB 회원가입은 관리자만-->
                                 , #{userName}
                                 , #{userSex}
                                 , #{userAge}
-                                , #{userRegionMaster}
-                                , #{userRegionDetail}
-                                , #{userPhone}
                              )
 
     </insert>

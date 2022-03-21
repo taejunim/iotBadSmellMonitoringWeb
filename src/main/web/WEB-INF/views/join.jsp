@@ -26,9 +26,7 @@
         $("#btnCheck").click(function(){
             idCheck();
         });
-
     });
-
 
     //회원가입
     function join() {
@@ -97,14 +95,6 @@
             return;
         }
 
-        //아이디 길이 확인
-        // if(!fn_chkIdLength(userId)) {
-        //     return;
-        // }
-        /*if(!fn_chkIdLength(userId)) {
-            return;
-        }*/
-
         if(userId != "") {
             $.ajax({
                 url: "/join/userFindIdSelect",
@@ -152,7 +142,7 @@
                 <td><input type="text" name="userName" class="inputForm fl" placeholder="이름을 입력해 주십시오." maxlength="10"></td>
             </tr>
             <tr>
-                <td class="align_l pl20"><label class="tableLabel">* 성별</label></td>
+                <td class="align_l pl20"><label class="tableLabel">&nbsp;&nbsp;&nbsp;성별</label></td>
                 <td>
                     <select name="userSex" class="selectForm fl required" >
                         <c:forEach var="item" items="${CG_SEX}">
@@ -162,27 +152,13 @@
                 </td>
             </tr>
             <tr>
-                <td class="align_l pl20"><label class="tableLabel">* 구분</label></td>
-                <td>
-                    <select name="userType" class="selectForm fl required">
-                        <c:forEach var="item" items="${CG_UST}">
-                            <c:if test="${item.codeGroup eq 'UST' and item.codeId eq '002'}">
-                                <option value="${item.codeId}" selected>${item.codeIdName}</option>
-                            </c:if>
-                        </c:forEach>
-                    </select>
-                </td>
-            </tr>
-            <tr>
                 <td colspan="2">
-                    <a class="button bgc_grayC wd60 font_bold" id="btnCancel">취소</a>
+                    <a class="button bgc_grayC wd60 font_bold"   id="btnCancel">취소</a>
                     <a class="button bgcDeepBlue wd60 font_bold" id="btnComplete">완료</a>
                 </td>
-
             </tr>
         </table>
         </form:form>
     </div>
 </div>
- </body>
-</html>
+</body>
