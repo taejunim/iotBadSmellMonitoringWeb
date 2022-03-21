@@ -218,8 +218,6 @@ To change this template use File | Settings | File Templates.
                     </c:forEach>
                 </select>
             </td>
-            <th>나이</th>
-            <td class="wd100"><input type="text" id="searchUserAge" name="userAge" value="${joinVO.userAge}"></td>
             <th>성별</th>
             <td class="wd100">
                 <select id="searchUserSex" name="userSex" class="wd90">

@@ -32,9 +32,6 @@
         <if test="userRegionMaster != null and !userRegionMaster.equals('')" >
             AND USER_REGION_MASTER = #{userRegionMaster}
         </if>
-        <if test="userAge != null and !userAge.equals('')" >
-            AND USER_AGE LIKE '%${userAge}%'
-        </if>
         <if test="userSex != null and !userSex.equals('')" >
             AND USER_SEX = #{userSex}
         </if>
@@ -59,9 +56,6 @@
         </if>
         <if test="userRegionMaster != null and !userRegionMaster.equals('')" >
             AND USER_REGION_MASTER = #{userRegionMaster}
-        </if>
-        <if test="userAge != null and !userAge.equals('')" >
-            AND USER_AGE LIKE '%${userAge}%'
         </if>
         <if test="userSex != null and !userSex.equals('')" >
             AND USER_SEX = #{userSex}
