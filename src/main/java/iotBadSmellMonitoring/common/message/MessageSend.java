@@ -7,7 +7,20 @@ import net.nurigo.sdk.message.request.SingleMessageSendingRequest;
 import net.nurigo.sdk.message.response.SingleMessageSentResponse;
 import net.nurigo.sdk.message.service.DefaultMessageService;
 
+/**
+ * @ Class Name   : MessageSend.java
+ * @ Notification : MESSAGE SEND CLASS.
+ * @
+ * @ 최초 생성일      최초 생성자
+ * @ ---------    ---------
+ * @ 2022.03.21.    조유영
+ * @
+ * @  수정일          수정자
+ * @ ---------    ---------
+ * @
+ **/
 public class MessageSend {
+
     private final DefaultMessageService messageService;
 
     private String        apiKey         = UtProperty.getProperty("message.apiKey");
@@ -32,6 +45,9 @@ public class MessageSend {
         return response;
     }
 
+    /**
+     * 단일 메시지 SET
+     */
     public Message setMessage(MessageVO messageVO) {
         Message message = new Message();
         message.setFrom(messageVO.getFrom());
@@ -40,4 +56,5 @@ public class MessageSend {
 
         return message;
     }
+
 }
