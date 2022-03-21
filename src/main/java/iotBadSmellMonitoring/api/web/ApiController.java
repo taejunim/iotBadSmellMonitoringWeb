@@ -912,7 +912,10 @@ public class ApiController {
 
              EgovMap egovMap = memberService.userPhoneCheck(request.getParameter("userPhone"));
 
-            if(egovMap != null && !egovMap.isEmpty())
+            if(request.getParameter("userPhone") == null || request.getParameter("userPhone").equals(""))
+                message = "{\"result\":\"fail\",\"message\":\"MOBILE NUMBER PLEASE.\"}";
+
+            else if(egovMap != null && !egovMap.isEmpty())
                 message = "{\"result\":\"fail\",\"message\":\"THIS IS A REGISTERED MOBILE NUMBER.\"}";
 
             else {                                                                                                      //인증번호 로직 시작
