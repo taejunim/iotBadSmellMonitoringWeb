@@ -11,6 +11,8 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -111,7 +113,13 @@ public class StatisticTableController {
 
     //엑셀 다운로드 - 시간 없이 전체만 구한다.
     @RequestMapping(value = "/statisticTableDataExcelDownload")
-    public String staitsticTableDataExcelDownload(StatisticTableVO statisticTableVO, ModelMap modelMap) throws Exception {
+    public String staitsticTableDataExcelDownload(StatisticTableVO statisticTableVO, ModelMap modelMap, HttpServletResponse response) throws Exception {
+
+        /* 쿠키를 이용한 로딩 START */
+        Cookie cookie = new Cookie("loading", "true");
+        cookie.setPath("/");
+        response.addCookie(cookie);
+        /* 쿠키를 이용한 로딩 END */
 
         EgovMap result = statisticService.statisticTableSelect(statisticTableVO);
 

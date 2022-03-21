@@ -41,6 +41,11 @@
         });
         //데이터 다운로드 클릭 이벤트
         $("#downloadButton").click(function(){
+            setCookie("loading","false");
+            checkDownloadCheck();
+
+            showLoader(true);
+
             document.frm.action = "<c:url value='/statisticTableDataExcelDownload'/>";
             document.frm.submit();
         });

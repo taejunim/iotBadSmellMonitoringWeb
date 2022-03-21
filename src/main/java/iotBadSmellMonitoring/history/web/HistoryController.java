@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 /**
@@ -97,7 +99,14 @@ public class HistoryController {
 
     //엑셀 다운로드
     @RequestMapping(value = "/historyDataExcelDownload")
-    public String historyDataExcelDownload(HistoryVO historyVO,ModelMap modelMap) throws Exception {
+    public String historyDataExcelDownload(HistoryVO historyVO,ModelMap modelMap, HttpServletResponse response) throws Exception {
+
+        /* 쿠키를 이용한 로딩 START */
+        Cookie cookie = new Cookie("loading", "true");
+        cookie.setPath("/");
+        response.addCookie(cookie);
+        /* 쿠키를 이용한 로딩 END */
+
         modelMap.addAttribute("resultList",historyService.historyListExcelSelect(historyVO));
         return "historyDataExcelDownload";
     }
