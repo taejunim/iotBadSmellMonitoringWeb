@@ -183,7 +183,13 @@
                     //새로 그릴떄마다 resize 해줘야함.
                     chart1.resize({height:600})
                     chart2.resize({height:600})
-                    $("#pieChartTitle").text($("#userRegionMaster option:selected").text()+" "+$("#userRegionDetail option:selected").text());
+
+                    //차트 제목
+                    if ($("#userRegionDetail option:selected").text() === "전체"){
+                        $("#pieChartTitle").text($("#userRegionMaster option:selected").text()+" "+$("#userRegionDetail option:selected").val());
+                    }else{
+                        $("#pieChartTitle").text($("#userRegionMaster option:selected").text()+" "+$("#userRegionDetail option:selected").text());
+                    }
                 }
             },
             error: function (err) {
