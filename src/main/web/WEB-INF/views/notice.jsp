@@ -37,6 +37,7 @@
             showLoader(true);
             $(location).attr('href', '/notice.do');
         });
+
         /* 검색 화면 검색어 세팅 END*/
 
         /*달력 SETTING START*/
@@ -58,6 +59,7 @@
             });
             //datepicker 초기화 END
         }
+
         /*달력 SETTING END*/
 
         /* 테이블 row 클릭 이벤트 START*/
@@ -136,7 +138,7 @@
                     });
                 }
             }
-        })
+        });
         /* 저장 버튼 클릭 이벤트 END*/
 
         /* 삭제 버튼 클릭 이벤트 START*/
@@ -169,8 +171,27 @@
                     }
                 })
             }
-        })
+        });
         /* 탈퇴 버튼 클릭 이벤트 END*/
+
+        /* 전송 버튼 클릭 이벤트 START*/
+        $("#noticeSendBtn").click(function () {
+
+            var regId = $("#regId").val().trim();
+
+            //공지사항을 선택 했는지 체크
+            if (regId === undefined || regId === "") {
+                alert("전송할 공지사항을 선택해 주세요.");
+                return false;
+            }
+
+            var con_test = confirm("공지사항을 전송하시겠습니까?");
+
+            if (con_test == true) {
+                alert("공지사항 전송");
+            }
+        });
+        /* 전송 버튼 클릭 이벤트 END*/
     });
 
     //페이지 이동 스크립트
@@ -333,8 +354,8 @@
                     </tr>
                     <tr class="h80">
                         <td colspan="2" class="align_c">
-                            <a class="button bgcDeepBlue" id="memberSaveBtn"><i
-                                    class="bx bxs-save"></i><strong>저장</strong></a>
+                            <a class="button bgcSkyBlue" id="noticeSendBtn"><i class="bx bx-arrow-from-bottom"></i><strong>전송</strong></a>
+                            <a class="button bgcDeepBlue" id="memberSaveBtn"><i class="bx bxs-save"></i><strong>저장</strong></a>
                             <a class="button bgcDeepRed" id="memberDeleteBtn"><i class="bx bx-minus-circle"></i>삭제</a>
                         </td>
                     </tr>
