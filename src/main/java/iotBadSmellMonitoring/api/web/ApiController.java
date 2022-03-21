@@ -2,6 +2,8 @@ package iotBadSmellMonitoring.api.web;
 
 import egovframework.rte.psl.dataaccess.util.EgovMap;
 import iotBadSmellMonitoring.common.CommonFunction;
+import iotBadSmellMonitoring.common.message.MessageSend;
+import iotBadSmellMonitoring.common.message.MessageVO;
 import iotBadSmellMonitoring.history.service.HistoryService;
 import iotBadSmellMonitoring.history.service.HistoryVO;
 import iotBadSmellMonitoring.history.service.RegisterService;
@@ -927,9 +929,21 @@ public class ApiController {
 
             if(egovMap != null && !egovMap.isEmpty())
                 message = "{\"result\":\"fail\",\"message\":\"THIS IS A REGISTERED MOBILE NUMBER.\"}";
-            else
-                message = "{\"result\":\"success\",\"data\":{\"authNum\":\""+cf.getNumberGen()+"\"}}";
 
+            else {                                                                                                      //인증번호
+
+                MessageSend ms           = new MessageSend();                                                           //MESSAGE SEND CLASS 선언
+                MessageVO   messageVO    = new MessageVO();                                                             //MESSAGE SEND VO CLASS 선언
+                String      authNumber   = cf.getNumberGen();                                                           //난수 생성(6자리) CALL
+
+                messageVO.setFrom("01037288621");                                                                       //악취관리센터 번호 : 솔라피에서 등록 해줘야함.
+                messageVO.setTo(request.getParameter("userPhone"));
+                messageVO.setText("[제주악취관리센터]\n인증번호: ["+authNumber+"] 입니다.");
+
+                ms.sendOne(messageVO);                                                                                  //단일 메시지 발송 (SMS) CALL
+
+                message = "{\"result\":\"success\",\"data\":{\"authNum\":\"" + cf.getNumberGen() + "\"}}";
+            }
         }catch (Exception e){
 
             //System.out.println("Exception: "+e);
