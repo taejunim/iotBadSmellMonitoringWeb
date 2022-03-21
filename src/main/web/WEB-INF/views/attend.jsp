@@ -165,7 +165,7 @@
 </script>
 <body>
 <jsp:include page="/menu"/>
-<div class="wd100rate h100rate scrollView">
+<div class="wd100rate h100rate bgc_w scrollView">
     <form:form id="frm" name="frm" method="post">
         <input type="hidden" id="pageIndex" name="pageIndex" value="${joinVO.pageIndex}">
     <table class="searchTable">
@@ -244,6 +244,11 @@
                 <c:if test="${empty resultList}">
                     <tr>
                         <td align="center" colspan="${dateCount+6}" rowspan="2">- 해당 데이터가 존재하지 않습니다. -</td>
+                    </tr>
+                </c:if>
+                <c:if test="${!empty resultList && resultList.size() ne 10}">
+                    <tr style="background-color: rgba(255,255,255,0)">
+                        <td align="center" colspan="${dateCount+6}" rowspan="${10-resultList.size()}"></td>
                     </tr>
                 </c:if>
             </table>

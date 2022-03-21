@@ -299,7 +299,7 @@ select::-ms-expand{
     margin: 3% auto 1% auto;
     text-align: center;
     width: 95%;
-
+    height: 480px!important;
 }
 .viewTable th{
     height: 40px;
