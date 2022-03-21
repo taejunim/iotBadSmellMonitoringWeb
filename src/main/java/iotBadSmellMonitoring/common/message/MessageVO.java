@@ -19,6 +19,7 @@ import lombok.Data;
 @Data
 public class MessageVO {
 
+    private String userName;                                                                                            //사용자 명
     private String from;                                                                                                // 메시지 수신 대상
     private String to;                                                                                                  // 메시지 발신 대상
     private String text;                                                                                                // 메시니 내용
