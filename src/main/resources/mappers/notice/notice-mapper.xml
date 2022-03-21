@@ -50,6 +50,17 @@
         SELECT COUNT(*) cnt
         FROM TB_NOTICE
         WHERE 1=1
+        <if test="noticeTitle != null and !noticeTitle.equals('')" >
+            AND LOWER(NOTICE_TITLE) LIKE LOWER('%${noticeTitle}%')
+        </if>
+        <if test="startDate != null and !startDate.equals('')" >
+            <![CDATA[ AND REG_DT >= CONCAT(#{startDate}, ' 00:00:00') ]]>
+        </if>
+
+        <if test="endDate != null and !endDate.equals('')" >
+            <![CDATA[ AND REG_DT <= CONCAT(#{endDate}, ' 23:59:59') ]]>
+        </if>
+
 
     </select>
 

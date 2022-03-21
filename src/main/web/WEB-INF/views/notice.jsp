@@ -27,17 +27,11 @@
             $("#searchEndDt").val(endDate).prop("selected", true);
         /* 검색 화면 검색어 세팅 END*/
 
-        //검색 버튼 클릭 이벤트
-        $(".searchBtn").click(function () {
-            fn_search();
-        });
-
         //검색조건 초기화 버튼 클릭 이벤트
         $(".resetBtn").click(function () {
             showLoader(true);
             $(location).attr('href', '/notice.do');
         });
-
         /* 검색 화면 검색어 세팅 END*/
 
         /*달력 SETTING START*/
@@ -59,8 +53,15 @@
             });
             //datepicker 초기화 END
         }
-
         /*달력 SETTING END*/
+
+        /*조회 엔터 이벤트 START*/
+        $('input[type="text"]').keydown(function() {
+            if (event.keyCode === 13) {
+                fn_search();
+            };
+        });
+        /*조회 엔터 이벤트 END*/
 
         /* 테이블 row 클릭 이벤트 START*/
         $(".itemRow").click(function () {

@@ -28,7 +28,7 @@ To change this template use File | Settings | File Templates.
             $("#searchUserType").val(userType).prop("selected", true);
         /* 검색 화면 검색어 세팅 END*/
 
-        // 테이블 row 클릭 이벤트
+        /*테이블 row 클릭 이벤트 START*/
         $(".itemRow").click(function () {
 
             $(this).css('background-color', 'rgb(217,239,255)');                        //선택된 로우 색상 변경
@@ -47,8 +47,18 @@ To change this template use File | Settings | File Templates.
             $("#userType").val(getItems.eq(1).text());
 
         })
+        /*테이블 row 클릭 이벤트 END*/
 
-        //저장 버튼 클릭 이벤트
+        /*조회 엔터 이벤트 START*/
+        $('input[type="text"]').keydown(function() {
+            if (event.keyCode === 13) {
+                fn_search();
+            };
+        });
+        /*조회 엔터 이벤트 END*/
+
+
+        /*저장 버튼 클릭 이벤트 START*/
         $("#memberSaveBtn").click(function () {
             var userId = $("#userId").val().trim();
 
@@ -97,8 +107,10 @@ To change this template use File | Settings | File Templates.
                 });
             }
         })
+        /*저장 버튼 클릭 이벤트 END*/
 
-        //탈퇴 버튼 클릭 이벤트
+
+        /*탈퇴 버튼 클릭 이벤트 START*/
         $("#memberDeleteBtn").click(function () {
 
             var getUserId = $("#userId").val().trim();
@@ -137,6 +149,7 @@ To change this template use File | Settings | File Templates.
                 });
             }
         })
+        /*탈퇴 버튼 클릭 이벤트 END*/
     });
 
     //페이지 이동 스크립트

@@ -70,6 +70,14 @@ var weatherState = '${historyVO.weatherState}'; //검색조건_기상 상태
             }
             /*달력 SETTING END*/
 
+            /*조회 엔터 이벤트 START*/
+            $('input[type="text"]').keydown(function() {
+                if (event.keyCode === 13) {
+                    fn_search();
+                };
+            });
+            /*조회 엔터 이벤트 END*/
+
             /* 테이블 row 클릭 이벤트 START*/
             $(".itemRow").click( function () {
 

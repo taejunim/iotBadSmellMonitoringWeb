@@ -38,7 +38,7 @@
 
         /* 검색 화면 검색어 세팅 END*/
 
-        //데이터 다운로드 클릭 이벤트
+        /* 데이터 다운로드 클릭 이벤트 START*/
         $("#downloadButton").click(function(){
 
             setCookie("loading","false");                                                                               //호출
@@ -49,12 +49,20 @@
             document.frm.action = "<c:url value='/attendDataExcelDownload'/>";
             document.frm.submit();
         });
+        /* 데이터 다운로드 클릭 이벤트 END*/
 
         // 지역 클릭 시 해당 지역상세 표출
         $("#userRegionMaster").on('change',function (){
             selectUserRegion(this.value);
         });
 
+        /*조회 엔터 이벤트 START*/
+        $('input[type="text"]').keydown(function() {
+            if (event.keyCode === 13) {
+                fn_search();
+            };
+        });
+        /*조회 엔터 이벤트 END*/
     });
 
     //페이지 이동 스크립트
