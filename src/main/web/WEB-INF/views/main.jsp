@@ -93,8 +93,31 @@ var markers = [];
   //기상상태가 안보이는 상태일때 다시 보이게 함
   function showWeatherStatus(index){
 
+    /*메인 페이지 날씨 이모티콘 SETTING START*/
+    var weatherName = $("#weatherStateName"+index).val();
+    var weather     = "";
+
+    if(weatherName == "구름많음")
+      weather = "<img style=' position: relative; top:7px' src='/resources/image/weather/weather_cloud_gray.png' width='30' height='30'/>";
+    else if(weatherName == "맑음")
+      weather = "<img style=' position: relative; top:7px' src='/resources/image/weather/weather_sun.png' width='30' height='30'/>";
+    else if(weatherName == "흐림")
+      weather = "<img style=' position: relative; top:7px' src='/resources/image/weather/weather_cloud_sun_gray.png' width='30' height='30'/>";
+    else if(weatherName == "눈" || weatherName == "눈날림")
+      weather = "<img style=' position: relative; top:7px' src='/resources/image/weather/weather_snow_gray.png' width='30' height='30'/>";
+    else if(weatherName == "비" || weatherName == "빗방울")
+      weather = "<img style=' position: relative; top:7px' src='/resources/image/weather/weather_rain_gray.png' width='30' height='30'/>";
+    else if(weatherName == "소나기")
+      weather = "<img style=' position: relative; top:7px' src='/resources/image/weather/weather_shower_gray.png' width='30' height='30'/>";
+    else if(weatherName == "빗방울/눈날림")
+      weather = "<img style=' position: relative; top:7px' src='/resources/image/weather/weather_sleet_gray.png' width='30' height='30'/>";
+    else
+      weather     = "(-)";
+    /*메인 페이지 날씨 이모티콘 SETTING END*/
+
     if($(".weatherStatus").css("display")=="none") $(".weatherStatus").css("display","");
-    $("#weatherState").text($("#weatherStateName"+index).val());
+    $("#weatherState").text($("#weatherStateName"+index).val()+"");
+    $("#weatherState").html(weather+" "+$("#weatherStateName"+index).val());
     $("#temperatureValue").text(addUnit($("#temperatureValue"+index).val(),"temperature"));
     $("#humidityValue").text(addUnit($("#humidityValue"+index).val(),"humidity"));
     $("#windDirectionValue").text($("#windDirectionValue"+index).val());
@@ -105,7 +128,7 @@ var markers = [];
   <body>
   <jsp:include page="/menu"/>
   <div class="bgc_w wd100rate h100rate fl">
-    <div id="leftSide" class="dp_inlineBlock" style="width: 20%;">
+    <div id="leftSide" class="dp_inlineBlock wd20rate">
       <table class="mainForm wd100rate h100rate">
         <tr><th>악취 강도</th></tr>
         <tr><td class="h200">
@@ -120,7 +143,7 @@ var markers = [];
         <tr class="weatherStatus"><td>
           <table class="wd90rate mt30" style="margin-left:auto; margin-right: auto;">
             <tr>
-              <th>날씨</th><td colspan="3" id="weatherState">빗방울/눈날림</td>
+              <th>날씨</th><td style="position: relative; top: -9px;" colspan="3" id="weatherState"></td>
             </tr>
             <tr>
               <th>기온</th><td id="temperatureValue"></td><th>습도</th><td id="humidityValue"></td>
@@ -132,8 +155,8 @@ var markers = [];
         </td></tr>
       </table>
     </div>
-    <div id="rightSide" class="fr" style="width:80%; height: 100%; border-left: 1px solid #10639a; margin-left: -1px; ">
-      <div id="map" class="wd90rate h80rate mg0auto" style="top:2%; z-index: 1;"></div>
+    <div id="rightSide" class="fr wd80rate h100rate" style="border-left: 1px solid #10639a; margin-left: -1px;">
+      <div id="map" class="wd100rate h100rate mg0auto" style="z-index: 1;"></div>
     </div>
   </div>
   </body>
