@@ -915,8 +915,9 @@ public class ApiController {
             if(egovMap != null && !egovMap.isEmpty())
                 message = "{\"result\":\"fail\",\"message\":\"THIS IS A REGISTERED MOBILE NUMBER.\"}";
 
-            else {                                                                                                      //인증번호
+            else {                                                                                                      //인증번호 로직 시작
 
+/*
                 MessageSend ms           = new MessageSend();                                                           //MESSAGE SEND CLASS 선언
                 MessageVO   messageVO    = new MessageVO();                                                             //MESSAGE SEND VO CLASS 선언
                 String      authNumber   = cf.getNumberGen();                                                           //난수 생성(6자리) CALL
@@ -926,6 +927,7 @@ public class ApiController {
                 messageVO.setText("[제주악취관리센터]\n인증번호: ["+authNumber+"] 입니다.");
 
                 ms.sendOne(messageVO);                                                                                  //단일 메시지 발송 (SMS) CALL
+*/
 
                 message = "{\"result\":\"success\",\"data\":{\"authNum\":\"" + cf.getNumberGen() + "\"}}";
             }

@@ -267,7 +267,7 @@ To change this template use File | Settings | File Templates.
                     <th>전화번호</th>
                     <th>나이</th>
                     <th>성별</th>
-                    <th class="wd20rate">등록일시</th>
+                    <th class="wd20rate">가입 등록 일시</th>
                     <th>당일 출석 여부</th>
                 </tr>
                 <c:forEach var="resultList" items="${resultList}" varStatus="status">
