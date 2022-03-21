@@ -14,20 +14,11 @@
         setButton("myPage");                        //선택된 화면의 메뉴색 변경 CALL
 
         /*세션값 불러오기 START*/
-        //전화번호
-        var phone = '<%=(String) session.getAttribute("userPhone")%>';
 
-        if(nullCheck(phone) != '-')
-            phone = phone.substr(0, 3) + "-" + phone.substr(3, 4) + "-" + phone.substr(7,4);            //전화번호에 - 추가
-        else phone = '-';
-        
-        $("#showId").val(nullCheck('<%=(String)session.getAttribute("userId")%>'));                                    //아이디         //사용자_비밀번호
-        $("#showName").val('<%=(String)session.getAttribute("userName")%>');                                //이름
-        $("#userPhone").val(phone);                                                                         //전화번호
-        $("#showAge").val(nullCheck('<%=(String)session.getAttribute("userAge")%>'));                                  //나이
-        $("#userRegion").val(nullCheck('<%=(String)session.getAttribute("userRegionMasterName")%>'));                  //지역
-        $("#userSex").val('<%=(String) session.getAttribute("userSexName")%>');                             //성별
-        $("#userType").val('<%=(String)session.getAttribute("userTypeName")%>');                            //구분
+        $("#showId").val(nullCheck('<%=(String)session.getAttribute("userId")%>'));                                     //아이디
+        $("#showName").val('<%=(String)session.getAttribute("userName")%>');                                            //이름
+        $("#userSex").val('<%=(String) session.getAttribute("userSexName")%>');                                         //성별
+        $("#userType").val('<%=(String)session.getAttribute("userTypeName")%>');                                        //구분
         /*세션값 불러오기 END*/
 
         //비밀번호변경 버튼 클릭 이벤트
@@ -115,11 +106,11 @@
     }
 </script>
 <body>
-<div class="wd100rate h100rate scrollView">
+<div class="wd100rate scrollView">
 <jsp:include page="/menu"/>
 <div>
     <form:form method="post">
-        <table class="whiteForm wd35rate h70rate mt4rate mt100">
+        <table class="whiteForm wd45rate mt4rate mt100">
         <tr><th colspan="2"></th></tr>
         <tr>
             <td class="align_l pl20"><label class="tableLabel">아이디</label></td>
@@ -136,18 +127,6 @@
         <tr>
             <td class="align_l pl20"><label class="tableLabel" >이름</label></td>
             <td><input type="text" id="showName" name="userName" placeholder="이름"disabled></td>
-        </tr>
-        <tr>
-            <td class="align_l pl20"><label class="tableLabel">전화번호</label></td>
-            <td><input type="text" id="userPhone" name="userPhone" disabled></td>
-        </tr>
-        <tr>
-            <td class="align_l pl20"><label class="tableLabel">나이</label></td>
-            <td><input type="text" id="showAge" name="userAge" disabled></td>
-        </tr>
-        <tr>
-            <td class="align_l pl20"><label class="tableLabel">지역</label></td>
-            <td><input type="text" id="userRegion" name="userRegion" disabled></td>
         </tr>
         <tr>
             <td class="align_l pl20"><label class="tableLabel">성별</label></td>
