@@ -1,13 +1,5 @@
 package iotBadSmellMonitoring.common;
 
-import iotBadSmellMonitoring.common.message.MessageVO;
-import net.nurigo.sdk.NurigoApp;
-import net.nurigo.sdk.message.model.Message;
-import net.nurigo.sdk.message.request.SingleMessageSendingRequest;
-import net.nurigo.sdk.message.response.SingleMessageSentResponse;
-import net.nurigo.sdk.message.service.DefaultMessageService;
-import org.springframework.web.bind.annotation.PostMapping;
-
 import java.util.Random;
 
 /**
@@ -23,7 +15,6 @@ import java.util.Random;
  * @
  **/
 public class CommonFunction {
-    private final DefaultMessageService messageService;
 
     /**
      * 현재 날짜 관련 공통 함수.
@@ -95,37 +86,4 @@ public class CommonFunction {
         }
         return numStr;
     }
-
-    /**
-     * 발급받은 API KEY와 API Secret Key를 사용해주세요.
-     */
-    public CommonFunction() {
-        this.messageService = NurigoApp.INSTANCE.initialize("NCSGYXHYQQ0G6YY3", "2HNG0S4FXVM5XPWVMTMWC7EGC5JJ7DCK", "https://api.solapi.com");
-    }
-
-    /**
-     * 단일 메시지 발송 예제
-     */
-    //@PostMapping("/send-one")
-    public SingleMessageSentResponse sendOne(MessageVO messageVO) {
-
-        SingleMessageSentResponse response = this.messageService.sendOne(new SingleMessageSendingRequest(setMessage(messageVO)));
-        System.out.println(response);
-
-        return response;
-    }
-
-
-    public Message setMessage(MessageVO messageVO) {
-        Message message = new Message();
-        message.setFrom(messageVO.getFrom());
-        message.setTo(messageVO.getTo());
-        message.setText(messageVO.getText());
-
-        return message;
-    }
-
-
-
-
 }
