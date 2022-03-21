@@ -119,7 +119,6 @@ public class ApiController {
 
         }catch (Exception e){
 
-            //System.out.println("Exception: "+e);
             message = "{\"result\":\"error\",\"message\":\"ERR DB INSERT.\"}";
         }
 
@@ -161,7 +160,6 @@ public class ApiController {
 
         }catch (Exception e){
 
-            //System.out.println("Exception: "+e);
             message = "{\"result\":\"error\",\"message\": \"ERR ID/PASSWORD.\"}";
         }
 
@@ -197,7 +195,6 @@ public class ApiController {
 
         }catch (Exception e){
 
-            //System.out.println("Exception: "+e);
             message = "{\"result\":\"error\",\"message\": \"ERR USER ID CHECK.\"}";
         }
 
@@ -241,7 +238,6 @@ public class ApiController {
 
         }catch (Exception e){
 
-            //System.out.println("Exception: "+e);
             message = "{\"result\":\"error\",\"message\":\"ERR FIND SEARCH CODE.\"}";
         }
 
@@ -346,7 +342,6 @@ public class ApiController {
 
         }catch (Exception e){
 
-            //System.out.println("Exception: "+e);
             message = "{\"result\":\"error\",\"message\":\"ERR DB INSERT / FILE UPLOAD.\"}";
         }
 
@@ -440,7 +435,6 @@ public class ApiController {
 
         }catch (Exception e){
 
-            //System.out.println("Exception: "+e);
             message = "{\"result\":\"error\",\"message\":\"ERR SEARCH USER INFO.\"}";
         }
 
@@ -525,7 +519,6 @@ public class ApiController {
 
         }catch (Exception e){
 
-            //System.out.println("Exception: "+e);
             message = "{\"result\":\"error\",\"message\":\"ERR SEARCH USER REGISTER INFO.\"}";
         }
 
@@ -571,7 +564,6 @@ public class ApiController {
 
         }catch (Exception e){
 
-            //System.out.println("Exception: "+e);
             message = "{\"result\":\"error\",\"message\":\"ERR SEARCH MASTER HISTORY DATA.\"}";
         }
 
@@ -616,7 +608,6 @@ public class ApiController {
 
         }catch (Exception e){
 
-            //System.out.println("Exception: "+e);
             message = "{\"result\":\"error\",\"message\":\"ERR SEARCH DETAIL HISTORY DATA.\"}";
         }
 
@@ -654,7 +645,6 @@ public class ApiController {
 
         }catch (Exception e){
 
-            //System.out.println("Exception: "+e);
             message = "{\"result\":\"error\",\"message\":\"ERR PASSWORD CHANGE.\"}";
         }
 
@@ -680,7 +670,6 @@ public class ApiController {
 
         } catch (Exception e){
 
-            //System.out.println("Exception: "+e);
             message = "{\"result\":\"error\",\"message\": \"GET DATE TIME ERR.\"}";
         }
 
@@ -787,7 +776,6 @@ public class ApiController {
 
         }catch (Exception e){
 
-            //System.out.println("Exception: "+e);
             message = "{\"result\":\"error\",\"message\":\"ERR SEARCH DETAIL HISTORY DATA.\"}";
         }
 
@@ -822,7 +810,6 @@ public class ApiController {
 
         }catch (Exception e){
 
-            //System.out.println("Exception: "+e);
             message = "{\"result\":\"error\",\"message\":\"ERR SEARCH USER WEATHER.\"}";
         }
 
@@ -863,7 +850,6 @@ public class ApiController {
 
         }catch (Exception e){
 
-            //System.out.println("Exception: "+e);
             message = "{\"result\":\"error\",\"message\":\"ERR SEARCH NOTICE.\"}";
         }
 
@@ -905,7 +891,6 @@ public class ApiController {
 
         }catch (Exception e){
 
-            //System.out.println("Exception: "+e);
             message = "{\"result\":\"error\",\"message\":\"ERR SEARCH DATA.\"}";
         }
 
@@ -946,7 +931,6 @@ public class ApiController {
             }
         }catch (Exception e){
 
-            //System.out.println("Exception: "+e);
             message = "{\"result\":\"error\",\"message\":\"ERR GET AUTH NUM.\"}";
         }
 
