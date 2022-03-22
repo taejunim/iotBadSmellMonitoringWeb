@@ -183,6 +183,7 @@
         FROM  tb_user
         WHERE USER_TYPE  != '002'
         AND   USER_PHONE != ''
+        GROUP BY USER_PHONE
     </select>
 
 </mapper>
