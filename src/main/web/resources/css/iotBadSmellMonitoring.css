@@ -392,6 +392,9 @@ select::-ms-expand{
 .conditionTitle {
     font-weight: bold;
 }
+#detail{
+    vertical-align: middle;
+}
 .mapLegend{
     width: 30px;
     height: 30px;
