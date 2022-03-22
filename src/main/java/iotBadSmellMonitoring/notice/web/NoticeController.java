@@ -14,7 +14,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.HttpSession;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @ Class Name   : NoticeController.java
@@ -83,24 +85,40 @@ public class NoticeController {
 
     //악취 접수 독려 메세지 전송
     @RequestMapping(value = "/sendEncourageMessage", method = RequestMethod.POST)
-    public @ResponseBody void sendEncourageMessage() throws Exception {
-        List<MessageVO> memberList = memberService.userPhoneNumberListSelect();
+    public @ResponseBody Map<String,Object> sendEncourageMessage() throws Exception {
 
-        MessageSend messageSend = new MessageSend();
-        messageSend.sendManyKakaoMessage(memberList);
+        List<MessageVO> memberList = memberService.userPhoneNumberListSelect();
+        Map<String, Object> result = new HashMap<>();
+        try {
+            MessageSend messageSend = new MessageSend();
+            messageSend.sendManyKakaoMessage(memberList);
+            result.put("result","success");
+        } catch (Exception e){
+            result.put("result","error");
+            result.put("errorMessage",e.getMessage());
+        }
+        return result;
     }
 
     //공지사항 메세지 전송
     @RequestMapping(value = "/sendNotice", method = RequestMethod.POST)
-    public @ResponseBody void sendNotice(@ModelAttribute NoticeVO noticeVO) throws Exception {
+    public @ResponseBody Map<String,Object> sendNotice(@ModelAttribute NoticeVO noticeVO) throws Exception {
+
         List<MessageVO> memberList = memberService.userPhoneNumberListSelect();
+        Map<String, Object> result = new HashMap<>();
 
         for (MessageVO messageVO : memberList) {
             messageVO.setText(noticeVO.getNoticeContents());
         }
+        try {
+            MessageSend messageSend = new MessageSend();
+            messageSend.sendMany(memberList);
+            result.put("result","success");
+        } catch (Exception e){
+            result.put("result","error");
+            result.put("errorMessage",e.getMessage());
+        }
 
-        MessageSend messageSend = new MessageSend();
-        messageSend.sendMany(memberList);
+        return result;
     }
-
 }

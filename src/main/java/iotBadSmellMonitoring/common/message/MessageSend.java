@@ -50,7 +50,6 @@ public class MessageSend {
     public SingleMessageSentResponse sendOne(MessageVO messageVO) {
 
         SingleMessageSentResponse response = this.messageService.sendOne(new SingleMessageSendingRequest(setMessage(messageVO)));
-        System.out.println(response);
 
         return response;
     }
@@ -68,9 +67,7 @@ public class MessageSend {
             messageList.add(message);
         }
         MultipleMessageSendingRequest request = new MultipleMessageSendingRequest(messageList);
-
         MultipleMessageSentResponse response = this.messageService.sendMany(request);
-        System.out.println(response);
 
         return response;
     }
@@ -93,12 +90,9 @@ public class MessageSend {
             message.setKakaoOptions(kakaoOption);
             messageList.add(message);
         }
-
         MultipleMessageSendingRequest request = new MultipleMessageSendingRequest(messageList);
         //알림톡 전송
         MultipleMessageSentResponse response = this.messageService.sendMany(request);
-        //전송 실패했을때 예외처리 하기 위해 남겨놓음
-        System.out.println(response);
 
         return response;
     }

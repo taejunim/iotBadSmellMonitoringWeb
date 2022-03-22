@@ -134,8 +134,6 @@
                             console.log(err);
                             alert("공지사항 변경을 실패하였습니다.");
                         }
-                    }).done(function () {
-                        showLoader(false);
                     });
                 }
             }
@@ -170,7 +168,7 @@
                         console.log(err);
                         alert("공지사항 삭제를 실패하였습니다.");
                     }
-                })
+                });
             }
         });
         /* 탈퇴 버튼 클릭 이벤트 END*/
@@ -193,16 +191,23 @@
                     url: "/sendNotice/",
                     type: "POST",
                     data: {noticeContents : noticeContents},
-                    dataType: "text",
+                    dataType: "json",
                     success: function (data) {
-                        alert("선택하신 공지사항을 전송하였습니다.");
+                        if(data.result == "success") alert("선택하신 공지사항을 전송하였습니다.");
+                        else {
+                            console.log(data);
+                            var errorMessage = data.errorMessage;
+                            if(errorMessage.indexOf("NotEnoughBalance") > -1) alert("선택하신 공지사항 전송에 실패하였습니다.(사유 : 보유잔액 부족)");
+                            else alert("선택하신 공지사항 전송에 실패하였습니다.");
+                        }
                     },
                     error: function (err) {
                         console.log(err);
                         alert("선택하신 공지사항 전송에 실패하였습니다.");
+                    },
+                    complete: function () {
+                        showLoader(false);
                     }
-                }).done(function () {
-                    showLoader(false);
                 });
             }
         });
@@ -217,17 +222,23 @@
                     url: "/sendEncourageMessage/",
                     type: "POST",
                     data: {},
-                    dataType: "text",
+                    dataType: "json",
                     success: function (data) {
-                        alert("악취 접수 독려 메세지를 전송하였습니다.");
+                        if(data.result == "success") alert("악취 접수 독려 메세지를 전송하였습니다.");
+                        else {
+                            console.log(data);
+                            var errorMessage = data.errorMessage;
+                            if(errorMessage.indexOf("NotEnoughBalance") > -1) alert("악취 접수 독려 메세지 전송에 실패하였습니다.(사유 : 보유잔액 부족)");
+                            else alert("악취 접수 독려 메세지 전송에 실패하였습니다.");
+                        }
                     },
                     error: function (err) {
                         console.log(err);
                         alert("악취 접수 독려 메세지 전송에 실패하였습니다.");
+                    },
+                    complete: function () {
                         showLoader(false);
                     }
-                }).done(function () {
-                    showLoader(false);
                 });
             }
         });
