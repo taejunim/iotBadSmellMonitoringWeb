@@ -1,6 +1,7 @@
 package iotBadSmellMonitoring.member.service.impl;
 
 import egovframework.rte.psl.dataaccess.util.EgovMap;
+import iotBadSmellMonitoring.common.message.MessageVO;
 import iotBadSmellMonitoring.join.service.JoinVO;
 import iotBadSmellMonitoring.member.service.MemberService;
 import org.apache.ibatis.session.SqlSession;
@@ -114,6 +115,18 @@ public class MemberServiceImpl implements MemberService {
         MemberMapper memberMapper = sqlSession.getMapper(MemberMapper.class);
 
         return memberMapper.userPhoneCheck(userPhone);
+    }
+
+    /**
+     * 메세지 전송될 사용자명, 번호 목록
+     * @return List<MessageVO>
+     * @throws Exception
+     */
+    public  List<MessageVO> userPhoneNumberListSelect() throws Exception {
+
+        MemberMapper memberMapper = sqlSession.getMapper(MemberMapper.class);
+
+        return memberMapper.userPhoneNumberListSelect();
     }
 
 }

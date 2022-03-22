@@ -1,6 +1,7 @@
 package iotBadSmellMonitoring.member.service.impl;
 
 import egovframework.rte.psl.dataaccess.util.EgovMap;
+import iotBadSmellMonitoring.common.message.MessageVO;
 import iotBadSmellMonitoring.join.service.JoinVO;
 
 import java.util.List;
@@ -75,5 +76,12 @@ public interface MemberMapper {
      * @throws Exception
      */
     EgovMap userPhoneCheck(String userPhone) throws Exception;
+
+    /**
+     * 메세지 전송될 사용자명, 번호 목록
+     * @return List<MessageVO>
+     * @throws Exception
+     */
+    List<MessageVO> userPhoneNumberListSelect() throws Exception;
 
 }

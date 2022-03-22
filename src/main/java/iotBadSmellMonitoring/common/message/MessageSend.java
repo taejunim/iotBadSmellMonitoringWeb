@@ -35,7 +35,7 @@ public class MessageSend {
     private static String domain         = UtProperty.getProperty("message.domain");                                    //api 호출 domain
     private static String pfId           = UtProperty.getProperty("message.pfId");                                      //카카오 채널 pf ID
     private static String temperateId    = UtProperty.getProperty("message.temperateId");                               //카카오 알림톡 템플릿 ID
-    private static String from           = UtProperty.getProperty("message.from");                                      //알림 발신 번호
+    private static String fromNumber     = UtProperty.getProperty("message.fromNumber");                                //알림 발신 번호
 
     /**
      * 발급받은 API KEY와 API Secret Key를 사용해주세요.
@@ -85,7 +85,6 @@ public class MessageSend {
         ArrayList<Message> messageList = new ArrayList<>();
 
         for (MessageVO messageVO : userList) {
-
             //메세지 생성
             Message message = setMessage(messageVO);
             //메세지에 담아줄 카카오 옵션 생성
@@ -109,8 +108,8 @@ public class MessageSend {
      */
     public Message setMessage(MessageVO messageVO) {
         Message message = new Message();
-        message.setFrom(from);
-        message.setTo(messageVO.getTo());
+        message.setFrom(fromNumber);
+        message.setTo(messageVO.getToNumber());
         message.setText(messageVO.getText());
 
         return message;

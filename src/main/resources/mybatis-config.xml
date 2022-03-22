@@ -21,6 +21,7 @@
         <typeAlias alias="noticeVO"            type="iotBadSmellMonitoring.notice.service.NoticeVO"/>
         <typeAlias alias="statisticVO"         type="iotBadSmellMonitoring.statistic.service.StatisticVO"/>
         <typeAlias alias="statisticTableVO"    type="iotBadSmellMonitoring.statistic.service.StatisticTableVO"/>
+        <typeAlias alias="messageVO"           type="iotBadSmellMonitoring.common.message.MessageVO"/>
         <typeAlias alias="egovMap"             type="egovframework.rte.psl.dataaccess.util.EgovMap" />
     </typeAliases>
 

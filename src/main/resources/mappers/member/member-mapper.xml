@@ -174,4 +174,15 @@
 
     </select>
 
+    <!--알림 전송할 사용자 리스트 체크-->
+    <select id="userPhoneNumberListSelect" resultType="messageVO">
+
+        SELECT USER_NAME   userName
+              , USER_ID    userId
+              , USER_PHONE toNumber
+        FROM  tb_user
+        WHERE USER_TYPE  != '002'
+        AND   USER_PHONE != ''
+    </select>
+
 </mapper>
