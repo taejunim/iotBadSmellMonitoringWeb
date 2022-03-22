@@ -45,11 +45,31 @@ public class MessageSend {
     }
 
     /**
-     * 단일 메시지 발송 (SMS)
+     * 단일 메시지 발송 (SMS) - 한글 45자, 영자 90자 이하는 자동으로 SMS
      */
     public SingleMessageSentResponse sendOne(MessageVO messageVO) {
 
         SingleMessageSentResponse response = this.messageService.sendOne(new SingleMessageSendingRequest(setMessage(messageVO)));
+        System.out.println(response);
+
+        return response;
+    }
+
+    /**
+     * param - List<MessageVO> userList - 메세지를 수신할 사용자 전화번호/메세지(text) 목록
+     * 다중 메시지 발송 (SMS) - 한글 45자, 영자 90자 이하는 자동으로 SMS
+     */
+    public MultipleMessageSentResponse sendMany(List<MessageVO> userList) {
+        ArrayList<Message> messageList = new ArrayList<>();
+
+        for (MessageVO messageVO : userList) {
+            //메세지 생성
+            Message message = setMessage(messageVO);
+            messageList.add(message);
+        }
+        MultipleMessageSendingRequest request = new MultipleMessageSendingRequest(messageList);
+
+        MultipleMessageSentResponse response = this.messageService.sendMany(request);
         System.out.println(response);
 
         return response;
