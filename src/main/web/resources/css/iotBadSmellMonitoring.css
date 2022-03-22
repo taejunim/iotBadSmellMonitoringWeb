@@ -261,6 +261,12 @@ select::-ms-expand{
     margin-right:auto;
     box-shadow : 0px 0px 20px #000;
 }
+.grayForm{
+    border: 1px white solid;
+    margin: 10% auto;
+    text-align: left;
+    width: 80%
+}
 .whiteForm > tbody > tr> th {
     background: white;
     color: #fff;
@@ -281,6 +287,11 @@ select::-ms-expand{
     height: 80%;
     overflow: auto;
 }
+.scrollView2{
+    height: 100%;
+    overflow: auto;
+}
+
 .titleIcon {
     background: url("../image/icon.png");
     background-size: 80px;

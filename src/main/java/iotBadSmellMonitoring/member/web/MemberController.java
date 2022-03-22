@@ -115,4 +115,11 @@ public class MemberController {
 
         memberService.memberDelete(joinVO);
     }
+
+    //이용약관 화면
+    @RequestMapping(value = "agreement")
+    public String agreement() throws Exception {
+
+        return "agreement";
+    }
 }
