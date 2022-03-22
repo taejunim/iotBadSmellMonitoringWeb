@@ -264,7 +264,7 @@ select::-ms-expand{
 .agreementForm{
     margin:  auto;
     text-align: left;
-    /*min-width: 5em;*/
+    font-size: 36px;
 }
 .whiteForm > tbody > tr> th {
     background: white;
