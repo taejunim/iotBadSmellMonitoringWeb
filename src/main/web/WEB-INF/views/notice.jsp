@@ -179,6 +179,7 @@
         $("#noticeSendBtn").click(function () {
 
             var regId = $("#regId").val().trim();
+            var noticeContents = $("#noticeContents").val();
 
             //공지사항을 선택 했는지 체크
             if (regId === undefined || regId === "") {
@@ -186,13 +187,51 @@
                 return false;
             }
 
-            var con_test = confirm("공지사항을 전송하시겠습니까?");
-
-            if (con_test == true) {
-                alert("공지사항 전송");
+            if (confirm("해당 공지사항을 전송하시겠습니까?")) {
+                showLoader(true);
+                $.ajax({
+                    url: "/sendNotice/",
+                    type: "POST",
+                    data: {noticeContents : noticeContents},
+                    dataType: "text",
+                    success: function (data) {
+                        alert("선택하신 공지사항을 전송하였습니다.");
+                    },
+                    error: function (err) {
+                        console.log(err);
+                        alert("선택하신 공지사항 전송에 실패하였습니다.");
+                    }
+                }).done(function () {
+                    showLoader(false);
+                });
             }
         });
         /* 전송 버튼 클릭 이벤트 END*/
+
+        /* 악취 접수 독려 메세지 전송 버튼 클릭 이벤트 START*/
+        $("#encourageSendBtn").click(function () {
+
+            if (confirm("악취 접수 독려 메세지를 전송하시겠습니까?")) {
+                showLoader(true);
+                $.ajax({
+                    url: "/sendEncourageMessage/",
+                    type: "POST",
+                    data: {},
+                    dataType: "text",
+                    success: function (data) {
+                        alert("악취 접수 독려 메세지를 전송하였습니다.");
+                    },
+                    error: function (err) {
+                        console.log(err);
+                        alert("악취 접수 독려 메세지 전송에 실패하였습니다.");
+                        showLoader(false);
+                    }
+                }).done(function () {
+                    showLoader(false);
+                });
+            }
+        });
+        /* 악취 접수 독려 메세지 전송 버튼 클릭 이벤트 END*/
     });
 
     //페이지 이동 스크립트
@@ -275,6 +314,7 @@
     </table>
     <div class="wd100rate h100rate bgc_w">
         <div class="wd65rate h100rate fl brDeepBlue">
+            <a class="button bgcDeepBlue mt10 fr" id="encourageSendBtn"><i class="bx bx-arrow-from-bottom"></i>악취 접수 독려 알림 전송</a>
             <table class="viewTable font_size15">
                 <thead>
                 <colgroup>
@@ -353,11 +393,15 @@
                         <td><input type="text" readonly class="wd350" id="modDt" disabled></td>
                         <td><input type="hidden" id="noticeId"></td> <!--noticeId-->
                     </tr>
-                    <tr class="h80">
+                    <tr class="h57">
                         <td colspan="2" class="align_c">
-                            <a class="button bgcSkyBlue" id="noticeSendBtn"><i class="bx bx-arrow-from-bottom"></i><strong>전송</strong></a>
                             <a class="button bgcDeepBlue" id="memberSaveBtn"><i class="bx bxs-save"></i><strong>저장</strong></a>
                             <a class="button bgcDeepRed" id="memberDeleteBtn"><i class="bx bx-minus-circle"></i>삭제</a>
+                        </td>
+                    </tr>
+                    <tr class="h57">
+                        <td colspan="2" class="align_c">
+                            <a class="button bgcSkyBlue" id="noticeSendBtn"><i class="bx bx-arrow-from-bottom"></i><strong>SMS 공지내용 전송</strong></a>
                         </td>
                     </tr>
                 </table>

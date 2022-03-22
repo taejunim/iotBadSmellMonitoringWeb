@@ -506,3 +506,9 @@ select::-ms-expand{
 .ui-datepicker-current {
     display: none;
 }
+#encourageSendBtn {
+    margin-right: 2.5%;
+}
+#noticeSendBtn {
+    width: 135px;
+}

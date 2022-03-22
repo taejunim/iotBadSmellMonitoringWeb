@@ -1,6 +1,9 @@
 package iotBadSmellMonitoring.notice.web;
 
 import egovframework.rte.ptl.mvc.tags.ui.pagination.PaginationInfo;
+import iotBadSmellMonitoring.common.message.MessageSend;
+import iotBadSmellMonitoring.common.message.MessageVO;
+import iotBadSmellMonitoring.member.service.MemberService;
 import iotBadSmellMonitoring.notice.service.NoticeService;
 import iotBadSmellMonitoring.notice.service.NoticeVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.HttpSession;
+import java.util.List;
 
 /**
  * @ Class Name   : NoticeController.java
@@ -29,6 +33,9 @@ public class NoticeController {
 
     @Autowired
     private NoticeService noticeService;
+
+    @Autowired
+    private MemberService memberService;
 
     //공지사항 조회
     @RequestMapping("/notice")
@@ -73,4 +80,27 @@ public class NoticeController {
 
         noticeService.noticeDelete(noticeVO);
     }
+
+    //악취 접수 독려 메세지 전송
+    @RequestMapping(value = "/sendEncourageMessage", method = RequestMethod.POST)
+    public @ResponseBody void sendEncourageMessage() throws Exception {
+        List<MessageVO> memberList = memberService.userPhoneNumberListSelect();
+
+        MessageSend messageSend = new MessageSend();
+        messageSend.sendManyKakaoMessage(memberList);
+    }
+
+    //공지사항 메세지 전송
+    @RequestMapping(value = "/sendNotice", method = RequestMethod.POST)
+    public @ResponseBody void sendNotice(@ModelAttribute NoticeVO noticeVO) throws Exception {
+        List<MessageVO> memberList = memberService.userPhoneNumberListSelect();
+
+        for (MessageVO messageVO : memberList) {
+            messageVO.setText(noticeVO.getNoticeContents());
+        }
+
+        MessageSend messageSend = new MessageSend();
+        messageSend.sendMany(memberList);
+    }
+
 }
