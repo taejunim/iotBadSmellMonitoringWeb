@@ -242,9 +242,9 @@
             alert("제목은 50자를 초과할 수 없습니다.");
             $("#getNoticeTitle").val(title.substring(0, 50));
         }
-        if( contents.length > 100 ) {
-            alert("내용은 100자를 초과할 수 없습니다.");
-            $("#noticeContents").val(contents.substring(0, 100));
+        if( contents.length > 45 ) {
+            alert("내용은 45자를 초과할 수 없습니다.");
+            $("#noticeContents").val(contents.substring(0, 45));
         }
     }
 

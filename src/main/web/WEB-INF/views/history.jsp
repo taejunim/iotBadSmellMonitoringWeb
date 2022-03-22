@@ -377,7 +377,7 @@ function imageDelete(imageIndex){
         </div>
     </div>
     <div class="scrollView">
-        <h2 class="mt50" style="position: relative;left: 30px;"><strong>상세</strong></h2>
+        <div><h2 class="mt50" style="position: relative;left: 30px;"><i class="bx bx-detail" id="detail"></i><strong> 상세 </strong></h2></div>
         <div id="rightSide" class="fr wd100rate h40rate">
             <table class="border_none mg0auto wd90rate mb20">
                 <tr>

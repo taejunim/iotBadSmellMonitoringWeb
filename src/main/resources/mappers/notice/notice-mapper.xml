@@ -66,7 +66,7 @@
 
     <!-- 공지사항 등록/수정 -->
     <insert id="noticeInsertUpdate" parameterType="noticeVO">
-        INSERT INTO TB_NOTICE (NOTICE_ID, NOTICE_TITLE, NOTICE_CONTENTS, REG_ID)
+        INSERT INTO TB_NOTICE (NOTICE_ID, NOTICE_TITLE, NOTICE_CONTENTS, REG_ID, MOD_ID, MOD_DT)
         VALUES (
 
         <choose>
@@ -83,6 +83,8 @@
                 , #{noticeTitle}
                 , #{noticeContents}
                 , #{regId}
+                , #{modId}
+                , now()
                 )
         ON DUPLICATE KEY UPDATE
 
