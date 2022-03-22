@@ -262,10 +262,9 @@ select::-ms-expand{
     box-shadow : 0px 0px 20px #000;
 }
 .agreementForm{
-    border: 1px white solid;
-    margin: 20% auto;
+    margin:  auto;
     text-align: left;
-    width: 80%
+    /*min-width: 5em;*/
 }
 .whiteForm > tbody > tr> th {
     background: white;
