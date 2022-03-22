@@ -261,9 +261,9 @@ select::-ms-expand{
     margin-right:auto;
     box-shadow : 0px 0px 20px #000;
 }
-.grayForm{
+.agreementForm{
     border: 1px white solid;
-    margin: 10% auto;
+    margin: 20% auto;
     text-align: left;
     width: 80%
 }

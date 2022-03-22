@@ -10,7 +10,7 @@
 <body>
 <div class="wd100rate bgc_w scrollView2 " style="height: 180vh;">
     <div>
-        <table class="grayForm">
+        <table class="agreementForm">
             <tr>
                 <th>
                     < 제주악취관리센터 >('www.jomc.co.kr'이하 '제주악취관리센터')은(는) 「개인정보 보호법」 제30조에 따라 정보주체의 개인정보를 보호하고 이와 관련한 고충을 신속하고

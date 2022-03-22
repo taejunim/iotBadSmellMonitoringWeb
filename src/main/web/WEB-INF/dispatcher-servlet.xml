@@ -48,6 +48,7 @@
             <mvc:exclude-mapping path="/join/**"/>
             <mvc:exclude-mapping path="/api/**"/>
             <mvc:exclude-mapping path="/resources/**"/>
+            <mvc:exclude-mapping path="/agreement/**"/>
 
             <ref bean="sampleInterceptor"/>
         </mvc:interceptor>
