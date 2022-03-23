@@ -162,9 +162,6 @@ To change this template use File | Settings | File Templates.
         if (userRegion != $("#searchUserRegion")) {
             frm.userRegionMaster.value = userRegion;
         }
-        if (userAge != $("#searchUserAge")) {
-            frm.userAge.value = userAge;
-        }
         if (userSex != $("#searchUserSex")) {
             frm.userSex.value = userSex;
         }
