@@ -106,11 +106,11 @@
     <!-- 통계 표 모든 지역 -->
     <select id="statisticTableAllSelect" parameterType="statisticTableVO" resultType="egovMap">
         SELECT *,
-               IFNull(result.userRegisterCount/result.userTotalCount*100,0) userRegisterPercentage,
-               IFNull(F_GET_CODE_NAME('SMT', result.mainSmellValue),'')     mainSmellValueName,
-               IFNULL(F_GET_CODE_NAME('STY',result.mainSmellType),'')       mainSmellTypeName,
-               #{smellRegisterTime}                                         smellRegisterTime,
-               ifNull(F_GET_CODE_NAME('REN',#{smellRegisterTime}),'')       smellRegisterTimeName
+               ROUND(IFNull(result.userRegisterCount/result.userTotalCount*100,0),2) userRegisterPercentage,
+               IFNull(F_GET_CODE_NAME('SMT', result.mainSmellValue),'')              mainSmellValueName,
+               IFNULL(F_GET_CODE_NAME('STY',result.mainSmellType),'')                mainSmellTypeName,
+               #{smellRegisterTime}                                                  smellRegisterTime,
+               ifNull(F_GET_CODE_NAME('REN',#{smellRegisterTime}),'')                smellRegisterTimeName
         FROM (
             SELECT (
             SELECT
@@ -155,11 +155,11 @@
     <!-- 통계 표 지역별 -->
     <select id="statisticTableRegionListSelect" parameterType="statisticTableVO" resultType="egovMap">
         SELECT *,
-               ifNull(result.userRegisterCount/result.userTotalCount*100,0) userRegisterPercentage,
-               ifNull(F_GET_CODE_NAME('SMT', result.mainSmellValue),'')     mainSmellValueName,
-               IFNULL(F_GET_CODE_NAME('STY',result.mainSmellType),'')       mainSmellTypeName,
-               #{smellRegisterTime}                                         smellRegisterTime,
-               ifNull(F_GET_CODE_NAME('REN',#{smellRegisterTime}),'')       smellRegisterTimeName
+               ROUND(ifNull(result.userRegisterCount/result.userTotalCount*100,0),2) userRegisterPercentage,
+               ifNull(F_GET_CODE_NAME('SMT', result.mainSmellValue),'')              mainSmellValueName,
+               IFNULL(F_GET_CODE_NAME('STY',result.mainSmellType),'')                mainSmellTypeName,
+               #{smellRegisterTime}                                                  smellRegisterTime,
+               ifNull(F_GET_CODE_NAME('REN',#{smellRegisterTime}),'')                smellRegisterTimeName
         FROM(
             SELECT a.REFERENCE_CODE_ID            userRegionMaster,
                    a.CODE_ID                      userRegionDetail,
@@ -244,15 +244,15 @@
     <!-- 통계 표 지역별 (단건, API용) -->
     <select id="statisticTableRegionSelect" parameterType="statisticTableVO" resultType="egovMap">
         SELECT *,
-               #{userRegionMaster}                                          userRegionMaster,
-               IFNull(F_GET_CODE_NAME('REM', #{userRegionMaster}),'')       userRegionMasterName,
-               #{userRegionDetail}                                          userRegionDetail,
-               IFNull(F_GET_CODE_NAME('RGD', #{userRegionDetail}),'')       userRegionDetailName,
-               IFNull(result.userRegisterCount/result.userTotalCount*100,0) userRegisterPercentage,
-               IFNull(F_GET_CODE_NAME('SMT', result.mainSmellValue),'')     mainSmellValueName,
-               IFNULL(F_GET_CODE_NAME('STY',result.mainSmellType),'')       mainSmellTypeName,
-               #{smellRegisterTime}                                         smellRegisterTime,
-               ifNull(F_GET_CODE_NAME('REN',#{smellRegisterTime}),'')       smellRegisterTimeName
+               #{userRegionMaster}                                                    userRegionMaster,
+               IFNull(F_GET_CODE_NAME('REM', #{userRegionMaster}),'')                 userRegionMasterName,
+               #{userRegionDetail}                                                    userRegionDetail,
+               IFNull(F_GET_CODE_NAME('RGD', #{userRegionDetail}),'')                 userRegionDetailName,
+               ROUND(IFNull(result.userRegisterCount/result.userTotalCount*100,0), 2) userRegisterPercentage,
+               IFNull(F_GET_CODE_NAME('SMT', result.mainSmellValue),'')               mainSmellValueName,
+               IFNULL(F_GET_CODE_NAME('STY',result.mainSmellType),'')                 mainSmellTypeName,
+               #{smellRegisterTime}                                                   smellRegisterTime,
+               ifNull(F_GET_CODE_NAME('REN',#{smellRegisterTime}),'')                 smellRegisterTimeName
         FROM (
             SELECT (
             SELECT

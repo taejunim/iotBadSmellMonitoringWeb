@@ -61,7 +61,7 @@
          WHERE 1=1
 
            AND USER_ID = #{userId}
-
+           AND REG_GBN != '003'
     </select>
 
 </mapper>

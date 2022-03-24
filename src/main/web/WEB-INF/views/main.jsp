@@ -15,22 +15,21 @@ var markers = [];
     setButton("main");
     $(".weatherStatus").css("display","none");
 
-    //지도 기본 설정 -> 금악초 근처 중심 잡아둠, Zoom Level 8
-    var latitude  = 33.357562;
-    var longitude = 126.296253;
-    map = focusMapCenter(latitude, longitude, 8);
+    //지도 기본 설정 -> 한라산 중심 잡아둠, Zoom Level 9
+    var latitude  = 33.3617168;
+    var longitude = 126.5204023;
+    map = focusMapCenter(latitude, longitude, 9);
 
     $.ajax({
       url: "/pcMainListSelect",
       type: "GET",
       dataType: "json",
       success: function (data) {
-        showLoader(false);
         drawMarker(data);
         for(var i=0; i< markers.length ; i++){
           markers[i].setMap(map);
         }
-        map.panTo( new kakao.maps.LatLng(33.357562, 126.296253));
+        map.panTo( new kakao.maps.LatLng(latitude, longitude));
       },
       error: function (err) {
         alert("사용자 데이터를 불러오는중 에러가 발생하였습니다.");

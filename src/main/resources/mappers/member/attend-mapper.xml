@@ -18,7 +18,7 @@
       WHERE 1 = 1
 
         AND USER_TYPE NOT IN ('002')
-
+        AND REG_GBN   NOT IN ('003')
         <choose>
             <when test="commonGbn1 == 'view' and commonGbn1.equals('view')">                        <!--VIEW -->
 
@@ -56,7 +56,7 @@
       WHERE 1 = 1
 
         AND USER_TYPE NOT IN ('002')
-
+        AND REG_GBN   NOT IN ('003')
         <if test="userName != null and !userName.equals('')" >
             AND LOWER(USER_NAME) LIKE LOWER('%${userName}%')
         </if>
