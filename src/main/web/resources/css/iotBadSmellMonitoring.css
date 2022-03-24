@@ -324,6 +324,9 @@ select::-ms-expand{
 .viewTable tr:hover{
     background-color: rgb(217,239,255);
 }
+.noneHover:hover {
+    background: none!important;
+}
 .viewTable td{
     border: 1px solid #ccc;
     height: 40px;

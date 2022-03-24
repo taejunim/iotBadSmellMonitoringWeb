@@ -358,12 +358,12 @@
                     </tr>
                 </c:forEach>
                 <c:if test="${empty resultList}">
-                    <tr>
+                    <tr class="noneHover">
                         <td align="center" colspan="7" rowspan="10">- 해당 데이터가 존재하지 않습니다. -</td>
                     </tr>
                 </c:if>
                 <c:if test="${!empty resultList && resultList.size() ne 10}">
-                    <tr style="background-color: rgba(255,255,255,0)">
+                    <tr style="background-color: rgba(255,255,255,0)" class="noneHover">
                         <td align="center" colspan="7" rowspan="${10-resultList.size()}"></td>
                     </tr>
                 </c:if>

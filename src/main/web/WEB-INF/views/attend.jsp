@@ -218,13 +218,13 @@
                     <th rowspan="2">수당 지급 여부</th>
                     <th rowspan="2">감독자 확인</th>
                 </tr>
-                <tr>
+                <tr class="noneHover">
                     <c:forEach var="dateList" items="${dateList}" varStatus="status">
                         <td>${dateList.day}</td>
                     </c:forEach>
                 </tr>
                 <c:forEach var="resultList" items="${resultList}" varStatus="status">
-                <tr>
+                <tr class="noneHover">
                     <td>${paginationInfo.totalRecordCount - ((joinVO.pageIndex-1) * 10) - status.index}</td>
                     <td>
                         ${resultList.userName}
