@@ -37,13 +37,17 @@
 
         //위에서 찾은 것들 중 빈값이 있는지 체크
         $(inputList).each(function (idx, obj) {
-            if ($(obj).val().trim().length == 0) {
-                $(obj).focus();
+            if ($(obj).val().trim().length == 0 ) {
+                if ($("#userPhone").val() != null){
+                    return true;
+                }else {
+                    $(obj).focus();
 
-                var txt = $(obj).attr("placeholder");
-                alert(txt);
-                chk = false;
-                return chk;
+                    var txt = $(obj).attr("placeholder");
+                    alert(txt);
+                    chk = false;
+                    return chk;
+                }
             }
         })
 
@@ -61,10 +65,16 @@
                 return $("input[name='userPasswordConfirm']").val();
             }
 
+
             //휴대폰 번호 체크
-            if (!fn_chkNumber_pattern($("input[name='userPhone']").val())) {
-                alert("휴대폰 번호를 바르게 입력해 주세요");
-                return false;
+            var userphone = $("#userPhone").val();
+
+            if ($("#userPhone").val().trim().length != 0) {
+
+                if (!fn_chkNumber_pattern(userphone)) {
+                    alert("휴대폰 번호를 바르게 입력해 주세요");
+                    return false;
+                }
             }
 
             if(tmpId == $("input[name='userId']").val()) {
@@ -149,7 +159,7 @@
             </tr>
             <tr>
                 <td class="align_l pl20"><label class="tableLabel">&nbsp;&nbsp;&nbsp;휴대폰 번호</label></td>
-                <td><input type="text" name="userPhone" class="inputForm fl" placeholder="휴대폰번호를 '-'없이 입력해 주십시오." maxlength="20"></td>
+                <td><input type="text" id="userPhone" name="userPhone" onkeyup="inputPhoneNumber(this);" class="inputForm fl" placeholder="휴대폰번호를 '-'없이 입력해 주십시오." maxlength="13"></td>
             </tr>
             <tr>
                 <td class="align_l pl20"><label class="tableLabel">&nbsp;&nbsp;&nbsp;성별</label></td>

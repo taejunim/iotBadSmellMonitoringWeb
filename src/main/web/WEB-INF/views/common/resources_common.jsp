@@ -82,13 +82,42 @@
         return true;
     }
 
-    //휴대폰번호 정규식
-    function fn_chkNumber_pattern(val) {
+        //휴대폰번호 정규식
+        function fn_chkNumber_pattern(val) {
 
-        var regExp = /^01([0|1|6|7|8|9])-?([0-9]{3,4})-?([0-9]{4})$/;
-        if (!regExp.test(val)) {
-            return false;
+            var regExp = /^01([0|1|6|7|8|9])-?([0-9]{3,4})-?([0-9]{4})$/;
+            if (!regExp.test(val)) {
+                return false;
+            }
+            return true;
         }
-        return true;
+
+
+    // 휴대폰번호 - 추가
+    function inputPhoneNumber(obj) {
+
+        var number = obj.value.replace(/[^0-9]/g, "");
+        var phone = "";
+
+        if (number.length < 4) {
+            return number;
+        } else if (number.length < 7) {
+            phone += number.substr(0, 3);
+            phone += "-";
+            phone += number.substr(3);
+        } else if (number.length < 11) {
+            phone += number.substr(0, 3);
+            phone += "-";
+            phone += number.substr(3, 3);
+            phone += "-";
+            phone += number.substr(6);
+        } else {
+            phone += number.substr(0, 3);
+            phone += "-";
+            phone += number.substr(3, 4);
+            phone += "-";
+            phone += number.substr(7);
+        }
+        obj.value = phone;
     }
     </script>

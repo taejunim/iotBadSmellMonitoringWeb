@@ -20,7 +20,7 @@
                                 , '002'                                                                                 <!-- WEB 회원가입은 관리자만-->
                                 , #{userName}
                                 , #{userSex}
-                                , #{userPhone}
+                                , replace(#{userPhone},'-','')
                              )
 
     </insert>
