@@ -61,6 +61,12 @@
                 return $("input[name='userPasswordConfirm']").val();
             }
 
+            //휴대폰 번호 체크
+            if (!fn_chkNumber_pattern($("input[name='userPhone']").val())) {
+                alert("휴대폰 번호를 바르게 입력해 주세요");
+                return false;
+            }
+
             if(tmpId == $("input[name='userId']").val()) {
                 if (confirm("회원가입을 진행하시겠습니까?")) {
                     var formData = $(".joinForm").serialize();
@@ -140,6 +146,10 @@
             <tr>
                 <td class="align_l pl20"><label class="tableLabel">* 이름</label></td>
                 <td><input type="text" name="userName" class="inputForm fl" placeholder="이름을 입력해 주십시오." maxlength="10"></td>
+            </tr>
+            <tr>
+                <td class="align_l pl20"><label class="tableLabel">&nbsp;&nbsp;&nbsp;휴대폰 번호</label></td>
+                <td><input type="text" name="userPhone" class="inputForm fl" placeholder="휴대폰번호를 '-'없이 입력해 주십시오." maxlength="20"></td>
             </tr>
             <tr>
                 <td class="align_l pl20"><label class="tableLabel">&nbsp;&nbsp;&nbsp;성별</label></td>

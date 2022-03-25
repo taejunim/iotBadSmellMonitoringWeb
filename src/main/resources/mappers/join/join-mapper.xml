@@ -12,7 +12,7 @@
                                 , USER_TYPE
                                 , USER_NAME
                                 , USER_SEX
-                                , USER_AGE
+                                , USER_PHONE
                              )
                      VALUES (
                                 #{userId}
@@ -20,7 +20,7 @@
                                 , '002'                                                                                 <!-- WEB 회원가입은 관리자만-->
                                 , #{userName}
                                 , #{userSex}
-                                , #{userAge}
+                                , #{userPhone}
                              )
 
     </insert>

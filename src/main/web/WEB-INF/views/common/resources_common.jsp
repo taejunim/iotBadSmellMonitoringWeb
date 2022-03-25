@@ -85,7 +85,7 @@
     //휴대폰번호 정규식
     function fn_chkNumber_pattern(val) {
 
-        var regExp =  /^\d{3}\d{3,4}\d{4}$/;
+        var regExp = /^01([0|1|6|7|8|9])-?([0-9]{3,4})-?([0-9]{4})$/;
         if (!regExp.test(val)) {
             return false;
         }
