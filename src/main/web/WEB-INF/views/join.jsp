@@ -37,8 +37,9 @@
 
         //위에서 찾은 것들 중 빈값이 있는지 체크
         $(inputList).each(function (idx, obj) {
-            if ($(obj).val().trim().length == 0 ) {
-                if ($("#userPhone").val() != null){
+            if ($(obj).val().trim().length === 0 ) {
+                //필수값이 아닌 것은 제외
+                if ($("#userPhone").val().trim().length === 0){
                     return true;
                 }else {
                     $(obj).focus();
@@ -67,11 +68,11 @@
 
 
             //휴대폰 번호 체크
-            var userphone = $("#userPhone").val();
+            var phone = $("#userPhone").val().trim();
 
-            if ($("#userPhone").val().trim().length != 0) {
+            if (phone.length !== 0) {
 
-                if (!fn_chkNumber_pattern(userphone)) {
+                if (!fn_chkNumber_pattern(phone)) {
                     alert("휴대폰 번호를 바르게 입력해 주세요");
                     return false;
                 }
