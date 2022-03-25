@@ -188,4 +188,16 @@
         GROUP BY USER_PHONE
     </select>
 
+    <!--알림 전송할 관리자 리스트 체크-->
+    <select id="adminPhoneNumberListSelect" resultType="messageVO">
+
+        SELECT USER_NAME   userName
+             , USER_ID    userId
+             , USER_PHONE toNumber
+        FROM  tb_user
+        WHERE USER_TYPE  = '002'
+          AND   USER_PHONE != ''
+        GROUP BY USER_PHONE
+    </select>
+
 </mapper>

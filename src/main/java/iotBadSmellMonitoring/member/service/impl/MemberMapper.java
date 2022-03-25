@@ -84,4 +84,11 @@ public interface MemberMapper {
      */
     List<MessageVO> userPhoneNumberListSelect() throws Exception;
 
+    /**
+     * 메세지 전송될 관리자명, 번호 목록
+     * @return List<MessageVO>
+     * @throws Exception
+     */
+    List<MessageVO> adminPhoneNumberListSelect() throws Exception;
+
 }

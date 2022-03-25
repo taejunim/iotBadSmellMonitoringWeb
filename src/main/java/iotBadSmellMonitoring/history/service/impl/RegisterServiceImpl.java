@@ -1,7 +1,11 @@
 package iotBadSmellMonitoring.history.service.impl;
 
+import egovframework.rte.psl.dataaccess.util.EgovMap;
+import iotBadSmellMonitoring.common.message.MessageSend;
+import iotBadSmellMonitoring.common.message.MessageVO;
 import iotBadSmellMonitoring.history.service.RegisterService;
 import iotBadSmellMonitoring.history.service.RegisterVO;
+import iotBadSmellMonitoring.member.service.MemberService;
 import org.apache.ibatis.session.SqlSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +13,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
+import java.util.List;
 
 /**
  * @ Class Name   : RegisterServiceImpl.java
@@ -37,6 +42,9 @@ public class RegisterServiceImpl implements RegisterService {
 
     @Value("${${environment}.server.path}")
     private String serverPath;
+
+    @Autowired
+    private MemberService memberService;
 
     /**
      * 접수 마스터||디테일 등록
@@ -67,6 +75,18 @@ public class RegisterServiceImpl implements RegisterService {
         int allResult    = 0;                                                                                           //마스터||디테일 등록 결과
 
         if(masterResult == 1){
+            if (registerVO.getSmellValue() != "001" && registerVO.getSmellValue() != "002") {                           //악취 강도가 3이상일시
+
+                List<MessageVO> memberList = memberService.adminPhoneNumberListSelect();
+                EgovMap userInfo = memberService.memberGetInfoSelect(registerVO.getRegId());
+
+                for (MessageVO messageVO : memberList) {
+                    messageVO.setText(userInfo.get("userRegionMasterName").toString() + " " + userInfo.get("userRegionDetailName").toString()  + " " + userInfo.get("userName").toString() + "님이 3도이상 접수를 하셨습니다." );
+                }
+
+                MessageSend messageSend = new MessageSend();
+                messageSend.sendMany(memberList);                                                                       //관리자에게 문자 전송
+            }
 
             allResult = 1;
 

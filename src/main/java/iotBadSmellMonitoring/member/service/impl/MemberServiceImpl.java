@@ -129,4 +129,16 @@ public class MemberServiceImpl implements MemberService {
         return memberMapper.userPhoneNumberListSelect();
     }
 
+    /**
+     * 메세지 전송될 관리자명, 번호 목록
+     * @return List<MessageVO>
+     * @throws Exception
+     */
+    public  List<MessageVO> adminPhoneNumberListSelect() throws Exception {
+
+        MemberMapper memberMapper = sqlSession.getMapper(MemberMapper.class);
+
+        return memberMapper.adminPhoneNumberListSelect();
+    }
+
 }
