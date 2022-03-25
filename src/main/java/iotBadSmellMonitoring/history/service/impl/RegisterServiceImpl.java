@@ -75,7 +75,7 @@ public class RegisterServiceImpl implements RegisterService {
         int allResult    = 0;                                                                                           //마스터||디테일 등록 결과
 
         if(masterResult == 1){
-            if (registerVO.getSmellValue() != "001" && registerVO.getSmellValue() != "002") {                           //악취 강도가 3이상일시
+            if (!registerVO.getSmellValue().equals("001") && !registerVO.getSmellValue().equals("002") && !registerVO.getSmellValue().equals("003")) {                           //악취 강도가 3이상일시
 
                 List<MessageVO> memberList = memberService.adminPhoneNumberListSelect();
                 EgovMap userInfo = memberService.memberGetInfoSelect(registerVO.getRegId());
