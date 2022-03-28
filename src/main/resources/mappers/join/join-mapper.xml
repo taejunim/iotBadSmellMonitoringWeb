@@ -17,7 +17,7 @@
                      VALUES (
                                 #{userId}
                                 , password(#{userPassword})
-                                , '002'                                                                                 <!-- WEB 회원가입은 관리자만-->
+                                , #{userType}                                                                            <!-- WEB 회원가입은 관리자만-->
                                 , #{userName}
                                 , #{userSex}
                                 , replace(#{userPhone},'-','')
@@ -47,6 +47,7 @@
          WHERE 1=1
 
            AND USER_ID       = #{userId}
+           AND USER_TYPE     = #{userType}
            AND USER_PASSWORD = password(#{userPassword});
 
     </select>

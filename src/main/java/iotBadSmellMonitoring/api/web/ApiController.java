@@ -102,6 +102,7 @@ public class ApiController {
             joinVO.setUserRegionMaster(jsonObject.get("userRegionMaster").toString());
             joinVO.setUserRegionDetail(jsonObject.get("userRegionDetail").toString());
             joinVO.setUserPhone(jsonObject.get("userPhone").toString());
+            joinVO.setUserType("001");                                                                                  //모바일 사용자
 
             if(joinVO.getUserId().equals("") || joinVO.getUserPassword().equals("") || joinVO.getUserAge().equals("") || joinVO.getUserName().equals("") || joinVO.getUserSex().equals("")|| joinVO.getUserType().equals(""))
                 message = "{\"result\":\"fail\",\"message\":\"NO DB INSERT.\"}";
@@ -145,7 +146,7 @@ public class ApiController {
 
             joinVO.setUserId(jsonObject.get("userId").toString());
             joinVO.setUserPassword(jsonObject.get("userPassword").toString());
-
+            joinVO.setUserType("001");                                                                                  //사용자 모바일
             EgovMap result = joinService.userLoginSelect(joinVO);                                                       //로그인 CALL.
 
             if(result != null && !result.isEmpty()) {                                                                   //null CHECK.
@@ -385,7 +386,7 @@ public class ApiController {
             JSONParser     jsonParser  = new JSONParser();
             org.json.simple.JSONArray jsonArray   = new org.json.simple.JSONArray();
 
-            System.out.println("주소 변환: "+getAddress);
+            //System.out.println("주소 변환: "+getAddress);
             jsonObject                 = (JSONObject)jsonParser.parse(getAddress);
 
             jsonArray = (org.json.simple.JSONArray) jsonObject.get("documents");
@@ -728,7 +729,7 @@ public class ApiController {
 
                     EgovMap mapM = new EgovMap();
 
-                    System.out.println("resultList.get(2).getValue(i).toString(): "+resulMtList.get(i).getValue(3).toString());
+                    //System.out.println("resultList.get(2).getValue(i).toString(): "+resulMtList.get(i).getValue(3).toString());
                     mapM.put("M_CODE_ID",resulMtList.get(i).getValue(2).toString());
                     mapM.put("M_CODE_ID_NAME",resulMtList.get(i).getValue(3).toString());
 

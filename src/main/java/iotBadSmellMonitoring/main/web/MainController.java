@@ -101,6 +101,7 @@ public class MainController {
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     public @ResponseBody String getLogin(@ModelAttribute("joinVO") JoinVO joinVO, HttpServletRequest request) throws Exception {
 
+        joinVO.setUserType("002");                                                                                      //관리자
         EgovMap egovMap = joinService.userLoginSelect(joinVO);     //로그인 CALL.
         String result = "";
 

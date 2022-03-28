@@ -134,7 +134,7 @@ public class StatisticTableController {
 
             if(i == 0) regionMaster = list.get(i).get("userRegionMaster").toString();
 
-            System.out.println(list.get(i).get("userRegionMaster").equals(regionMaster));
+            //System.out.println(list.get(i).get("userRegionMaster").equals(regionMaster));
 
             if(list.get(i).get("userRegionMaster").equals(regionMaster)){
                 regionMasterCount ++;

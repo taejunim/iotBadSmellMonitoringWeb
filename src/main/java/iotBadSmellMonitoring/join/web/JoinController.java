@@ -70,11 +70,12 @@ public class JoinController {
     //회원 가입 요청
     @RequestMapping(value = "/join/userJoinInsert", method = RequestMethod.POST)
     public @ResponseBody String userJoinInsert(@ModelAttribute JoinVO joinVO) throws Exception {
-        System.out.println("JoinVO  --->  " + joinVO);
+
         String result = "";
 
         //예외처리
         try {
+            joinVO.setUserType("002");                                                                                  //관리자
             joinService.userJoinInsert(joinVO);
             result = "success";
         }catch (Exception e) {
