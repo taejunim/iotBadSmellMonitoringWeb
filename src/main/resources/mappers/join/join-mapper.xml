@@ -13,6 +13,9 @@
                                 , USER_NAME
                                 , USER_SEX
                                 , USER_PHONE
+                                , USER_REGION_MASTER
+                                , USER_REGION_DETAIL
+                                , USER_AGE
                              )
                      VALUES (
                                 #{userId}
@@ -21,6 +24,9 @@
                                 , #{userName}
                                 , #{userSex}
                                 , replace(#{userPhone},'-','')
+                                , #{userRegionMaster}
+                                , #{userRegionDetail}
+                                , #{userAge}
                              )
 
     </insert>
@@ -40,7 +46,6 @@
              , F_GET_CODE_NAME('SEX',USER_SEX) USER_SEX_NAME
              , USER_AGE
              , USER_PHONE
-
 
         FROM tb_user
 
