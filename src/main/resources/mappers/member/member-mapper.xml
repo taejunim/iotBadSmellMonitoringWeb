@@ -73,16 +73,26 @@
     <update id="memberPasswordUpdate" parameterType="joinVO">
 
         UPDATE tb_user
+
            SET USER_PASSWORD = password(#{userPassword})
-         WHERE USER_ID = #{userId};
+
+         WHERE USER_ID = #{userId}
+
+           AND REG_GBN   != '003'
+
     </update>
 
     <!-- 회원 탈퇴 -->
     <delete id="memberDelete" parameterType="joinVO">
 
         DELETE
+
           FROM tb_user
-         WHERE USER_ID = #{userId};
+
+         WHERE USER_ID = #{userId}
+
+           AND REG_GBN   != '003'
+
     </delete>
 
     <!-- 사용자 정보 -->
@@ -110,6 +120,7 @@
 
                  WHERE 1 = 1
 
+                   AND REG_GBN   != '003'
                    AND USER_ID = #{userId}
                 ) t1
     </select>
@@ -172,7 +183,8 @@
 
          WHERE 1=1
 
-           AND REG_GBN      NOT IN ('003')
+           AND USER_TYPE  = '001'
+           AND REG_GBN NOT IN ('003')
            AND USER_PHONE = #{userPhone}
 
     </select>
@@ -183,10 +195,15 @@
         SELECT USER_NAME   userName
               , USER_ID    userId
               , USER_PHONE toNumber
-        FROM  tb_user
+
+          FROM  tb_user
+
         WHERE USER_TYPE  != '002'
-        AND   USER_PHONE != ''
-        GROUP BY USER_PHONE
+
+          AND REG_GBN NOT IN ('003')
+          AND USER_PHONE != ''
+     GROUP BY USER_PHONE
+
     </select>
 
     <!--알림 전송할 관리자 리스트 체크-->
@@ -195,10 +212,16 @@
         SELECT USER_NAME   userName
              , USER_ID    userId
              , USER_PHONE toNumber
-        FROM  tb_user
+
+         FROM  tb_user
+
         WHERE USER_TYPE  = '002'
-          AND   USER_PHONE != ''
-        GROUP BY USER_PHONE
+
+          AND USER_PHONE != ''
+          AND REG_GBN      NOT IN ('003')
+
+     GROUP BY USER_PHONE
+
     </select>
 
 </mapper>

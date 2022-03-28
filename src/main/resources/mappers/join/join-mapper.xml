@@ -49,6 +49,7 @@
            AND USER_ID       = #{userId}
            AND USER_TYPE     = #{userType}
            AND USER_PASSWORD = password(#{userPassword});
+           AND REG_GBN      != '003'
 
     </select>
 
