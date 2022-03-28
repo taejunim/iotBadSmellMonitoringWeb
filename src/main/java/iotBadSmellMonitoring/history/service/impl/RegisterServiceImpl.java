@@ -75,21 +75,19 @@ public class RegisterServiceImpl implements RegisterService {
         int allResult    = 0;                                                                                           //마스터||디테일 등록 결과
 
         if(masterResult == 1){
-            if (!registerVO.getSmellValue().equals("001") && !registerVO.getSmellValue().equals("002") && !registerVO.getSmellValue().equals("003")) {                           //악취 강도가 3이상일시
-
-                List<MessageVO> memberList = memberService.adminPhoneNumberListSelect();
-                EgovMap userInfo = memberService.memberGetInfoSelect(registerVO.getRegId());
-
-                for (MessageVO messageVO : memberList) {
-                    messageVO.setText(userInfo.get("userRegionMasterName").toString() + " " + userInfo.get("userRegionDetailName").toString()  + " " + userInfo.get("userName").toString() + "님이 3도이상 접수를 하셨습니다." );
-                }
-
+            if (!registerVO.getSmellValue().equals("001") && !registerVO.getSmellValue().equals("002") && !registerVO.getSmellValue().equals("003")) {   //악취 강도가 3이상일시
                 try {                                                                                                   //관리자에게 문자 전송
+                    List<MessageVO> memberList = memberService.adminPhoneNumberListSelect();
+                    EgovMap userInfo = memberService.memberGetInfoSelect(registerVO.getRegId());
+
+                    for (MessageVO messageVO : memberList) {
+                        messageVO.setText(userInfo.get("userRegionMasterName").toString() + " " + userInfo.get("userRegionDetailName").toString()  + " " + userInfo.get("userName").toString() + "님이 3도이상 접수를 하셨습니다." );
+                    }
+
                     MessageSend messageSend = new MessageSend();
                     messageSend.sendMany(memberList);
-                } catch (Exception e) {
-                    allResult = 1;
-                }
+
+                } catch (Exception e) {}
             }
 
             allResult = 1;
