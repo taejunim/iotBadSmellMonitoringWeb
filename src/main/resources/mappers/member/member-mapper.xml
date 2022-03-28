@@ -172,6 +172,7 @@
 
          WHERE 1=1
 
+           AND REG_GBN      NOT IN ('003')
            AND USER_PHONE = #{userPhone}
 
     </select>

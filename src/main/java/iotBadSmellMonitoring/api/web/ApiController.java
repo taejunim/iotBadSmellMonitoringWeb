@@ -931,7 +931,7 @@ public class ApiController {
                 ms.sendOne(messageVO);                                                                                  //단일 메시지 발송 (SMS) CALL
 
 
-                message = "{\"result\":\"success\",\"data\":{\"authNum\":\"" + cf.getNumberGen() + "\"}}";
+                message = "{\"result\":\"success\",\"data\":{\"authNum\":\"" + authNumber + "\"}}";
             }
         }catch (Exception e){
 
