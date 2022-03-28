@@ -31,7 +31,7 @@
         <choose>
             <when test="deviceGbn == 'web'">
 
-                LIMIT #{recordCountPerPage} OFFSET #{firstIndex};
+                LIMIT #{recordCountPerPage} OFFSET #{firstIndex}
 
             </when>
             <otherwise>
@@ -98,6 +98,6 @@
     <delete id="noticeDelete" parameterType="noticeVO">
         DELETE
         FROM TB_NOTICE
-        WHERE NOTICE_ID = #{noticeId};
+        WHERE NOTICE_ID = #{noticeId}
     </delete>
 </mapper>

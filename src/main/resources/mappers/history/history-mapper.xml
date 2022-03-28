@@ -58,7 +58,7 @@
         </if>
 
         ORDER BY tsr.REG_DT DESC
-        LIMIT #{recordCountPerPage} OFFSET #{firstIndex};
+        LIMIT #{recordCountPerPage} OFFSET #{firstIndex}
     </select>
 
     <!-- 회원 리스트 TOTAL COUNT 조회 -->
@@ -115,7 +115,7 @@
 
         DELETE
         FROM tb_smell_image
-        WHERE SMELL_IMAGE_NO = #{smellImageNo};
+        WHERE SMELL_IMAGE_NO = #{smellImageNo}
     </delete>
 
     <!-- TODAY HISTORY 목록-->

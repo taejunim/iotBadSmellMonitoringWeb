@@ -42,7 +42,7 @@
 
 
         ORDER BY REG_DT DESC
-        LIMIT #{recordCountPerPage} OFFSET #{firstIndex};
+        LIMIT #{recordCountPerPage} OFFSET #{firstIndex}
     </select>
 
     <!-- 회원 리스트 TOTAL COUNT 조회 -->
