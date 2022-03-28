@@ -84,8 +84,12 @@ public class RegisterServiceImpl implements RegisterService {
                     messageVO.setText(userInfo.get("userRegionMasterName").toString() + " " + userInfo.get("userRegionDetailName").toString()  + " " + userInfo.get("userName").toString() + "님이 3도이상 접수를 하셨습니다." );
                 }
 
-                MessageSend messageSend = new MessageSend();
-                messageSend.sendMany(memberList);                                                                       //관리자에게 문자 전송
+                try {                                                                                                   //관리자에게 문자 전송
+                    MessageSend messageSend = new MessageSend();
+                    messageSend.sendMany(memberList);
+                } catch (Exception e) {
+                    allResult = 1;
+                }
             }
 
             allResult = 1;
