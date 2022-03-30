@@ -87,12 +87,12 @@ public class StatisticTableController {
 
         //날짜 파라미터 없을경우 현재 월로 검색
         if(statisticTableVO.getSearchStart() == null || statisticTableVO.getSearchEnd() == null) {
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM");
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
             Date now = new Date();
 
-            String searchMonth = dateFormat.format(now);
-            statisticTableVO.setSearchStart(searchMonth);
-            statisticTableVO.setSearchEnd(searchMonth);
+            String searchEnd = dateFormat.format(now);
+            statisticTableVO.setSearchStart(searchEnd.substring(0, searchEnd.length() - 2) + "01");
+            statisticTableVO.setSearchEnd(searchEnd);
         }
 
         //시간대를 동적으로 사용하기 위한 부분

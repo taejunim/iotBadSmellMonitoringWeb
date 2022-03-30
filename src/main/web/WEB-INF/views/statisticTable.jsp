@@ -22,16 +22,11 @@
         });
 
         $("#searchButton").click(function(){
-
-            var searchStart = $("#startYearSelect").val() + "-" + $("#startMonthSelect").val();
-            var searchEnd = $("#endYearSelect").val() + "-" + $("#endMonthSelect").val();
-
-            if(searchStart > searchEnd) return alert("검색조건을 다시 확인하여 주십시오. 검색 시작 시간은 검색 종료 시간을 초과할수 없습니다.");
-
+            showLoader(true);
+            var searchStart = $("#searchStartSelect").val();
+            var searchEnd = $("#searchEndSelect").val();
             frm.searchStart.value = searchStart;
             frm.searchEnd.value = searchEnd;
-
-            showLoader(true);
             document.frm.action = "<c:url value='/statisticTable'/>";
             document.frm.submit();
         });
@@ -43,39 +38,33 @@
         $("#downloadButton").click(function(){
             setCookie("loading","false");
             checkDownloadCheck();
-
             showLoader(true);
-
             document.frm.action = "<c:url value='/statisticTableDataExcelDownload'/>";
             document.frm.submit();
         });
 
-        setSearchCondition();
+        setDatePicker();
 
     });
 
-    function setSearchCondition() {
-        var date = new Date();
-        var year = date.getFullYear();
-        $(".monthYearSelect").empty();
-        for(var i=0; i<=10; i++){
-            $(".yearSelect").append("<option value='"+ (year - i) +"'>"+(year - i) +"년"+"</option>");
-        }
-        for(var i=1; i<=12; i++){
-            if(i < 10) $(".monthSelect").append("<option value='0"+ i +"'>0"+i +"월"+"</option>");
-            else $(".monthSelect").append("<option value='"+ i +"'>"+i +"월"+"</option>");
-        }
-        var getSearchStart = '${statisticTableVO.searchStart}';
-        var getSearchEnd = '${statisticTableVO.searchEnd}';
+    /*달력 SETTING START*/
+    function setDatePicker(){
 
-        var searchStart = getSearchStart.split("-");
-        var searchEnd = getSearchEnd.split("-");
+        $('#searchStartSelect').datepicker();
+        $('#searchStartSelect').datepicker("option", "maxDate", $("#searchEndSelect").val());
+        $('#searchStartSelect').datepicker("option", "onClose", function ( selectedDate ) {
+            $("#searchEndSelect").datepicker( "option", "minDate", selectedDate );
+        });
 
-        $("#startYearSelect").val(searchStart[0]);
-        $("#startMonthSelect").val(searchStart[1]);
-        $("#endYearSelect").val(searchEnd[0]);
-        $("#endMonthSelect").val(searchEnd[1]);
-
+        $('#searchEndSelect').datepicker();
+        $('#searchEndSelect').datepicker("option", "minDate", $("#searchStartSelect").val());
+        $('#searchEndSelect').datepicker("option", "onClose", function ( selectedDate ) {
+            $("#searchStartSelect").datepicker( "option", "maxDate", selectedDate );
+        });
+        //datepicker 초기화 END
+        //기본값 세팅
+        $("#searchStartSelect").val('${statisticTableVO.searchStart}');
+        $("#searchEndSelect").val('${statisticTableVO.searchEnd}');
     }
 
 </script>
@@ -90,15 +79,9 @@
                     <input type = "hidden" id="searchStart" name="searchStart" value="${statisticTableVO.searchStart}"/>
                     <input type = "hidden" id="searchEnd" name="searchEnd" value="${statisticTableVO.searchEnd}"/>
                     <div class="monthInput">
-                        <select class="wd100 monthYearSelect yearSelect" id="startYearSelect">
-                        </select>
-                        <select class="wd100 monthYearSelect monthSelect" id="startMonthSelect">
-                        </select>
+                        <input type="date" name="startDate" class="mDateTimeInput" id="searchStartSelect" readonly="readonly">
                         ~
-                        <select class="wd100 monthYearSelect yearSelect" id="endYearSelect">
-                        </select>
-                        <select class="wd100 monthYearSelect monthSelect" id="endMonthSelect">
-                        </select>
+                        <input type="date" name="endDate" class="mDateTimeInput" id="searchEndSelect" readonly="readonly">
                     </div>
                 </td>
                 <td><a class="button resetBtn bgc_grayC mt10 fr" id="resetButton"><i class="bx bx-redo"></i>초기화</a>
