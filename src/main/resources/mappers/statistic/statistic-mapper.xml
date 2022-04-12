@@ -11,20 +11,21 @@
             <when test="searchGbn.equals('day')">
              , COUNT(SMELL_VALUE)               CNT
              , DATE_FORMAT(REG_DT, '%Y-%m-%d') REG_DT
-        FROM (
-                SELECT MAX(SMELL_VALUE) SMELL_VALUE,
-                REG_DT,
-                SMELL_REGISTER_TIME,
-                REG_ID
-                FROM tb_smell_register
-                WHERE 1 = 1
-                AND DATE_FORMAT(REG_DT, '%Y-%m-%d') BETWEEN #{searchStart} AND #{searchEnd}
-                GROUP BY DATE_FORMAT(REG_DT, '%Y-%m-%d') , SMELL_REGISTER_TIME, REG_ID
-                ) A LEFT JOIN (
+        FROM tb_smell_register A LEFT JOIN (
                 SELECT   USER_ID
                     , USER_REGION_MASTER
                     , USER_REGION_DETAIL
-                FROM tb_user ) B ON A.REG_ID = B.USER_ID
+                FROM (
+                    SELECT a.USER_ID            USER_ID,
+                           a.USER_REGION_MASTER USER_REGION_MASTER,
+                           a.USER_REGION_DETAIL USER_REGION_DETAIL
+                    FROM tb_user a
+                    INNER JOIN (
+                        SELECT USER_ID, MAX(REG_GBN) REG_GBN
+                        FROM tb_user
+                        GROUP BY USER_ID
+                    ) b ON a.USER_ID = b.USER_ID AND a.REG_GBN = b.REG_GBN
+                ) tb_user ) B ON A.REG_ID = B.USER_ID
        WHERE 1=1
                 <if test="userRegionMaster != null and !userRegionMaster.equals('')" >
                     AND B.USER_REGION_MASTER = #{userRegionMaster}
@@ -32,27 +33,29 @@
                 <if test="userRegionDetail != null and !userRegionDetail.equals('')" >
                     AND B.USER_REGION_DETAIL = #{userRegionDetail}
                 </if>
-       GROUP BY SMELL_VALUE, DATE_FORMAT(REG_DT, '%Y-%m-%d')
+                AND DATE_FORMAT(REG_DT, '%Y-%m-%d') BETWEEN #{searchStart} AND #{searchEnd}
+                GROUP BY SMELL_VALUE, DATE_FORMAT(REG_DT, '%Y-%m-%d')
        ORDER BY REG_DT, SMELL_VALUE
             </when>
             <when test="searchGbn.equals('month')">
              , COUNT(SMELL_VALUE)            CNT
              , DATE_FORMAT(REG_DT, '%Y-%m') REG_DT
 
-        FROM (
-                SELECT MAX(SMELL_VALUE) SMELL_VALUE,
-                REG_DT,
-                SMELL_REGISTER_TIME,
-                REG_ID
-                FROM tb_smell_register
-                WHERE 1 = 1
-                AND DATE_FORMAT(REG_DT, '%Y-%m') BETWEEN #{searchStart} AND #{searchEnd}
-                GROUP BY DATE_FORMAT(REG_DT, '%Y-%m-%d') , SMELL_REGISTER_TIME, REG_ID
-                ) A LEFT JOIN (
+        FROM tb_smell_register A LEFT JOIN (
                 SELECT   USER_ID
                 , USER_REGION_MASTER
                 , USER_REGION_DETAIL
-                FROM tb_user ) B ON A.REG_ID = B.USER_ID
+                FROM (
+                    SELECT a.USER_ID            USER_ID,
+                           a.USER_REGION_MASTER USER_REGION_MASTER,
+                           a.USER_REGION_DETAIL USER_REGION_DETAIL
+                    FROM tb_user a
+                    INNER JOIN (
+                    SELECT USER_ID, MAX(REG_GBN) REG_GBN
+                    FROM tb_user
+                    GROUP BY USER_ID
+                    ) b ON a.USER_ID = b.USER_ID AND a.REG_GBN = b.REG_GBN
+                ) tb_user ) B ON A.REG_ID = B.USER_ID
        WHERE 1=1
                 <if test="userRegionMaster != null and !userRegionMaster.equals('')" >
                     AND B.USER_REGION_MASTER = #{userRegionMaster}
@@ -60,27 +63,29 @@
                 <if test="userRegionDetail != null and !userRegionDetail.equals('')" >
                     AND B.USER_REGION_DETAIL = #{userRegionDetail}
                 </if>
-       GROUP BY SMELL_VALUE, DATE_FORMAT(REG_DT, '%Y-%m')
+                AND DATE_FORMAT(REG_DT, '%Y-%m') BETWEEN #{searchStart} AND #{searchEnd}
+                GROUP BY SMELL_VALUE, DATE_FORMAT(REG_DT, '%Y-%m')
        ORDER BY REG_DT, SMELL_VALUE
             </when>
             <when test="searchGbn.equals('year')">
             , COUNT(SMELL_VALUE)         CNT
             , DATE_FORMAT(REG_DT, '%Y') REG_DT
 
-                FROM (
-                    SELECT MAX(SMELL_VALUE) SMELL_VALUE,
-                           REG_DT,
-                           SMELL_REGISTER_TIME,
-                           REG_ID
-                    FROM tb_smell_register
-                    WHERE 1 = 1
-                    AND DATE_FORMAT(REG_DT, '%Y') BETWEEN #{searchStart} AND #{searchEnd}
-                    GROUP BY DATE_FORMAT(REG_DT, '%Y-%m-%d') , SMELL_REGISTER_TIME, REG_ID
-                ) A LEFT JOIN (
+                FROM tb_smell_register A LEFT JOIN (
                 SELECT USER_ID
                      , USER_REGION_MASTER
                      , USER_REGION_DETAIL
-                FROM tb_user ) B ON A.REG_ID = B.USER_ID
+                FROM (
+                    SELECT a.USER_ID            USER_ID,
+                           a.USER_REGION_MASTER USER_REGION_MASTER,
+                           a.USER_REGION_DETAIL USER_REGION_DETAIL
+                    FROM tb_user a
+                    INNER JOIN (
+                        SELECT USER_ID, MAX(REG_GBN) REG_GBN
+                        FROM tb_user
+                        GROUP BY USER_ID
+                    ) b ON a.USER_ID = b.USER_ID AND a.REG_GBN = b.REG_GBN
+                ) tb_user ) B ON A.REG_ID = B.USER_ID
        WHERE 1=1
                 <if test="userRegionMaster != null and !userRegionMaster.equals('')" >
                     AND B.USER_REGION_MASTER = #{userRegionMaster}
@@ -88,26 +93,29 @@
                 <if test="userRegionDetail != null and !userRegionDetail.equals('')" >
                     AND B.USER_REGION_DETAIL = #{userRegionDetail}
                 </if>
-     GROUP BY SMELL_VALUE, DATE_FORMAT(REG_DT, '%Y')
+                AND DATE_FORMAT(REG_DT, '%Y') BETWEEN #{searchStart} AND #{searchEnd}
+
+                GROUP BY SMELL_VALUE, DATE_FORMAT(REG_DT, '%Y')
      ORDER BY REG_DT, SMELL_VALUE
             </when>
             <otherwise>
              , COUNT(SMELL_VALUE)                            CNT
              , F_GET_CODE_NAME('REN',A.SMELL_REGISTER_TIME) REG_DT
-     FROM (
-            SELECT MAX(SMELL_VALUE) SMELL_VALUE,
-                REG_DT,
-                SMELL_REGISTER_TIME,
-                REG_ID
-            FROM tb_smell_register
-            WHERE 1 = 1
-                AND DATE_FORMAT(REG_DT, '%Y-%m-%d') = DATE_FORMAT(curdate(), '%Y-%m-%d')
-            GROUP BY DATE_FORMAT(REG_DT, '%Y-%m-%d') , SMELL_REGISTER_TIME, REG_ID
-                ) A LEFT JOIN (
-                SELECT   USER_ID
-                , USER_REGION_MASTER
-                , USER_REGION_DETAIL
-                FROM tb_user ) B ON A.REG_ID = B.USER_ID
+     FROM tb_smell_register A LEFT JOIN (
+                    SELECT   USER_ID
+                           , USER_REGION_MASTER
+                           , USER_REGION_DETAIL
+                    FROM (
+                        SELECT a.USER_ID            USER_ID,
+                               a.USER_REGION_MASTER USER_REGION_MASTER,
+                               a.USER_REGION_DETAIL USER_REGION_DETAIL
+                        FROM tb_user a
+                        INNER JOIN (
+                        SELECT USER_ID, MAX(REG_GBN) REG_GBN
+                        FROM tb_user
+                        GROUP BY USER_ID
+                        ) b ON a.USER_ID = b.USER_ID AND a.REG_GBN = b.REG_GBN
+                    ) tb_user ) B ON A.REG_ID = B.USER_ID
      WHERE 1=1
                 <if test="userRegionMaster != null and !userRegionMaster.equals('')" >
                     AND B.USER_REGION_MASTER = #{userRegionMaster}
@@ -115,7 +123,8 @@
                 <if test="userRegionDetail != null and !userRegionDetail.equals('')" >
                     AND B.USER_REGION_DETAIL = #{userRegionDetail}
                 </if>
-      AND A.SMELL_REGISTER_TIME IN(
+                AND DATE_FORMAT(A.REG_DT, '%Y-%m-%d') = DATE_FORMAT(curdate(), '%Y-%m-%d')
+                AND A.SMELL_REGISTER_TIME IN(
                 #{searchStart}
                 <if test='searchStart lt "002" and searchEnd gte "002"' >
                     ,'002'
@@ -139,37 +148,35 @@
             #{smellRegisterTime}                                                  smellRegisterTime,
             ifNull(F_GET_CODE_NAME('REN',#{smellRegisterTime}),'')                smellRegisterTimeName
             FROM (
-                SELECT
-                       (
-                        SELECT
-                        <choose>
-                            <when test="smellRegisterTime != null and !smellRegisterTime.equals('')" >
-                                COUNT(DISTINCT USER_ID) * (DATEDIFF(#{searchEnd}, #{searchStart}) + 1)
-                            </when>
-                            <otherwise>
-                                COUNT(DISTINCT USER_ID) * 3 * (DATEDIFF(#{searchEnd}, #{searchStart}) + 1)
-                            </otherwise>
-                        </choose>
-                        FROM tb_user
-                        WHERE USER_REGION_MASTER IS NOT NULL AND USER_REGION_MASTER != ''
-                        AND   USER_REGION_DETAIL IS NOT NULL AND USER_REGION_DETAIL != ''
-                    ) userTotalCount,
-                    (
-                    SELECT COUNT(*)
-                        FROM (
-                            SELECT MAX(SMELL_VALUE) SMELL_VALUE,
-                                   REG_DT,
-                                   SMELL_REGISTER_TIME,
-                                   REG_ID
-                            FROM tb_smell_register
-                            WHERE 1 = 1
-                            AND DATE_FORMAT(REG_DT, '%Y-%m-%d')  BETWEEN #{searchStart} AND #{searchEnd}
-                        <if test="smellRegisterTime != null and !smellRegisterTime.equals('')" >
-                            AND SMELL_REGISTER_TIME = #{smellRegisterTime}
-                        </if>
-                            GROUP BY DATE_FORMAT(REG_DT, '%Y-%m-%d'), SMELL_REGISTER_TIME, REG_ID
-                        ) userRegisterCount
-                    ) userRegisterCount
+                SELECT COUNT(*) userTotalCount,
+                       COUNT(CASE WHEN SMELL_VALUE != '001' AND SMELL_TYPE != '008' THEN 1 END) userRegisterCount
+                FROM (
+                SELECT t1.SMELL_VALUE         SMELL_VALUE,
+                       t1.SMELL_TYPE          SMELL_TYPE,
+                       t1.REG_DT              REG_DT,
+                       t1.SMELL_REGISTER_TIME SMELL_REGISTER_TIME,
+                       t1.REG_ID              REG_ID
+                FROM tb_smell_register t1,
+                (
+                SELECT MAX(SMELL_VALUE) SMELL_VALUE,
+                    REG_DT,
+                    SMELL_REGISTER_TIME,
+                    REG_ID
+                FROM tb_smell_register
+                WHERE 1 = 1
+                AND DATE_FORMAT(REG_DT, '%Y-%m-%d') BETWEEN #{searchStart} AND #{searchEnd}
+                <if test="smellRegisterTime != null and !smellRegisterTime.equals('')" >
+                    AND SMELL_REGISTER_TIME = #{smellRegisterTime}
+                </if>
+                GROUP BY DATE_FORMAT(REG_DT, '%Y-%m-%d'), SMELL_REGISTER_TIME, REG_ID
+                ) t2
+                WHERE 1=1
+                AND DATE_FORMAT(t1.REG_DT, '%Y-%m-%d') = DATE_FORMAT(t2.REG_DT, '%Y-%m-%d')
+                AND t1.SMELL_REGISTER_TIME = t2.SMELL_REGISTER_TIME
+                AND t1.REG_ID = t2.REG_ID
+                AND t1.SMELL_VALUE = t2.SMELL_VALUE
+                GROUP BY DATE_FORMAT(t1.REG_DT, '%Y-%m-%d'), t1.SMELL_REGISTER_TIME, t1.REG_ID
+                ) userRegisterCount
         ) result LEFT OUTER JOIN
         (
             SELECT smellValueResult.SMELL_VALUE mainSmellValue,
@@ -248,33 +255,12 @@
                #{smellRegisterTime}                                                  smellRegisterTime,
                ifNull(F_GET_CODE_NAME('REN',#{smellRegisterTime}),'')                smellRegisterTimeName
         FROM(
-            SELECT a.REFERENCE_CODE_ID            userRegionMaster,
-                   a.CODE_ID                      userRegionDetail,
-                   a.USER_REGION_MASTER_NAME      userRegionMasterName,
-                   a.USER_REGION_DETAIL_NAME      userRegionDetailName,
-                   (
-                    SELECT
-                    <choose>
-                        <when test="smellRegisterTime != null and !smellRegisterTime.equals('')" >
-                            COUNT(DISTINCT USER_ID) * (DATEDIFF(#{searchEnd}, #{searchStart}) + 1)
-                        </when>
-                        <otherwise>
-                            COUNT(DISTINCT USER_ID) * 3 * (DATEDIFF(#{searchEnd}, #{searchStart}) + 1)
-                        </otherwise>
-                    </choose>
-                    FROM (
-                        SELECT a.USER_ID, a.USER_REGION_MASTER, a.USER_REGION_DETAIL
-                        FROM tb_user a
-                        INNER JOIN (
-                            SELECT USER_ID, MAX(REG_GBN) REG_GBN
-                            FROM tb_user
-                            GROUP BY USER_ID) b
-                            ON a.USER_ID = b.USER_ID AND a.REG_GBN = b.REG_GBN
-                    ) tb_user
-                    WHERE tb_user.USER_REGION_MASTER = a.REFERENCE_CODE_ID
-                    AND tb_user.USER_REGION_DETAIL = a.CODE_ID
-                   ) userTotalCount,
-                   ifnull(b.USER_REGIST_COUNT, 0) userRegisterCount,
+            SELECT a.REFERENCE_CODE_ID              userRegionMaster,
+                   a.CODE_ID                        userRegionDetail,
+                   a.USER_REGION_MASTER_NAME        userRegionMasterName,
+                   a.USER_REGION_DETAIL_NAME        userRegionDetailName,
+                   ifnull(b.USER_REGISTER_COUNT, 0) userRegisterCount,
+                   ifnull(b.USER_TOTAL_COUNT, 0)    userTotalCount,
                    ifNull((
                         SELECT SMELL_VALUE
                         FROM (
@@ -358,15 +344,34 @@
             left outer join (
                 SELECT tb_user.USER_REGION_MASTER ,
                        tb_user.USER_REGION_DETAIL ,
-                       COUNT(*) USER_REGIST_COUNT
+                       COUNT(*) USER_TOTAL_COUNT  ,
+                       COUNT(CASE WHEN SMELL_VALUE != '001' AND SMELL_TYPE != '008' THEN 1 END) USER_REGISTER_COUNT
                 FROM (
-                        SELECT REG_ID, REG_DT, SMELL_REGISTER_TIME
-                        FROM tb_smell_register
-                        WHERE DATE_FORMAT(tb_smell_register.REG_DT, '%Y-%m-%d') BETWEEN #{searchStart} AND #{searchEnd}
-                    <if test="smellRegisterTime != null and !smellRegisterTime.equals('')" >
-                        AND tb_smell_register.SMELL_REGISTER_TIME = #{smellRegisterTime}
-                    </if>
-                        GROUP BY DATE_FORMAT(REG_DT, '%Y-%m-%d'), SMELL_REGISTER_TIME, REG_ID
+                        SELECT t1.SMELL_VALUE         SMELL_VALUE,
+                               t1.SMELL_TYPE,
+                               t1.REG_DT              REG_DT,
+                               t1.SMELL_REGISTER_TIME SMELL_REGISTER_TIME,
+                               t1.REG_ID              REG_ID
+                        FROM tb_smell_register t1,
+                        (
+                            SELECT MAX(SMELL_VALUE) SMELL_VALUE,
+                                   REG_DT,
+                                   SMELL_REGISTER_TIME,
+                                   REG_ID
+                            FROM tb_smell_register
+                            WHERE 1 = 1
+                            AND DATE_FORMAT(REG_DT, '%Y-%m-%d') BETWEEN #{searchStart} AND #{searchEnd}
+                        <if test="smellRegisterTime != null and !smellRegisterTime.equals('')" >
+                            AND SMELL_REGISTER_TIME = #{smellRegisterTime}
+                        </if>
+                            GROUP BY DATE_FORMAT(REG_DT, '%Y-%m-%d'), SMELL_REGISTER_TIME, REG_ID
+                        ) t2
+                        WHERE 1=1
+                        AND DATE_FORMAT(t1.REG_DT, '%Y-%m-%d') = DATE_FORMAT(t2.REG_DT, '%Y-%m-%d')
+                        AND t1.SMELL_REGISTER_TIME = t2.SMELL_REGISTER_TIME
+                        AND t1.REG_ID = t2.REG_ID
+                        AND t1.SMELL_VALUE = t2.SMELL_VALUE
+                        GROUP BY DATE_FORMAT(t1.REG_DT, '%Y-%m-%d'), t1.SMELL_REGISTER_TIME, t1.REG_ID
                      )tb_smell_register,
                      (
                         SELECT a.USER_ID            USER_ID,
@@ -401,90 +406,101 @@
                #{smellRegisterTime}                                                   smellRegisterTime,
                ifNull(F_GET_CODE_NAME('REN',#{smellRegisterTime}),'')                 smellRegisterTimeName
         FROM (
-            SELECT (
-                SELECT COUNT(DISTINCT USER_ID) * 3 * (DATEDIFF(LAST_DAY(CONCAT(#{searchEnd}, '-01')), CONCAT(#{searchStart}, '-01')) + 1)
-                FROM (
-                    SELECT a.USER_ID, a.USER_REGION_MASTER, a.USER_REGION_DETAIL
-                    FROM tb_user a
-                    INNER JOIN (
-                        SELECT USER_ID, MAX(REG_GBN) REG_GBN
-                        FROM tb_user
-                        GROUP BY USER_ID) b
-                        ON a.USER_ID = b.USER_ID AND a.REG_GBN = b.REG_GBN
-                ) tb_user
-                WHERE USER_REGION_MASTER    = #{userRegionMaster}
-                AND   USER_REGION_DETAIL    = #{userRegionDetail}
-            )        userTotalCount,
-            (
-                SELECT COUNT(*)
-                FROM (
-                    SELECT MAX(tb_smell_register.SMELL_VALUE) SMELL_VALUE,
-                           tb_smell_register.REG_DT,
-                           tb_smell_register.SMELL_REGISTER_TIME,
-                           tb_smell_register.REG_ID
-                    FROM tb_smell_register, tb_user
-                    WHERE 1 = 1
-                    AND tb_smell_register.REG_ID = tb_user.USER_ID
-                    AND DATE_FORMAT(tb_smell_register.REG_DT, '%Y-%m') BETWEEN #{searchStart} AND #{searchEnd}
-                    AND tb_user.USER_REGION_MASTER = #{userRegionMaster}
-                    AND tb_user.USER_REGION_DETAIL = #{userRegionDetail}
-                    GROUP BY DATE_FORMAT(tb_smell_register.REG_DT, '%Y-%m-%d'), tb_smell_register.SMELL_REGISTER_TIME, tb_smell_register.REG_ID
-                ) a
-            ) userRegisterCount,
-            ifNull((
-
-                SELECT SMELL_VALUE
-                FROM (
-                    SELECT MAX(SMELL_VALUE) SMELL_VALUE
-                    FROM tb_smell_register,tb_user
-                    WHERE 1 = 1
-                    AND tb_smell_register.REG_ID = tb_user.USER_ID
-                    AND DATE_FORMAT(tb_smell_register.REG_DT, '%Y-%m') BETWEEN #{searchStart} AND #{searchEnd}
-                    AND tb_user.USER_REGION_MASTER = #{userRegionMaster}
-                    AND tb_user.USER_REGION_DETAIL = #{userRegionDetail}
-                GROUP BY DATE_FORMAT(tb_smell_register.REG_DT, '%Y-%m-%d'), SMELL_REGISTER_TIME, tb_smell_register.REG_ID
-                ) a
-                WHERE SMELL_VALUE != '001'
-                GROUP BY SMELL_VALUE
-                ORDER BY COUNT(SMELL_VALUE) DESC LIMIT 1
-            ),'') mainSmellValue,
-            ifNull((
-                SELECT SMELL_TYPE
-                FROM (
-                    SELECT t1.SMELL_TYPE SMELL_TYPE
+            SELECT
+                ifNull((
+                    SELECT SMELL_VALUE
                     FROM (
-                        SELECT SMELL_VALUE,
-                               SMELL_TYPE,
-                               SMELL_REGISTER_TIME,
-                               REG_ID,
-                               tb_smell_register.REG_DT
+                        SELECT MAX(SMELL_VALUE) SMELL_VALUE
                         FROM tb_smell_register,tb_user
-                        WHERE tb_smell_register.REG_ID = tb_user.USER_ID
+                        WHERE 1 = 1
+                        AND tb_smell_register.REG_ID = tb_user.USER_ID
                         AND DATE_FORMAT(tb_smell_register.REG_DT, '%Y-%m') BETWEEN #{searchStart} AND #{searchEnd}
                         AND tb_user.USER_REGION_MASTER = #{userRegionMaster}
                         AND tb_user.USER_REGION_DETAIL = #{userRegionDetail}
-                    ) t1,
-                    (
-                    SELECT MAX(SMELL_VALUE) SMELL_VALUE,
-                           REG_DT,
-                           SMELL_REGISTER_TIME,
-                           REG_ID
-                    FROM tb_smell_register
-                    WHERE 1 = 1
-                    AND DATE_FORMAT(REG_DT, '%Y-%m') BETWEEN #{searchStart} AND #{searchEnd}
-                    GROUP BY DATE_FORMAT(REG_DT, '%Y-%m-%d'), SMELL_REGISTER_TIME, REG_ID
-                    ) t2
-                    WHERE 1 = 1
-                    AND DATE_FORMAT(t1.REG_DT, '%Y-%m-%d') = DATE_FORMAT(t2.REG_DT, '%Y-%m-%d')
-                    AND t1.SMELL_REGISTER_TIME = t2.SMELL_REGISTER_TIME
-                    AND t1.REG_ID = t2.REG_ID
-                    AND t1.SMELL_VALUE = t2.SMELL_VALUE
-                    AND t1.SMELL_TYPE != '008'
-                    GROUP BY DATE_FORMAT(t1.REG_DT, '%Y-%m-%d'), t1.SMELL_REGISTER_TIME, t1.REG_ID
-                )  a
-                GROUP BY SMELL_TYPE
-                ORDER BY COUNT(SMELL_TYPE) DESC LIMIT 1
-            ),'') mainSmellType
+                    GROUP BY DATE_FORMAT(tb_smell_register.REG_DT, '%Y-%m-%d'), SMELL_REGISTER_TIME, tb_smell_register.REG_ID
+                    ) a
+                    WHERE SMELL_VALUE != '001'
+                    GROUP BY SMELL_VALUE
+                    ORDER BY COUNT(SMELL_VALUE) DESC LIMIT 1
+                ),'') mainSmellValue,
+                ifNull((
+                    SELECT SMELL_TYPE
+                    FROM (
+                        SELECT t1.SMELL_TYPE SMELL_TYPE
+                        FROM (
+                            SELECT SMELL_VALUE,
+                                   SMELL_TYPE,
+                                   SMELL_REGISTER_TIME,
+                                   REG_ID,
+                                   tb_smell_register.REG_DT
+                            FROM tb_smell_register,tb_user
+                            WHERE tb_smell_register.REG_ID = tb_user.USER_ID
+                            AND DATE_FORMAT(tb_smell_register.REG_DT, '%Y-%m') BETWEEN #{searchStart} AND #{searchEnd}
+                            AND tb_user.USER_REGION_MASTER = #{userRegionMaster}
+                            AND tb_user.USER_REGION_DETAIL = #{userRegionDetail}
+                        ) t1,
+                        (
+                        SELECT MAX(SMELL_VALUE) SMELL_VALUE,
+                               REG_DT,
+                               SMELL_REGISTER_TIME,
+                               REG_ID
+                        FROM tb_smell_register
+                        WHERE 1 = 1
+                        AND DATE_FORMAT(REG_DT, '%Y-%m') BETWEEN #{searchStart} AND #{searchEnd}
+                        GROUP BY DATE_FORMAT(REG_DT, '%Y-%m-%d'), SMELL_REGISTER_TIME, REG_ID
+                        ) t2
+                        WHERE 1 = 1
+                        AND DATE_FORMAT(t1.REG_DT, '%Y-%m-%d') = DATE_FORMAT(t2.REG_DT, '%Y-%m-%d')
+                        AND t1.SMELL_REGISTER_TIME = t2.SMELL_REGISTER_TIME
+                        AND t1.REG_ID = t2.REG_ID
+                        AND t1.SMELL_VALUE = t2.SMELL_VALUE
+                        AND t1.SMELL_TYPE != '008'
+                        GROUP BY DATE_FORMAT(t1.REG_DT, '%Y-%m-%d'), t1.SMELL_REGISTER_TIME, t1.REG_ID
+                    )  a
+                    GROUP BY SMELL_TYPE
+                    ORDER BY COUNT(SMELL_TYPE) DESC LIMIT 1
+                ),'') mainSmellType,
+                COUNT(*) userTotalCount  ,
+                COUNT(CASE WHEN SMELL_VALUE != '001' AND SMELL_TYPE != '008' THEN 1 END) userRegisterCount
+            FROM (
+                SELECT t1.SMELL_VALUE         SMELL_VALUE,
+                       t1.SMELL_TYPE,
+                       t1.REG_DT              REG_DT,
+                       t1.SMELL_REGISTER_TIME SMELL_REGISTER_TIME,
+                       t1.REG_ID              REG_ID
+                FROM tb_smell_register t1,
+                     (
+                      SELECT MAX(SMELL_VALUE) SMELL_VALUE,
+                             REG_DT,
+                             SMELL_REGISTER_TIME,
+                             REG_ID
+                      FROM tb_smell_register
+                      WHERE 1 = 1
+                      AND DATE_FORMAT(REG_DT, '%Y-%m') BETWEEN #{searchStart} AND #{searchEnd}
+                      GROUP BY DATE_FORMAT(REG_DT, '%Y-%m-%d'), SMELL_REGISTER_TIME, REG_ID
+                      ) t2
+                WHERE 1=1
+                AND DATE_FORMAT(t1.REG_DT, '%Y-%m-%d') = DATE_FORMAT(t2.REG_DT, '%Y-%m-%d')
+                AND t1.SMELL_REGISTER_TIME = t2.SMELL_REGISTER_TIME
+                AND t1.REG_ID = t2.REG_ID
+                AND t1.SMELL_VALUE = t2.SMELL_VALUE
+                GROUP BY DATE_FORMAT(t1.REG_DT, '%Y-%m-%d'), t1.SMELL_REGISTER_TIME, t1.REG_ID
+                )tb_smell_register,
+                (
+                 SELECT a.USER_ID            USER_ID,
+                        a.USER_REGION_MASTER USER_REGION_MASTER,
+                        a.USER_REGION_DETAIL USER_REGION_DETAIL
+                 FROM tb_user a
+                 INNER JOIN (
+                    SELECT USER_ID, MAX(REG_GBN) REG_GBN
+                    FROM tb_user
+                    WHERE USER_REGION_MASTER = #{userRegionMaster}
+                    AND USER_REGION_DETAIL   = #{userRegionDetail}
+                    GROUP BY USER_ID
+                    ) b ON a.USER_ID = b.USER_ID AND a.REG_GBN = b.REG_GBN
+                ) tb_user
+            WHERE 1 = 1
+            AND tb_smell_register.REG_ID = tb_user.USER_ID
      ) result
     </select>
 </mapper>
