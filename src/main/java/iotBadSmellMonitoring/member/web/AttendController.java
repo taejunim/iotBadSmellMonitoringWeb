@@ -154,7 +154,7 @@ public class AttendController {
 
             attendCheckMap.put("USER_REG_COUNT",regDayCount+"/"+lastDay);
 
-            if(regDayCount<23)                                                                                          // 24일 이상일 경우 수당 지금 여부 O.
+            if(regDayCount<24)                                                                                          // 24일 이상일 경우 수당 지금 여부 O.
                 attendCheckMap.put("USER_DAY_CHECK","X");
             else
                 attendCheckMap.put("USER_DAY_CHECK","O");
@@ -256,7 +256,7 @@ public class AttendController {
 
             attendCheckMap.put("USER_REG_COUNT",regDayCount+"/"+lastDay);
 
-            if(regDayCount<23)                                                                                          // 24일 이상일 경우 수당 지금 여부 O.
+            if(regDayCount<24)                                                                                          // 24일 이상일 경우 수당 지금 여부 O.
                 attendCheckMap.put("USER_DAY_CHECK","X");
             else
                 attendCheckMap.put("USER_DAY_CHECK","O");

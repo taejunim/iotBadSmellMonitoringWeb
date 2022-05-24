@@ -78,8 +78,8 @@
                               , t2.REG_COUNT REG_COUNT
                               , (CASE
                                     WHEN DATE_FORMAT(t2.DATE_YMD, '%Y-%m-%d') > DATE_FORMAT(now(), '%Y-%m-%d') THEN '-'
-                                    WHEN REG_COUNT >= 3 THEN 'O'
-                                    WHEN REG_COUNT < 3 THEN 'X' END) AS CHECK_RESULT
+                                    WHEN REG_COUNT >= 2 THEN 'O'
+                                    WHEN REG_COUNT < 2 THEN 'X' END) AS CHECK_RESULT
 
                 FROM (
                          SELECT t1.date_ymd                                DATE_YMD
