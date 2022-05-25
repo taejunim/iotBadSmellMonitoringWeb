@@ -85,7 +85,11 @@
                          SELECT t1.date_ymd                                DATE_YMD
                               , COUNT(DATE_FORMAT(tsr.REG_DT, '%Y-%m-%d')) REG_COUNT
 
-                         FROM tb_smell_register tsr
+                         FROM (SELECT *
+                               FROM tb_smell_register
+                               WHERE REG_DT LIKE CONCAT(#{searchYear},'-',#{searchMonth},'-%')
+                                 AND REG_ID = #{userId}
+                               GROUP BY DATE_FORMAT(REG_DT, '%Y-%m-%d'), SMELL_REGISTER_TIME) tsr
                                   RIGHT JOIN
 
                               (
@@ -161,7 +165,6 @@
                                   WHERE 1 = 1
                                     AND a.date_ymd LIKE CONCAT(#{searchYear},'-',#{searchMonth},'-%') -- 한달만 검색 하려고 하는경우
                               ) t1 ON t1.date_ymd = DATE_FORMAT(tsr.REG_DT, '%Y-%m-%d')
-                                  AND REG_ID = #{userId}
 
                          GROUP BY t1.date_ymd
                          ORDER BY t1.date_ymd ASC
