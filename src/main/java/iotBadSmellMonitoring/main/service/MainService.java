@@ -27,6 +27,14 @@ public interface MainService {
     List<EgovMap> pcMainListSelect(MainVO mainVO) throws Exception;
 
     /**
+     * PC 메인 목록
+     * @param mainSearchVo     PC 공통 화면 검색 VO.
+     * @return           List<EgovMap>
+     * @throws Exception
+     */
+    List<EgovMap> pcMainListFindByMember(MainSearchVo mainSearchVo) throws Exception;
+
+    /**
      * 코드 목록
      * @param mainVO     PC 공통 관련 VO.
      * @return           List<EgovMap>

@@ -22,6 +22,7 @@
              , USER_SEX
              , F_GET_CODE_NAME('SEX',USER_SEX) USER_SEX_NAME
              , USER_AGE
+             , SIGN_IN_STATUS
              , REG_DT
           FROM tb_user
          WHERE 1=1

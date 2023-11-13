@@ -28,6 +28,7 @@ public class JoinVO extends PageVO {
     private String userRegionMaster;                                                                                    //사용자 지역
     private String userRegionDetail;                                                                                    //사용자 지역 상세
     private String userPhone;                                                                                           //사용자 휴대폰
+    private String signInStatus;                                                                                        //관리자 승인 상태
     private String regDt;
 
 }

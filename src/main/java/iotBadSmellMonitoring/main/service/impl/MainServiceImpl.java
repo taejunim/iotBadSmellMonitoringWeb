@@ -1,6 +1,7 @@
 package iotBadSmellMonitoring.main.service.impl;
 
 import egovframework.rte.psl.dataaccess.util.EgovMap;
+import iotBadSmellMonitoring.main.service.MainSearchVo;
 import iotBadSmellMonitoring.main.service.MainService;
 import iotBadSmellMonitoring.main.service.MainVO;
 import org.apache.ibatis.session.SqlSession;
@@ -38,6 +39,20 @@ public class MainServiceImpl implements MainService {
         MainMapper mainMapper = sqlSession.getMapper(MainMapper.class);
 
         return mainMapper.pcMainListSelect(mainVO);
+    }
+    /**
+     * PC 메인 목록
+     * @param mainSearchVo    PC 공통 화면 검색 VO.
+     * @return           List<EgovMap>
+     * @throws Exception
+     */
+    @Override
+    public List<EgovMap> pcMainListFindByMember(MainSearchVo mainSearchVo) throws Exception {
+
+        MainMapper mainMapper = sqlSession.getMapper(MainMapper.class);
+
+
+        return mainMapper.pcMainListFindByMember(mainSearchVo);
     }
 
     /**

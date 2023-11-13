@@ -16,6 +16,7 @@
         <typeAlias alias="int"                 type="java.lang.Integer"/>
         <typeAlias alias="joinVO"              type="iotBadSmellMonitoring.join.service.JoinVO"/>
         <typeAlias alias="mainVO"              type="iotBadSmellMonitoring.main.service.MainVO"/>
+        <typeAlias alias="mainSearchVo"        type="iotBadSmellMonitoring.main.service.MainSearchVo"/>
         <typeAlias alias="registerVO"          type="iotBadSmellMonitoring.history.service.RegisterVO"/>
         <typeAlias alias="historyVO"           type="iotBadSmellMonitoring.history.service.HistoryVO"/>
         <typeAlias alias="noticeVO"            type="iotBadSmellMonitoring.notice.service.NoticeVO"/>

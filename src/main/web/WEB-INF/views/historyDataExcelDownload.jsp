@@ -11,6 +11,7 @@
             <tbody>
                 <tr>
                     <th>순번</th>
+                    <th>지역</th>
                     <th>기상 상태</th>
                     <th>접수 시간대</th>
                     <th>악취 강도</th>
@@ -29,6 +30,7 @@
                 <c:forEach var="resultList" items="${resultList}" varStatus="status">
                 <tr>
                     <td style="text-align:center;">${status.index + 1}</td>
+                    <td>${resultList.userRegionDetail}</td>
                     <td>${resultList.weatherStateName}</td>
                     <td>${resultList.smellRegisterTimeName}</td>
                     <td>${resultList.smellValueName}</td>

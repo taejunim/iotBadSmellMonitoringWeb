@@ -88,22 +88,22 @@ var weatherState = '${historyVO.weatherState}'; //검색조건_기상 상태
                 /*오른쪽 table에 값 담아주기 START*/
                 var getItems = $(this).find("td");  //viewTable의 row
 
-                $("#getWeatherState").text(getItems.eq(1).text());              //기상 상태
-                $("#getRegId").text(getItems.eq(5).text());                     //등록자 아이디
-                $("#getRegName").text(getItems.eq(6).text());                   //등록자
-                $("#getSmellType").text(getItems.eq(4).text());                 //취기
-                $("#getSmellValue").text(getItems.eq(3).text());                //악취 강도
-                $("#humidityValue").text(getItems.eq(8).text() + "%");          //습도
-                $("#getTemperatureValue").text(getItems.eq(9).text() + " ℃");   //온도
-                $("#getWindDirectionValue").text(getItems.eq(10).text());       //풍향
-                $("#getWindSpeedValue").text(getItems.eq(11).text() +"m/s");    //풍속
-                $("#getRegDt").text(getItems.eq(7).text());                     //등록일시
-                $("#smellComment").text(getItems.eq(12).text());                //비고
+                $("#getWeatherState").text(getItems.eq(2).text());              //기상 상태
+                $("#getRegId").text(getItems.eq(6).text());                     //등록자 아이디
+                $("#getRegName").text(getItems.eq(7).text());                   //등록자
+                $("#getSmellType").text(getItems.eq(5).text());                 //취기
+                $("#getSmellValue").text(getItems.eq(4).text());                //악취 강도
+                $("#humidityValue").text(getItems.eq(9).text() + "%");          //습도
+                $("#getTemperatureValue").text(getItems.eq(10).text() + " ℃");   //온도
+                $("#getWindDirectionValue").text(getItems.eq(11).text());       //풍향
+                $("#getWindSpeedValue").text(getItems.eq(12).text() +"m/s");    //풍속
+                $("#getRegDt").text(getItems.eq(8).text());                     //등록일시
+                $("#smellComment").text(getItems.eq(13).text());                //비고
                 /*오른쪽 table에 값 담아주기 END*/
 
                 /*지도 세팅 START*/
-                var gpsX = getItems.eq(13).text();       //gps_x의 값
-                var gpsY = getItems.eq(14).text();       //gps_y의 값
+                var gpsX = getItems.eq(14).text();       //gps_x의 값
+                var gpsY = getItems.eq(15).text();       //gps_y의 값
 
                 var mapContainer = document.getElementById('map'), // 지도를 표시할 div
                     mapOption = {
@@ -114,7 +114,7 @@ var weatherState = '${historyVO.weatherState}'; //검색조건_기상 상태
 
                 var markerPosition  = new kakao.maps.LatLng(gpsY, gpsX); // 마커가 표시될 위치
 
-                var smellValue = getItems.eq(3).text();     //returnMarkerImage에 넘겨줄 파라미터
+                var smellValue = getItems.eq(4).text();     //returnMarkerImage에 넘겨줄 파라미터
 
                 var markerImage = returnMarkerImage(smellValue); //마커 이미지
 
@@ -129,7 +129,7 @@ var weatherState = '${historyVO.weatherState}'; //검색조건_기상 상태
                 /*지도 세팅 END*/
 
                 /*이미지 불러오기 START*/
-                smellRegisterNo =  getItems.eq(15).text()  //table의 resultList로 받아온 smellRegisterNo 가져오기
+                smellRegisterNo =  getItems.eq(16).text()  //table의 resultList로 받아온 smellRegisterNo 가져오기
 
                 fn_img_list(); //이미지 불러오기 함수
                 /*이미지 불러오기 END*/
@@ -333,6 +333,7 @@ function imageDelete(imageIndex){
         <table class=" viewTable font_size13">
             <tr>
                 <th class="wd5rate">NO</th>
+                <th>지역</th>
                 <th>기상 상태</th>
                 <th>접수 시간대</th>
                 <th>악취 강도</th>
@@ -344,6 +345,7 @@ function imageDelete(imageIndex){
             <c:forEach var="resultList" items="${resultList}" varStatus="status">
             <tr class="cursor_pointer itemRow" id="tr-hover">
                 <td>${paginationInfo.totalRecordCount - ((historyVO.pageIndex-1) * 10) - status.index}</td>
+                <td>${resultList.userRegionDetail}</td>
                 <td>${resultList.weatherStateName}</td>
                 <td>${resultList.smellRegisterTimeName}</td>
                 <td>${resultList.smellValueName}</td>

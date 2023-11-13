@@ -309,7 +309,7 @@ select::-ms-expand{
     margin: 3% auto 1% auto;
     text-align: center;
     width: 95%;
-    height: 480px!important;
+    /*height: 480px!important;*/
 }
 .viewTable th{
     height: 40px;
@@ -513,4 +513,37 @@ select::-ms-expand{
 }
 #noticeSendBtn {
     width: 135px;
+}
+
+.memberStatusStay {
+    background-color: #f7d54a;
+}
+
+.memberStatusGreen {
+    background-color: #62c462;
+}
+
+.memberStatusRed {
+    background-color: #ee5f5b;
+}
+
+.memberStatusImg {
+    padding: 0px 10px 0px 12px;
+    margin: 0 auto;
+    width: 12px;
+    height: 12px;
+}
+
+.backgroundImgGreen {
+    filter: invert(80%) sepia(8%) saturate(2449%) hue-rotate(68deg) brightness(83%) contrast(96%);
+}
+
+.backgroundImgRed {
+    filter: invert(12%) sepia(80%) saturate(5416%) hue-rotate(357deg) brightness(118%) contrast(115%);
+}
+.backgroundImgStay {
+    filter: invert(100%) sepia(2%) saturate(223%) hue-rotate(165deg) brightness(115%) contrast(77%);
+}
+.memberStatusImgTd {
+    text-align: left;
 }

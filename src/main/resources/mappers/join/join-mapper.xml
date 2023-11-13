@@ -16,6 +16,7 @@
                                 , USER_REGION_MASTER
                                 , USER_REGION_DETAIL
                                 , USER_AGE
+                                , SIGN_IN_STATUS
                              )
                      VALUES (
                                 #{userId}
@@ -27,6 +28,7 @@
                                 , #{userRegionMaster}
                                 , #{userRegionDetail}
                                 , #{userAge}
+                                , ''
                              )
 
     </insert>

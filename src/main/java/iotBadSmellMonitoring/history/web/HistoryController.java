@@ -1,11 +1,13 @@
 package iotBadSmellMonitoring.history.web;
 
+import com.sun.codemodel.internal.JForEach;
 import egovframework.rte.psl.dataaccess.util.EgovMap;
 import egovframework.rte.ptl.mvc.tags.ui.pagination.PaginationInfo;
 import iotBadSmellMonitoring.history.service.HistoryService;
 import iotBadSmellMonitoring.history.service.HistoryVO;
 import iotBadSmellMonitoring.main.service.MainService;
 import iotBadSmellMonitoring.main.service.MainVO;
+import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -16,7 +18,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
-import java.util.List;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 /**
  * @ Class Name   : HistoryController.java
@@ -73,6 +81,9 @@ public class HistoryController {
         }
 
         paginationInfo.setTotalRecordCount(historyService.historyListTotalCnt(historyVO));
+
+
+
 
         model.addAttribute("resultList", historyService.historyListSelect(historyVO));
         model.addAttribute("paginationInfo", paginationInfo);

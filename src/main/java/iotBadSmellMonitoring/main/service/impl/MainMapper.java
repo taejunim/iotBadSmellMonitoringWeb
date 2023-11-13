@@ -1,6 +1,7 @@
 package iotBadSmellMonitoring.main.service.impl;
 
 import egovframework.rte.psl.dataaccess.util.EgovMap;
+import iotBadSmellMonitoring.main.service.MainSearchVo;
 import iotBadSmellMonitoring.main.service.MainVO;
 
 import java.util.List;
@@ -29,6 +30,14 @@ public interface MainMapper {
     List<EgovMap> pcMainListSelect(MainVO mainVO) throws Exception;
 
     /**
+     * PC 메인 목록
+     * @param mainSearchVo    PC 공통 화면 검색 VO.
+     * @return           List<EgovMap>
+     * @throws Exception
+     */
+    List<EgovMap> pcMainListFindByMember(MainSearchVo mainSearchVo);
+
+    /**
      * 코드 목록
      * @param mainVO     PC 공통 관련 VO.
      * @return           List<EgovMap>
@@ -43,5 +52,6 @@ public interface MainMapper {
      * @throws Exception
      */
     EgovMap getUserWeather(String userRegion) throws Exception;
+
 
 }

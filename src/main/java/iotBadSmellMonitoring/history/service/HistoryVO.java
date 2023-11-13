@@ -21,6 +21,7 @@ public class HistoryVO extends PageVO {
 
     /*HISTORY MASTER START*/
     private String smellRegisterNo;                                                                                     //냄새_접수_번호(SR+YYYYMMDDHHMISS+SEQ(2자리))
+    private String userRegionDetail;                                                                                     // 사용자 지역 상세(코드 테이블 참조)
     private String smellType;                                                                                           //냄새 타입(코드 테이블 참고)
     private String smellValue;                                                                                          //냄새 강도(코드 테이블 참고)
     private String weatherState;                                                                                         //날씨 상태(코드 테이블 참고)

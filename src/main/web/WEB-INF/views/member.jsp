@@ -57,6 +57,18 @@ To change this template use File | Settings | File Templates.
         });
         /*조회 엔터 이벤트 END*/
 
+        /*승인 버튼 클릭 이벤트 START*/
+        $("#memberConfirmBtn").click(function () {
+            var userId = $("#userId").val().trim();
+
+            // 회원을 선택 했는지 체크
+            if (userId === undefined || userId === "") {
+                alert("변경할 회원을 선택해 주세요.");
+                return false;
+            }
+
+
+        })
 
         /*저장 버튼 클릭 이벤트 START*/
         $("#memberSaveBtn").click(function () {
@@ -241,6 +253,11 @@ To change this template use File | Settings | File Templates.
     <div class="wd100rate h100rate bgc_w">
         <div class="wd70rate h100rate fl brDeepBlue">
             <table class="viewTable font_size15">
+                <caption style="text-align: left; padding: 0 0 10px 0; margin: -10px auto;">
+                    <img src="resources/image/member/memberStatus.svg" class="memberStatusImg backgroundImgGreen"> : 승인
+                    <img src="resources/image/member/memberStatus.svg" class="memberStatusImg backgroundImgRed"> : 거절
+                    <img src="resources/image/member/memberStatus.svg" class="memberStatusImg backgroundImgStay"> : 대기
+                </caption>
                 <thead>
                 <colgroup>
                     <col width="5%"/>
@@ -270,7 +287,17 @@ To change this template use File | Settings | File Templates.
                 <c:forEach var="resultList" items="${resultList}" varStatus="status">
                     <tr class="cursor_pointer itemRow h40">
                         <td>${paginationInfo.totalRecordCount - ((joinVO.pageIndex-1) * 10) - status.index}</td>
-                        <td>${resultList.userTypeName}</td>
+                        <c:choose>
+                            <c:when test="${resultList.signInStatus eq 'Y'}">
+                                <td class="memberStatusImgTd"><img src="resources/image/member/memberStatus.svg" class="memberStatusImg backgroundImgGreen">${resultList.userTypeName}</td>
+                            </c:when>
+                            <c:when test="${resultList.signInStatus eq 'N'}">
+                                <td class="memberStatusImgTd"><img src="resources/image/member/memberStatus.svg" class="memberStatusImg backgroundImgRed">${resultList.userTypeName}</td>
+                            </c:when>
+                            <c:otherwise>
+                                <td class="memberStatusImgTd"><img src="resources/image/member/memberStatus.svg" class="memberStatusImg backgroundImgStay">${resultList.userTypeName}</td>
+                            </c:otherwise>
+                        </c:choose>
                         <td>${resultList.userId}</td>
                         <td>${resultList.userName}</td>
                         <td>${resultList.userRegionName}</td>
@@ -356,7 +383,9 @@ To change this template use File | Settings | File Templates.
                         <td><input type="text" readonly class="wd210" id="userType" disabled></td>
                     </tr>
                     <tr class="h80">
-                        <td colspan="2" class="align_c">
+                        <td colspan="4" class="align_c">
+                            <a class="button bgcLightGreen" id="memberRefuseBtn"><i class="bx bxs-user-plus"></i><strong>승인</strong></a>
+                            <a class="button bgcDeepRed" id="memberConfirmBtn"><i class="bx bxs-user-minus"></i>거절</a>
                             <a class="button bgcDeepBlue" id="memberSaveBtn"><i
                                     class="bx bxs-save"></i><strong>저장</strong></a>
                             <a class="button bgcDeepRed" id="memberDeleteBtn"><i class="bx bx-minus-circle"></i>탈퇴</a>

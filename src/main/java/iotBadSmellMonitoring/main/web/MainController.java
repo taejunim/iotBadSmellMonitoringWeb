@@ -5,6 +5,7 @@ import iotBadSmellMonitoring.history.service.RegisterService;
 import iotBadSmellMonitoring.history.service.RegisterVO;
 import iotBadSmellMonitoring.join.service.JoinService;
 import iotBadSmellMonitoring.join.service.JoinVO;
+import iotBadSmellMonitoring.main.service.MainSearchVo;
 import iotBadSmellMonitoring.main.service.MainService;
 import iotBadSmellMonitoring.main.service.MainVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -77,15 +78,26 @@ public class MainController {
     public String main(HttpSession session, ModelMap model) throws Exception{
         MainVO mainVO = new MainVO();
         /*냄새 강도 SETTING START*/
+
         // 처음 한번만 값을 가져와서 세션에 저장
-        if(session.getAttribute("CG_SMT") == null){
+        if(session.getAttribute("CG_SMT") == null || session.getAttribute("CG_RGN") == null ){
             mainVO.setCodeGroup("SMT");
             session.setAttribute("CG_SMT",mainService.codeListSelect(mainVO));
             model.addAttribute("CG_SMT",session.getAttribute("CG_SMT"));
+
+            mainVO.setCodeGroup("STY");
+            session.setAttribute("CG_STY", mainService.codeListSelect(mainVO));
+            model.addAttribute("CG_STY",mainService.codeListSelect(mainVO));
+
+            mainVO.setCodeGroup("REM");
+            session.setAttribute("CG_RGN", mainService.codeListSelect(mainVO));
+            model.addAttribute("CG_RGN", session.getAttribute("CG_RGN"));
         }
         // 세션에 값을 저장했을 경우 세션값을  model에 넘겨줌
         else{
             model.addAttribute("CG_SMT",session.getAttribute("CG_SMT"));
+            model.addAttribute("CG_RGN", session.getAttribute("CG_STY"));
+            model.addAttribute("CG_RGN", session.getAttribute("CG_RGN"));
         }
         return "main";
     }
@@ -133,5 +145,10 @@ public class MainController {
     public @ResponseBody List<EgovMap> pcMainListSelect() throws Exception {
         MainVO mainVO = new MainVO();
         return mainService.pcMainListSelect(mainVO);
+    }
+
+    @RequestMapping(value = "/pcMainListFindByMember")
+    public @ResponseBody List<EgovMap> pcMainListFindByMember(MainSearchVo mainSearchVo) throws Exception{
+        return mainService.pcMainListFindByMember(mainSearchVo);
     }
 }
