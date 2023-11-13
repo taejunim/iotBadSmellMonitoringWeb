@@ -96,6 +96,22 @@
 
     </delete>
 
+    <update id="memberConfirm" parameterType="joinVo">
+        UPDATE tb_user
+        SET SIGN_IN_STATUS = 'Y'
+        WHERE 1 = 1
+        AND USER_ID = #{userId}
+        AND REG_GBN   != '003'
+    </update>
+
+    <update id="memberRefuse" parameterType="joinVo">
+        UPDATE tb_user
+        SET SIGN_IN_STATUS = 'N'
+        WHERE 1 = 1
+        AND USER_ID = #{userId}
+        AND REG_GBN   != '003'
+    </update>
+
     <!-- 사용자 정보 -->
     <select id="memberGetInfoSelect" parameterType="string" resultType="egovMap" >
 

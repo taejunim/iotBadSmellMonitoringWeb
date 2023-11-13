@@ -116,6 +116,18 @@ public class MemberController {
         memberService.memberDelete(joinVO);
     }
 
+    //회원 승인
+    @RequestMapping(value = "/memberConfirm" , method = RequestMethod.POST)
+    public @ResponseBody void memberConfirm(@ModelAttribute JoinVO joinVO) throws Exception {
+        memberService.memberConfirm(joinVO);
+    }
+
+    //회원 승인
+    @RequestMapping(value = "/memberRefuse" , method = RequestMethod.POST)
+    public @ResponseBody void memberRefuse(@ModelAttribute JoinVO joinVO) throws Exception {
+        memberService.memberRefuse(joinVO);
+    }
+
     //이용약관 화면
     @RequestMapping(value = "agreement")
     public String agreement() throws Exception {

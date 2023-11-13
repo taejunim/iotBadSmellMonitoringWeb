@@ -55,6 +55,22 @@ public interface MemberService {
      */
     void memberDelete(JoinVO joinVO) throws Exception;
 
+    /**
+     * 회원 승인
+     * @param   joinVO
+     * @return
+     * @throws Exception
+     */
+    void memberConfirm(JoinVO joinVO);
+
+    /**
+     * 회원 거절
+     * @param   joinVO
+     * @return
+     * @throws Exception
+     */
+    void memberRefuse(JoinVO joinVO);
+
 
     /**
      * USER_ID / USER_NAME GET

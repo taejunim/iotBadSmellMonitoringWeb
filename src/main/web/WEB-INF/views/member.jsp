@@ -14,6 +14,10 @@ To change this template use File | Settings | File Templates.
     var userSex     = '${joinVO.userSex}';              //검색조건_성별
     var userType    = '${joinVO.userType}';             //검색조건_구분
 
+    function init() {
+        location.replace(location.href);
+    }
+
     $(document).ready(function () {
         setButton("member");            //선택된 화면의 메뉴색 변경 CALL
         setDropButton("memberInfo");    //선택된 드롭다운 메뉴색 변경 CALL
@@ -66,10 +70,76 @@ To change this template use File | Settings | File Templates.
                 alert("변경할 회원을 선택해 주세요.");
                 return false;
             }
+            var con_test;
+            if ($("#memberStatus").val().trim() == 'N') {
+                con_test = confirm(userId + "님은 거절된 회원입니다. 승인하시겠습니까?");
+            } else {
+                con_test = confirm(userId + "을(를) 승인하시겠습니까?");
+            }
+
+            if (con_test == true) {
+                showLoader(true);
+                $.ajax({
+                    url: "/memberConfirm/",
+                    type: "POST",
+                    data: {userId: $("#userId").val()},
+                    dataType: "text",
+                    success: function (data) {
+                        alert("승인되었습니다.");
+                        init();
+                    },
+                    error: function (err) {
+                        console.log(err);
+                        alert("승인에 실패하였습니다.");
+                    }
+                }).done(function () {
+                    showLoader(false);
+                });
+            }
 
 
         })
+        /*승인 버튼 클릭 이벤트 END*/
+        /*거절 버튼 클릭 이벤트 START*/
+        $("#memberRefuseBtn").click(function () {
+            var userId = $("#userId").val().trim();
 
+            // 회원을 선택 했는지 체크
+            if (userId === undefined || userId === "") {
+                alert("변경할 회원을 선택해 주세요.");
+                return false;
+            }
+
+            if($("#memberStatus").val().trim() == 'Y') {
+                alert("승인 된 사용자는 거절할 수 없습니다.");
+                return false;
+            }
+
+            var con_test = confirm(userId + "을(를) 거절하시겠습까?");
+
+            if (con_test == true) {
+                showLoader(true);
+                $.ajax({
+                    url: "/memberRefuse/",
+                    type: "POST",
+                    data: {userId: $("#userId").val()},
+                    dataType: "text",
+                    success: function (data) {
+                        alert("거절되었습니다.");
+                        init();
+                    },
+                    error: function (err) {
+                        console.log(err);
+                        alert("거절에 실패하였습니다.");
+                    }
+                }).done(function () {
+                    showLoader(false);
+                });
+            }
+
+
+        })
+        /*거절 버튼 클릭 이벤트 END*/
         /*저장 버튼 클릭 이벤트 START*/
         $("#memberSaveBtn").click(function () {
             var userId = $("#userId").val().trim();
@@ -298,7 +368,7 @@ To change this template use File | Settings | File Templates.
                                 <td class="memberStatusImgTd"><img src="resources/image/member/memberStatus.svg" class="memberStatusImg backgroundImgStay">${resultList.userTypeName}</td>
                             </c:otherwise>
                         </c:choose>
-                        <td>${resultList.userId}</td>
+                        <td>${resultList.userId}<input type="hidden" value="${resultList.signInStatus}" id="memberStatus"></td>
                         <td>${resultList.userName}</td>
                         <td>${resultList.userRegionName}</td>
                         <td>${resultList.userPhone}</td>
@@ -384,8 +454,8 @@ To change this template use File | Settings | File Templates.
                     </tr>
                     <tr class="h80">
                         <td colspan="4" class="align_c">
-                            <a class="button bgcLightGreen" id="memberRefuseBtn"><i class="bx bxs-user-plus"></i><strong>승인</strong></a>
-                            <a class="button bgcDeepRed" id="memberConfirmBtn"><i class="bx bxs-user-minus"></i>거절</a>
+                            <a class="button bgcLightGreen" id="memberConfirmBtn"><i class="bx bxs-user-plus"></i><strong>승인</strong></a>
+                            <a class="button bgcDeepRed" id="memberRefuseBtn"><i class="bx bxs-user-minus"></i>거절</a>
                             <a class="button bgcDeepBlue" id="memberSaveBtn"><i
                                     class="bx bxs-save"></i><strong>저장</strong></a>
                             <a class="button bgcDeepRed" id="memberDeleteBtn"><i class="bx bx-minus-circle"></i>탈퇴</a>

@@ -58,7 +58,7 @@ public class MemberServiceImpl implements MemberService {
     }
 
     /**
-     * 회원 비밀번호 변경
+     * 회원 탈퇴
      * @param   joinVO
      * @return
      * @throws Exception
@@ -76,6 +76,30 @@ public class MemberServiceImpl implements MemberService {
 
         MemberMapper mapper = sqlSession.getMapper(MemberMapper.class);
         mapper.memberDelete(joinVO);
+    }
+
+    /**
+     * 회원 승인
+     * @param   joinVO
+     * @return
+     * @throws Exception
+     */
+    @Override
+    public void memberConfirm(JoinVO joinVO) {
+        MemberMapper mapper = sqlSession.getMapper(MemberMapper.class);
+        mapper.memberConfirm(joinVO);
+    }
+
+    /**
+     * 회원 거절
+     * @param   joinVO
+     * @return
+     * @throws Exception
+     */
+    @Override
+    public void memberRefuse(JoinVO joinVO) {
+        MemberMapper mapper = sqlSession.getMapper(MemberMapper.class);
+        mapper.memberRefuse(joinVO);
     }
 
     /**
