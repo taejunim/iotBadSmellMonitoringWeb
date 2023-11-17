@@ -30,7 +30,8 @@
              , tsr.REG_ID                                               REG_ID
              , tu.USER_NAME                                             USER_NAME
              , DATE_FORMAT(tsr.REG_DT,'%Y-%m-%d %H:%i:%S')              REG_DT
-
+             , tsr.READING_YN                                           READING_YN
+             , CASE WHEN (SELECT tsi.SMELL_REGISTER_NO FROM tb_smell_image tsi WHERE tsi.SMELL_REGISTER_NO = tsr.SMELL_REGISTER_NO GROUP BY tsi.SMELL_REGISTER_NO) IS NOT NULL THEN 'Y' ELSE 'N' END AS IMAGE_YN
           FROM tb_smell_register tsr  force index (tb_smell_status_REG_DT_index) LEFT OUTER JOIN tb_user tu on tsr.REG_ID = tu.USER_ID AND tu.REG_GBN   != '003'
           WHERE 1=1
 
@@ -46,6 +47,9 @@
         </if>
         <if test="weatherState != null and !weatherState.equals('')" >
             AND WEATHER_STATE = #{weatherState}
+        </if>
+        <if test="readingYn != null and !readingYn.equals('')" >
+            AND READING_YN = #{readingYn}
         </if>
 
         <if test="startDate != null and !startDate.equals('')" >
@@ -245,4 +249,10 @@
         ORDER BY tsr.REG_DT DESC
     </select>
 
+    <update id="historyReadingYn" parameterType="historyVO">
+        UPDATE tb_smell_register
+        SET READING_YN = 'Y'
+        WHERE 1 = 1
+        AND SMELL_REGISTER_NO = #{smellRegisterNo}
+    </update>
 </mapper>

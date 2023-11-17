@@ -430,6 +430,16 @@ select::-ms-expand{
 .mDateTimeInput{
     width: 137px;
 }
+.mDateTimeInputMain {
+    font-size: 11px;
+    width: 35%;
+}
+@media all and (max-width:1630px) and (max-height:900px) {
+    .mDateTimeInputMain {
+        font-size: 11px;
+        width: 33%;
+    }
+}
 .borderRight{
     border-right: 1px solid #10639a;
 }

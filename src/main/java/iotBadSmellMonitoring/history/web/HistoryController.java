@@ -121,4 +121,11 @@ public class HistoryController {
         modelMap.addAttribute("resultList",historyService.historyListExcelSelect(historyVO));
         return "historyDataExcelDownload";
     }
+
+    //열람 여부 업데이트
+    @RequestMapping(value = "/historyReadingYn" , method = RequestMethod.POST)
+    public @ResponseBody String historyReadingYn(@ModelAttribute("historyVO") HistoryVO historyVO) throws Exception {
+        historyService.historyReadingYn(historyVO);
+        return historyVO.getSmellRegisterNo();
+    }
 }

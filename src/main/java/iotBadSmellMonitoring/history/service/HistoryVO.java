@@ -38,6 +38,8 @@ public class HistoryVO extends PageVO {
     private String endDate;                                                                                             //끝 날짜
     private String airSensorName;                                                                                       //측정소 명
     private Double pm10Avg;                                                                                             //PM10 미세 먼지 평균 값 (㎍/㎥)
+    private String readingYn;                                                                                           //열람 여부
+    private String imageYn;                                                                                             //이미지 유무
     private String airSensingDate;                                                                                      //공기질 수집 일시 YYYYMMDDHH24MISS
     /*HISTORY MASTER END*/
 

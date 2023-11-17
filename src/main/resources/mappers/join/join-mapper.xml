@@ -48,7 +48,7 @@
              , F_GET_CODE_NAME('SEX',USER_SEX) USER_SEX_NAME
              , USER_AGE
              , USER_PHONE
-
+             , SIGN_IN_STATUS
         FROM tb_user
 
          WHERE 1=1

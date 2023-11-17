@@ -63,4 +63,11 @@ public interface HistoryService {
      */
     List<EgovMap> historyListExcelSelect(HistoryVO historyVO) throws Exception;
 
+    /**
+     * HISTORY 읽음 처리
+     * @return void
+     * @throws Exception
+     */
+    void historyReadingYn(HistoryVO historyVO) throws Exception;
+
 }

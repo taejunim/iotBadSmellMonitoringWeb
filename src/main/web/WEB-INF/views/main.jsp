@@ -31,6 +31,8 @@ Time: 9:49 오전
           markers[i].setMap(map);
         }
         map.panTo( new kakao.maps.LatLng(latitude, longitude));
+        // 클러스터러에 마커들을 추가합니다
+        clusterer.addMarkers(markers);
       },
       error: function (err) {
         alert("사용자 데이터를 불러오는중 에러가 발생하였습니다.");
@@ -44,7 +46,22 @@ Time: 9:49 오전
 
 
 
+
+    // 마커 클러스터러를 생성합니다
+      var clusterer = new kakao.maps.MarkerClusterer({
+          map: map, // 마커들을 클러스터로 관리하고 표시할 지도 객체
+          averageCenter: true, // 클러스터에 포함된 마커들의 평균 위치를 클러스터 마커 위치로 설정
+          minLevel: 9 // 클러스터 할 최소 지도 레벨
+      });
+
+
+
   });
+
+
+
+
+
 
   /*달력 SETTING START*/
   function setDatePicker(){
@@ -102,6 +119,13 @@ Time: 9:49 오전
       var longitude = 126.5204023;
       map = focusMapCenter(latitude, longitude, 9);
 
+      // 마커 클러스터러를 생성합니다
+      var clusterer = new kakao.maps.MarkerClusterer({
+          map: map, // 마커들을 클러스터로 관리하고 표시할 지도 객체
+          averageCenter: true, // 클러스터에 포함된 마커들의 평균 위치를 클러스터 마커 위치로 설정
+          minLevel: 9 // 클러스터 할 최소 지도 레벨
+      });
+
       $.ajax({
           url: "/pcMainListFindByMember",
           type: "GET",
@@ -119,6 +143,8 @@ Time: 9:49 오전
                   markers[i].setMap(map);
               }
               map.panTo( new kakao.maps.LatLng(latitude, longitude));
+              // 클러스터러에 마커들을 추가합니다
+              clusterer.addMarkers(markers);
           },
           error: function (err) {
               alert("사용자 데이터를 불러오는중 에러가 발생하였습니다.");
@@ -150,6 +176,9 @@ Time: 9:49 오전
           position: new kakao.maps.LatLng(arrays[i].gpsY, arrays[i].gpsX), // 마커를 표시할 위치
           image: markerImage // 마커 이미지
         });
+
+
+
 
         marker.id = "marker" + i;
 
@@ -264,12 +293,12 @@ Time: 9:49 오전
           <table class="mainForm wd100rate h100rate" style="border-bottom: 1px #10639a solid; border-top: 1px #10639a solid;">
               <tbody style="text-align: center">
               <tr>
-                  <th colspan="3">검색 조건</th>
+                  <th colspan="3" style="width: 100%">검색 조건</th>
               </tr>
               <tr>
                   <td style="background: #d9efff;" class="wd50">지역</td>
                   <td class="wd80">
-                      <select id="searchUserRegion" name="userRegionMaster" class="wd70" onchange="handleChange(this)">
+                      <select id="searchUserRegion" name="userRegionMaster" class="wd70" onchange="handleChange(this)" style="font-size: 11px;">
                           <option value="">전체</option>
                           <c:forEach var="item" items="${CG_RGN}">
                               <option value="${item.codeId}">${item.codeIdName}</option>
@@ -277,11 +306,11 @@ Time: 9:49 오전
                       </select>
                   </td>
                   <td>
-                      <input type="date" name="startDate" class="mDateTimeInput" value="${mainSearchVo.startDate}" onchange="handleChange(this)"
-                             id="searchStartDt" readonly="readonly"  style="font-size: 11px; width: 35%;">
+                      <input type="date" name="startDate" class="mDateTimeInputMain" value="${mainSearchVo.startDate}" onchange="handleChange(this)"
+                             id="searchStartDt" readonly="readonly">
                       ~
-                      <input type="date" name="endDate" class="mDateTimeInput" value="${mainSearchVo.endDate}" id="searchEndDt" onchange="handleChange(this)"
-                             readonly="readonly" style="font-size: 11px; width: 35%;">
+                      <input type="date" name="endDate" class="mDateTimeInputMain" value="${mainSearchVo.endDate}" id="searchEndDt" onchange="handleChange(this)"
+                             readonly="readonly">
                   </td>
               </tr>
               </tbody>

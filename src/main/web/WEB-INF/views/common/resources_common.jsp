@@ -27,7 +27,7 @@
     <spring:eval expression="@environment.getProperty('${environment}.kakaoMapKey')" var="kakaoMapKey" />
 
     <!-- KakaoMap 카카오 앱키 세팅 -->
-    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=${kakaoMapKey}"></script>
+    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=${kakaoMapKey}&libraries=clusterer"></script>
 
     <script type="text/javascript">
         var contextPath = '${pageContext.request.contextPath}';

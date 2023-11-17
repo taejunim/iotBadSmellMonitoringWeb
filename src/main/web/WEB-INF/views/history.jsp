@@ -85,25 +85,26 @@ var weatherState = '${historyVO.weatherState}'; //검색조건_기상 상태
                 $(".itemRow").not($(this)).css('background-color', 'rgba(255,255,255,0)');  //선택되지 않은 로우 색상
 
 
+                var getItemRow = $(this);
                 /*오른쪽 table에 값 담아주기 START*/
-                var getItems = $(this).find("td");  //viewTable의 row
+                var getItems = getItemRow.find("td");  //viewTable의 row
 
                 $("#getWeatherState").text(getItems.eq(2).text());              //기상 상태
                 $("#getRegId").text(getItems.eq(6).text());                     //등록자 아이디
                 $("#getRegName").text(getItems.eq(7).text());                   //등록자
                 $("#getSmellType").text(getItems.eq(5).text());                 //취기
                 $("#getSmellValue").text(getItems.eq(4).text());                //악취 강도
-                $("#humidityValue").text(getItems.eq(9).text() + "%");          //습도
-                $("#getTemperatureValue").text(getItems.eq(10).text() + " ℃");   //온도
-                $("#getWindDirectionValue").text(getItems.eq(11).text());       //풍향
-                $("#getWindSpeedValue").text(getItems.eq(12).text() +"m/s");    //풍속
+                $("#humidityValue").text(getItems.eq(11).text() + "%");          //습도
+                $("#getTemperatureValue").text(getItems.eq(12).text() + " ℃");   //온도
+                $("#getWindDirectionValue").text(getItems.eq(13).text());       //풍향
+                $("#getWindSpeedValue").text(getItems.eq(14).text() +"m/s");    //풍속
                 $("#getRegDt").text(getItems.eq(8).text());                     //등록일시
-                $("#smellComment").text(getItems.eq(13).text());                //비고
+                $("#smellComment").text(getItems.eq(15).text());                //비고
                 /*오른쪽 table에 값 담아주기 END*/
 
                 /*지도 세팅 START*/
-                var gpsX = getItems.eq(14).text();       //gps_x의 값
-                var gpsY = getItems.eq(15).text();       //gps_y의 값
+                var gpsX = getItems.eq(16).text();       //gps_x의 값
+                var gpsY = getItems.eq(17).text();       //gps_y의 값
 
                 var mapContainer = document.getElementById('map'), // 지도를 표시할 div
                     mapOption = {
@@ -129,10 +130,26 @@ var weatherState = '${historyVO.weatherState}'; //검색조건_기상 상태
                 /*지도 세팅 END*/
 
                 /*이미지 불러오기 START*/
-                smellRegisterNo =  getItems.eq(16).text()  //table의 resultList로 받아온 smellRegisterNo 가져오기
+                smellRegisterNo =  getItems.eq(18).text()  //table의 resultList로 받아온 smellRegisterNo 가져오기
 
                 fn_img_list(); //이미지 불러오기 함수
                 /*이미지 불러오기 END*/
+
+                $.ajax({
+                    url : '/historyReadingYn',
+                    type: "POST",
+                    data : {
+                        smellRegisterNo : smellRegisterNo
+                    },
+                    dataType: "text",
+                    success : function (data) {
+                        getItemRow.css("color","rgb(190,190,190)")
+                    },
+                    error : function (err) {
+                        console.log(err);
+                        alert("서버와 통신이 불안정합니다.")
+                    }
+                })
             });
             /* 테이블 row 클릭 이벤트 END*/
 
@@ -323,6 +340,12 @@ function imageDelete(imageIndex){
                     <option value="${item.codeId}">${item.codeIdName}</option>
                 </c:forEach>
         </select></td>
+        <th>열람 여부</th>
+        <td><select id="readingYn" name="readingYn" class="wd120">
+            <option value="">전체</option>
+            <option value="Y">확인</option>
+            <option value="N">미확인</option>
+        </select></td>
         <td><a class="button resetBtn bgc_grayC mt10 fr" onclick="fn_reset();"><i class="bx bx-redo"></i>초기화</a>
             <a class="button bgcSkyBlue mt10 fr" onclick="fn_search();"><i class="bx bx-search"></i>조회</a>
             <a class="button bgcDeepBlue mt10 fr" id="downloadButton"><i class="bx bx-download"></i>엑셀</a></td>
@@ -341,27 +364,86 @@ function imageDelete(imageIndex){
                 <th class="wd10rate">등록자 아이디</th>
                 <th class="wd10rate">등록자</th>
                 <th class="wd15rate">등록일시</th>
+                <th>특이사항</th>
+                <th>사진첨부</th>
             </tr>
             <c:forEach var="resultList" items="${resultList}" varStatus="status">
-            <tr class="cursor_pointer itemRow" id="tr-hover">
-                <td>${paginationInfo.totalRecordCount - ((historyVO.pageIndex-1) * 10) - status.index}</td>
-                <td>${resultList.userRegionDetail}</td>
-                <td>${resultList.weatherStateName}</td>
-                <td>${resultList.smellRegisterTimeName}</td>
-                <td>${resultList.smellValueName}</td>
-                <td>${resultList.smellTypeName}</td>
-                <td>${resultList.regId}</td>
-                <td>${resultList.userName}</td>
-                <td>${resultList.regDt}</td>
-                <td style="display:none;">${resultList.humidityValue}</td>
-                <td style="display:none;">${resultList.temperatureValue}</td>
-                <td style="display:none;">${resultList.windDirectionValueName}</td>
-                <td style="display:none;">${resultList.windSpeedValue}</td>
-                <td style="display:none;">${resultList.smellComment}</td>
-                <td style="display:none;">${resultList.gpsX }</td>
-                <td style="display:none;">${resultList.gpsY}</td>
-                <td style="display:none;">${resultList.smellRegisterNo}</td>
-            </tr>
+                <c:choose>
+                    <c:when test="${resultList.readingYn eq 'Y'}">
+                        <tr class="cursor_pointer itemRow" id="tr-hover" style="color: rgb(190,190,190)">
+                            <td>${paginationInfo.totalRecordCount - ((historyVO.pageIndex-1) * 10) - status.index}</td>
+                            <td>${resultList.userRegionDetail}</td>
+                            <td>${resultList.weatherStateName}</td>
+                            <td>${resultList.smellRegisterTimeName}</td>
+                            <td>${resultList.smellValueName}</td>
+                            <td>${resultList.smellTypeName}</td>
+                            <td>${resultList.regId}</td>
+                            <td>${resultList.userName}</td>
+                            <td>${resultList.regDt}</td>
+                            <c:choose>
+                                <c:when test="${resultList.smellComment ne '' || not empty resultList.smellComment}">
+                                    <td style="color: black">O</td>
+                                </c:when>
+                                <c:otherwise>
+                                    <td style="color: black">X</td>
+                                </c:otherwise>
+                            </c:choose>
+                            <c:choose>
+                                <c:when test="${resultList.imageYn eq 'Y'}">
+                                    <td style="color: black">O</td>
+                                </c:when>
+                                <c:otherwise>
+                                    <td style="color: black">X</td>
+                                </c:otherwise>
+                            </c:choose>
+                            <td style="display:none;">${resultList.humidityValue}</td>
+                            <td style="display:none;">${resultList.temperatureValue}</td>
+                            <td style="display:none;">${resultList.windDirectionValueName}</td>
+                            <td style="display:none;">${resultList.windSpeedValue}</td>
+                            <td style="display:none;">${resultList.smellComment}</td>
+                            <td style="display:none;">${resultList.gpsX }</td>
+                            <td style="display:none;">${resultList.gpsY}</td>
+                            <td style="display:none;">${resultList.smellRegisterNo}</td>
+                        </tr>
+                    </c:when>
+                    <c:otherwise>
+                        <tr class="cursor_pointer itemRow" id="tr-hover">
+                            <td>${paginationInfo.totalRecordCount - ((historyVO.pageIndex-1) * 10) - status.index}</td>
+                            <td>${resultList.userRegionDetail}</td>
+                            <td>${resultList.weatherStateName}</td>
+                            <td>${resultList.smellRegisterTimeName}</td>
+                            <td>${resultList.smellValueName}</td>
+                            <td>${resultList.smellTypeName}</td>
+                            <td>${resultList.regId}</td>
+                            <td>${resultList.userName}</td>
+                            <td>${resultList.regDt}</td>
+                            <c:choose>
+                                <c:when test="${resultList.smellComment ne '' || not empty resultList.smellComment}">
+                                    <td style="color: black">O</td>
+                                </c:when>
+                                <c:otherwise>
+                                    <td style="color: black">X</td>
+                                </c:otherwise>
+                            </c:choose>
+                            <c:choose>
+                                <c:when test="${resultList.imageYn eq 'Y'}">
+                                    <td style="color: black">O</td>
+                                </c:when>
+                                <c:otherwise>
+                                    <td style="color: black">X</td>
+                                </c:otherwise>
+                            </c:choose>
+                            <td style="display:none;">${resultList.humidityValue}</td>
+                            <td style="display:none;">${resultList.temperatureValue}</td>
+                            <td style="display:none;">${resultList.windDirectionValueName}</td>
+                            <td style="display:none;">${resultList.windSpeedValue}</td>
+                            <td style="display:none;">${resultList.smellComment}</td>
+                            <td style="display:none;">${resultList.gpsX }</td>
+                            <td style="display:none;">${resultList.gpsY}</td>
+                            <td style="display:none;">${resultList.smellRegisterNo}</td>
+                        </tr>
+                    </c:otherwise>
+                </c:choose>
             </c:forEach>
             <c:if test="${empty resultList}">
                 <tr class="noneHover">

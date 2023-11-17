@@ -125,4 +125,14 @@ public class HistoryServiceImpl implements HistoryService {
         return historyMapper.historyListExcelSelect(historyVO);
     }
 
+    /**
+     * HISTORY 읽음 처리
+     * @return void
+     * @throws Exception
+     */
+    @Override
+    public void historyReadingYn(HistoryVO historyVO) throws Exception {
+        sqlSession.getMapper(HistoryMapper.class).historyReadingYn(historyVO);
+    }
+
 }

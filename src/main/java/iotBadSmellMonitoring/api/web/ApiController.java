@@ -154,7 +154,11 @@ public class ApiController {
                 JSONObject json =  new JSONObject(result);                                                              //map을 json으로 변환.
                 json = (JSONObject) jsonParser.parse(String.valueOf(json).replace("null", "\"\""));   //null시 KEY 누락을 막기 위하여.
 
-                message = "{\"result\":\"success\",\"data\":" + json + "}";
+                if(!json.get("signInStatus").equals("Y")) {
+                    message = "{\"result\":\"statusNotChange\",\"data\":" + json + "}";
+                } else {
+                    message = "{\"result\":\"success\",\"data\":" + json + "}";
+                }
             }
             else
                 message = "{\"result\":\"fail\",\"message\": \"NO ID/PASSWORD.\"}";
