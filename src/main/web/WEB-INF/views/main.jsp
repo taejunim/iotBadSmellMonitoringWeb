@@ -131,7 +131,7 @@ Time: 9:49 오전
           type: "GET",
           dataType: "json",
           data : {
-              userRegionMaster : searchUserRegion,
+              userRegionDetail : searchUserRegion,
               startDate : startDate,
               endDate : endDate,
               smellType : smellType,
@@ -298,9 +298,9 @@ Time: 9:49 오전
               <tr>
                   <td style="background: #d9efff;" class="wd50">지역</td>
                   <td class="wd80">
-                      <select id="searchUserRegion" name="userRegionMaster" class="wd70" onchange="handleChange(this)" style="font-size: 11px;">
+                      <select id="searchUserRegion" name="userRegionDetail" class="wd70" onchange="handleChange(this)" style="font-size: 11px;">
                           <option value="">전체</option>
-                          <c:forEach var="item" items="${CG_RGN}">
+                          <c:forEach var="item" items="${CG_RGD}">
                               <option value="${item.codeId}">${item.codeIdName}</option>
                           </c:forEach>
                       </select>

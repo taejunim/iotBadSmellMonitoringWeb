@@ -89,15 +89,15 @@ public class MainController {
             session.setAttribute("CG_STY", mainService.codeListSelect(mainVO));
             model.addAttribute("CG_STY",mainService.codeListSelect(mainVO));
 
-            mainVO.setCodeGroup("REM");
-            session.setAttribute("CG_RGN", mainService.codeListSelect(mainVO));
-            model.addAttribute("CG_RGN", session.getAttribute("CG_RGN"));
+            mainVO.setCodeGroup("RGD");
+            session.setAttribute("CG_RGD", mainService.codeListSelect(mainVO));
+            model.addAttribute("CG_RGD", session.getAttribute("CG_RGD"));
         }
         // 세션에 값을 저장했을 경우 세션값을  model에 넘겨줌
         else{
             model.addAttribute("CG_SMT",session.getAttribute("CG_SMT"));
             model.addAttribute("CG_RGN", session.getAttribute("CG_STY"));
-            model.addAttribute("CG_RGN", session.getAttribute("CG_RGN"));
+            model.addAttribute("CG_RGD", session.getAttribute("CG_RGD"));
         }
         return "main";
     }
