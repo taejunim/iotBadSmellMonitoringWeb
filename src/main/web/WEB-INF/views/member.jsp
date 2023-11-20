@@ -103,7 +103,8 @@ To change this template use File | Settings | File Templates.
         /*거절 버튼 클릭 이벤트 START*/
         $("#memberRefuseBtn").click(function () {
             var userId = $("#userId").val().trim();
-
+            var status = $("#memberStatus").val().trim();
+            console.log('userId : ' +  userId + ' ' + 'status : ' + status);
             // 회원을 선택 했는지 체크
             if (userId === undefined || userId === "") {
                 alert("변경할 회원을 선택해 주세요.");
@@ -114,6 +115,8 @@ To change this template use File | Settings | File Templates.
                 alert("승인 된 사용자는 거절할 수 없습니다.");
                 return false;
             }
+
+            // alert("거절된 회원은 탈퇴 후 다시 가입 시켜주세요.");
 
             var con_test = confirm(userId + "을(를) 거절하시겠습까?");
 

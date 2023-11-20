@@ -557,3 +557,90 @@ select::-ms-expand{
 .memberStatusImgTd {
     text-align: left;
 }
+
+.statisticSmellTable {
+    margin: 10% auto;
+    width: 40%;
+    text-align: center;
+    border: 1px solid black;
+}
+.statisticSmellTableTh {
+    border: 1px solid black;
+}
+.statisticSmellTableTd {
+    border: 1px solid black;
+}
+.statisticSmellTable tr:nth-child(1) {
+    border-bottom: 1px double;
+    border-collapse: separate;
+    border-spacing: 3px;
+    background-color: rgb(210,210,210);
+}
+.statisticSmellTable tr:nth-child(1) :nth-child(1){
+    width: 25%;
+}
+.statisticSmellTable tr:nth-child(2) > td:nth-child(1) {
+    width: 15%;
+}
+.kakaoClusterPointBlue {
+    cursor: pointer;
+    width: 52px;
+    height: 52px;
+    line-height: 52px;
+    font-size: 14px;
+    background: url(http://i1.daumcdn.net/localimg/localimages/07/mapjsapi/cluster.png) 0px 0px;
+    text-align: center;
+    font-weight: bold;
+}
+.kakaoClusterPointGreen {
+    cursor: pointer;
+    width: 52px;
+    height: 52px;
+    line-height: 52px;
+    font-size: 14px;
+    background: url(http://i1.daumcdn.net/localimg/localimages/07/mapjsapi/cluster.png) 0px -84px;
+    background-size: 159%;
+    text-align: center;
+    font-weight: bold;
+}
+.kakaoClusterPointYellow {
+    cursor: pointer;
+    width: 52px;
+    height: 52px;
+    line-height: 52px;
+    font-size: 14px;
+    background: url(http://i1.daumcdn.net/localimg/localimages/07/mapjsapi/cluster.png) 0px -133px;
+    background-size: 129%;
+    text-align: center;
+    font-weight: bold;
+}
+.kakaoClusterPointBrown {
+    cursor: pointer;
+    width: 52px;
+    height: 52px;
+    line-height: 52px;
+    font-size: 14px;
+    background: url(http://i1.daumcdn.net/localimg/localimages/07/mapjsapi/cluster.png) 1px -455px;
+    background-size: 110%;
+    text-align: center;
+    font-weight: bold;
+}
+.kakaoClusterPointRed{
+    cursor: pointer;
+    width: 52px;
+    height: 52px;
+    line-height: 52px;
+    font-size: 14px;
+    background: url(http://i1.daumcdn.net/localimg/localimages/07/mapjsapi/cluster.png) 0px -458px;
+    background-size: 98%;
+    text-align: center;
+    font-weight: bold;
+}
+.kakaoClusterInfoText {
+    position: relative;
+    top: -35px;
+    left: 25px;
+    line-height: 0px;
+    margin-left: 10px;
+    font-size: 12px;
+}

@@ -11,6 +11,7 @@ Time: 9:49 오전
 <script type="text/javascript">
   var map;
   var markers = [];
+  var infoWindows = [];
   $(document).ready(function () {
     setButton("main");
     setDatePicker();                        //달력 SETTING CALL.
@@ -31,6 +32,7 @@ Time: 9:49 오전
           markers[i].setMap(map);
         }
         map.panTo( new kakao.maps.LatLng(latitude, longitude));
+        map.setMaxLevel(13); // map의 레벨을 조정해서 맵이 깨지는 현상을 방지한다.
         // 클러스터러에 마커들을 추가합니다
         clusterer.addMarkers(markers);
       },
@@ -48,12 +50,34 @@ Time: 9:49 오전
 
 
     // 마커 클러스터러를 생성합니다
-      var clusterer = new kakao.maps.MarkerClusterer({
-          map: map, // 마커들을 클러스터로 관리하고 표시할 지도 객체
-          averageCenter: true, // 클러스터에 포함된 마커들의 평균 위치를 클러스터 마커 위치로 설정
-          minLevel: 9 // 클러스터 할 최소 지도 레벨
-      });
+    var clusterer = new kakao.maps.MarkerClusterer({
+        map: map, // 마커들을 클러스터로 관리하고 표시할 지도 객체
+        averageCenter: true, // 클러스터에 포함된 마커들의 평균 위치를 클러스터 마커 위치로 설정
+        minLevel: 8, // 클러스터 할 최소 지도 레벨
+        gridSize: 100,
+        calculator: [10, 50, 100, 150, 200]
+    });
 
+    // 지도 확대 축소를 제어할 수 있는  줌 컨트롤을 생성합니다
+    var zoomControl = new kakao.maps.ZoomControl();
+    map.addControl(zoomControl, kakao.maps.ControlPosition.RIGHT);
+
+    var beforeLevel = 9;
+
+    kakao.maps.event.addListener(map, 'zoom_changed', function() {
+
+
+        var afterLevel = map.getLevel();
+
+        if (afterLevel > beforeLevel && afterLevel == 8) {
+            closeInfoWindows();
+        }
+
+        beforeLevel = afterLevel;
+
+        console.log("lever : " + afterLevel);
+
+    });
 
 
   });
@@ -91,10 +115,16 @@ Time: 9:49 오전
   var smellType;
   var startDate;
   var endDate;
-  function handleChange(e) {
+  function handleChange(e) { // select 박스 handler function
       if (e.id == "searchUserRegion") {
           searchUserRegion = e.value;
       } else if (e.id == "smellValue") {
+          if (e.value == '001') {
+              $('#smellType').attr('disabled','disabled');
+              $('#smellType').val('').prop('selected',true);
+          } else {
+              $('#smellType').removeAttr('disabled');
+          }
           smellValue = e.value;
       } else if (e.id == "smellType") {
           smellType = e.value;
@@ -213,9 +243,13 @@ Time: 9:49 오전
         var iwRemoveable = true;
         // 인포윈도우를 생성합니다
         var infowindow = new kakao.maps.InfoWindow({
+          zIndex:1,
           content: iwContent,
           removable : iwRemoveable // removeable 속성을 ture 로 설정하면 인포윈도우를 닫을 수 있는 x버튼이 표시됩니다
         });
+
+        infoWindows.push(infowindow);
+
 
         // 마커에 mouseover 이벤트와 mouseout 이벤트를 등록합니다
         // 이벤트 리스너로는 클로저를 만들어 등록합니다
@@ -227,16 +261,18 @@ Time: 9:49 오전
     }
   }
 
+  function closeInfoWindows() {
+      for (var idx = 0 ; idx < infoWindows.length ; idx++ ) {
+          infoWindows[idx].close();
+      }
+  }
+
   // 인포윈도우를 표시하는 클로저를 만드는 함수입니다
   function clickListener(map, marker, infowindow) {
     return function() {
-      infowindow.open(map, marker);
-      map.setLevel(6,
-              {animate : {
-                  duration: 500
-              }
-        , anchor : marker.getPosition()})
-      clickMarker(marker.id);
+        closeInfoWindows();
+        infowindow.open(map, marker);
+        clickMarker(marker.id);
     };
   }
 
@@ -290,31 +326,62 @@ Time: 9:49 오전
         <div class="wd50rate h50 fl"><div class="mapLegend bgcDeepRed"></div><label class="mapLegendLabel">${CG_SMT[5].codeIdName}</label></div>
       </td></tr>
     </table>
-          <table class="mainForm wd100rate h100rate" style="border-bottom: 1px #10639a solid; border-top: 1px #10639a solid;">
-              <tbody style="text-align: center">
-              <tr>
-                  <th colspan="3" style="width: 100%">검색 조건</th>
-              </tr>
-              <tr>
-                  <td style="background: #d9efff;" class="wd50">지역</td>
-                  <td class="wd80">
-                      <select id="searchUserRegion" name="userRegionDetail" class="wd70" onchange="handleChange(this)" style="font-size: 11px;">
-                          <option value="">전체</option>
-                          <c:forEach var="item" items="${CG_RGD}">
-                              <option value="${item.codeId}">${item.codeIdName}</option>
-                          </c:forEach>
-                      </select>
-                  </td>
-                  <td>
-                      <input type="date" name="startDate" class="mDateTimeInputMain" value="${mainSearchVo.startDate}" onchange="handleChange(this)"
-                             id="searchStartDt" readonly="readonly">
-                      ~
-                      <input type="date" name="endDate" class="mDateTimeInputMain" value="${mainSearchVo.endDate}" id="searchEndDt" onchange="handleChange(this)"
-                             readonly="readonly">
-                  </td>
-              </tr>
-              </tbody>
-          </table>
+    <table class="mainForm wd100rate h100rate" style="border-bottom: 1px #10639a solid; border-top: 1px #10639a solid;">
+        <tbody style="text-align: center">
+            <tr>
+                <th>군집 정도</th>
+            </tr>
+            <tr>
+                <td>
+                    <div class="wd50rate h50 fl">
+                        <div class="kakaoClusterPointBlue"></div>
+                        <label class="kakaoClusterInfoText">10 미만</label>
+                    </div>
+                    <div class="wd50rate h50 fl">
+                        <div class="kakaoClusterPointGreen"></div>
+                        <label class="kakaoClusterInfoText">10 이상 ~ 50 미만</label>
+                    </div>
+                    <div class="wd50rate h50 fl">
+                        <div class="kakaoClusterPointYellow"></div>
+                        <label class="kakaoClusterInfoText">50 이상 ~ 100 미만</label>
+                    </div>
+                    <div class="wd50rate h50 fl">
+                        <div class="kakaoClusterPointBrown"></div>
+                        <label class="kakaoClusterInfoText">100 이상 ~ 150 미만</label>
+                    </div>
+                    <div class="wd50rate h50 fl">
+                        <div class="kakaoClusterPointRed"></div>
+                        <label class="kakaoClusterInfoText">150이상</label>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="mainForm wd100rate h100rate" style="border-bottom: 1px #10639a solid; border-top: 1px #10639a solid;">
+      <tbody style="text-align: center">
+      <tr>
+          <th colspan="3" style="width: 100%">검색 조건</th>
+      </tr>
+      <tr>
+          <td style="background: #d9efff;" class="wd50">지역</td>
+          <td class="wd80">
+              <select id="searchUserRegion" name="userRegionDetail" class="wd70" onchange="handleChange(this)" style="font-size: 11px;">
+                  <option value="">전체</option>
+                  <c:forEach var="item" items="${CG_RGD}">
+                      <option value="${item.codeId}">${item.codeIdName}</option>
+                  </c:forEach>
+              </select>
+          </td>
+          <td>
+              <input type="date" name="startDate" class="mDateTimeInputMain" value="${mainSearchVo.startDate}" onchange="handleChange(this)"
+                     id="searchStartDt" readonly="readonly">
+              ~
+              <input type="date" name="endDate" class="mDateTimeInputMain" value="${mainSearchVo.endDate}" id="searchEndDt" onchange="handleChange(this)"
+                     readonly="readonly">
+          </td>
+      </tr>
+      </tbody>
+    </table>
           <div class="pd15">
               <select id="smellValue" name="smellValue" onchange="handleChange(this)">
                   <option value="">전체</option>
