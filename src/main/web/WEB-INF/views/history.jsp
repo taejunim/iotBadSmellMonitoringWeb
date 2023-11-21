@@ -18,11 +18,14 @@ var endDate = '${historyVO.endDate}';           //검색조건_등록일 끝
 var smellType = '${historyVO.smellType}';       //검색조건_취기
 var smellValue = '${historyVO.smellValue}';     //검색조건_악취 강도
 var weatherState = '${historyVO.weatherState}'; //검색조건_기상 상태
+var readingYn    = '${historyVO.readingYn}'
 
         $(document).ready(function () {
 
             setButton("history");                   //선택된 화면의 메뉴색 변경 CALL.
             setDatePicker();                        //달력 SETTING CALL.
+            hideList();                             //회원 선택 전 히든처리 CALL.
+
 
              //지도 기본 설정 -> 금악리로 중심 잡아둠, Zoom Level 5
              map = focusMapCenter(33.352974, 126.314419, 5);
@@ -47,6 +50,10 @@ var weatherState = '${historyVO.weatherState}'; //검색조건_기상 상태
             //기상상태
             if (weatherState != "" && weatherState != null)
                 $("#weatherState").val(weatherState).prop("selected", true);
+
+            //기상상태
+            if (readingYn != "" && readingYn != null)
+                $("#readingYn").val(readingYn).prop("selected", true);
             /* 검색 화면 검색어 세팅 END*/
 
             /*달력 SETTING START*/
@@ -106,12 +113,15 @@ var weatherState = '${historyVO.weatherState}'; //검색조건_기상 상태
                 var gpsX = getItems.eq(16).text();       //gps_x의 값
                 var gpsY = getItems.eq(17).text();       //gps_y의 값
 
+                console.log("gpsX / gpsY : " + gpsX  + " : " +  gpsY);
+
                 var mapContainer = document.getElementById('map'), // 지도를 표시할 div
                     mapOption = {
                         center: new kakao.maps.LatLng(gpsY, gpsX), // 지도의 중심좌표
-                        level: 5 // 지도의 확대 레벨
+                        level: 6 // 지도의 확대 레벨
                     };
                 var map = new kakao.maps.Map(mapContainer, mapOption); // 지도 생성
+
 
                 var markerPosition  = new kakao.maps.LatLng(gpsY, gpsX); // 마커가 표시될 위치
 
@@ -130,10 +140,12 @@ var weatherState = '${historyVO.weatherState}'; //검색조건_기상 상태
                 /*지도 세팅 END*/
 
                 /*이미지 불러오기 START*/
-                smellRegisterNo =  getItems.eq(18).text()  //table의 resultList로 받아온 smellRegisterNo 가져오기
 
                 fn_img_list(); //이미지 불러오기 함수
+
                 /*이미지 불러오기 END*/
+
+                smellRegisterNo =  getItems.eq(18).text()  //table의 resultList로 받아온 smellRegisterNo 가져오기
 
                 $.ajax({
                     url : '/historyReadingYn',
@@ -150,6 +162,10 @@ var weatherState = '${historyVO.weatherState}'; //검색조건_기상 상태
                         alert("서버와 통신이 불안정합니다.")
                     }
                 })
+
+                showList();                                         // 회원 선택 시 상세화면 불러오기.
+
+                map.relayout();
             });
             /* 테이블 row 클릭 이벤트 END*/
 
@@ -171,6 +187,16 @@ var weatherState = '${historyVO.weatherState}'; //검색조건_기상 상태
 
         });
 
+function hideList() {
+    $("#rightSide").hide();
+    $("#DetailShow").hide();
+    $(".scrollView").append("<h2 class='selectMember' style='margin: 0 auto; text-align: center; position: relative; top: 50%;'> - 게시글을 선택해 주세요. - </h2>");
+}
+function showList() {
+    $("#rightSide").show();
+    $("#DetailShow").show();
+    $(".selectMember").remove();
+}
 //이미지 호출 AJAX
 function fn_img_list(){
 
@@ -272,6 +298,9 @@ function imageDelete(imageIndex){
             }
             if (weatherState !=  $("#weatherState")){
                 frm.weatherState.value = weatherState;
+            }
+            if (readingYn !=  $("#readingYn")){
+                frm.readingYn.value = readingYn;
             }
             frm.pageIndex.value = pageNo;
             document.frm.action = "<c:url value='/history.do'/>";
@@ -461,7 +490,7 @@ function imageDelete(imageIndex){
         </div>
     </div>
     <div class="scrollView">
-        <div><h2 class="mt50" style="position: relative;left: 30px;"><i class="bx bx-detail" id="detail"></i><strong> 상세 </strong></h2></div>
+        <div id="DetailShow"><h2 class="mt50" style="position: relative;left: 30px;"><i class="bx bx-detail" id="detail"></i><strong> 상세 </strong></h2></div>
         <div id="rightSide" class="fr wd100rate h40rate">
             <table class="border_none mg0auto wd90rate mb20">
                 <tr>

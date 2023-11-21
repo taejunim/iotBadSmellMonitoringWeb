@@ -557,30 +557,11 @@ select::-ms-expand{
 .memberStatusImgTd {
     text-align: left;
 }
-
-.statisticSmellTable {
-    margin: 10% auto;
-    width: 40%;
-    text-align: center;
-    border: 1px solid black;
-}
-.statisticSmellTableTh {
-    border: 1px solid black;
-}
-.statisticSmellTableTd {
-    border: 1px solid black;
-}
-.statisticSmellTable tr:nth-child(1) {
-    border-bottom: 1px double;
-    border-collapse: separate;
-    border-spacing: 3px;
-    background-color: rgb(210,210,210);
-}
-.statisticSmellTable tr:nth-child(1) :nth-child(1){
-    width: 25%;
-}
-.statisticSmellTable tr:nth-child(2) > td:nth-child(1) {
-    width: 15%;
+.statisticSmellTableCaption {
+    font-weight: bold;
+    font-size: 21px;
+    margin: 0 auto;
+    padding: 20px 0 20px 0;
 }
 .kakaoClusterPointBlue {
     cursor: pointer;

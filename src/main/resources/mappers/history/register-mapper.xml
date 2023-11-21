@@ -10,6 +10,37 @@
 
     </select>
 
+    <select id="registerCheckDuplicate" parameterType="registerVO" resultType="string">
+        select
+            SMELL_REGISTER_NO
+        from tb_smell_register
+        WHERE REG_ID = #{regId}
+          AND SMELL_REGISTER_TIME = #{smellRegisterTime}
+          AND DATE_FORMAT(REG_DT,'%Y%m%d') = DATE_FORMAT(NOW(),'%Y%m%d')
+    </select>
+
+    <update id="registerDuplicateUpdate" parameterType="registerVO">
+        UPDATE tb_smell_register
+        SET
+              SMELL_TYPE  = #{smellType}
+            , SMELL_VALUE = #{smellValue}
+            , WEATHER_STATE = #{weatherState}
+            , TEMPERATURE_VALUE = #{temperatureValue}
+            , HUMIDITY_VALUE = #{humidityValue}
+            , WIND_DIRECTION_VALUE = #{windDirectionValue}
+            , WIND_SPEED_VALUE = #{windSpeedValue}
+            , GPS_X = #{gpsX}
+            , GPS_Y =  #{gpsY}
+            , SMELL_COMMENT = #{smellComment}
+            , SMELL_REGISTER_TIME = #{smellRegisterTime}
+            , AIR_SENSOR_NAME = #{airSensorName}
+            , AIR_SENSING_DATE = #{airSensingDate}
+            , PM10_AVG = #{pm10Avg}
+            , REG_DT = DATE_FORMAT(NOW(),'%Y-%m-%d %H:%m:%s')
+            , READING_YN = 'N'
+        WHERE SMELL_REGISTER_NO = #{smellRegisterNo}
+    </update>
+
     <!-- 접수 마스터 등록-->
     <insert id="registerMasterInsert" parameterType="registerVO">
 
@@ -68,5 +99,11 @@
                                         , #{smellRegisterNo}
                                     )
     </insert>
+    
+    <delete id="deleteBySmellRegisterNo" parameterType="registerVO">
+        DELETE FROM tb_smell_image
+        WHERE SMELL_REGISTER_NO = #{smellRegisterNo}
+        ;
+    </delete>
 
 </mapper>

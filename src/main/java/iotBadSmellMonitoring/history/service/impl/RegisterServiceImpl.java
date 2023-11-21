@@ -56,7 +56,10 @@ public class RegisterServiceImpl implements RegisterService {
 
         RegisterMapper registerMapper = sqlSession.getMapper(RegisterMapper.class);
 
-        registerVO.setSmellRegisterNo(registerMapper.registerSmellRegisterNoSelect());                                  //접수 마스터 번호 CALL.
+        /**
+         * 시간대별로  아이디가 있으면 해당 번호를 가져온다.
+         * */
+        String checkedSmellRegisterNo = registerMapper.registerCheckDuplicate(registerVO);
 
         /** 앱에서 smellType 없으면
          * smellValue(악취 강도) - 001(무취) 이면 smellType(악취 타입) - 008(취기 없음)
@@ -71,7 +74,25 @@ public class RegisterServiceImpl implements RegisterService {
             }
         }
 
-        int masterResult = registerMapper.registerMasterInsert(registerVO);                                             //접수 마스터 등록 CALL.
+        int masterResult = 0;
+
+        /**
+         * checkedSmellRegisterNo 가 있으면 해당 접수이력번호의 데이터를 최신으로 수정한다.
+         * */
+        if (!isStringEmpty(checkedSmellRegisterNo)) {
+            registerVO.setSmellRegisterNo(checkedSmellRegisterNo);
+            masterResult = registerMapper.registerDuplicateUpdate(registerVO);
+        } else {
+            registerVO.setSmellRegisterNo(registerMapper.registerSmellRegisterNoSelect());                                  //접수 마스터 번호 CALL.
+            masterResult = registerMapper.registerMasterInsert(registerVO);
+        }
+
+
+
+
+
+
+                                                     //접수 마스터 등록 CALL.
         int allResult    = 0;                                                                                           //마스터||디테일 등록 결과
 
         if(masterResult == 1){
@@ -130,10 +151,20 @@ public class RegisterServiceImpl implements RegisterService {
                         oFile.renameTo(nFile);
                     }
                 }
+            } else {
+                File Folder = new File(serverPath+registerVO.getSmellRegisterNo());
+                Folder.delete();     //폴더 삭제합니다.
+
+                registerMapper.deleteBySmellRegisterNo(registerVO);
+
             }
         }
 
         return allResult;
+    }
+
+    static boolean isStringEmpty(String str) {
+        return str == null || str.trim().isEmpty() || "".equals(str);
     }
 
 }

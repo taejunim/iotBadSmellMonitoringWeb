@@ -21,6 +21,7 @@ To change this template use File | Settings | File Templates.
     $(document).ready(function () {
         setButton("member");            //선택된 화면의 메뉴색 변경 CALL
         setDropButton("memberInfo");    //선택된 드롭다운 메뉴색 변경 CALL
+        hideList();                             //회원 선택 전 히든처리 CALL.
 
         /* 검색 화면 검색어 세팅 START*/
         if (userRegion != "" && userRegion != null)                         //지역
@@ -40,6 +41,8 @@ To change this template use File | Settings | File Templates.
 
             var getItems = $(this).find("td");
 
+            console.log("getItems.eq(10).text() : " + getItems.eq(10).text());
+
             $("#userPassword").val("");
             $("#userPasswordConfirm").val("");
             $("#userId").val(getItems.eq(2).text());
@@ -49,6 +52,9 @@ To change this template use File | Settings | File Templates.
             $("#userAge").val(getItems.eq(6).text());
             $("#userSex").val(getItems.eq(7).text());
             $("#userType").val(getItems.eq(1).text());
+            $('#memberStatus').val(getItems.eq(10).text());
+
+            showList();                                         // 회원 선택 시 상세화면 불러오기.
 
         })
         /*테이블 row 클릭 이벤트 END*/
@@ -72,7 +78,10 @@ To change this template use File | Settings | File Templates.
             }
             var con_test;
             if ($("#memberStatus").val().trim() == 'N') {
-                con_test = confirm(userId + "님은 거절된 회원입니다. 승인하시겠습니까?");
+                alert("거절된 회원은 승인 할 수 없습니다.\n재가입 후 다시 승인 해주시길 바랍니다.")
+            } else if ($("#memberStatus").val().trim() == 'Y'){
+                alert("이미 승인된 회원입니다.");
+                return false;
             } else {
                 con_test = confirm(userId + "을(를) 승인하시겠습니까?");
             }
@@ -104,15 +113,18 @@ To change this template use File | Settings | File Templates.
         $("#memberRefuseBtn").click(function () {
             var userId = $("#userId").val().trim();
             var status = $("#memberStatus").val().trim();
-            console.log('userId : ' +  userId + ' ' + 'status : ' + status);
             // 회원을 선택 했는지 체크
             if (userId === undefined || userId === "") {
                 alert("변경할 회원을 선택해 주세요.");
                 return false;
             }
 
-            if($("#memberStatus").val().trim() == 'Y') {
-                alert("승인 된 사용자는 거절할 수 없습니다.");
+            if(status == 'Y') {
+                console.log('status : ' + status);
+                alert("승인된 사용자는 거절할 수 없습니다.");
+                return false;
+            } else if (status == 'N') {
+                alert("이미 거절된 회원입니다.");
                 return false;
             }
 
@@ -236,6 +248,17 @@ To change this template use File | Settings | File Templates.
         })
         /*탈퇴 버튼 클릭 이벤트 END*/
     });
+
+    function hideList() {
+        $("#DetailMemberInfo").hide();
+        $("#DetailShow").hide();
+        $(".wd28rate").append("<h2 class='selectMember' style='margin: 0 auto; text-align: center; position: relative; top: 37%;'> - 회원을 선택해 주세요. - </h2>");
+    }
+    function showList() {
+        $("#DetailMemberInfo").show();
+        $("#DetailShow").show();
+        $(".selectMember").remove();
+    }
 
     //페이지 이동 스크립트
     function fn_page(pageNo) {
@@ -371,7 +394,7 @@ To change this template use File | Settings | File Templates.
                                 <td class="memberStatusImgTd"><img src="resources/image/member/memberStatus.svg" class="memberStatusImg backgroundImgStay">${resultList.userTypeName}</td>
                             </c:otherwise>
                         </c:choose>
-                        <td>${resultList.userId}<input type="hidden" value="${resultList.signInStatus}" id="memberStatus"></td>
+                        <td>${resultList.userId}</td>
                         <td>${resultList.userName}</td>
                         <td>${resultList.userRegionName}</td>
                         <td>${resultList.userPhone}</td>
@@ -395,6 +418,7 @@ To change this template use File | Settings | File Templates.
                                 </c:choose>
                             </c:forEach>
                         </td>
+                        <td style="display: none;">${resultList.signInStatus}</td>
                     </tr>
                 </c:forEach>
                 <c:if test="${empty resultList}">
@@ -414,58 +438,65 @@ To change this template use File | Settings | File Templates.
         </div>
         </form:form>
         <div class="h100rate fr wd28rate">
-            <div><h2 class="mt50"><i class="bx bx-detail" id="detail"></i><strong> 상세 </strong></h2></div>
-            <form:form id="memberInfo" method="post">
-                <table class="listTable wd95rate">
-                    <tr class="h57">
-                        <td class="align_l wd130"><label>아이디</label></td>
-                        <td><input type="text" readonly class="wd210" name="userId" id="userId" disabled></td>
-                    </tr>
-                    <tr class="h57">
-                        <td class="align_l"><label>비밀번호</label></td>
-                        <td><input type="password" class="wd210" name="userPassword" id="userPassword" maxlength="20">
-                        </td>
-                    </tr>
-                    <tr class="h57">
-                        <td class="align_l"><label>비밀번호 확인</label></td>
-                        <td><input type="password" class="wd210" name="userPassword" id="userPasswordConfirm"
-                                   maxlength="20"></td>
-                    </tr>
-                    <tr class="h57">
-                        <td class="align_l"><label>이름</label></td>
-                        <td><input type="text" readonly class="wd210" id="userName" disabled></td>
-                    </tr>
-                    <tr class="h57">
-                        <td class="align_l"><label>전화번호</label></td>
-                        <td><input type="text" readonly class="wd210" id="userPhone" disabled></td>
-                    </tr>
-                    <tr class="h57">
-                        <td class="align_l"><label>나이</label></td>
-                        <td><input type="text" readonly class="wd210" id="userAge" disabled></td>
-                    </tr>
-                    <tr class="h57">
-                        <td class="align_l"><label>지역</label></td>
-                        <td><input type="text" readonly class="wd210" id="userRegion" disabled></td>
-                    </tr>
-                    <tr class="h57">
-                        <td class="align_l"><label>성별</label></td>
-                        <td><input type="text" readonly class="wd210" id="userSex" disabled></td>
-                    </tr>
-                    <tr class="h57">
-                        <td class="align_l"><label>구분</label></td>
-                        <td><input type="text" readonly class="wd210" id="userType" disabled></td>
-                    </tr>
-                    <tr class="h80">
-                        <td colspan="4" class="align_c">
-                            <a class="button bgcLightGreen" id="memberConfirmBtn"><i class="bx bxs-user-plus"></i><strong>승인</strong></a>
-                            <a class="button bgcDeepRed" id="memberRefuseBtn"><i class="bx bxs-user-minus"></i>거절</a>
-                            <a class="button bgcDeepBlue" id="memberSaveBtn"><i
-                                    class="bx bxs-save"></i><strong>저장</strong></a>
-                            <a class="button bgcDeepRed" id="memberDeleteBtn"><i class="bx bx-minus-circle"></i>탈퇴</a>
-                        </td>
-                    </tr>
-                </table>
-            </form:form>
+            <div id="DetailShow"><h2 class="mt50"><i class="bx bx-detail" id="detail"></i><strong> 상세 </strong></h2></div>
+            <div id="DetailMemberInfo">
+                <form:form id="memberInfo" method="post">
+                    <table class="listTable wd95rate">
+                        <tr class="h57">
+                            <td class="align_l wd130"><label>아이디</label></td>
+                            <td><input type="text" readonly class="wd210" name="userId" id="userId" disabled></td>
+                        </tr>
+                        <tr class="h57">
+                            <td class="align_l"><label>비밀번호</label></td>
+                            <td><input type="password" class="wd210" name="userPassword" id="userPassword" maxlength="20">
+                            </td>
+                        </tr>
+                        <tr class="h57">
+                            <td class="align_l"><label>비밀번호 확인</label></td>
+                            <td><input type="password" class="wd210" name="userPassword" id="userPasswordConfirm"
+                                       maxlength="20"></td>
+                        </tr>
+                        <tr class="h57">
+                            <td class="align_l"><label>이름</label></td>
+                            <td><input type="text" readonly class="wd210" id="userName" disabled></td>
+                        </tr>
+                        <tr class="h57">
+                            <td class="align_l"><label>전화번호</label></td>
+                            <td><input type="text" readonly class="wd210" id="userPhone" disabled></td>
+                        </tr>
+                        <tr class="h57">
+                            <td class="align_l"><label>나이</label></td>
+                            <td><input type="text" readonly class="wd210" id="userAge" disabled></td>
+                        </tr>
+                        <tr class="h57">
+                            <td class="align_l"><label>지역</label></td>
+                            <td><input type="text" readonly class="wd210" id="userRegion" disabled></td>
+                        </tr>
+                        <tr class="h57">
+                            <td class="align_l"><label>성별</label></td>
+                            <td><input type="text" readonly class="wd210" id="userSex" disabled></td>
+                        </tr>
+                        <tr class="h57">
+                            <td class="align_l"><label>구분</label></td>
+                            <td><input type="text" readonly class="wd210" id="userType" disabled></td>
+                        </tr>
+                        <tr style="display: none;">
+                            <td>
+                            <td><input type="text" readonly class="wd210" id="memberStatus" disabled></td>
+                            </td>
+                        </tr>
+                        <tr class="h80">
+                            <td colspan="4" class="align_c">
+                                <a class="button bgcLightGreen" id="memberConfirmBtn"><i class="bx bxs-user-plus"></i><strong>승인</strong></a>
+                                <a class="button bgcDeepRed" id="memberRefuseBtn"><i class="bx bxs-user-minus"></i>거절</a>
+                                <a class="button bgcDeepBlue" id="memberSaveBtn"><i
+                                        class="bx bxs-save"></i><strong>저장</strong></a>
+                                <a class="button bgcDeepRed" id="memberDeleteBtn"><i class="bx bx-minus-circle"></i>탈퇴</a>
+                            </td>
+                        </tr>
+                    </table>
+                </form:form>
+            </div>
         </div>
     </div>
 </div>

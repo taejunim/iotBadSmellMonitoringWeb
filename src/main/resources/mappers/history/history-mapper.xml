@@ -86,6 +86,9 @@
         <if test="weatherState != null and !weatherState.equals('')" >
             AND WEATHER_STATE = #{weatherState}
         </if>
+        <if test="readingYn != null and !readingYn.equals('')" >
+            AND READING_YN = #{readingYn}
+        </if>
 
         <if test="startDate != null and !startDate.equals('')" >
 

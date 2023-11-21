@@ -40,4 +40,27 @@ public interface RegisterMapper {
      */
     int registerDetailInsert(RegisterVO registerVO) throws Exception;
 
+    /**
+     * 중복 데이터 검사
+     * @param registerVO REGISTER DETAIL / DETAIL VO.
+     * @return           String
+     * @throws Exception
+     */
+    String registerCheckDuplicate(RegisterVO registerVO) throws Exception;
+
+    /**
+     * 중복 데이터 검사 후처리
+     * @param registerVO REGISTER DETAIL / DETAIL VO.
+     * @return           int
+     * @throws Exception
+     */
+    int registerDuplicateUpdate(RegisterVO registerVO) throws Exception;
+
+    /**
+     * 중복 데이터 검사 후처리 (이미지 삭제)
+     * @param registerVO REGISTER DETAIL / DETAIL VO.
+     * @return           int
+     * @throws Exception
+     */
+    void deleteBySmellRegisterNo(RegisterVO registerVO);
 }
