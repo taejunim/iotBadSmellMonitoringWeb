@@ -561,7 +561,7 @@ select::-ms-expand{
     font-weight: bold;
     font-size: 21px;
     margin: 0 auto;
-    padding: 20px 0 20px 0;
+    padding: 50px 0 50px 0;
 }
 .kakaoClusterPointBlue {
     cursor: pointer;

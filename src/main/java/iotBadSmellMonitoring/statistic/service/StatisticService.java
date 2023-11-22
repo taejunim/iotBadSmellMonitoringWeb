@@ -26,4 +26,35 @@ public interface StatisticService {
      * @throws Exception
      */
     EgovMap statisticTableRegionSelect(StatisticTableVO statisticTableVO) throws Exception;
+
+    /**
+     * 취기 통계 전체 조회
+     * @return EgovMap
+     * @throws Exception
+     */
+    EgovMap statisticSmellTableTotal(StatisticTableVO statisticTableVO) throws Exception;
+
+    /**
+     * 취기 통계 전체 조회 (Detail)
+     * @return EgovMap
+     * @throws Exception
+     */
+    List<EgovMap> statisticSmellTableDetail(StatisticTableVO statisticTableVO) throws Exception;
+
+    /**
+     * 취기 마을별 통계
+     * @return EgovMap
+     * @throws Exception
+     */
+    List<EgovMap> statisticSmellTableTotalByRegion(StatisticTableVO statisticTableVO) throws Exception;
+
+    /**
+     * 취기 마을별 통계 (Detail)
+     * @return EgovMap
+     * @throws Exception
+     */
+    List<EgovMap> statisticSmellTableDetailByRegion(StatisticTableVO statisticTableVO) throws Exception;
+
+    EgovMap userRegionDetailCode(StatisticTableVO statisticTableVO) throws Exception;
 }
+

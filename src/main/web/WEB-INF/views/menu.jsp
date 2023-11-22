@@ -27,6 +27,12 @@
             $(location).attr('href', '/statisticTable.do');
 
         });
+        //표 Click
+        $("#statistic4").click(function(){
+            showLoader(true);
+            $(location).attr('href', '/statisticSmellTable.do');
+
+        });
         //회원정보 Click
         $("#memberInfo").click(function(){
             showLoader(true);
@@ -89,6 +95,7 @@
         <div class="dropdown-content">
             <a id="graph">그래프</a>
             <a id="statistic3">표</a>
+            <a id="statistic4">취기</a>
         </div>
     </div>
     <div id="member" class="dropdown">

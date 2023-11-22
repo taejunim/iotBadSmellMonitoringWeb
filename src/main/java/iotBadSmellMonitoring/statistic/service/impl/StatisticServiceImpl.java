@@ -68,4 +68,54 @@ public class StatisticServiceImpl implements StatisticService {
 
         return statisticMapper.statisticTableRegionSelect(statisticTableVO);
     }
+
+    /**
+     * 취기 통계 전체 조회
+     * @return EgovMap
+     * @throws Exception
+     */
+    @Override
+    public EgovMap statisticSmellTableTotal(StatisticTableVO statisticTableVO) throws Exception {
+        StatisticMapper statisticMapper = sqlSession.getMapper(StatisticMapper.class);
+        return statisticMapper.statisticSmellTableTotal(statisticTableVO);
+    }
+
+    /**
+     * 취기 통계 전체 조회 (Detail)
+     * @return EgovMap
+     * @throws Exception
+     */
+    @Override
+    public List<EgovMap> statisticSmellTableDetail(StatisticTableVO statisticTableVO) throws Exception {
+        StatisticMapper statisticMapper = sqlSession.getMapper(StatisticMapper.class);
+        return statisticMapper.statisticSmellTableDetail(statisticTableVO);
+    }
+    /**
+     * 취기 마을별 통계
+     * @return EgovMap
+     * @throws Exception
+     */
+    @Override
+    public List<EgovMap> statisticSmellTableTotalByRegion(StatisticTableVO statisticTableVO) throws Exception {
+        StatisticMapper statisticMapper = sqlSession.getMapper(StatisticMapper.class);
+        return statisticMapper.statisticSmellTableTotalByRegion(statisticTableVO);
+    }
+    /**
+     * 취기 마을별 통계 (Detail)
+     * @return EgovMap
+     * @throws Exception
+     */
+    @Override
+    public List<EgovMap> statisticSmellTableDetailByRegion(StatisticTableVO statisticTableVO) throws Exception {
+        StatisticMapper statisticMapper = sqlSession.getMapper(StatisticMapper.class);
+        return statisticMapper.statisticSmellTableDetailByRegion(statisticTableVO);
+    }
+
+    @Override
+    public EgovMap userRegionDetailCode(StatisticTableVO statisticTableVO) throws Exception {
+        StatisticMapper statisticMapper = sqlSession.getMapper(StatisticMapper.class);
+        return statisticMapper.userRegionDetailCode(statisticTableVO);
+    }
+
+
 }

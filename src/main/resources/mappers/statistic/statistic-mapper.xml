@@ -503,4 +503,285 @@
             AND tb_smell_register.REG_ID = tb_user.USER_ID
      ) result
     </select>
+    <!-- 취기 냄새별 총계-->
+    <select id="statisticSmellTableTotal"  parameterType="statisticTableVO" resultType="egovMap">
+        SELECT  FORMAT(SUM(TOTAL_COUNT),0)         AS TOTAL_COUNT,
+                FORMAT(SUM(CHIKEN_SMELL),0)        AS CHIKEN_SMELL,
+                FORMAT(SUM(OTHER_SMELL),0)         AS OTHER_SMELL,
+                FORMAT(SUM(PIG_SMELL),0)           AS PIG_SMELL,
+                FORMAT(SUM(WATER_COMPOST_SMELL),0) AS WATER_COMPOST_SMELL,
+                FORMAT(SUM(COW_SMELL),0)           AS COW_SMELL,
+                FORMAT(SUM(FOOD_SMELL),0)          AS FOOD_SMELL,
+                FORMAT(SUM(STEAM_SMELL),0)         AS STEAM_SMELL,
+                FORMAT(SUM(COMPOST_SMELL),0)       AS COMPOST_SMELL
+        FROM (
+                 SELECT  T1.USER_REGION_MASTER_NAME,
+                         T1.USER_REGION_DETAIL_NAME,
+                         IFNULL(T2.TOTAL_COUNT,'0') AS TOTAL_COUNT,
+                         IFNULL(T2.PIG_SMELL,'0') AS PIG_SMELL,
+                         IFNULL(T2.CHIKEN_SMELL,'0') AS CHIKEN_SMELL,
+                         IFNULL(T2.COW_SMELL,'0') AS COW_SMELL,
+                         IFNULL(T2.WATER_COMPOST_SMELL,'0') AS WATER_COMPOST_SMELL,
+                         IFNULL(T2.COMPOST_SMELL,'0') AS COMPOST_SMELL,
+                         IFNULL(T2.FOOD_SMELL,'0') AS FOOD_SMELL,
+                         IFNULL(T2.STEAM_SMELL,'0') AS STEAM_SMELL,
+                         IFNULL(T2.OTHER_SMELL,'0') AS OTHER_SMELL
+                 FROM
+                     (
+                         SELECT REFERENCE_CODE_ID,
+                                CODE_ID,
+                                (
+                                    SELECT CODE_ID_NAME
+                                    FROM tb_code
+                                    WHERE CODE_GROUP = 'REM' AND CODE_ID = tbCode.REFERENCE_CODE_ID
+                                ) USER_REGION_MASTER_NAME,
+                                CODE_ID_NAME USER_REGION_DETAIL_NAME
+                         FROM tb_code tbCode
+                         WHERE CODE_GROUP = 'RGD'
+                     ) T1 LEFT OUTER JOIN
+                     (SELECT
+                          USER_REGION_MASTER,
+                          USER_REGION_DETAIL,
+                          COUNT(SMELL_TYPE) - COUNT(CASE WHEN tsr.SMELL_TYPE = '008' THEN 1 END) AS TOTAL_COUNT,
+                          COUNT(CASE WHEN tsr.SMELL_TYPE = '001' THEN 1 END) AS CHIKEN_SMELL,
+                          COUNT(CASE WHEN tsr.SMELL_TYPE = '002' THEN 1 END) AS OTHER_SMELL,
+                          COUNT(CASE WHEN tsr.SMELL_TYPE = '003' THEN 1 END) AS PIG_SMELL,
+                          COUNT(CASE WHEN tsr.SMELL_TYPE = '004' THEN 1 END) AS WATER_COMPOST_SMELL,
+                          COUNT(CASE WHEN tsr.SMELL_TYPE = '005' THEN 1 END) AS COW_SMELL,
+                          COUNT(CASE WHEN tsr.SMELL_TYPE = '006' THEN 1 END) AS FOOD_SMELL,
+                          COUNT(CASE WHEN tsr.SMELL_TYPE = '007' THEN 1 END) AS STEAM_SMELL,
+                          COUNT(CASE WHEN tsr.SMELL_TYPE = '009' THEN 1 END) AS COMPOST_SMELL
+                      FROM tb_smell_register tsr
+                               LEFT JOIN tb_user tu
+                                         on tsr.REG_ID = tu.USER_ID
+                      where tu.REG_GBN != '003'
+                      AND DATE_FORMAT(tsr.REG_DT, '%Y-%m-%d') BETWEEN #{searchStart} AND #{searchEnd}
+                      GROUP BY USER_REGION_DETAIL) T2
+                     ON T1.REFERENCE_CODE_ID = T2.USER_REGION_MASTER
+                         AND T1.CODE_ID = T2.USER_REGION_DETAIL
+             ) T3
+    </select>
+
+    <select id="statisticSmellTableDetail"  parameterType="statisticTableVO" resultType="egovMap">
+        SELECT  T1.USER_REGION_MASTER_NAME,
+                T1.USER_REGION_DETAIL_NAME,
+                FORMAT(IFNULL(T2.TOTAL_COUNT,'0'),0) AS TOTAL_COUNT,
+                FORMAT(IFNULL(T2.PIG_SMELL,'0'),0) AS PIG_SMELL,
+                FORMAT(IFNULL(T2.CHIKEN_SMELL,'0'),0) AS CHIKEN_SMELL,
+                FORMAT(IFNULL(T2.COW_SMELL,'0'),0) AS COW_SMELL,
+                FORMAT(IFNULL(T2.WATER_COMPOST_SMELL,'0'),0) AS WATER_COMPOST_SMELL,
+                FORMAT(IFNULL(T2.COMPOST_SMELL,'0'),0) AS COMPOST_SMELL,
+                FORMAT(IFNULL(T2.FOOD_SMELL,'0'),0) AS FOOD_SMELL,
+                FORMAT(IFNULL(T2.STEAM_SMELL,'0'),0) AS STEAM_SMELL,
+                FORMAT(IFNULL(T2.OTHER_SMELL,'0'),0) AS OTHER_SMELL
+        FROM
+            (
+                SELECT REFERENCE_CODE_ID,
+                       CODE_ID,
+                       (
+                           SELECT CODE_ID_NAME
+                           FROM tb_code
+                           WHERE CODE_GROUP = 'REM' AND CODE_ID = tbCode.REFERENCE_CODE_ID
+                       ) USER_REGION_MASTER_NAME,
+                       CODE_ID_NAME USER_REGION_DETAIL_NAME
+                FROM tb_code tbCode
+                WHERE CODE_GROUP = 'RGD'
+            ) T1 LEFT OUTER JOIN
+            (SELECT
+                 USER_REGION_MASTER,
+                 USER_REGION_DETAIL,
+                 COUNT(SMELL_TYPE) - COUNT(CASE WHEN tsr.SMELL_TYPE = '008' THEN 1 END) AS TOTAL_COUNT,
+                 COUNT(CASE WHEN tsr.SMELL_TYPE = '001' THEN 1 END) AS CHIKEN_SMELL,
+                 COUNT(CASE WHEN tsr.SMELL_TYPE = '002' THEN 1 END) AS OTHER_SMELL,
+                 COUNT(CASE WHEN tsr.SMELL_TYPE = '003' THEN 1 END) AS PIG_SMELL,
+                 COUNT(CASE WHEN tsr.SMELL_TYPE = '004' THEN 1 END) AS WATER_COMPOST_SMELL,
+                 COUNT(CASE WHEN tsr.SMELL_TYPE = '005' THEN 1 END) AS COW_SMELL,
+                 COUNT(CASE WHEN tsr.SMELL_TYPE = '006' THEN 1 END) AS FOOD_SMELL,
+                 COUNT(CASE WHEN tsr.SMELL_TYPE = '007' THEN 1 END) AS STEAM_SMELL,
+                 COUNT(CASE WHEN tsr.SMELL_TYPE = '009' THEN 1 END) AS COMPOST_SMELL
+             FROM tb_smell_register tsr
+                      LEFT JOIN tb_user tu
+                                on tsr.REG_ID = tu.USER_ID
+             where tu.REG_GBN != '003'
+             AND DATE_FORMAT(tsr.REG_DT, '%Y-%m-%d') BETWEEN #{searchStart} AND #{searchEnd}
+             GROUP BY USER_REGION_DETAIL) T2
+            ON T1.REFERENCE_CODE_ID = T2.USER_REGION_MASTER
+                AND T1.CODE_ID = T2.USER_REGION_DETAIL
+                ORDER BY USER_REGION_MASTER_NAME DESC
+    </select>
+
+    <select id="statisticSmellTableTotalByRegion" parameterType="statisticTableVO" resultType="egovMap">
+        SELECT CASE WHEN CODE_ID IS NULL THEN '합계' ELSE (SELECT CODE_ID_NAME FROM tb_code WHERE tb_code.CODE_GROUP = 'REN' AND tb_code.CODE_ID = RESULT.CODE_ID) END REGISTER_TIME,
+        IFNULL(USER_REG,'-') AS USER_REG,
+        IFNULL(TOTAL_USER_REG_SMELL,'-') AS TOTAL_USER_REG_SMELL,
+        IFNULL(SMELL_PERCENTAGE,'-') AS SMELL_PERCENTAGE,
+        IFNULL(SMELL_LEVEL_1,'-') AS SMELL_LEVEL_1,
+        IFNULL(SMELL_LEVEL_2,'-') AS SMELL_LEVEL_2,
+        IFNULL(SMELL_LEVEL_3,'-') AS SMELL_LEVEL_3,
+        IFNULL(SMELL_LEVEL_4,'-') AS SMELL_LEVEL_4,
+        IFNULL(SMELL_LEVEL_5,'-') AS SMELL_LEVEL_5,
+        USER_REGION_DETAIL_NAME
+        FROM (
+            SELECT *
+            FROM (
+                SELECT CODE_ID
+                FROM TB_CODE
+                WHERE CODE_GROUP = 'REN'
+                ) TC
+            RIGHT OUTER JOIN
+                (
+                SELECT SMELL_REGISTER_TIME
+                , USER_REG
+                , USER_REG_SMELL                                       AS TOTAL_USER_REG_SMELL
+                , ROUND(IFNULL(USER_REG_SMELL / USER_REG * 100, 0), 2) AS SMELL_PERCENTAGE
+                , SMELL_LEVEL_1
+                , SMELL_LEVEL_2
+                , SMELL_LEVEL_3
+                , SMELL_LEVEL_4
+                , SMELL_LEVEL_5
+                , USER_REGION_DETAIL_NAME
+                FROM (
+                    SELECT *
+                    FROM TB_CODE
+                    WHERE CODE_GROUP = 'STY'
+                    ) T1
+                RIGHT OUTER JOIN
+                    (
+                    SELECT SMELL_TYPE,
+                    SMELL_REGISTER_TIME,
+                    COUNT(*)                                        AS                               USER_REG,
+                    COUNT(CASE WHEN TSR.SMELL_VALUE != '001' AND TSR.SMELL_TYPE != '008' THEN 1 END) USER_REG_SMELL,
+                    COUNT(CASE WHEN TSR.SMELL_VALUE = '002' AND TSR.SMELL_TYPE != '008' THEN 1 END)  SMELL_LEVEL_1,
+                    COUNT(CASE WHEN TSR.SMELL_VALUE = '003' AND TSR.SMELL_TYPE != '008' THEN 1 END)  SMELL_LEVEL_2,
+                    COUNT(CASE WHEN TSR.SMELL_VALUE = '004' AND TSR.SMELL_TYPE != '008' THEN 1 END)  SMELL_LEVEL_3,
+                    COUNT(CASE WHEN TSR.SMELL_VALUE = '005' AND TSR.SMELL_TYPE != '008' THEN 1 END)  SMELL_LEVEL_4,
+                    COUNT(CASE WHEN TSR.SMELL_VALUE = '006' AND TSR.SMELL_TYPE != '008' THEN 1 END)  SMELL_LEVEL_5,
+                    (SELECT CODE_ID_NAME
+                    FROM TB_CODE
+                    WHERE TB_CODE.CODE_GROUP = 'RGD'
+                    AND TB_CODE.CODE_ID = TU.USER_REGION_DETAIL) AS                               USER_REGION_DETAIL_NAME
+                    FROM TB_SMELL_REGISTER TSR
+                    LEFT OUTER JOIN TB_USER TU
+                    ON TSR.REG_ID = TU.USER_ID
+                    WHERE DATE_FORMAT(tsr.REG_DT, '%Y-%m-%d') BETWEEN #{searchStart} AND #{searchEnd}
+                    <if test="userRegionDetail != null and !userRegionDetail.equals('')" >
+                        AND tu.USER_REGION_DETAIL = #{userRegionDetail}
+                    </if>
+                    <if test="smellType != null and !smellType.equals('')">
+                        AND tsr.SMELL_TYPE = #{smellType}
+                    </if>
+                    GROUP BY SMELL_REGISTER_TIME WITH ROLLUP
+                    ) T2
+                ON T1.CODE_ID = T2.SMELL_TYPE
+                ) T3
+                ON TC.CODE_ID = T3.SMELL_REGISTER_TIME
+                UNION
+                SELECT *
+                FROM
+                     (
+                    SELECT CODE_ID
+                    FROM TB_CODE
+                    WHERE CODE_GROUP = 'REN'
+                    ) TC
+                LEFT OUTER JOIN
+                    (
+                        SELECT SMELL_REGISTER_TIME
+                        , USER_REG
+                        , USER_REG_SMELL                                       AS TOTAL_USER_REG_SMELL
+                        , ROUND(IFNULL(USER_REG_SMELL / USER_REG * 100, 0), 2) AS SMELL_PERCENTAGE
+                        , SMELL_LEVEL_1
+                        , SMELL_LEVEL_2
+                        , SMELL_LEVEL_3
+                        , SMELL_LEVEL_4
+                        , SMELL_LEVEL_5
+                        , USER_REGION_DETAIL_NAME
+                        FROM (
+                            SELECT *
+                            FROM TB_CODE
+                            WHERE CODE_GROUP = 'STY'
+                            ) T1
+                    RIGHT OUTER JOIN
+                        (
+                        SELECT SMELL_TYPE,
+                        SMELL_REGISTER_TIME,
+                        COUNT(*)                                        AS                               USER_REG,
+                        COUNT(CASE WHEN TSR.SMELL_VALUE != '001' AND TSR.SMELL_TYPE != '008' THEN 1 END) USER_REG_SMELL,
+                        COUNT(CASE WHEN TSR.SMELL_VALUE = '002' AND TSR.SMELL_TYPE != '008' THEN 1 END)  SMELL_LEVEL_1,
+                        COUNT(CASE WHEN TSR.SMELL_VALUE = '003' AND TSR.SMELL_TYPE != '008' THEN 1 END)  SMELL_LEVEL_2,
+                        COUNT(CASE WHEN TSR.SMELL_VALUE = '004' AND TSR.SMELL_TYPE != '008' THEN 1 END)  SMELL_LEVEL_3,
+                        COUNT(CASE WHEN TSR.SMELL_VALUE = '005' AND TSR.SMELL_TYPE != '008' THEN 1 END)  SMELL_LEVEL_4,
+                        COUNT(CASE WHEN TSR.SMELL_VALUE = '006' AND TSR.SMELL_TYPE != '008' THEN 1 END)  SMELL_LEVEL_5,
+                        (SELECT CODE_ID_NAME
+                        FROM TB_CODE
+                        WHERE TB_CODE.CODE_GROUP = 'RGD'
+                        AND TB_CODE.CODE_ID = TU.USER_REGION_DETAIL) AS                               USER_REGION_DETAIL_NAME
+                        FROM TB_SMELL_REGISTER TSR
+                        LEFT OUTER JOIN TB_USER TU
+                        ON TSR.REG_ID = TU.USER_ID
+                        WHERE DATE_FORMAT(tsr.REG_DT, '%Y-%m-%d') BETWEEN #{searchStart} AND #{searchEnd}
+                        <if test="userRegionDetail != null and !userRegionDetail.equals('')" >
+                            AND tu.USER_REGION_DETAIL = #{userRegionDetail}
+                        </if>
+                        <if test="smellType != null and !smellType.equals('')">
+                            AND tsr.SMELL_TYPE = #{smellType}
+                        </if>
+                        GROUP BY SMELL_REGISTER_TIME WITH ROLLUP
+                        ) T2
+                    ON T1.CODE_ID = T2.SMELL_TYPE
+                    ) T3
+                ON TC.CODE_ID = T3.SMELL_REGISTER_TIME
+        ) RESULT
+        ORDER BY RESULT.CODE_ID ASC
+    </select>
+
+    <select id="statisticSmellTableDetailByRegion" parameterType="statisticTableVO" resultType="egovMap">
+        SELECT * FROM (
+        SELECT
+        CASE WHEN SMELL_TYPE IS NULL THEN '합계' ELSE (SELECT tb_code.CODE_ID_NAME FROM tb_code WHERE tb_code.CODE_GROUP = 'STY' AND tb_code.CODE_ID =  T2.SMELL_TYPE) END AS SMELL_TYPE
+        , CASE WHEN USER_REG_SMELL = 0 THEN '-' ELSE USER_REG_SMELL END AS TOTAL_USER_REG_SMELL
+        , CASE WHEN SMELL_LEVEL_1 = 0 THEN '-' ELSE SMELL_LEVEL_1 END AS SMELL_LEVEL_1
+        , CASE WHEN SMELL_LEVEL_2 = 0 THEN '-' ELSE SMELL_LEVEL_2 END AS SMELL_LEVEL_2
+        , CASE WHEN SMELL_LEVEL_3 = 0 THEN '-' ELSE SMELL_LEVEL_3 END AS SMELL_LEVEL_3
+        , CASE WHEN SMELL_LEVEL_4 = 0 THEN '-' ELSE SMELL_LEVEL_4 END AS SMELL_LEVEL_4
+        , CASE WHEN SMELL_LEVEL_5 = 0 THEN '-' ELSE SMELL_LEVEL_5 END AS SMELL_LEVEL_5
+        FROM
+            (
+                SELECT * FROM tb_code
+                WHERE CODE_GROUP = 'STY'
+            ) T1
+        RIGHT OUTER JOIN
+            (
+                SELECT tsr.* ,
+                COUNT(*) AS USER_REG,
+                COUNT(CASE WHEN tsr.SMELL_VALUE != '001' AND tsr.SMELL_TYPE != '008' THEN 1 END) USER_REG_SMELL,
+                COUNT(CASE WHEN tsr.SMELL_VALUE = '002'  AND tsr.SMELL_TYPE != '008' THEN 1 END ) SMELL_LEVEL_1,
+                COUNT(CASE WHEN tsr.SMELL_VALUE = '003'  AND tsr.SMELL_TYPE != '008' THEN 1 END ) SMELL_LEVEL_2,
+                COUNT(CASE WHEN tsr.SMELL_VALUE = '004'  AND tsr.SMELL_TYPE != '008' THEN 1 END ) SMELL_LEVEL_3,
+                COUNT(CASE WHEN tsr.SMELL_VALUE = '005'  AND tsr.SMELL_TYPE != '008' THEN 1 END ) SMELL_LEVEL_4,
+                COUNT(CASE WHEN tsr.SMELL_VALUE = '006'  AND tsr.SMELL_TYPE != '008' THEN 1 END ) SMELL_LEVEL_5,
+                (SELECT CODE_ID_NAME FROM tb_code WHERE tb_code.CODE_GROUP = 'RGD' AND tb_code.CODE_ID = TU.USER_REGION_DETAIL) AS USER_REGION_DETAIL_NAME
+                FROM
+                tb_smell_register tsr
+                LEFT OUTER JOIN tb_user tu
+                ON tsr.REG_ID = tu.USER_ID
+                WHERE DATE_FORMAT(tsr.REG_DT, '%Y-%m-%d') BETWEEN #{searchStart} AND #{searchEnd}
+                <if test="userRegionDetail != null and !userRegionDetail.equals('')" >
+                    AND tu.USER_REGION_DETAIL = #{userRegionDetail}
+                </if>
+                <if test="smellType != null and !smellType.equals('')">
+                    AND tsr.SMELL_TYPE = #{smellType}
+                </if>
+                GROUP BY tsr.SMELL_TYPE WITH ROLLUP
+            ) T2
+        ON T1.CODE_ID = T2.SMELL_TYPE
+        ) RESULT
+        ORDER BY RESULT.SMELL_TYPE DESC
+    </select>
+
+    <select id="userRegionDetailCode" parameterType="statisticTableVO" resultType="egovMap">
+        SELECT CODE_ID_NAME
+        FROM tb_code
+        WHERE CODE_GROUP = 'RGD'
+          AND CODE_ID = #{userRegionDetail}
+    </select>
 </mapper>

@@ -15,7 +15,7 @@ import java.util.List;
  * @
  * @ 수정일           수정자
  * @ ---------    ---------
- * @
+ * @ 2023.11.22     김우성
  **/
 @Data
 public class StatisticTableVO {
@@ -39,5 +39,5 @@ public class StatisticTableVO {
     /* 조회용 */
     private String searchStart;                 //조회 시작
     private String searchEnd;                   //조회 끝
-
+    private String smellType;                   //취기
 }
