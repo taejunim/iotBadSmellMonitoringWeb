@@ -36,7 +36,7 @@
             , AIR_SENSOR_NAME = #{airSensorName}
             , AIR_SENSING_DATE = #{airSensingDate}
             , PM10_AVG = #{pm10Avg}
-            , REG_DT = DATE_FORMAT(NOW(),'%Y-%m-%d %H:%m:%s')
+            , REG_DT = DATE_FORMAT(NOW(),'%Y-%m-%d %H:%i:%s')
             , READING_YN = 'N'
         WHERE SMELL_REGISTER_NO = #{smellRegisterNo}
     </update>
