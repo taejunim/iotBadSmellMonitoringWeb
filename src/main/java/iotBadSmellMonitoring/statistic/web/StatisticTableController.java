@@ -3,6 +3,7 @@ package iotBadSmellMonitoring.statistic.web;
 import egovframework.rte.psl.dataaccess.util.EgovMap;
 import iotBadSmellMonitoring.main.service.MainService;
 import iotBadSmellMonitoring.main.service.MainVO;
+import iotBadSmellMonitoring.statistic.common.StatisticUtils;
 import iotBadSmellMonitoring.statistic.service.StatisticService;
 import iotBadSmellMonitoring.statistic.service.StatisticTableVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -130,23 +131,12 @@ public class StatisticTableController {
         int regionMasterCount = 0;
 
         //자바스크립트 사용을 할수 없어 rowspan을 하기 위한 처리
-        for(int i = 0 ;i < list.size() ; i ++){
-
-            if(i == 0) regionMaster = list.get(i).get("userRegionMaster").toString();
-
-            //System.out.println(list.get(i).get("userRegionMaster").equals(regionMaster));
-
-            if(list.get(i).get("userRegionMaster").equals(regionMaster)){
-                regionMasterCount ++;
-            } else {
-                regionCountMap.put(regionMaster,regionMasterCount);
-                regionMaster = list.get(i).get("userRegionMaster").toString();
-                regionMasterCount = 1;
-            }
-        }
+        StatisticUtils.addSelectByRegion(list, regionCountMap, regionMaster, regionMasterCount);
 
         modelMap.addAttribute("result",statisticService.statisticTableSelect(statisticTableVO));
         modelMap.addAttribute("regionCountMap",regionCountMap);
         return "statisticTableDataExcelDownload";
     }
+
+
 }

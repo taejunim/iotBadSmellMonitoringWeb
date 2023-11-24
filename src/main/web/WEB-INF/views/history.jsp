@@ -88,6 +88,8 @@ var readingYn    = '${historyVO.readingYn}'
             /* 테이블 row 클릭 이벤트 START*/
             $(".itemRow").click( function () {
 
+
+
                 $(this).css('background-color', 'rgb(217,239,255)');                        //선택된 로우 색상 변경
                 $(".itemRow").not($(this)).css('background-color', 'rgba(255,255,255,0)');  //선택되지 않은 로우 색상
 
@@ -108,6 +110,16 @@ var readingYn    = '${historyVO.readingYn}'
                 $("#getRegDt").text(getItems.eq(8).text());                     //등록일시
                 $("#smellComment").text(getItems.eq(15).text());                //비고
                 /*오른쪽 table에 값 담아주기 END*/
+
+                smellRegisterNo =  getItems.eq(18).text()  //table의 resultList로 받아온 smellRegisterNo 가져오기
+
+                /*이미지 불러오기 START*/
+
+                fn_img_list(); //이미지 불러오기 함수
+
+                /*이미지 불러오기 END*/
+
+                showList();                                         // 회원 선택 시 상세화면 불러오기.
 
                 /*지도 세팅 START*/
                 var gpsX = getItems.eq(16).text();       //gps_x의 값
@@ -139,13 +151,9 @@ var readingYn    = '${historyVO.readingYn}'
                 marker.setMap(map);
                 /*지도 세팅 END*/
 
-                /*이미지 불러오기 START*/
 
-                fn_img_list(); //이미지 불러오기 함수
 
-                /*이미지 불러오기 END*/
 
-                smellRegisterNo =  getItems.eq(18).text()  //table의 resultList로 받아온 smellRegisterNo 가져오기
 
                 $.ajax({
                     url : '/historyReadingYn',
@@ -163,7 +171,6 @@ var readingYn    = '${historyVO.readingYn}'
                     }
                 })
 
-                showList();                                         // 회원 선택 시 상세화면 불러오기.
 
                 map.relayout();
             });

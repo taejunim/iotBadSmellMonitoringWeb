@@ -3,8 +3,10 @@ package iotBadSmellMonitoring.statistic.web;
 import egovframework.rte.psl.dataaccess.util.EgovMap;
 import iotBadSmellMonitoring.main.service.MainService;
 import iotBadSmellMonitoring.main.service.MainVO;
+import iotBadSmellMonitoring.statistic.common.StatisticUtils;
 import iotBadSmellMonitoring.statistic.service.StatisticService;
 import iotBadSmellMonitoring.statistic.service.StatisticTableVO;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -105,4 +107,46 @@ public class StatisticSmellTableController {
         /**취기 마을별 통계  END*/
         return "statisticSmellTable";
     }
+
+    @RequestMapping(value = "/statisticSmellTableDataExcelDownload")
+    public String statisticSmellTableDataExcelDownload(@ModelAttribute("statisticTableVO") StatisticTableVO statisticTableVO,ModelMap modelMap, HttpServletResponse response) throws Exception {
+
+        System.out.println("statisticTableVO : " + statisticTableVO.toString());
+        /* 쿠키를 이용한 로딩 START */
+        Cookie cookie = new Cookie("loading", "true");
+        cookie.setPath("/");
+        response.addCookie(cookie);
+        /* 쿠키를 이용한 로딩 END */
+
+        List<EgovMap> list = statisticService.statisticSmellTableDetail(statisticTableVO);
+
+
+
+        Map<String,Object> regionCountMap = new HashMap<>();
+        String regionMaster = "";
+        int regionMasterCount = 0;
+
+        Map<String , Object> resultMap = new HashMap<>();
+        resultMap.put("list",list);
+
+            modelMap.addAttribute("userRegionDetail",statisticTableVO.getUserRegionDetail());
+            modelMap.addAttribute("userRegionDetailName",list.get(0).get("userRegionDetailName"));
+        if ("".equals(statisticTableVO.getUserRegionDetail().trim()) || StringUtils.isEmpty(statisticTableVO.getUserRegionDetail())) {
+            StatisticUtils.addSelectByRegion(list, regionCountMap, regionMaster, regionMasterCount);
+            modelMap.addAttribute("resultList",statisticService.statisticSmellTableTotal(statisticTableVO));
+            modelMap.addAttribute("resultListDetail",resultMap);
+            modelMap.addAttribute("regionCountMap",regionCountMap);
+            //자바스크립트 사용을 할수 없어 rowspan을 하기 위한 처리
+        } else {
+            modelMap.addAttribute("resultList",statisticService.statisticSmellTableTotalByRegion(statisticTableVO));
+            modelMap.addAttribute("resultListDetail",statisticService.statisticSmellTableDetailByRegion(statisticTableVO));
+        }
+
+
+
+
+        return "/statisticSmellTableDataExcelDownload";
+    }
+
+
 }

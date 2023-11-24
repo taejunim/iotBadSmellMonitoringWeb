@@ -14,8 +14,9 @@
     $(document).ready(function () {
         if (userRegion != "" && userRegion != null)        { //지역
             $("#searchUserRegion").val(userRegion).prop("selected", true);
-        } else if (smellType != "" &&  smellType != null) {
-            $("#smellType").val(smellType).prop("selected",true);
+        }
+        if (smellType != "" &&  smellType != null) {
+            $("#smellType").val(smellType).prop("selected", true);
         }
 
 
@@ -53,41 +54,42 @@
             document.frm.action = "<c:url value='/statisticSmellTable'/>";
             document.frm.submit();
         });
+        $("#resetButton").click(function(){
+            showLoader(true);
+            $(location).attr('href', '/statisticSmellTable.do');
+        });
+        //데이터 다운로드 클릭 이벤트
+        $("#downloadButton").click(function(){
+            setCookie("loading","false");
+            checkDownloadCheck();
+            showLoader(true);
+            var searchStart = $("#searchStartSelect").val();
+            var searchEnd = $("#searchEndSelect").val();
+            var searchUserRegion = $("#searchUserRegion").val();
+            var smellType = $("#smellType").val();
+            frm.searchStart.value = searchStart;
+            frm.searchEnd.value = searchEnd;
+            frm.searchUserRegion.value = searchUserRegion;
+            frm.smellType.value = smellType;
+            document.frm.action = "<c:url value='/statisticSmellTableDataExcelDownload'/>";
+            document.frm.submit();
+        });
     });
 
 
 
 
 
-    // var searchUserRegion;
-    // var smellValue;
-    // var smellType;
-    // var startDate;
-    // var endDate;
+
     function handleChange(e) { // select 박스 handler function
         if (e.id == "searchUserRegion") {
             console.log("e.value : " + e.value);
             if (e.value == '') {
-                $('#smellType').attr('disabled','disabled');
-                $('#smellType').val('').prop('selected',true);
+                $('#smellType').attr('disabled', 'disabled');
+                $('#smellType').val('').prop('selected', true);
             } else {
                 $('#smellType').removeAttr('disabled');
             }
-            searchUserRegion = e.value;
-        } else if (e.id == "smellValue") {
-            smellValue = e.value;
-        } else if (e.id == "smellType") {
-            smellType = e.value;
-        } else if (e.id == "searchStartDt") {
-            startDate = e.value;
-        } else if (e.id == "searchEndDt") {
-            var oneDay = new Date(e.value);
-            oneDay.setDate(oneDay.getDate() + 1)
-
-            console.log(oneDay);
-            oneDay =  dateFormat(oneDay);
-            endDate = oneDay;
-
         }
     }
 
@@ -158,7 +160,7 @@
         <div class="wd100rate" style="overflow: auto; height: 100%;">
             <c:choose>
                 <c:when test="${userRegionDetail eq '' || userRegionDetail eq null}">
-                    <table class="statisticTable">
+                    <table class="statisticTable" style="width: 65% !important;">
                         <caption class="statisticSmellTableCaption">&lt;주민 악취모니터링 주요 취기 결과&gt;</caption>
                         <th colspan="3" class="">구분</th>
                         <th class="">돈사취</th>
@@ -201,7 +203,7 @@
                     </table>
                 </c:when>
                 <c:otherwise>
-                    <table class="statisticTable">
+                    <table class="statisticTable" style="width: 65% !important;">
                                 <caption class="statisticSmellTableCaption">&lt; ${userRegion.codeIdName}-주민 악취모니터링 결과&gt;</caption>
                             <tr>
                                 <th rowspan="2">구분</th>
@@ -218,6 +220,19 @@
                                 <th>5도</th>
                             </tr>
                         <c:forEach items="${resultListByRegion}" var="resultByRegion" varStatus="status">
+                            <c:if test="${resultByRegion.registerTime ne '합계' && status.first}">
+                                <tr>
+                                    <td>합계</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                </tr>
+                            </c:if>
                             <tr>
                                 <td>${resultByRegion.registerTime}</td>
                                 <td>${resultByRegion.userReg}</td>
@@ -231,7 +246,7 @@
                             </tr>
                         </c:forEach>
                     </table>
-                    <table class="statisticTable">
+                    <table class="statisticTable" style="width: 65% !important;">
                         <caption class="statisticSmellTableCaption">&lt; ${userRegion.codeIdName}-주요 취기별 악취강도(회)&gt;</caption>
                         <tr>
                             <th rowspan="2" colspan="2">구분</th>
@@ -245,6 +260,17 @@
                             <th>5도</th>
                         </tr>
                         <c:forEach items="${resultListByRegionDetail}" var="resultListByRegionDetail" varStatus="status">
+                            <c:if test="${resultListByRegionDetail.smellType ne '합계' && status.first}">
+                                <tr>
+                                    <td>합계</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                </tr>
+                            </c:if>
                             <tr>
                                 <td>${resultListByRegionDetail.smellType}</td>
                                 <td>${resultListByRegionDetail.totalUserRegSmell}</td>
@@ -258,7 +284,6 @@
                     </table>
                 </c:otherwise>
             </c:choose>
-
         </div>
     </div>
 </div>
