@@ -41,7 +41,6 @@ To change this template use File | Settings | File Templates.
 
             var getItems = $(this).find("td");
 
-            console.log("getItems.eq(10).text() : " + getItems.eq(10).text());
 
             $("#userPassword").val("");
             $("#userPasswordConfirm").val("");
@@ -255,6 +254,13 @@ To change this template use File | Settings | File Templates.
         $(".wd28rate").append("<h2 class='selectMember' style='margin: 0 auto; text-align: center; position: relative; top: 37%;'> - 회원을 선택해 주세요. - </h2>");
     }
     function showList() {
+        if ($("#memberStatus").val() == '') {
+            $("#memberConfirmBtn").show();
+            $("#memberRefuseBtn").show();
+        } else {
+            $("#memberConfirmBtn").hide();
+            $("#memberRefuseBtn").hide();
+        }
         $("#DetailMemberInfo").show();
         $("#DetailShow").show();
         $(".selectMember").remove();

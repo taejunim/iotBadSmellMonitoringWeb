@@ -167,7 +167,20 @@
                         </c:if>
                         <tr>
                             <td class="borderNone"></td>
-                            <td style="border: 0.5pt solid black;">${resultByRegion.registerTime}</td>
+                            <c:choose>
+                                <c:when test="${resultByRegion.registerTime eq '합계'}">
+                                    <td style="border: 0.5pt solid black;">${resultByRegion.registerTime}</td>
+                                </c:when>
+                                <c:when test="${resultByRegion.registerTime eq '06:00 ~ 09:00'}">
+                                    <td style="border: 0.5pt solid black;">오전<br style="mso-data-placement: same-cell">${resultByRegion.registerTime}</td>
+                                </c:when>
+                                <c:when test="${resultByRegion.registerTime eq '11:00 ~ 17:00'}">
+                                    <td style="border: 0.5pt solid black;">오후<br style="mso-data-placement: same-cell">${resultByRegion.registerTime}</td>
+                                </c:when>
+                                <c:otherwise>
+                                    <td style="border: 0.5pt solid black;">야간<br style="mso-data-placement: same-cell">${resultByRegion.registerTime}</td>
+                                </c:otherwise>
+                            </c:choose>
                             <td style="border: 0.5pt solid black;">${resultByRegion.userReg}</td>
                             <td style="border: 0.5pt solid black;">${resultByRegion.totalUserRegSmell}</td>
                             <td style="border: 0.5pt solid black;">${resultByRegion.smellPercentage}%</td>
@@ -181,7 +194,7 @@
                 </tbody>
             </table>
     <table class="statisticTable">
-        <caption>&lt; ${userRegionDetailName}-주요 취기별 악취강도(회)&gt;</caption>
+        <caption>&lt; ${userRegionDetailName}-주요 취기별 악취강도(회) &gt;</caption>
         <tr class="statisticTableTh">
             <td class="borderNone"></td>
             <th rowspan="2" colspan="2">구분</th>

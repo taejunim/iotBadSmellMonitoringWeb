@@ -120,9 +120,10 @@ Time: 9:49 오전
       } else if (e.id == "smellValue") {
           if (e.value == '001') {
               $('#smellType').attr('disabled','disabled');
-              $('#smellType').val('').prop('selected',true);
+              $('#smellType').val('008').prop('selected',true);
           } else {
               $('#smellType').removeAttr('disabled');
+              $('#smellType').val('').prop('selected',true);
           }
           smellValue = e.value;
       } else if (e.id == "smellType") {

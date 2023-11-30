@@ -234,7 +234,21 @@
                                 </tr>
                             </c:if>
                             <tr>
-                                <td>${resultByRegion.registerTime}</td>
+                                <c:choose>
+                                    <c:when test="${resultByRegion.registerTime eq '합계'}">
+                                        <td>${resultByRegion.registerTime}</td>
+                                    </c:when>
+                                    <c:when test="${resultByRegion.registerTime eq '06:00 ~ 09:00'}">
+                                        <td>오전<br>${resultByRegion.registerTime}</td>
+                                    </c:when>
+                                    <c:when test="${resultByRegion.registerTime eq '11:00 ~ 17:00'}">
+                                        <td>오후<br>${resultByRegion.registerTime}</td>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <td>야간<br>${resultByRegion.registerTime}</td>
+                                    </c:otherwise>
+                                </c:choose>
+
                                 <td>${resultByRegion.userReg}</td>
                                 <td>${resultByRegion.totalUserRegSmell}</td>
                                 <td>${resultByRegion.smellPercentage}%</td>

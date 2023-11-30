@@ -156,25 +156,33 @@
                        t1.REG_DT              REG_DT,
                        t1.SMELL_REGISTER_TIME SMELL_REGISTER_TIME,
                        t1.REG_ID              REG_ID
-                FROM tb_smell_register t1,
+                FROM tb_smell_register t1 inner JOIN tb_user tu on t1.REG_ID = tu.USER_ID,
                 (
-                SELECT MAX(SMELL_VALUE) SMELL_VALUE,
-                    REG_DT,
+                    SELECT MAX(SMELL_VALUE) SMELL_VALUE,
+                    r.REG_DT,
                     SMELL_REGISTER_TIME,
-                    REG_ID
-                FROM tb_smell_register
-                WHERE 1 = 1
-                AND DATE_FORMAT(REG_DT, '%Y-%m-%d') BETWEEN #{searchStart} AND #{searchEnd}
-                <if test="smellRegisterTime != null and !smellRegisterTime.equals('')" >
-                    AND SMELL_REGISTER_TIME = #{smellRegisterTime}
-                </if>
-                GROUP BY DATE_FORMAT(REG_DT, '%Y-%m-%d'), SMELL_REGISTER_TIME, REG_ID
+                    r.REG_ID
+                    FROM tb_smell_register r
+                    inner JOIN tb_user tu on r.REG_ID = tu.USER_ID
+                    WHERE 1 = 1
+                    and tu.REG_GBN = '004'
+                    AND (r.REG_ID, r.REG_DT) in (
+                    SELECT tb_smell_register.REG_ID,MAX(REG_DT) FROM tb_smell_register GROUP BY DATE_FORMAT(REG_DT, '%Y-%m-%d') , SMELL_REGISTER_TIME , REG_ID
+                    )
+                    AND DATE_FORMAT(r.REG_DT, '%Y-%m-%d') BETWEEN #{searchStart} AND #{searchEnd}
+                    <if test="smellRegisterTime != null and !smellRegisterTime.equals('')" >
+                        AND SMELL_REGISTER_TIME = #{smellRegisterTime}
+                    </if>
+                    GROUP BY DATE_FORMAT(r.REG_DT, '%Y-%m-%d'), SMELL_REGISTER_TIME, r.REG_ID
                 ) t2
                 WHERE 1=1
                 AND DATE_FORMAT(t1.REG_DT, '%Y-%m-%d') = DATE_FORMAT(t2.REG_DT, '%Y-%m-%d')
                 AND t1.SMELL_REGISTER_TIME = t2.SMELL_REGISTER_TIME
                 AND t1.REG_ID = t2.REG_ID
                 AND t1.SMELL_VALUE = t2.SMELL_VALUE
+                AND (t1.REG_ID, t1.REG_DT) in (
+                SELECT tb_smell_register.REG_ID,MAX(REG_DT) FROM tb_smell_register GROUP BY DATE_FORMAT(REG_DT, '%Y-%m-%d') , SMELL_REGISTER_TIME , REG_ID
+                )
                 GROUP BY DATE_FORMAT(t1.REG_DT, '%Y-%m-%d'), t1.SMELL_REGISTER_TIME, t1.REG_ID
                 ) userRegisterCount
         ) result LEFT OUTER JOIN
@@ -288,6 +296,9 @@
                         AND tb_smell_register.REG_ID = tb_user.USER_ID
                         AND tb_user.USER_REGION_MASTER = a.REFERENCE_CODE_ID
                         AND tb_user.USER_REGION_DETAIL = a.CODE_ID
+                        AND (tb_smell_register.REG_ID, tb_smell_register.REG_DT) in (
+                            SELECT tsr2.REG_ID,MAX(tsr2.REG_DT) FROM tb_smell_register tsr2 GROUP BY DATE_FORMAT(REG_DT, '%Y-%m-%d') , SMELL_REGISTER_TIME , REG_ID
+                        )
                         GROUP BY tb_smell_register.SMELL_VALUE
                         ORDER BY COUNT(SMELL_VALUE) DESC LIMIT 1
                     ),'') mainSmellValue,
@@ -304,7 +315,7 @@
                                 ON a.USER_ID = b.USER_ID AND a.REG_GBN = b.REG_GBN
                              ) tb_user,
                              (
-                                 SELECT t1.SMELL_VALUE, t1.SMELL_TYPE, t1.REG_ID
+                                 SELECT t1.SMELL_VALUE, t1.SMELL_TYPE, t1.REG_ID, t1.REG_DT
                                  FROM tb_smell_register t1,
                                       (
                                           SELECT MAX(SMELL_VALUE) SMELL_VALUE, REG_ID, REG_DT, SMELL_REGISTER_TIME
@@ -327,6 +338,9 @@
                         AND tb_smell_register.REG_ID = tb_user.USER_ID
                         AND tb_user.USER_REGION_MASTER = a.REFERENCE_CODE_ID
                         AND tb_user.USER_REGION_DETAIL = a.CODE_ID
+                        AND (tb_smell_register.REG_ID, tb_smell_register.REG_DT) in (
+                        SELECT tsr2.REG_ID,MAX(tsr2.REG_DT) FROM tb_smell_register tsr2 GROUP BY DATE_FORMAT(REG_DT, '%Y-%m-%d') , SMELL_REGISTER_TIME , REG_ID
+                        )
                         GROUP BY tb_smell_register.SMELL_TYPE
                         ORDER BY COUNT(SMELL_TYPE) DESC LIMIT 1
                     ),'') mainSmellType
@@ -364,6 +378,9 @@
                         <if test="smellRegisterTime != null and !smellRegisterTime.equals('')" >
                             AND SMELL_REGISTER_TIME = #{smellRegisterTime}
                         </if>
+                            AND (tb_smell_register.REG_ID , tb_smell_register.REG_DT) in (
+                            SELECT tb_smell_register.REG_ID,MAX(tb_smell_register.REG_DT) FROM tb_smell_register GROUP BY REG_ID,DATE_FORMAT(REG_DT, '%Y-%m-%d') , SMELL_REGISTER_TIME
+                            )
                             GROUP BY DATE_FORMAT(REG_DT, '%Y-%m-%d'), SMELL_REGISTER_TIME, REG_ID
                         ) t2
                         WHERE 1=1
@@ -371,6 +388,9 @@
                         AND t1.SMELL_REGISTER_TIME = t2.SMELL_REGISTER_TIME
                         AND t1.REG_ID = t2.REG_ID
                         AND t1.SMELL_VALUE = t2.SMELL_VALUE
+                        AND (t1.REG_ID , t1.REG_DT) in (
+                        SELECT tb_smell_register.REG_ID,MAX(tb_smell_register.REG_DT) FROM tb_smell_register GROUP BY REG_ID,DATE_FORMAT(REG_DT, '%Y-%m-%d') , SMELL_REGISTER_TIME
+                        )
                         GROUP BY DATE_FORMAT(t1.REG_DT, '%Y-%m-%d'), t1.SMELL_REGISTER_TIME, t1.REG_ID
                      )tb_smell_register,
                      (
@@ -381,6 +401,7 @@
                         INNER JOIN (
                             SELECT USER_ID, MAX(REG_GBN) REG_GBN
                             FROM tb_user
+                            WHERE tb_user.REG_GBN = '004'
                             GROUP BY USER_ID
                         ) b ON a.USER_ID = b.USER_ID AND a.REG_GBN = b.REG_GBN
                      ) tb_user
@@ -551,12 +572,18 @@
                           COUNT(CASE WHEN tsr.SMELL_TYPE = '006' THEN 1 END) AS FOOD_SMELL,
                           COUNT(CASE WHEN tsr.SMELL_TYPE = '007' THEN 1 END) AS STEAM_SMELL,
                           COUNT(CASE WHEN tsr.SMELL_TYPE = '009' THEN 1 END) AS COMPOST_SMELL
-                      FROM tb_smell_register tsr
-                               LEFT JOIN tb_user tu
-                                         on tsr.REG_ID = tu.USER_ID
-                      where tu.REG_GBN != '003'
+                      FROM
+                          (SELECT tsr.*, tu.USER_REGION_MASTER, tu.USER_REGION_DETAIL
+                           FROM tb_smell_register tsr
+                                    LEFT OUTER JOIN tb_user tu
+                                                    ON tsr.REG_ID = tu.USER_ID
+                           WHERE tu.REG_GBN = '004'
+                             AND SMELL_VALUE != '001' AND SMELL_TYPE != '008'
+                      AND (tsr.REG_ID , tsr.REG_DT) IN (
+                            SELECT tb_smell_register.REG_ID,MAX(tb_smell_register.REG_DT) FROM tb_smell_register GROUP BY REG_ID,DATE_FORMAT(REG_DT, '%Y-%m-%d') , SMELL_REGISTER_TIME
+                        )
                       AND DATE_FORMAT(tsr.REG_DT, '%Y-%m-%d') BETWEEN #{searchStart} AND #{searchEnd}
-                      GROUP BY USER_REGION_DETAIL) T2
+                           GROUP BY DATE_FORMAT(tsr.REG_DT, '%Y-%m-%d'), SMELL_REGISTER_TIME, REG_ID) tsr) T2
                      ON T1.REFERENCE_CODE_ID = T2.USER_REGION_MASTER
                          AND T1.CODE_ID = T2.USER_REGION_DETAIL
              ) T3
@@ -566,15 +593,15 @@
         SELECT  T1.USER_REGION_MASTER_NAME,
                 T1.USER_REGION_DETAIL_NAME,
                 T1.REFERENCE_CODE_ID AS USER_REGION_MASTER,
-                FORMAT(IFNULL(T2.TOTAL_COUNT,'0'),0) AS TOTAL_COUNT,
-                FORMAT(IFNULL(T2.PIG_SMELL,'0'),0) AS PIG_SMELL,
-                FORMAT(IFNULL(T2.CHIKEN_SMELL,'0'),0) AS CHIKEN_SMELL,
-                FORMAT(IFNULL(T2.COW_SMELL,'0'),0) AS COW_SMELL,
-                FORMAT(IFNULL(T2.WATER_COMPOST_SMELL,'0'),0) AS WATER_COMPOST_SMELL,
-                FORMAT(IFNULL(T2.COMPOST_SMELL,'0'),0) AS COMPOST_SMELL,
-                FORMAT(IFNULL(T2.FOOD_SMELL,'0'),0) AS FOOD_SMELL,
-                FORMAT(IFNULL(T2.STEAM_SMELL,'0'),0) AS STEAM_SMELL,
-                FORMAT(IFNULL(T2.OTHER_SMELL,'0'),0) AS OTHER_SMELL
+                FORMAT(SUM(IFNULL(T2.TOTAL_COUNT,'0')),0) AS TOTAL_COUNT,
+                FORMAT(SUM(IFNULL(T2.PIG_SMELL,'0')),0) AS PIG_SMELL,
+                FORMAT(SUM(IFNULL(T2.CHIKEN_SMELL,'0')),0) AS CHIKEN_SMELL,
+                FORMAT(SUM(IFNULL(T2.COW_SMELL,'0')),0) AS COW_SMELL,
+                FORMAT(SUM(IFNULL(T2.WATER_COMPOST_SMELL,'0')),0) AS WATER_COMPOST_SMELL,
+                FORMAT(SUM(IFNULL(T2.COMPOST_SMELL,'0')),0) AS COMPOST_SMELL,
+                FORMAT(SUM(IFNULL(T2.FOOD_SMELL,'0')),0) AS FOOD_SMELL,
+                FORMAT(SUM(IFNULL(T2.STEAM_SMELL,'0')),0) AS STEAM_SMELL,
+                FORMAT(SUM(IFNULL(T2.OTHER_SMELL,'0')),0) AS OTHER_SMELL
         FROM
             (
                 SELECT REFERENCE_CODE_ID,
@@ -600,14 +627,22 @@
                  COUNT(CASE WHEN tsr.SMELL_TYPE = '006' THEN 1 END) AS FOOD_SMELL,
                  COUNT(CASE WHEN tsr.SMELL_TYPE = '007' THEN 1 END) AS STEAM_SMELL,
                  COUNT(CASE WHEN tsr.SMELL_TYPE = '009' THEN 1 END) AS COMPOST_SMELL
-             FROM tb_smell_register tsr
-                      LEFT JOIN tb_user tu
-                                on tsr.REG_ID = tu.USER_ID
-             where tu.REG_GBN != '003'
-             AND DATE_FORMAT(tsr.REG_DT, '%Y-%m-%d') BETWEEN #{searchStart} AND #{searchEnd}
-             GROUP BY USER_REGION_DETAIL) T2
+             FROM
+                 (SELECT tsr.*, tu.USER_REGION_MASTER, tu.USER_REGION_DETAIL
+                  FROM tb_smell_register tsr
+                           LEFT OUTER JOIN tb_user tu
+                                           ON tsr.REG_ID = tu.USER_ID
+                  WHERE tu.REG_GBN = '004'
+                    AND SMELL_VALUE != '001' AND SMELL_TYPE != '008'
+                      AND (tsr.REG_ID , tsr.REG_DT) IN (
+                            SELECT tb_smell_register.REG_ID,MAX(tb_smell_register.REG_DT) FROM tb_smell_register GROUP BY REG_ID,DATE_FORMAT(REG_DT, '%Y-%m-%d') , SMELL_REGISTER_TIME
+                        )
+                      AND DATE_FORMAT(tsr.REG_DT, '%Y-%m-%d') BETWEEN #{searchStart} AND #{searchEnd}
+                  GROUP BY DATE_FORMAT(tsr.REG_DT, '%Y-%m-%d'), SMELL_REGISTER_TIME, REG_ID) tsr
+                GROUP BY tsr.USER_REGION_MASTER , tsr.USER_REGION_DETAIL) T2
             ON T1.REFERENCE_CODE_ID = T2.USER_REGION_MASTER
                 AND T1.CODE_ID = T2.USER_REGION_DETAIL
+                GROUP BY T1.USER_REGION_MASTER_NAME, T1.USER_REGION_DETAIL_NAME
                 ORDER BY USER_REGION_MASTER_NAME DESC
     </select>
 
@@ -623,114 +658,136 @@
         IFNULL(SMELL_LEVEL_5,'-') AS SMELL_LEVEL_5,
         USER_REGION_DETAIL_NAME
         FROM (
-            SELECT *
-            FROM (
-                SELECT CODE_ID
-                FROM TB_CODE
-                WHERE CODE_GROUP = 'REN'
-                ) TC
-            RIGHT OUTER JOIN
-                (
-                SELECT SMELL_REGISTER_TIME
-                , USER_REG
-                , USER_REG_SMELL                                       AS TOTAL_USER_REG_SMELL
-                , ROUND(IFNULL(USER_REG_SMELL / USER_REG * 100, 0), 2) AS SMELL_PERCENTAGE
-                , SMELL_LEVEL_1
-                , SMELL_LEVEL_2
-                , SMELL_LEVEL_3
-                , SMELL_LEVEL_4
-                , SMELL_LEVEL_5
-                , USER_REGION_DETAIL_NAME
-                FROM (
-                    SELECT *
-                    FROM TB_CODE
-                    WHERE CODE_GROUP = 'STY'
-                    ) T1
-                RIGHT OUTER JOIN
-                    (
-                    SELECT SMELL_TYPE,
-                    SMELL_REGISTER_TIME,
-                    COUNT(*)                                        AS                               USER_REG,
-                    COUNT(CASE WHEN TSR.SMELL_VALUE != '001' AND TSR.SMELL_TYPE != '008' THEN 1 END) USER_REG_SMELL,
-                    COUNT(CASE WHEN TSR.SMELL_VALUE = '002' AND TSR.SMELL_TYPE != '008' THEN 1 END)  SMELL_LEVEL_1,
-                    COUNT(CASE WHEN TSR.SMELL_VALUE = '003' AND TSR.SMELL_TYPE != '008' THEN 1 END)  SMELL_LEVEL_2,
-                    COUNT(CASE WHEN TSR.SMELL_VALUE = '004' AND TSR.SMELL_TYPE != '008' THEN 1 END)  SMELL_LEVEL_3,
-                    COUNT(CASE WHEN TSR.SMELL_VALUE = '005' AND TSR.SMELL_TYPE != '008' THEN 1 END)  SMELL_LEVEL_4,
-                    COUNT(CASE WHEN TSR.SMELL_VALUE = '006' AND TSR.SMELL_TYPE != '008' THEN 1 END)  SMELL_LEVEL_5,
-                    (SELECT CODE_ID_NAME
-                    FROM TB_CODE
-                    WHERE TB_CODE.CODE_GROUP = 'RGD'
-                    AND TB_CODE.CODE_ID = TU.USER_REGION_DETAIL) AS                               USER_REGION_DETAIL_NAME
-                    FROM TB_SMELL_REGISTER TSR
-                    LEFT OUTER JOIN TB_USER TU
-                    ON TSR.REG_ID = TU.USER_ID
-                    WHERE DATE_FORMAT(tsr.REG_DT, '%Y-%m-%d') BETWEEN #{searchStart} AND #{searchEnd}
-                    <if test="userRegionDetail != null and !userRegionDetail.equals('')" >
-                        AND tu.USER_REGION_DETAIL = #{userRegionDetail}
-                    </if>
-                    <if test="smellType != null and !smellType.equals('')">
-                        AND tsr.SMELL_TYPE = #{smellType}
-                    </if>
-                    GROUP BY SMELL_REGISTER_TIME WITH ROLLUP
-                    ) T2
-                ON T1.CODE_ID = T2.SMELL_TYPE
-                ) T3
-                ON TC.CODE_ID = T3.SMELL_REGISTER_TIME
-                UNION
-                SELECT *
-                FROM
-                     (
-                    SELECT CODE_ID
-                    FROM TB_CODE
-                    WHERE CODE_GROUP = 'REN'
-                    ) TC
-                LEFT OUTER JOIN
-                    (
-                        SELECT SMELL_REGISTER_TIME
-                        , USER_REG
-                        , USER_REG_SMELL                                       AS TOTAL_USER_REG_SMELL
-                        , ROUND(IFNULL(USER_REG_SMELL / USER_REG * 100, 0), 2) AS SMELL_PERCENTAGE
-                        , SMELL_LEVEL_1
-                        , SMELL_LEVEL_2
-                        , SMELL_LEVEL_3
-                        , SMELL_LEVEL_4
-                        , SMELL_LEVEL_5
-                        , USER_REGION_DETAIL_NAME
-                        FROM (
-                            SELECT *
-                            FROM TB_CODE
-                            WHERE CODE_GROUP = 'STY'
-                            ) T1
-                    RIGHT OUTER JOIN
-                        (
-                        SELECT SMELL_TYPE,
-                        SMELL_REGISTER_TIME,
-                        COUNT(*)                                        AS                               USER_REG,
-                        COUNT(CASE WHEN TSR.SMELL_VALUE != '001' AND TSR.SMELL_TYPE != '008' THEN 1 END) USER_REG_SMELL,
-                        COUNT(CASE WHEN TSR.SMELL_VALUE = '002' AND TSR.SMELL_TYPE != '008' THEN 1 END)  SMELL_LEVEL_1,
-                        COUNT(CASE WHEN TSR.SMELL_VALUE = '003' AND TSR.SMELL_TYPE != '008' THEN 1 END)  SMELL_LEVEL_2,
-                        COUNT(CASE WHEN TSR.SMELL_VALUE = '004' AND TSR.SMELL_TYPE != '008' THEN 1 END)  SMELL_LEVEL_3,
-                        COUNT(CASE WHEN TSR.SMELL_VALUE = '005' AND TSR.SMELL_TYPE != '008' THEN 1 END)  SMELL_LEVEL_4,
-                        COUNT(CASE WHEN TSR.SMELL_VALUE = '006' AND TSR.SMELL_TYPE != '008' THEN 1 END)  SMELL_LEVEL_5,
-                        (SELECT CODE_ID_NAME
-                        FROM TB_CODE
-                        WHERE TB_CODE.CODE_GROUP = 'RGD'
-                        AND TB_CODE.CODE_ID = TU.USER_REGION_DETAIL) AS                               USER_REGION_DETAIL_NAME
-                        FROM TB_SMELL_REGISTER TSR
-                        LEFT OUTER JOIN TB_USER TU
-                        ON TSR.REG_ID = TU.USER_ID
-                        WHERE DATE_FORMAT(tsr.REG_DT, '%Y-%m-%d') BETWEEN #{searchStart} AND #{searchEnd}
-                        <if test="userRegionDetail != null and !userRegionDetail.equals('')" >
-                            AND tu.USER_REGION_DETAIL = #{userRegionDetail}
-                        </if>
-                        <if test="smellType != null and !smellType.equals('')">
-                            AND tsr.SMELL_TYPE = #{smellType}
-                        </if>
-                        GROUP BY SMELL_REGISTER_TIME WITH ROLLUP
-                        ) T2
-                    ON T1.CODE_ID = T2.SMELL_TYPE
-                    ) T3
-                ON TC.CODE_ID = T3.SMELL_REGISTER_TIME
+        SELECT *
+        FROM (
+        SELECT CODE_ID
+        FROM TB_CODE
+        WHERE CODE_GROUP = 'REN'
+        ) TC
+        RIGHT OUTER JOIN
+        (
+        SELECT SMELL_REGISTER_TIME
+        , USER_REG
+        , USER_REG_SMELL                                       AS TOTAL_USER_REG_SMELL
+        , ROUND(IFNULL(USER_REG_SMELL / USER_REG * 100, 0), 2) AS SMELL_PERCENTAGE
+        , SMELL_LEVEL_1
+        , SMELL_LEVEL_2
+        , SMELL_LEVEL_3
+        , SMELL_LEVEL_4
+        , SMELL_LEVEL_5
+        , USER_REGION_DETAIL_NAME
+        FROM (
+        SELECT *
+        FROM TB_CODE
+        WHERE CODE_GROUP = 'STY'
+        ) T1
+        RIGHT OUTER JOIN
+        (
+        SELECT SMELL_TYPE,
+        SMELL_REGISTER_TIME,
+        COUNT(*)                                        AS                               USER_REG,
+        COUNT(CASE WHEN a.SMELL_VALUE != '001' AND a.SMELL_TYPE != '008' THEN 1 END) USER_REG_SMELL,
+        COUNT(CASE WHEN a.SMELL_VALUE = '002' AND a.SMELL_TYPE != '008' THEN 1 END)  SMELL_LEVEL_1,
+        COUNT(CASE WHEN a.SMELL_VALUE = '003' AND a.SMELL_TYPE != '008' THEN 1 END)  SMELL_LEVEL_2,
+        COUNT(CASE WHEN a.SMELL_VALUE = '004' AND a.SMELL_TYPE != '008' THEN 1 END)  SMELL_LEVEL_3,
+        COUNT(CASE WHEN a.SMELL_VALUE = '005' AND a.SMELL_TYPE != '008' THEN 1 END)  SMELL_LEVEL_4,
+        COUNT(CASE WHEN a.SMELL_VALUE = '006' AND a.SMELL_TYPE != '008' THEN 1 END)  SMELL_LEVEL_5,
+        a.USER_REGION_DETAIL_NAME
+        from
+        (
+        SELECT
+        TSR.*,
+        (SELECT CODE_ID_NAME
+        FROM TB_CODE
+        WHERE TB_CODE.CODE_GROUP = 'RGD'
+        AND TB_CODE.CODE_ID = TU.USER_REGION_DETAIL) AS                               USER_REGION_DETAIL_NAME
+        FROM TB_SMELL_REGISTER TSR
+        LEFT OUTER JOIN TB_USER TU
+        ON TSR.REG_ID = TU.USER_ID
+        WHERE DATE_FORMAT(tsr.REG_DT, '%Y-%m-%d') BETWEEN #{searchStart} AND #{searchEnd}
+        <if test="userRegionDetail != null and !userRegionDetail.equals('')" >
+            AND tu.USER_REGION_DETAIL = #{userRegionDetail}
+        </if>
+        <if test="smellType != null and !smellType.equals('')">
+            AND tsr.SMELL_TYPE = #{smellType}
+        </if>
+        AND TU.REG_GBN = '004'
+        AND (tsr.REG_ID , tsr.REG_DT) in (
+        SELECT tb_smell_register.REG_ID,MAX(tb_smell_register.REG_DT) FROM tb_smell_register GROUP BY REG_ID,DATE_FORMAT(REG_DT, '%Y-%m-%d') , SMELL_REGISTER_TIME
+        )
+        GROUP BY REG_ID,DATE_FORMAT(TSR.REG_DT, '%Y-%m-%d') , SMELL_REGISTER_TIME
+        ) a
+        GROUP BY SMELL_REGISTER_TIME WITH ROLLUP
+        ) T2
+        ON T1.CODE_ID = T2.SMELL_TYPE
+        ) T3
+        ON TC.CODE_ID = T3.SMELL_REGISTER_TIME
+        UNION
+        SELECT *
+        FROM
+        (
+        SELECT CODE_ID
+        FROM TB_CODE
+        WHERE CODE_GROUP = 'REN'
+        ) TC
+        LEFT OUTER JOIN
+        (
+        SELECT SMELL_REGISTER_TIME
+        , USER_REG
+        , USER_REG_SMELL                                       AS TOTAL_USER_REG_SMELL
+        , ROUND(IFNULL(USER_REG_SMELL / USER_REG * 100, 0), 2) AS SMELL_PERCENTAGE
+        , SMELL_LEVEL_1
+        , SMELL_LEVEL_2
+        , SMELL_LEVEL_3
+        , SMELL_LEVEL_4
+        , SMELL_LEVEL_5
+        , USER_REGION_DETAIL_NAME
+        FROM (
+        SELECT *
+        FROM TB_CODE
+        WHERE CODE_GROUP = 'STY'
+        ) T1
+        RIGHT OUTER JOIN
+        (
+        SELECT SMELL_TYPE,
+        SMELL_REGISTER_TIME,
+        COUNT(*)                                        AS                               USER_REG,
+        COUNT(CASE WHEN a.SMELL_VALUE != '001' AND a.SMELL_TYPE != '008' THEN 1 END) USER_REG_SMELL,
+        COUNT(CASE WHEN a.SMELL_VALUE = '002' AND a.SMELL_TYPE != '008' THEN 1 END)  SMELL_LEVEL_1,
+        COUNT(CASE WHEN a.SMELL_VALUE = '003' AND a.SMELL_TYPE != '008' THEN 1 END)  SMELL_LEVEL_2,
+        COUNT(CASE WHEN a.SMELL_VALUE = '004' AND a.SMELL_TYPE != '008' THEN 1 END)  SMELL_LEVEL_3,
+        COUNT(CASE WHEN a.SMELL_VALUE = '005' AND a.SMELL_TYPE != '008' THEN 1 END)  SMELL_LEVEL_4,
+        COUNT(CASE WHEN a.SMELL_VALUE = '006' AND a.SMELL_TYPE != '008' THEN 1 END)  SMELL_LEVEL_5,
+        a.USER_REGION_DETAIL_NAME
+        from
+        (
+        SELECT
+        TSR.*,
+        (SELECT CODE_ID_NAME
+        FROM TB_CODE
+        WHERE TB_CODE.CODE_GROUP = 'RGD'
+        AND TB_CODE.CODE_ID = TU.USER_REGION_DETAIL) AS                               USER_REGION_DETAIL_NAME
+        FROM TB_SMELL_REGISTER TSR
+        LEFT OUTER JOIN TB_USER TU
+        ON TSR.REG_ID = TU.USER_ID
+        WHERE DATE_FORMAT(tsr.REG_DT, '%Y-%m-%d') BETWEEN #{searchStart} AND #{searchEnd}
+        <if test="userRegionDetail != null and !userRegionDetail.equals('')" >
+            AND tu.USER_REGION_DETAIL = #{userRegionDetail}
+        </if>
+        <if test="smellType != null and !smellType.equals('')">
+            AND tsr.SMELL_TYPE = #{smellType}
+        </if>
+        AND TU.REG_GBN = '004'
+        AND (tsr.REG_ID , tsr.REG_DT) in (
+        SELECT tb_smell_register.REG_ID,MAX(tb_smell_register.REG_DT) FROM tb_smell_register GROUP BY REG_ID,DATE_FORMAT(REG_DT, '%Y-%m-%d') , SMELL_REGISTER_TIME
+        )
+        GROUP BY REG_ID,DATE_FORMAT(TSR.REG_DT, '%Y-%m-%d') , SMELL_REGISTER_TIME
+        ) a
+        GROUP BY SMELL_REGISTER_TIME WITH ROLLUP
+        ) T2
+        ON T1.CODE_ID = T2.SMELL_TYPE
+        ) T3
+        ON TC.CODE_ID = T3.SMELL_REGISTER_TIME
         ) RESULT
         ORDER BY RESULT.CODE_ID ASC
     </select>
@@ -742,32 +799,41 @@
         WHEN CODE_ID IS NULL THEN '합계'
         ELSE (SELECT TB_CODE.CODE_ID_NAME
         FROM TB_CODE
-        WHERE TB_CODE.CODE_GROUP = 'STY' AND TB_CODE.CODE_ID = BB1.CODE_ID) END       AS SMELL_TYPE
+        WHERE TB_CODE.CODE_GROUP = 'STY'
+        AND TB_CODE.CODE_ID = BB1.CODE_ID) END                                   AS SMELL_TYPE
         , CASE
         WHEN USER_REG_SMELL = 0 OR USER_REG_SMELL IS NULL THEN '-'
-        ELSE USER_REG_SMELL END                                                             AS TOTAL_USER_REG_SMELL
-        , CASE WHEN SMELL_LEVEL_1 = 0 OR SMELL_LEVEL_1 IS NULL THEN '-' ELSE SMELL_LEVEL_1 END    AS SMELL_LEVEL_1
-        , CASE WHEN SMELL_LEVEL_2 = 0 OR SMELL_LEVEL_2 IS NULL THEN '-' ELSE SMELL_LEVEL_2 END    AS SMELL_LEVEL_2
-        , CASE WHEN SMELL_LEVEL_3 = 0 OR SMELL_LEVEL_3 IS NULL THEN '-' ELSE SMELL_LEVEL_3 END    AS SMELL_LEVEL_3
-        , CASE WHEN SMELL_LEVEL_4 = 0 OR SMELL_LEVEL_4 IS NULL THEN '-' ELSE SMELL_LEVEL_4 END    AS SMELL_LEVEL_4
-        , CASE WHEN SMELL_LEVEL_5 = 0 OR SMELL_LEVEL_5 IS NULL THEN '-' ELSE SMELL_LEVEL_5 END    AS SMELL_LEVEL_5
+        ELSE USER_REG_SMELL END                                                          AS TOTAL_USER_REG_SMELL
+        , CASE WHEN SMELL_LEVEL_1 = 0 OR SMELL_LEVEL_1 IS NULL THEN '-' ELSE SMELL_LEVEL_1 END AS SMELL_LEVEL_1
+        , CASE WHEN SMELL_LEVEL_2 = 0 OR SMELL_LEVEL_2 IS NULL THEN '-' ELSE SMELL_LEVEL_2 END AS SMELL_LEVEL_2
+        , CASE WHEN SMELL_LEVEL_3 = 0 OR SMELL_LEVEL_3 IS NULL THEN '-' ELSE SMELL_LEVEL_3 END AS SMELL_LEVEL_3
+        , CASE WHEN SMELL_LEVEL_4 = 0 OR SMELL_LEVEL_4 IS NULL THEN '-' ELSE SMELL_LEVEL_4 END AS SMELL_LEVEL_4
+        , CASE WHEN SMELL_LEVEL_5 = 0 OR SMELL_LEVEL_5 IS NULL THEN '-' ELSE SMELL_LEVEL_5 END AS SMELL_LEVEL_5
         FROM (
         SELECT *
         FROM (
         SELECT *
         FROM TB_CODE
         WHERE CODE_GROUP = 'STY'
+        AND CODE_ID != '008'
         ) T1
-        LEFT OUTER JOIN
+        LEFT JOIN
         (
         SELECT SMELL_TYPE,
-        COUNT(*) AS                                                                      USER_REG,
-        COUNT(CASE WHEN TSR.SMELL_VALUE != '001' AND TSR.SMELL_TYPE != '008' THEN 1 END) USER_REG_SMELL,
-        COUNT(CASE WHEN TSR.SMELL_VALUE = '002' AND TSR.SMELL_TYPE != '008' THEN 1 END)  SMELL_LEVEL_1,
-        COUNT(CASE WHEN TSR.SMELL_VALUE = '003' AND TSR.SMELL_TYPE != '008' THEN 1 END)  SMELL_LEVEL_2,
-        COUNT(CASE WHEN TSR.SMELL_VALUE = '004' AND TSR.SMELL_TYPE != '008' THEN 1 END)  SMELL_LEVEL_3,
-        COUNT(CASE WHEN TSR.SMELL_VALUE = '005' AND TSR.SMELL_TYPE != '008' THEN 1 END)  SMELL_LEVEL_4,
-        COUNT(CASE WHEN TSR.SMELL_VALUE = '006' AND TSR.SMELL_TYPE != '008' THEN 1 END)  SMELL_LEVEL_5,
+        COUNT(*) AS                                                                  USER_REG,
+        COUNT(CASE WHEN a.SMELL_VALUE != '001' AND a.SMELL_TYPE != '008' THEN 1 END) USER_REG_SMELL,
+        COUNT(CASE WHEN a.SMELL_VALUE = '002' AND a.SMELL_TYPE != '008' THEN 1 END)  SMELL_LEVEL_1,
+        COUNT(CASE WHEN a.SMELL_VALUE = '003' AND a.SMELL_TYPE != '008' THEN 1 END)  SMELL_LEVEL_2,
+        COUNT(CASE WHEN a.SMELL_VALUE = '004' AND a.SMELL_TYPE != '008' THEN 1 END)  SMELL_LEVEL_3,
+        COUNT(CASE WHEN a.SMELL_VALUE = '005' AND a.SMELL_TYPE != '008' THEN 1 END)  SMELL_LEVEL_4,
+        COUNT(CASE WHEN a.SMELL_VALUE = '006' AND a.SMELL_TYPE != '008' THEN 1 END)  SMELL_LEVEL_5,
+        a.USER_REGION_DETAIL
+        from (
+        SELECT TSR.*,
+        (SELECT CODE_ID_NAME
+        FROM TB_CODE
+        WHERE TB_CODE.CODE_GROUP = 'RGD'
+        AND TB_CODE.CODE_ID = TU.USER_REGION_DETAIL) AS USER_REGION_DETAIL_NAME,
         TU.USER_REGION_DETAIL
         FROM TB_SMELL_REGISTER TSR
         LEFT OUTER JOIN TB_USER TU
@@ -779,7 +845,14 @@
         <if test="smellType != null and !smellType.equals('')">
             AND tsr.SMELL_TYPE = #{smellType}
         </if>
-        GROUP BY TSR.SMELL_TYPE
+        AND TU.REG_GBN = '004'
+        AND (tsr.REG_ID , tsr.REG_DT) in (
+        SELECT tb_smell_register.REG_ID,MAX(tb_smell_register.REG_DT) FROM tb_smell_register GROUP BY REG_ID,DATE_FORMAT(REG_DT, '%Y-%m-%d') , SMELL_REGISTER_TIME
+        )
+        GROUP BY REG_ID, DATE_FORMAT(TSR.REG_DT, '%Y-%m-%d'), SMELL_REGISTER_TIME
+        ) a
+        WHERE a.SMELL_TYPE != '008'
+        GROUP BY a.SMELL_TYPE
         WITH ROLLUP
         ) T2
         ON T1.CODE_ID = T2.SMELL_TYPE
@@ -789,17 +862,25 @@
         SELECT *
         FROM TB_CODE
         WHERE CODE_GROUP = 'STY'
+        AND CODE_ID != '008'
         ) T1
-        RIGHT OUTER JOIN
+        RIGHT JOIN
         (
         SELECT SMELL_TYPE,
-        COUNT(*) AS                                                                      USER_REG,
-        COUNT(CASE WHEN TSR.SMELL_VALUE != '001' AND TSR.SMELL_TYPE != '008' THEN 1 END) USER_REG_SMELL,
-        COUNT(CASE WHEN TSR.SMELL_VALUE = '002' AND TSR.SMELL_TYPE != '008' THEN 1 END)  SMELL_LEVEL_1,
-        COUNT(CASE WHEN TSR.SMELL_VALUE = '003' AND TSR.SMELL_TYPE != '008' THEN 1 END)  SMELL_LEVEL_2,
-        COUNT(CASE WHEN TSR.SMELL_VALUE = '004' AND TSR.SMELL_TYPE != '008' THEN 1 END)  SMELL_LEVEL_3,
-        COUNT(CASE WHEN TSR.SMELL_VALUE = '005' AND TSR.SMELL_TYPE != '008' THEN 1 END)  SMELL_LEVEL_4,
-        COUNT(CASE WHEN TSR.SMELL_VALUE = '006' AND TSR.SMELL_TYPE != '008' THEN 1 END)  SMELL_LEVEL_5,
+        COUNT(*) AS                                                                  USER_REG,
+        COUNT(CASE WHEN a.SMELL_VALUE != '001' AND a.SMELL_TYPE != '008' THEN 1 END) USER_REG_SMELL,
+        COUNT(CASE WHEN a.SMELL_VALUE = '002' AND a.SMELL_TYPE != '008' THEN 1 END)  SMELL_LEVEL_1,
+        COUNT(CASE WHEN a.SMELL_VALUE = '003' AND a.SMELL_TYPE != '008' THEN 1 END)  SMELL_LEVEL_2,
+        COUNT(CASE WHEN a.SMELL_VALUE = '004' AND a.SMELL_TYPE != '008' THEN 1 END)  SMELL_LEVEL_3,
+        COUNT(CASE WHEN a.SMELL_VALUE = '005' AND a.SMELL_TYPE != '008' THEN 1 END)  SMELL_LEVEL_4,
+        COUNT(CASE WHEN a.SMELL_VALUE = '006' AND a.SMELL_TYPE != '008' THEN 1 END)  SMELL_LEVEL_5,
+        a.USER_REGION_DETAIL
+        from (
+        SELECT TSR.*,
+        (SELECT CODE_ID_NAME
+        FROM TB_CODE
+        WHERE TB_CODE.CODE_GROUP = 'RGD'
+        AND TB_CODE.CODE_ID = TU.USER_REGION_DETAIL) AS USER_REGION_DETAIL_NAME,
         TU.USER_REGION_DETAIL
         FROM TB_SMELL_REGISTER TSR
         LEFT OUTER JOIN TB_USER TU
@@ -811,7 +892,14 @@
         <if test="smellType != null and !smellType.equals('')">
             AND tsr.SMELL_TYPE = #{smellType}
         </if>
-        GROUP BY TSR.SMELL_TYPE
+        AND TU.REG_GBN = '004'
+        AND (tsr.REG_ID , tsr.REG_DT) in (
+        SELECT tb_smell_register.REG_ID,MAX(tb_smell_register.REG_DT) FROM tb_smell_register GROUP BY REG_ID,DATE_FORMAT(REG_DT, '%Y-%m-%d') , SMELL_REGISTER_TIME
+        )
+        GROUP BY REG_ID, DATE_FORMAT(TSR.REG_DT, '%Y-%m-%d'), SMELL_REGISTER_TIME
+        ) a
+        WHERE a.SMELL_TYPE != '008'
+        GROUP BY a.SMELL_TYPE
         WITH ROLLUP
         ) T2
         ON T1.CODE_ID = T2.SMELL_TYPE

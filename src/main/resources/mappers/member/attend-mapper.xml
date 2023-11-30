@@ -75,16 +75,17 @@
         <![CDATA[
 
                 SELECT          t2.DATE_YMD DATE_YMD
-                              , t2.REG_COUNT REG_COUNT
+                              , t2.EVENING_TIME + t2.MORNING_TIME + AFTERNOON_TIME REG_COUNT
                               , (CASE
                                     WHEN DATE_FORMAT(t2.DATE_YMD, '%Y-%m-%d') > DATE_FORMAT(now(), '%Y-%m-%d') THEN '-'
-                                    WHEN REG_COUNT >= 2 THEN 'O'
-                                    WHEN REG_COUNT < 2 THEN 'X' END) AS CHECK_RESULT
+                                    WHEN EVENING_TIME + MORNING_TIME >= 2  OR EVENING_TIME + AFTERNOON_TIME >= 2 THEN 'O'
+                                    WHEN EVENING_TIME + MORNING_TIME < 2 OR EVENING_TIME + AFTERNOON_TIME < 2 THEN 'X' END) AS CHECK_RESULT
 
                 FROM (
                          SELECT t1.date_ymd                                DATE_YMD
-                              , COUNT(DATE_FORMAT(tsr.REG_DT, '%Y-%m-%d')) REG_COUNT
-
+                              , COUNT(CASE WHEN tsr.SMELL_REGISTER_TIME = '001' THEN 1 END) AS MORNING_TIME
+                              , COUNT(CASE WHEN tsr.SMELL_REGISTER_TIME = '002' THEN 1 END) AS AFTERNOON_TIME
+                              , COUNT(CASE WHEN tsr.SMELL_REGISTER_TIME = '003' THEN 1 END) AS EVENING_TIME
                          FROM (SELECT *
                                FROM tb_smell_register
                                WHERE REG_DT LIKE CONCAT(#{searchYear},'-',#{searchMonth},'-%')
