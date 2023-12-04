@@ -18,7 +18,7 @@
 <!--                     filePattern="/home/metis/tomcat/apache-tomcat-9.0.35/logs/${logNm}_%d{yyyy-MM-dd}_%i.log.zip">-->
             <PatternLayout pattern="${layoutPattern}" />
             <Policies>
-                <SizeBasedTriggeringPolicy size="200MB" /> <!-- 600MB 용량이 초과시 DefaultRolloverStrategy 정책만큼 넘버링 -->
+                <SizeBasedTriggeringPolicy size="600MB" /> <!-- 600MB 용량이 초과시 DefaultRolloverStrategy 정책만큼 넘버링 -->
                 <TimeBasedTriggeringPolicy module="true" interval="1" /><!-- 일별 로그 파일 생성-->
             </Policies>
             <DefaultRolloverStrategy max="200" fileIndex="min" >
