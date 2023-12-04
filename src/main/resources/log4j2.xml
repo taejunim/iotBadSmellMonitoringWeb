@@ -3,22 +3,31 @@
     <Properties>
         <Property name="logNm">logger</Property>
         <Property name="layoutPattern">%d [%t] %-5level %c(%M:%L) - %m%n</Property>
+<!--        <Property name="BASE_DIR">C:/tomcat/logs</Property>-->
+        <Property name="BASE_DIR">/home/metis/tomcat/apache-tomcat-9.0.35/logs</Property>
+        <Property name="LOG_DIR">./logs</Property>
     </Properties>
     <Appenders>
         <Console name="console" target="SYSTEM_OUT">
             <PatternLayout pattern="${layoutPattern}" />
         </Console>
 
-<!--        <RollingFile name="file" fileName="C:/tomcat/logs/${logNm}.log"-->
-<!--                     filePattern="C:/tomcat/logs/${logNm}_%d{yyyy-MM-dd}_%i.log.zip">-->
-        <RollingFile name="file" fileName="/home/metis/tomcat/apache-tomcat-9.0.35/logs/${logNm}.log"
-                     filePattern="/home/metis/tomcat/apache-tomcat-9.0.35/logs/${logNm}_%d{yyyy-MM-dd}_%i.log.zip">
+        <RollingFile name="file" fileName="${BASE_DIR}/${logNm}.log"
+                     filePattern="${BASE_DIR}/${logNm}_%d{yyyy-MM-dd}_%i.log.zip">
+<!--        <RollingFile name="file" fileName="/home/metis/tomcat/apache-tomcat-9.0.35/logs/${logNm}.log"-->
+<!--                     filePattern="/home/metis/tomcat/apache-tomcat-9.0.35/logs/${logNm}_%d{yyyy-MM-dd}_%i.log.zip">-->
             <PatternLayout pattern="${layoutPattern}" />
             <Policies>
-                <SizeBasedTriggeringPolicy size="600MB" /> <!-- 600MB 용량이 초과시 DefaultRolloverStrategy 정책만큼 넘버링 -->
+                <SizeBasedTriggeringPolicy size="200MB" /> <!-- 600MB 용량이 초과시 DefaultRolloverStrategy 정책만큼 넘버링 -->
                 <TimeBasedTriggeringPolicy module="true" interval="1" /><!-- 일별 로그 파일 생성-->
             </Policies>
-            <DefaultRolloverStrategy max="200" fileIndex="min" /><!-- 롤링 파일 200개 까지 생성 -->
+            <DefaultRolloverStrategy max="200" fileIndex="min" >
+                <Delete basePath="${BASE_DIR}" maxDepth = "1">
+                    <IfAccumulatedFileCount exceeds="90"/> <!-- log 파일이 90개 이상일때 예전 log 파일 삭제 -->
+                    <IfFileName glob="*.zip"/>   <!-- 삭제할 파일명 -->
+                    <IfLastModified age="90d"/>  <!--90일 이전 파일은 삭제 -->
+                </Delete>
+            </DefaultRolloverStrategy><!-- 롤링 파일 200개 까지 생성 -->
         </RollingFile>
     </Appenders>
 
