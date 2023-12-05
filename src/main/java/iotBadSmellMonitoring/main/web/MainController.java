@@ -8,6 +8,7 @@ import iotBadSmellMonitoring.join.service.JoinVO;
 import iotBadSmellMonitoring.main.service.MainSearchVo;
 import iotBadSmellMonitoring.main.service.MainService;
 import iotBadSmellMonitoring.main.service.MainVO;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -142,13 +143,17 @@ public class MainController {
 
     //PC 메인 , 사용자별 가장 최근 접수 데이터 가져오기
     @RequestMapping(value = "/pcMainListSelect")
-    public @ResponseBody List<EgovMap> pcMainListSelect() throws Exception {
-        MainVO mainVO = new MainVO();
-        return mainService.pcMainListSelect(mainVO);
+    public @ResponseBody List<EgovMap> pcMainListSelect(MainSearchVo mainSearchVo) throws Exception {
+        return mainService.pcMainListSelect(mainSearchVo);
     }
 
     @RequestMapping(value = "/pcMainListFindByMember")
     public @ResponseBody List<EgovMap> pcMainListFindByMember(MainSearchVo mainSearchVo) throws Exception{
         return mainService.pcMainListFindByMember(mainSearchVo);
+    }
+
+    @RequestMapping(value = "/pcMainListSelectAll")
+    public @ResponseBody List<EgovMap> pcMainListSelectAll(MainSearchVo mainSearchVo) throws Exception {
+        return mainService.pcMainListSelectAll(mainSearchVo);
     }
 }

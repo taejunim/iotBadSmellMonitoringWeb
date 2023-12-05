@@ -7,11 +7,26 @@ Time: 9:49 오전
 -->
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
 <%@include file="/WEB-INF/views/common/resources_common.jsp" %>
+<style>
+    .label {margin-bottom: 96px;}
+    .label * {display: inline-block;vertical-align: top;}
+    .label .left {background: url("https://t1.daumcdn.net/localimg/localimages/07/2011/map/storeview/tip_l.png") no-repeat;display: inline-block;height: 24px;overflow: hidden;vertical-align: top;width: 7px;}
+    .label .center {background: url(https://t1.daumcdn.net/localimg/localimages/07/2011/map/storeview/tip_bg.png) repeat-x;display: inline-block;height: 24px;font-size: 12px;line-height: 24px;}
+    .label .right {background: url("https://t1.daumcdn.net/localimg/localimages/07/2011/map/storeview/tip_r.png") -1px 0  no-repeat;display: inline-block;height: 24px;overflow: hidden;width: 6px;}
+</style>
 <script src="/resources/js/kakaoMapUtils.js"></script>
 <script type="text/javascript">
+  var beforeLevel = 9;
   var map;
   var markers = [];
   var infoWindows = [];
+
+  var customOverlayArray = [];
+  var clusterers = [];
+  var selectedCodeId = "";
+  var selectedGpsX;
+  var selectedGpsY;
+
   $(document).ready(function () {
     setButton("main");
     setDatePicker();                        //달력 SETTING CALL.
@@ -22,8 +37,9 @@ Time: 9:49 오전
     var longitude = 126.5204023;
     map = focusMapCenter(latitude, longitude, 9);
 
-    $.ajax({
-      url: "/pcMainListSelect",
+    fnSearch()
+    /*$.ajax({
+      url: "/pcMainListSelectAll",
       type: "GET",
       dataType: "json",
       success: function (data) {
@@ -34,12 +50,12 @@ Time: 9:49 오전
         map.panTo( new kakao.maps.LatLng(latitude, longitude));
         map.setMaxLevel(13); // map의 레벨을 조정해서 맵이 깨지는 현상을 방지한다.
         // 클러스터러에 마커들을 추가합니다
-        clusterer.addMarkers(markers);
+        // clusterer.addMarkers(markers);
       },
       error: function (err) {
         alert("사용자 데이터를 불러오는중 에러가 발생하였습니다.");
       }
-    });
+    });*/
 
     //마커 위 infoWindow에도 이벤트 연결
     $(document).on("click",".infoWindow",function(event){
@@ -53,32 +69,151 @@ Time: 9:49 오전
     var clusterer = new kakao.maps.MarkerClusterer({
         map: map, // 마커들을 클러스터로 관리하고 표시할 지도 객체
         averageCenter: true, // 클러스터에 포함된 마커들의 평균 위치를 클러스터 마커 위치로 설정
-        minLevel: 8, // 클러스터 할 최소 지도 레벨
+        minLevel: 3, // 클러스터 할 최소 지도 레벨
         minClusterSize : 1,
         calculator: [10, 50, 100, 150, 200],
-        gridSize : 25
+        gridSize : 80
     });
 
     // 지도 확대 축소를 제어할 수 있는  줌 컨트롤을 생성합니다
     var zoomControl = new kakao.maps.ZoomControl();
     map.addControl(zoomControl, kakao.maps.ControlPosition.RIGHT);
 
-    var beforeLevel = 9;
 
-    kakao.maps.event.addListener(map, 'zoom_changed', function() {
 
+    /*kakao.maps.event.addListener(map, 'zoom_changed', function() {
 
         var afterLevel = map.getLevel();
 
-        if (afterLevel > beforeLevel && afterLevel == 8) {
+        console.log("afterLevel : " + afterLevel);
+        console.log("beforeLevel : " + beforeLevel);
+
+        if (afterLevel > beforeLevel || afterLevel == 8) {
             closeInfoWindows();
         }
 
         beforeLevel = afterLevel;
 
-    });
+    });*/
 
 
+      kakao.maps.event.addListener(map, 'zoom_changed', function() {
+          console.log("customOverlay Click! :" + map.getLevel());
+          setTimeout(() => {
+              if (selectedCodeId != null && selectedCodeId != "") {
+                  if(map.getLevel() <= 9 && map.getLevel() >= 7) {
+                      for (var i = 0 ; i < markers.length ; i++) {
+                          markers[i].setMap(null);
+                      }
+                      for (var i = 0 ; i < clusterers.length ; i++) {
+                          clusterers[i].clear();
+                      }
+                      for (var i = 0 ; i < customOverlayArray.length ; i++) {
+                          customOverlayArray[i].setMap(null);
+                          // customOverlayArray = [];
+                      }
+
+                      markers = [];
+                      clusterers = [];
+                      customOverlayArray = [];
+
+                      fnSearch();
+                  }
+                  else if (map.getLevel() <= 6 && map.getLevel() >= 3){
+                      console.log("66666666")
+                      for (var i = 0 ; i < markers.length ; i++) {
+                          markers[i].setMap(null);
+                      }
+                      for (var i = 0 ; i < clusterers.length ; i++) {
+                          clusterers[i].clear();
+                      }
+                      for (var i = 0 ; i < customOverlayArray.length ; i++) {
+                          customOverlayArray[i].setMap(null);
+                          //customOverlayArray = [];
+                      }
+
+                      // 마커 클러스터러를 생성합니다
+                      var clusterer = new kakao.maps.MarkerClusterer({
+                          map: map, // 마커들을 클러스터로 관리하고 표시할 지도 객체
+                          averageCenter: true, // 클러스터에 포함된 마커들의 평균 위치를 클러스터 마커 위치로 설정
+                          minLevel: 3, // 클러스터 할 최소 지도 레벨
+                          minClusterSize : 1,
+                          calculator: [10, 50, 100, 150, 200],
+                          gridSize : 150
+                      });
+
+                      markers = [];
+                      clusterers = [];
+                      customOverlayArray = [];
+
+                      console.log("selectedCodeId : " + selectedCodeId);
+                      $.ajax({
+                          url: "/pcMainListFindByMember",
+                          type: "GET",
+                          dataType: "json",
+                          data : {
+                              userRegionDetail :  selectedCodeId,
+                              startDate : startDate,
+                              endDate : endDate,
+                              smellType : smellType,
+                              smellValue : smellValue
+                          },
+                          success: function (data) {
+
+                              drawMarker(data);
+                              for(var i=0; i< markers.length ; i++){
+                                  markers[i].setMap(map);
+                              }
+                              // 클러스터러에 마커들을 추가합니다
+                              clusterer.addMarkers(markers);
+
+                              clusterers.push(clusterer);
+
+                              console.log("끝 : " + new Date().toTimeString().split(' ')[0])
+                          },
+                          error: function (err) {
+                              alert("사용자 데이터를 불러오는중 에러가 발생하였습니다.");
+                          }
+                      });
+                  } else if (map.getLevel() <= 2){
+                      for (var i = 0 ; i < markers.length ; i++) {
+                          markers[i].setMap(null);
+                      }
+                      for (var i = 0 ; i < clusterers.length ; i++) {
+                          clusterers[i].clear();
+                      }
+                      for (var i = 0 ; i < customOverlayArray.length ; i++) {
+                          customOverlayArray[i].setMap(null);
+                          // customOverlayArray = [];
+                      }
+
+                      clusterers = [];
+                      customOverlayArray = [];
+
+                      $.ajax({
+                          url: "/pcMainListSelect",
+                          type: "GET",
+                          dataType: "json",
+                          data : {
+                              userRegionDetail : selectedCodeId
+                          },
+                          success: function (data) {
+                              markers = [];
+                              drawMarker(data);
+                              for(var i=0; i< markers.length ; i++){
+                                  markers[i].setMap(map);
+                              }
+                          },
+                          error: function (err) {
+                              alert("사용자 데이터를 불러오는중 에러가 발생하였습니다.");
+                          }
+                      });
+                  }
+              }
+          },500)
+
+
+      });
   });
 
 
@@ -107,11 +242,13 @@ Time: 9:49 오전
     });
 
     var date = new Date();
-    var startDate = date.getFullYear() + "-" + ((date.getMonth() + 1) > 9 ? (date.getMonth() + 1).toString() : "0" + (date.getMonth() + 1)) + "-01";
-      var endDate = date.getFullYear() + "-" + ((date.getMonth() + 1) > 9 ? (date.getMonth() + 1).toString() : "0" + (date.getMonth() + 1)) + "-" + (date.getDate() > 9 ? date.getDate().toString() : "0" + date.getDate().toString());
+    var searchStartDt = date.getFullYear() + "-" + ((date.getMonth() + 1) > 9 ? (date.getMonth() + 1).toString() : "0" + (date.getMonth() + 1)) + "-01";
+      var searchEndDt = date.getFullYear() + "-" + ((date.getMonth() + 1) > 9 ? (date.getMonth() + 1).toString() : "0" + (date.getMonth() + 1)) + "-" + (date.getDate() > 9 ? date.getDate().toString() : "0" + date.getDate().toString());
 
-      $('#searchStartDt').val(startDate);
-      $('#searchEndDt').val(endDate);
+      $('#searchStartDt').val(searchStartDt);
+      $('#searchEndDt').val(searchEndDt);
+      startDate = searchStartDt;
+      endDate = searchEndDt;
     //datepicker 초기화 END
   }
   /*달력 SETTING END*/
@@ -153,22 +290,59 @@ Time: 9:49 오전
 
 
   function fnSearch() {
-      //지도 기본 설정 -> 한라산 중심 잡아둠, Zoom Level 9
-      var latitude  = 33.3617168;
-      var longitude = 126.5204023;
-      map = focusMapCenter(latitude, longitude, 9);
+      for (var i = 0 ; i < markers.length ; i++) {
+          markers[i].setMap(null);
+      }
+      for (var i = 0 ; i < clusterers.length ; i++) {
+          clusterers[i].clear();
+      }
+      for (var i = 0 ; i < customOverlayArray.length ; i++) {
+          customOverlayArray[i].setMap(null);
+          // customOverlayArray = [];
+      }
 
-      // 마커 클러스터러를 생성합니다
-      var clusterer = new kakao.maps.MarkerClusterer({
-          map: map, // 마커들을 클러스터로 관리하고 표시할 지도 객체
-          averageCenter: true, // 클러스터에 포함된 마커들의 평균 위치를 클러스터 마커 위치로 설정
-          minLevel: 9 // 클러스터 할 최소 지도 레벨
-      });
+      //지도 기본 설정 -> 한라산 중심 잡아둠, Zoom Level 9
+      // var latitude  = 33.3617168;
+      // var longitude = 126.5204023;
+      //map = focusMapCenter(latitude, longitude, 9);
+      // map.setLevel(9, {anchor: new kakao.maps.LatLng(latitude, longitude)});
+
+      // // 마커 클러스터러를 생성합니다
+      // var clusterer = new kakao.maps.MarkerClusterer({
+      //     map: map, // 마커들을 클러스터로 관리하고 표시할 지도 객체
+      //     averageCenter: true, // 클러스터에 포함된 마커들의 평균 위치를 클러스터 마커 위치로 설정
+      //     minLevel: 9 // 클러스터 할 최소 지도 레벨
+      // });
+      //
+      // $.ajax({
+      //     url: "/pcMainListFindByMember",
+      //     type: "GET",
+      //     dataType: "json",
+      //     data : {
+      //         userRegionDetail : searchUserRegion,
+      //         startDate : startDate,
+      //         endDate : endDate,
+      //         smellType : smellType,
+      //         smellValue : smellValue
+      //     },
+      //     success: function (data) {
+      //         drawMarker(data);
+      //         for(var i=0; i< markers.length ; i++){
+      //             markers[i].setMap(map);
+      //         }
+      //         map.panTo( new kakao.maps.LatLng(latitude, longitude));
+      //         // 클러스터러에 마커들을 추가합니다
+      //         clusterer.addMarkers(markers);
+      //     },
+      //     error: function (err) {
+      //         alert("사용자 데이터를 불러오는중 에러가 발생하였습니다.");
+      //     }
+      // });
 
       $.ajax({
-          url: "/pcMainListFindByMember",
-          type: "GET",
-          dataType: "json",
+          url : "/pcMainListSelectAll",
+          type : "GET",
+          dataType : "json",
           data : {
               userRegionDetail : searchUserRegion,
               startDate : startDate,
@@ -177,18 +351,31 @@ Time: 9:49 오전
               smellValue : smellValue
           },
           success: function (data) {
-              drawMarker(data);
-              for(var i=0; i< markers.length ; i++){
-                  markers[i].setMap(map);
+              for (var i = 0 ; i < data.length ; i++ ) {
+
+                  // 커스텀 오버레이에 표시할 내용입니다
+                  // HTML 문자열 또는 Dom Element 입니다
+                  console.log("data[i].codeId : " + data[i].codeId)
+                  var content = '<div class ="label"><span class="left"></span><span class="center"><a style="text-decoration: none; color: black" href="javascript:void(0);" onclick="test('+ "'" +data[i].codeId+"'" +','+ data[i].gpsY + ',' + data[i].gpsX+')">'+ data[i].userRegionDetail + ' : ' +data[i].totalCount+ '</a></span><span class="right"></span></div>';
+
+                  // 커스텀 오버레이가 표시될 위치입니다
+                  var position = new kakao.maps.LatLng(data[i].gpsY, data[i].gpsX);
+
+                  // 커스텀 오버레이를 생성합니다
+                  var customOverlay = new kakao.maps.CustomOverlay({
+                      position: position,
+                      content: content
+                  });
+
+                  // 커스텀 오버레이를 지도에 표시합니다
+                  customOverlay.setMap(map);
+                  customOverlayArray.push(customOverlay);
               }
-              map.panTo( new kakao.maps.LatLng(latitude, longitude));
-              // 클러스터러에 마커들을 추가합니다
-              clusterer.addMarkers(markers);
           },
           error: function (err) {
               alert("사용자 데이터를 불러오는중 에러가 발생하였습니다.");
           }
-      });
+      })
   }
 
 
@@ -203,71 +390,284 @@ Time: 9:49 오전
   function drawMarker(arrays) {
 
       // 메인 화면에서 검색 시 마커 초기화 후 지도에 뿌림
-      markers = [];
+      //markers = [];
+
+      var customOverlay;
+
+      for (var i = 0 ; i < customOverlayArray.length ; i++) {
+          customOverlayArray[i].setMap(null);
+          // customOverlayArray = [];
+      }
+
 
     for (var i = 0; i < arrays.length; i++) {
-
-      if(arrays[i].gpsX != "" && arrays[i].gps != "") {
-        var markerImage = returnMarkerImage(arrays[i].smellValue);
-        // 마커를 생성합니다
-        var marker = new kakao.maps.Marker({
-          map: map, // 마커를 표시할 지도
-          position: new kakao.maps.LatLng(arrays[i].gpsY, arrays[i].gpsX), // 마커를 표시할 위치
-          image: markerImage // 마커 이미지
-        });
-
-
-
-
-        marker.id = "marker" + i;
+        if (arrays[i].smellValue != null || arrays[i].smellValue != undefined) {
+            console.log("marker Here!");
+            if(arrays[i].gpsX != "" && arrays[i].gps != "") {
+                var markerImage = returnMarkerImage(arrays[i].smellValue);
+                // 마커를 생성합니다
+                var marker = new kakao.maps.Marker({
+                    map: map, // 마커를 표시할 지도
+                    position: new kakao.maps.LatLng(arrays[i].gpsY, arrays[i].gpsX), // 마커를 표시할 위치
+                    image: markerImage // 마커 이미지
+                });
 
 
-        if (arrays[i].weatherStateName == "구름많음") weather = "<img style=' position: relative; top:7px' src='/resources/image/weather/weather_cloud_gray.png' width='30' height='30'/>";
-        else if (arrays[i].weatherStateName == "맑음") weather = "<img style=' position: relative; top:7px' src='/resources/image/weather/weather_sun.png' width='30' height='30'/>";
-        else if (arrays[i].weatherStateName == "흐림") weather = "<img style=' position: relative; top:7px' src='/resources/image/weather/weather_cloud_sun_gray.png' width='30' height='30'/>";
-        else if (arrays[i].weatherStateName == "눈" || arrays[i].weatherStateName == "눈날림") weather = "<img style=' position: relative; top:7px' src='/resources/image/weather/weather_snow_gray.png' width='30' height='30'/>";
-        else if (arrays[i].weatherStateName == "비" || arrays[i].weatherStateName == "빗방울") weather = "<img style=' position: relative; top:7px' src='/resources/image/weather/weather_cloud_gray.png' width='30' height='30'/>";
-        else if (arrays[i].weatherStateName == "소나기") weather = "<img style=' position: relative; top:7px' src='/resources/image/weather/weather_shower_gray.png' width='30' height='30'/>";
-        else if (arrays[i].weatherStateName == "빗방울/눈날림") weather = "<img style=' position: relative; top:7px' src='/resources/image/weather/weather_sleet_gray.png' width='30' height='30'/>";
-        else
-          weather     = "(-)";
-
-        var iwContent = '<div id="infoWindow' + i + '" class="cursor_pointer infoWindow" style="padding:5px; font-size:12px;">' + arrays[i].userName + '' +
-                '<br>' + arrays[i].regDt + '' +
-                '<br>' + "날씨 : " + weather + '' +
-                '<br>' + "기온 : " + arrays[i].temperatureValue + '' +
-                '<br>' + "습도 : " + arrays[i].humidityValue + '' +
-                '<br>' + "풍향 : " + arrays[i].windDirectionValueName + '' +
-                '<br>' + "풍속 : " + arrays[i].windSpeedValue + '' +
-                '</div>'; // 인포윈도우에 표출될 내용으로 HTML 문자열이나 document element가 가능합니다
-
-        iwContent += '<input type="hidden" id = "latitude' + i + '" value ="' + arrays[i].gpsY + '"/>';
-        iwContent += '<input type="hidden" id = "longitude' + i + '" value ="' + arrays[i].gpsX + '"/>';
-        iwContent += '<input type="hidden" id = "weatherStateName' + i + '" value ="' + arrays[i].weatherStateName + '"/>';
-        iwContent += '<input type="hidden" id = "temperatureValue' + i + '" value ="' + arrays[i].temperatureValue + '"/>';
-        iwContent += '<input type="hidden" id = "humidityValue' + i + '" value ="' + arrays[i].humidityValue + '"/>';
-        iwContent += '<input type="hidden" id = "windDirectionValue' + i + '" value ="' + arrays[i].windDirectionValueName + '"/>';
-        iwContent += '<input type="hidden" id = "windSpeedValue' + i + '" value ="' + arrays[i].windSpeedValue + '"/>';
-
-        var iwRemoveable = true;
-        // 인포윈도우를 생성합니다
-        var infowindow = new kakao.maps.InfoWindow({
-          zIndex:1,
-          content: iwContent,
-          removable : iwRemoveable // removeable 속성을 ture 로 설정하면 인포윈도우를 닫을 수 있는 x버튼이 표시됩니다
-        });
-
-        infoWindows.push(infowindow);
 
 
-        // 마커에 mouseover 이벤트와 mouseout 이벤트를 등록합니다
-        // 이벤트 리스너로는 클로저를 만들어 등록합니다
-        // for문에서 클로저를 만들어 주지 않으면 마지막 마커에만 이벤트가 등록됩니다
-        kakao.maps.event.addListener(marker, 'click', clickListener(map, marker, infowindow));
+                marker.id = "marker" + i;
 
-        markers.push(marker);
-      }
+
+                if (arrays[i].weatherStateName == "구름많음") weather = "<img style=' position: relative; top:7px' src='/resources/image/weather/weather_cloud_gray.png' width='30' height='30'/>";
+                else if (arrays[i].weatherStateName == "맑음") weather = "<img style=' position: relative; top:7px' src='/resources/image/weather/weather_sun.png' width='30' height='30'/>";
+                else if (arrays[i].weatherStateName == "흐림") weather = "<img style=' position: relative; top:7px' src='/resources/image/weather/weather_cloud_sun_gray.png' width='30' height='30'/>";
+                else if (arrays[i].weatherStateName == "눈" || arrays[i].weatherStateName == "눈날림") weather = "<img style=' position: relative; top:7px' src='/resources/image/weather/weather_snow_gray.png' width='30' height='30'/>";
+                else if (arrays[i].weatherStateName == "비" || arrays[i].weatherStateName == "빗방울") weather = "<img style=' position: relative; top:7px' src='/resources/image/weather/weather_cloud_gray.png' width='30' height='30'/>";
+                else if (arrays[i].weatherStateName == "소나기") weather = "<img style=' position: relative; top:7px' src='/resources/image/weather/weather_shower_gray.png' width='30' height='30'/>";
+                else if (arrays[i].weatherStateName == "빗방울/눈날림") weather = "<img style=' position: relative; top:7px' src='/resources/image/weather/weather_sleet_gray.png' width='30' height='30'/>";
+                else
+                    weather     = "(-)";
+
+                var iwContent = '<div id="infoWindow' + i + '" class="cursor_pointer infoWindow" style="padding:5px; font-size:12px;">' + arrays[i].userName + '' +
+                    '<br>' + arrays[i].regDt + '' +
+                    '<br>' + "날씨 : " + weather + '' +
+                    '<br>' + "기온 : " + arrays[i].temperatureValue + '' +
+                    '<br>' + "습도 : " + arrays[i].humidityValue + '' +
+                    '<br>' + "풍향 : " + arrays[i].windDirectionValueName + '' +
+                    '<br>' + "풍속 : " + arrays[i].windSpeedValue + '' +
+                    '</div>'; // 인포윈도우에 표출될 내용으로 HTML 문자열이나 document element가 가능합니다
+
+                iwContent += '<input type="hidden" id = "latitude' + i + '" value ="' + arrays[i].gpsY + '"/>';
+                iwContent += '<input type="hidden" id = "longitude' + i + '" value ="' + arrays[i].gpsX + '"/>';
+                iwContent += '<input type="hidden" id = "weatherStateName' + i + '" value ="' + arrays[i].weatherStateName + '"/>';
+                iwContent += '<input type="hidden" id = "temperatureValue' + i + '" value ="' + arrays[i].temperatureValue + '"/>';
+                iwContent += '<input type="hidden" id = "humidityValue' + i + '" value ="' + arrays[i].humidityValue + '"/>';
+                iwContent += '<input type="hidden" id = "windDirectionValue' + i + '" value ="' + arrays[i].windDirectionValueName + '"/>';
+                iwContent += '<input type="hidden" id = "windSpeedValue' + i + '" value ="' + arrays[i].windSpeedValue + '"/>';
+
+                var iwRemoveable = true;
+                // 인포윈도우를 생성합니다
+                var infowindow = new kakao.maps.InfoWindow({
+                    zIndex:1,
+                    content: iwContent,
+                    removable : iwRemoveable // removeable 속성을 ture 로 설정하면 인포윈도우를 닫을 수 있는 x버튼이 표시됩니다
+                });
+
+                infoWindows.push(infowindow);
+
+
+                // 마커에 mouseover 이벤트와 mouseout 이벤트를 등록합니다
+                // 이벤트 리스너로는 클로저를 만들어 등록합니다
+                // for문에서 클로저를 만들어 주지 않으면 마지막 마커에만 이벤트가 등록됩니다
+                kakao.maps.event.addListener(marker, 'click', clickListener(map, marker, infowindow));
+
+                markers.push(marker);
+
+                console.log("drawMarker : " + markers.length);
+            }
+        } else {
+            console.log(typeof arrays[i].codeId);
+            // 커스텀 오버레이에 표시할 내용입니다
+            // HTML 문자열 또는 Dom Element 입니다
+            var content = '<div class ="label"><span class="left"></span><span class="center"><a style="text-decoration: none; color: black" href="javascript:void(0);" onclick="test('+arrays[i].codeId +','+ arrays[i].gpsY + ',' + arrays[i].gpsX+')">'+ arrays[i].userRegionDetail + ' : ' +arrays[i].totalCount+ '</a></span><span class="right"></span></div>';
+
+            // 커스텀 오버레이가 표시될 위치입니다
+            var position = new kakao.maps.LatLng(arrays[i].gpsY, arrays[i].gpsX);
+
+            // 커스텀 오버레이를 생성합니다
+            customOverlay = new kakao.maps.CustomOverlay({
+                position: position,
+                content: content
+            });
+
+            // 커스텀 오버레이를 지도에 표시합니다
+            customOverlay.setMap(map);
+
+            customOverlayArray.push(customOverlay)
+
+
+        }
+
     }
+  }
+
+
+
+  function test(codeId, gpsx , gpsy) {
+
+      $(".label").css('display','none');
+      console.log("selectedCodeId : " + codeId)
+      console.log("시작 : " + new Date().toTimeString().split(' ')[0])
+
+
+      selectedCodeId = codeId;
+      selectedGpsX = gpsx;
+      selectedGpsY = gpsy;
+
+      console.log("test Click selectedCodeId : " + selectedCodeId)
+
+
+      map.setLevel(5, {anchor: new kakao.maps.LatLng(gpsx, gpsy)});
+
+      /*if (gpsx == "33.3212026") { // 파라미터값이 제대로 안들어가서 하드코딩
+          codeId = "010";
+      } else if (gpsx =="33.2456108") {
+          codeId = "011";
+      } else if (gpsx =="33.247276") {
+          codeId = "012";
+      }
+
+      console.log("codeId : " + codeId);
+      console.log("gpsx : " + gpsx);
+      console.log("gpsy : " + gpsy);
+
+      var latitude  = gpsx;
+      var longitude = gpsy;
+
+
+
+    // 마커 클러스터러를 생성합니다
+      var clusterer = new kakao.maps.MarkerClusterer({
+          map: map, // 마커들을 클러스터로 관리하고 표시할 지도 객체
+          averageCenter: true, // 클러스터에 포함된 마커들의 평균 위치를 클러스터 마커 위치로 설정
+          minLevel: 4, // 클러스터 할 최소 지도 레벨
+          minClusterSize : 1,
+          calculator: [10, 50, 100, 150, 200],
+          gridSize : 150
+      });
+
+
+      $.ajax({
+          url: "/pcMainListFindByMember",
+          type: "GET",
+          dataType: "json",
+          data : {
+              userRegionDetail :  codeId,
+              startDate : startDate,
+              endDate : endDate,
+              smellType : smellType,
+              smellValue : smellValue
+          },
+          success: function (data) {
+
+              drawMarker(data);
+              for(var i=0; i< markers.length ; i++){
+                  markers[i].setMap(map);
+              }
+              map.panTo( new kakao.maps.LatLng(latitude, longitude));
+              // 클러스터러에 마커들을 추가합니다
+              clusterer.addMarkers(markers);
+
+
+
+              console.log("끝 : " + new Date().toTimeString().split(' ')[0])
+          },
+          error: function (err) {
+              alert("사용자 데이터를 불러오는중 에러가 발생하였습니다.");
+          }
+      });
+
+      map.setLevel(
+          6,
+          {
+              anchor: new kakao.maps.LatLng(gpsx, gpsy)
+          }
+      );
+
+      beforeLevel = 9;
+
+      kakao.maps.event.addListener(map, 'zoom_changed', function() {
+          console.log("codeId : " + codeId);
+
+          var afterLevel = map.getLevel();
+
+          if (afterLevel >= 2 && afterLevel < 3 ) {
+              console.log("탐 ? afterLevel : " + afterLevel);
+          } else if (afterLevel <= 3) {
+              /!*map = focusMapCenter(latitude, longitude, 4);
+              $.ajax({
+                  url: "/pcMainListSelect",
+                  type: "GET",
+                  dataType: "json",
+                  data : {
+                      userRegionDetail : codeId
+                  },
+                  success: function (data) {
+                      drawMarker(data);
+                      for(var i=0; i< markers.length ; i++){
+                          markers[i].setMap(map);
+                      }
+                      map.panTo( new kakao.maps.LatLng(data[0].gpsY, data[0].gpsX));
+
+                      kakao.maps.event.addListener(map, 'zoom_changed', function() {
+                          console.log("come");
+
+                            if (map.getLevel() > 4 && map.getLevel() < 7) {
+                                for (var i = 0 ; i < markers.length ; i++) {
+                                    markers[i].setMap(null);
+                                }
+                                // 마커 클러스터러를 생성합니다
+                                var clusterer = new kakao.maps.MarkerClusterer({
+                                    map: map, // 마커들을 클러스터로 관리하고 표시할 지도 객체
+                                    averageCenter: true, // 클러스터에 포함된 마커들의 평균 위치를 클러스터 마커 위치로 설정
+                                    minLevel: 4, // 클러스터 할 최소 지도 레벨
+                                    minClusterSize : 1,
+                                    calculator: [10, 50, 100, 150, 200],
+                                    gridSize : 150
+                                });
+
+                                markers = [];
+                                console.log("LeveL 7 : " + markers);
+
+                                $.ajax({
+                                    url: "/pcMainListFindByMember",
+                                    type: "GET",
+                                    dataType: "json",
+                                    data : {
+                                        userRegionDetail :  codeId,
+                                        startDate : startDate,
+                                        endDate : endDate,
+                                        smellType : smellType,
+                                        smellValue : smellValue
+                                    },
+                                    success: function (data) {
+
+                                        drawMarker(data);
+                                        for(var i=0; i< markers.length ; i++){
+                                            markers[i].setMap(map);
+                                        }
+                                        map.panTo( new kakao.maps.LatLng(latitude, longitude));
+                                        // 클러스터러에 마커들을 추가합니다
+                                        clusterer.addMarkers(markers);
+
+
+
+                                        console.log("끝 : " + new Date().toTimeString().split(' ')[0])
+                                    },
+                                    error: function (err) {
+                                        alert("사용자 데이터를 불러오는중 에러가 발생하였습니다.");
+                                    }
+                                });
+
+                            }
+                      });
+                  },
+                  error: function (err) {
+                      alert("사용자 데이터를 불러오는중 에러가 발생하였습니다.");
+                  }
+              });*!/
+          }
+
+          console.log("afterLevel : " + afterLevel);
+          console.log("beforeLevel : " + beforeLevel);
+
+          if (afterLevel > beforeLevel || afterLevel == 8) {
+              closeInfoWindows();
+          }
+
+          beforeLevel = afterLevel;
+
+      });*/
   }
 
   function closeInfoWindows() {
@@ -283,6 +683,13 @@ Time: 9:49 오전
         infowindow.open(map, marker);
         clickMarker(marker.id);
     };
+  }
+
+  function lpad(val, padLength, padString){
+      while(val.length < padLength){
+          val = padString + val;
+      }
+      return val;
   }
 
   //기상상태가 안보이는 상태일때 다시 보이게 함

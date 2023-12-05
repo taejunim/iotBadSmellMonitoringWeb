@@ -135,4 +135,6 @@ public class HistoryServiceImpl implements HistoryService {
         sqlSession.getMapper(HistoryMapper.class).historyReadingYn(historyVO);
     }
 
+
+
 }

@@ -70,4 +70,6 @@ public interface HistoryMapper {
      */
     void historyReadingYn(HistoryVO historyVO) throws Exception;
 
+
+
 }

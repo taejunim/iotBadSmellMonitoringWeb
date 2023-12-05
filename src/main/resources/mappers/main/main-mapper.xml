@@ -4,7 +4,7 @@
 <mapper namespace="iotBadSmellMonitoring.main.service.impl.MainMapper">
 
     <!-- PC 메인 목록-->
-    <select id="pcMainListSelect" parameterType="mainVO" resultType="egovMap">
+    <select id="pcMainListSelect" parameterType="mainSearchVo" resultType="egovMap">
 
     SELECT ANY_VALUE(tsr.SMELL_REGISTER_NO)                       SMELL_REGISTER_NO
          , ANY_VALUE(tsr.SMELL_TYPE)                              SMELL_TYPE
@@ -27,8 +27,11 @@
          , tu.USER_NAME                                           USER_NAME
          , DATE_FORMAT(tsr.REG_DT,'%Y-%m-%d %H:%i:%S')            REG_DT
       FROM ( SELECT * FROM ( SELECT * FROM tb_smell_register ORDER BY tb_smell_register.REG_DT DESC LIMIT 18446744073709551615 ) AS tb_smell_register GROUP BY tb_smell_register.REG_ID) tsr INNER JOIN tb_user tu on tsr.REG_ID = tu.USER_ID
-      WHERE REG_GBN != '003'
+      WHERE tu.REG_GBN = '004'
       AND SIGN_IN_STATUS = 'Y'
+        <if test="userRegionDetail != null and !userRegionDetail.equals('')" >
+            AND tu.USER_REGION_DETAIL = #{userRegionDetail}
+        </if>
 
     </select>
 
@@ -54,8 +57,10 @@
         , tsr.REG_ID                                             REG_ID
         , tu.USER_NAME                                           USER_NAME
         , DATE_FORMAT(tsr.REG_DT,'%Y-%m-%d %H:%i:%S')            REG_DT
-        FROM ( SELECT * FROM ( SELECT * FROM tb_smell_register ORDER BY tb_smell_register.REG_DT DESC LIMIT 18446744073709551615 ) AS tb_smell_register GROUP BY tb_smell_register.REG_ID) tsr INNER JOIN tb_user tu on tsr.REG_ID = tu.USER_ID
+        FROM tb_smell_register tsr left join tb_user tu on tsr.REG_ID = tu.USER_ID
         WHERE 1 = 1
+        AND SIGN_IN_STATUS = 'Y'
+        AND tu.REG_GBN = '004'
         <if test="userRegionDetail != null and !userRegionDetail.equals('')" >
         AND tu.USER_REGION_DETAIL = #{userRegionDetail}
         </if>
@@ -68,6 +73,63 @@
         <if test="startDate != null and !startDate.equals('') or endDate != null and !endDate.equals('') ">
             AND tsr.REG_DT  <![CDATA[ >= ]]> #{startDate} AND tsr.REG_DT <![CDATA[ < ]]> #{endDate}
         </if>
+    </select>
+
+    <select id="pcMainListSelectAll" parameterType="mainSearchVo" resultType="egovMap">
+        select
+            tu.USER_REGION_DETAIL as CODE_ID
+             ,(select CODE_ID_NAME from tb_code tc
+               where tc.CODE_ID = tu.USER_REGION_DETAIL
+                 and tc.CODE_GROUP = 'RGD') as USER_REGION_DETAIL
+             ,count(*) as TOTAL_COUNT
+             ,case
+                  when tu.USER_REGION_DETAIL = '001' then '126.3162828'
+                  when tu.USER_REGION_DETAIL = '002' then '126.271862'
+                  when tu.USER_REGION_DETAIL = '003' then '126.2981186'
+                  when tu.USER_REGION_DETAIL = '004' then '126.2756824'
+                  when tu.USER_REGION_DETAIL = '005' then '126.2392054'
+                  when tu.USER_REGION_DETAIL = '006' then '126.2421586'
+                  when tu.USER_REGION_DETAIL = '007' then '126.4289539'
+                  when tu.USER_REGION_DETAIL = '008' then '126.4508866'
+                  when tu.USER_REGION_DETAIL = '009' then '126.2700715'
+                  when tu.USER_REGION_DETAIL = '010' then '126.2194108'
+                  when tu.USER_REGION_DETAIL = '011' then '126.2313473'
+                  when tu.USER_REGION_DETAIL = '012' then '126.2475706'
+                  when tu.USER_REGION_DETAIL = '013' then '126.7313785'
+                  when tu.USER_REGION_DETAIL = '014' then '126.1799307'
+            end as GPS_X
+             ,case
+                  when tu.USER_REGION_DETAIL = '001' then '33.3515554'
+                  when tu.USER_REGION_DETAIL = '002' then '33.3600196'
+                  when tu.USER_REGION_DETAIL = '003' then '33.3961452'
+                  when tu.USER_REGION_DETAIL = '004' then '33.379419'
+                  when tu.USER_REGION_DETAIL = '005' then '33.3700283'
+                  when tu.USER_REGION_DETAIL = '006' then '33.3511661'
+                  when tu.USER_REGION_DETAIL = '007' then '33.4191693'
+                  when tu.USER_REGION_DETAIL = '008' then '33.4034138'
+                  when tu.USER_REGION_DETAIL = '009' then '33.3279794'
+                  when tu.USER_REGION_DETAIL = '010' then '33.3212026'
+                  when tu.USER_REGION_DETAIL = '011' then '33.2456108'
+                  when tu.USER_REGION_DETAIL = '012' then '33.247276'
+                  when tu.USER_REGION_DETAIL = '013' then '33.3828211'
+                  when tu.USER_REGION_DETAIL = '014' then '33.3238904'
+            end as GPS_Y
+        from tb_smell_register tsr left join tb_user tu
+                                             on tsr.REG_ID = tu.USER_ID
+        where REG_GBN = '004'
+        <if test="userRegionDetail != null and !userRegionDetail.equals('')" >
+            AND tu.USER_REGION_DETAIL = #{userRegionDetail}
+        </if>
+        <if test="smellType != null and !smellType.equals('')" >
+            AND tsr.SMELL_TYPE = #{smellType}
+        </if>
+        <if test="smellValue != null and !smellValue.equals('')" >
+            AND tsr.SMELL_VALUE = #{smellValue}
+        </if>
+        <if test="startDate != null and !startDate.equals('') or endDate != null and !endDate.equals('') ">
+            AND tsr.REG_DT  <![CDATA[ >= ]]> #{startDate} AND tsr.REG_DT <![CDATA[ < ]]> #{endDate}
+        </if>
+        group by tu.USER_REGION_DETAIL
     </select>
 
     <!-- 코드 목록-->

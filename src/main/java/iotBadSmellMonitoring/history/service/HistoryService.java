@@ -70,4 +70,6 @@ public interface HistoryService {
      */
     void historyReadingYn(HistoryVO historyVO) throws Exception;
 
+
+
 }

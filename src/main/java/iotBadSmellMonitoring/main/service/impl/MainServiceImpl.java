@@ -1,6 +1,7 @@
 package iotBadSmellMonitoring.main.service.impl;
 
 import egovframework.rte.psl.dataaccess.util.EgovMap;
+import iotBadSmellMonitoring.history.service.impl.HistoryMapper;
 import iotBadSmellMonitoring.main.service.MainSearchVo;
 import iotBadSmellMonitoring.main.service.MainService;
 import iotBadSmellMonitoring.main.service.MainVO;
@@ -30,15 +31,15 @@ public class MainServiceImpl implements MainService {
 
     /**
      * PC 메인 목록
-     * @param mainVO     PC 공통 관련 VO.
+     * @param mainSearchVo     PC 공통 관련 VO.
      * @return           List<EgovMap>
      * @throws Exception
      */
-    public List<EgovMap> pcMainListSelect(MainVO mainVO) throws Exception {
+    public List<EgovMap> pcMainListSelect(MainSearchVo mainSearchVo) throws Exception {
 
         MainMapper mainMapper = sqlSession.getMapper(MainMapper.class);
 
-        return mainMapper.pcMainListSelect(mainVO);
+        return mainMapper.pcMainListSelect(mainSearchVo);
     }
     /**
      * PC 메인 목록
@@ -54,6 +55,16 @@ public class MainServiceImpl implements MainService {
 
         return mainMapper.pcMainListFindByMember(mainSearchVo);
     }
+
+    /**
+     * 모든 REGISTER 조회
+     * @return List<EgovMap>
+     * @throws Exception
+     */
+    public List<EgovMap> pcMainListSelectAll(MainSearchVo mainSearchVo) throws Exception {
+        MainMapper mainMapper = sqlSession.getMapper(MainMapper.class);
+        return mainMapper.pcMainListSelectAll(mainSearchVo);
+    };
 
     /**
      * 코드 목록
@@ -82,5 +93,6 @@ public class MainServiceImpl implements MainService {
 
         return mainMapper.getUserWeather(userRegion);
     }
+
 
 }

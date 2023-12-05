@@ -23,11 +23,11 @@ public interface MainMapper {
 
     /**
      * PC 메인 목록
-     * @param mainVO     PC 공통 관련 VO.
+     * @param mainSearchVo     PC 공통 관련 VO.
      * @return           List<EgovMap>
      * @throws Exception
      */
-    List<EgovMap> pcMainListSelect(MainVO mainVO) throws Exception;
+    List<EgovMap> pcMainListSelect(MainSearchVo mainSearchVo) throws Exception;
 
     /**
      * PC 메인 목록
@@ -36,6 +36,13 @@ public interface MainMapper {
      * @throws Exception
      */
     List<EgovMap> pcMainListFindByMember(MainSearchVo mainSearchVo);
+
+    /**
+     * 모든 REGISTER 조회
+     * @return List<EgovMap>
+     * @throws Exception
+     */
+    List<EgovMap> pcMainListSelectAll(MainSearchVo mainSearchVo) throws Exception;
 
     /**
      * 코드 목록
