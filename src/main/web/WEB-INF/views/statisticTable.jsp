@@ -51,21 +51,24 @@
     function setDatePicker(){
 
         $('#searchStartSelect').datepicker();
-        $('#searchStartSelect').datepicker("option", "maxDate", $("#searchEndSelect").val());
         $('#searchStartSelect').datepicker("option", "onClose", function ( selectedDate ) {
             $("#searchEndSelect").datepicker( "option", "minDate", selectedDate );
+
+            var date = new Date(selectedDate);
+            date = new Date(date.getFullYear() + "-12-31");
+            $("#searchEndSelect").datepicker( "option", "maxDate", date );
         });
 
         $('#searchEndSelect').datepicker();
-        $('#searchEndSelect').datepicker("option", "minDate", $("#searchStartSelect").val());
         $('#searchEndSelect').datepicker("option", "onClose", function ( selectedDate ) {
-            $("#searchStartSelect").datepicker( "option", "maxDate", selectedDate );
+            //$("#searchStartDt").datepicker( "option", "maxDate", selectedDate );
         });
         //datepicker 초기화 END
         //기본값 세팅
         $("#searchStartSelect").val('${statisticTableVO.searchStart}');
         $("#searchEndSelect").val('${statisticTableVO.searchEnd}');
     }
+    /*달력 SETTING END*/
 
 </script>
 <body>

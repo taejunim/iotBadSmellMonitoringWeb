@@ -63,15 +63,17 @@ var readingYn    = '${historyVO.readingYn}'
                 $('#datePicker').datepicker();
 
                 $('#searchStartDt').datepicker();
-                $('#searchStartDt').datepicker("option", "maxDate", $("#searchEndDt").val());
                 $('#searchStartDt').datepicker("option", "onClose", function ( selectedDate ) {
                     $("#searchEndDt").datepicker( "option", "minDate", selectedDate );
+
+                    var date = new Date(selectedDate);
+                    date = new Date(date.getFullYear() + "-12-31");
+                    $("#searchEndDt").datepicker( "option", "maxDate", date );
                 });
 
                 $('#searchEndDt').datepicker();
-                $('#searchEndDt').datepicker("option", "minDate", $("#searchStartDt").val());
                 $('#searchEndDt').datepicker("option", "onClose", function ( selectedDate ) {
-                    $("#searchStartDt").datepicker( "option", "maxDate", selectedDate );
+                    //$("#searchStartDt").datepicker( "option", "maxDate", selectedDate );
                 });
                 //datepicker 초기화 END
             }

@@ -257,6 +257,18 @@
             if(day < 10) day = "0" + day;
             $(".datepicker").val(date.getFullYear() + "-" + month+ "-" + day);
 
+            $('#startDatePicker').datepicker("option", "onClose", function ( selectedDate ) {
+                $("#endDatePicker").datepicker( "option", "minDate", selectedDate );
+
+                var date = new Date(selectedDate);
+                date = new Date(date.getFullYear() + "-12-31");
+                $("#endDatePicker").datepicker( "option", "maxDate", date );
+            });
+
+            $('#endDatePicker').datepicker("option", "onClose", function ( selectedDate ) {
+                //$("#searchStartDt").datepicker( "option", "maxDate", selectedDate );
+            });
+
         } else if($("#type").val() == "month"){
             $(".dateInput").css("display","none");
             $(".timeInput").css("display","none");
