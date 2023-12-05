@@ -27,6 +27,8 @@ Time: 9:49 오전
   var selectedGpsX;
   var selectedGpsY;
 
+  var isLoading = false;
+
   $(document).ready(function () {
     setButton("main");
     setDatePicker();                        //달력 SETTING CALL.
@@ -96,10 +98,23 @@ Time: 9:49 오전
 
     });*/
 
+      kakao.maps.event.addListener(map, 'zoom_start', function() {
+
+          if (isLoading) {
+              kakao.maps.event.preventMap();
+          }
+      });
 
       kakao.maps.event.addListener(map, 'zoom_changed', function() {
-          console.log("customOverlay Click! :" + map.getLevel());
-          setTimeout(() => {
+
+          if (isLoading) {
+              kakao.maps.event.preventMap();
+              return;
+          }
+          isLoading = true;
+
+          console.log("level : " + map.getLevel());
+
               if (selectedCodeId != null && selectedCodeId != "") {
                   if(map.getLevel() <= 9 && map.getLevel() >= 7) {
                       for (var i = 0 ; i < markers.length ; i++) {
@@ -170,6 +185,8 @@ Time: 9:49 오전
                               clusterers.push(clusterer);
 
                               console.log("끝 : " + new Date().toTimeString().split(' ')[0])
+
+                              isLoading = false;
                           },
                           error: function (err) {
                               alert("사용자 데이터를 불러오는중 에러가 발생하였습니다.");
@@ -203,6 +220,8 @@ Time: 9:49 오전
                               for(var i=0; i< markers.length ; i++){
                                   markers[i].setMap(map);
                               }
+
+                              isLoading = false;
                           },
                           error: function (err) {
                               alert("사용자 데이터를 불러오는중 에러가 발생하였습니다.");
@@ -210,9 +229,6 @@ Time: 9:49 오전
                       });
                   }
               }
-          },500)
-
-
       });
   });
 
@@ -370,6 +386,8 @@ Time: 9:49 오전
                   // 커스텀 오버레이를 지도에 표시합니다
                   customOverlay.setMap(map);
                   customOverlayArray.push(customOverlay);
+
+                  isLoading = false;
               }
           },
           error: function (err) {
