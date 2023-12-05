@@ -105,6 +105,13 @@ Time: 9:49 오전
     $('#searchEndDt').datepicker("option", "onClose", function ( selectedDate ) {
       //$("#searchStartDt").datepicker( "option", "maxDate", selectedDate );
     });
+
+    var date = new Date();
+    var startDate = date.getFullYear() + "-" + ((date.getMonth() + 1) > 9 ? (date.getMonth() + 1).toString() : "0" + (date.getMonth() + 1)) + "-01";
+      var endDate = date.getFullYear() + "-" + ((date.getMonth() + 1) > 9 ? (date.getMonth() + 1).toString() : "0" + (date.getMonth() + 1)) + "-" + (date.getDate() > 9 ? date.getDate().toString() : "0" + date.getDate().toString());
+
+      $('#searchStartDt').val(startDate);
+      $('#searchEndDt').val(endDate);
     //datepicker 초기화 END
   }
   /*달력 SETTING END*/
