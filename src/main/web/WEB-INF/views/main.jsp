@@ -83,20 +83,7 @@ Time: 9:49 오전
 
 
 
-    /*kakao.maps.event.addListener(map, 'zoom_changed', function() {
 
-        var afterLevel = map.getLevel();
-
-        console.log("afterLevel : " + afterLevel);
-        console.log("beforeLevel : " + beforeLevel);
-
-        if (afterLevel > beforeLevel || afterLevel == 8) {
-            closeInfoWindows();
-        }
-
-        beforeLevel = afterLevel;
-
-    });*/
 
       kakao.maps.event.addListener(map, 'zoom_start', function() {
 
@@ -118,6 +105,8 @@ Time: 9:49 오전
 
           beforeLevel = afterLevel;
 
+          console.log("isLoading : " + isLoading);
+
           if (isLoading) {
               kakao.maps.event.preventMap();
               return;
@@ -126,7 +115,9 @@ Time: 9:49 오전
 
           console.log("level : " + map.getLevel());
 
+          console.log("selectedCodeId : " + selectedCodeId);
               if (selectedCodeId != null && selectedCodeId != "") {
+                  console.log("첫 화면 시 진입?")
                   if(map.getLevel() <= 9 && map.getLevel() >= 7) {
                       for (var i = 0 ; i < markers.length ; i++) {
                           markers[i].setMap(null);
@@ -248,6 +239,8 @@ Time: 9:49 오전
                           }
                       });
                   }
+              } else {
+                  isLoading = false;
               }
       });
   });

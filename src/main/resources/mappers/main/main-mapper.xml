@@ -26,14 +26,23 @@
          , tsr.REG_ID                                             REG_ID
          , tu.USER_NAME                                           USER_NAME
          , DATE_FORMAT(tsr.REG_DT,'%Y-%m-%d %H:%i:%S')            REG_DT
-      FROM ( SELECT * FROM ( SELECT * FROM tb_smell_register ORDER BY tb_smell_register.REG_DT DESC LIMIT 18446744073709551615 ) AS tb_smell_register GROUP BY tb_smell_register.REG_ID) tsr INNER JOIN tb_user tu on tsr.REG_ID = tu.USER_ID
-      WHERE tu.REG_GBN = '004'
-      AND SIGN_IN_STATUS = 'Y'
+        FROM tb_smell_register tsr INNER JOIN tb_user tu on tsr.REG_ID = tu.USER_ID
+        WHERE 1 = 1
+        AND SIGN_IN_STATUS = 'Y'
+        AND tu.REG_GBN = '004'
+        AND (tsr.REG_ID, tsr.REG_DT) IN (
+        SELECT a.REG_ID, MAX(a.REG_DT)
+        FROM tb_smell_register a
+        <if test="startDate != null and !startDate.equals('') or endDate != null and !endDate.equals('') ">
+            WHERE a.REG_DT  <![CDATA[ >= ]]> #{startDate} AND a.REG_DT <![CDATA[ <= ]]> #{endDate}
+        </if>
+        group by a.REG_ID
+        )
         <if test="userRegionDetail != null and !userRegionDetail.equals('')" >
             AND tu.USER_REGION_DETAIL = #{userRegionDetail}
         </if>
         <if test="startDate != null and !startDate.equals('') or endDate != null and !endDate.equals('') ">
-            AND tsr.REG_DT  <![CDATA[ >= ]]> #{startDate} AND tsr.REG_DT <![CDATA[ < ]]> #{endDate}
+            AND tsr.REG_DT  <![CDATA[ >= ]]> #{startDate} AND tsr.REG_DT <![CDATA[ <= ]]> #{endDate}
         </if>
 
     </select>
@@ -74,7 +83,7 @@
             AND tsr.SMELL_VALUE = #{smellValue}
         </if>
         <if test="startDate != null and !startDate.equals('') or endDate != null and !endDate.equals('') ">
-            AND tsr.REG_DT  <![CDATA[ >= ]]> #{startDate} AND tsr.REG_DT <![CDATA[ < ]]> #{endDate}
+            AND tsr.REG_DT  <![CDATA[ >= ]]> #{startDate} AND tsr.REG_DT <![CDATA[ <= ]]> #{endDate}
         </if>
     </select>
 
@@ -130,7 +139,7 @@
             AND tsr.SMELL_VALUE = #{smellValue}
         </if>
         <if test="startDate != null and !startDate.equals('') or endDate != null and !endDate.equals('') ">
-            AND tsr.REG_DT  <![CDATA[ >= ]]> #{startDate} AND tsr.REG_DT <![CDATA[ < ]]> #{endDate}
+            AND tsr.REG_DT  <![CDATA[ >= ]]> #{startDate} AND tsr.REG_DT <![CDATA[ <= ]]> #{endDate}
         </if>
         group by tu.USER_REGION_DETAIL
     </select>
