@@ -32,6 +32,9 @@
         <if test="userRegionDetail != null and !userRegionDetail.equals('')" >
             AND tu.USER_REGION_DETAIL = #{userRegionDetail}
         </if>
+        <if test="startDate != null and !startDate.equals('') or endDate != null and !endDate.equals('') ">
+            AND tsr.REG_DT  <![CDATA[ >= ]]> #{startDate} AND tsr.REG_DT <![CDATA[ < ]]> #{endDate}
+        </if>
 
     </select>
 

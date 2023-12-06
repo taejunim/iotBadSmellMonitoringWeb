@@ -39,7 +39,7 @@ Time: 9:49 오전
     var longitude = 126.5204023;
     map = focusMapCenter(latitude, longitude, 9);
 
-    fnSearch()
+    fnSearch('search')
     /*$.ajax({
       url: "/pcMainListSelectAll",
       type: "GET",
@@ -107,6 +107,17 @@ Time: 9:49 오전
 
       kakao.maps.event.addListener(map, 'zoom_changed', function() {
 
+          var afterLevel = map.getLevel();
+
+          console.log("afterLevel : " + afterLevel);
+          console.log("beforeLevel : " + beforeLevel);
+
+          if (afterLevel > beforeLevel || afterLevel == 2) {
+              closeInfoWindows();
+          }
+
+          beforeLevel = afterLevel;
+
           if (isLoading) {
               kakao.maps.event.preventMap();
               return;
@@ -132,10 +143,12 @@ Time: 9:49 오전
                       clusterers = [];
                       customOverlayArray = [];
 
-                      fnSearch();
+                      fnSearch('zoom');
                   }
                   else if (map.getLevel() <= 6 && map.getLevel() >= 3){
-                      console.log("66666666")
+
+                      showLoader(true);
+
                       for (var i = 0 ; i < markers.length ; i++) {
                           markers[i].setMap(null);
                       }
@@ -186,6 +199,7 @@ Time: 9:49 오전
 
                               console.log("끝 : " + new Date().toTimeString().split(' ')[0])
 
+                              showLoader(false);
                               isLoading = false;
                           },
                           error: function (err) {
@@ -193,6 +207,9 @@ Time: 9:49 오전
                           }
                       });
                   } else if (map.getLevel() <= 2){
+
+                      showLoader(true);
+
                       for (var i = 0 ; i < markers.length ; i++) {
                           markers[i].setMap(null);
                       }
@@ -212,7 +229,9 @@ Time: 9:49 오전
                           type: "GET",
                           dataType: "json",
                           data : {
-                              userRegionDetail : selectedCodeId
+                              userRegionDetail : selectedCodeId,
+                              startDate : startDate,
+                              endDate : endDate,
                           },
                           success: function (data) {
                               markers = [];
@@ -221,6 +240,7 @@ Time: 9:49 오전
                                   markers[i].setMap(map);
                               }
 
+                              showLoader(false);
                               isLoading = false;
                           },
                           error: function (err) {
@@ -305,7 +325,9 @@ Time: 9:49 오전
 
 
 
-  function fnSearch() {
+  function fnSearch(type) {
+      showLoader(true);
+
       for (var i = 0 ; i < markers.length ; i++) {
           markers[i].setMap(null);
       }
@@ -317,11 +339,14 @@ Time: 9:49 오전
           // customOverlayArray = [];
       }
 
-      //지도 기본 설정 -> 한라산 중심 잡아둠, Zoom Level 9
-      // var latitude  = 33.3617168;
-      // var longitude = 126.5204023;
-      //map = focusMapCenter(latitude, longitude, 9);
-      // map.setLevel(9, {anchor: new kakao.maps.LatLng(latitude, longitude)});
+      if (type == 'search') {
+          //지도 기본 설정 -> 한라산 중심 잡아둠, Zoom Level 9
+          var latitude  = 33.3617168;
+          var longitude = 126.5204023;
+          //map = focusMapCenter(latitude, longitude, 9);
+          map.setLevel(9);
+          map.panTo( new kakao.maps.LatLng(latitude, longitude));
+      }
 
       // // 마커 클러스터러를 생성합니다
       // var clusterer = new kakao.maps.MarkerClusterer({
@@ -387,6 +412,7 @@ Time: 9:49 오전
                   customOverlay.setMap(map);
                   customOverlayArray.push(customOverlay);
 
+                  showLoader(false);
                   isLoading = false;
               }
           },
@@ -830,7 +856,7 @@ Time: 9:49 오전
                   </c:forEach>
               </select>
           </div>
-    <a class="button bgcSkyBlue mt10 fr" onclick="fnSearch()"><i class="bx bx-search"></i>조회</a>
+    <a class="button bgcSkyBlue mt10 fr" onclick="fnSearch('search')"><i class="bx bx-search"></i>조회</a>
 
   </div>
   <div id="rightSide" class="fr wd80rate h100rate" style="border-left: 1px solid #10639a; margin-left: -1px;">
