@@ -87,12 +87,7 @@ public class RegisterServiceImpl implements RegisterService {
             masterResult = registerMapper.registerMasterInsert(registerVO);
         }
 
-
-
-
-
-
-                                                     //접수 마스터 등록 CALL.
+        //접수 마스터 등록 CALL.
         int allResult    = 0;                                                                                           //마스터||디테일 등록 결과
 
         if(masterResult == 1){

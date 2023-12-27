@@ -280,17 +280,19 @@ public class ApiController {
             return message;
         }
 
-        else if(559 < intTime && 900 > intTime){
-
+        else if(559 < intTime && 900 > intTime) {
+            registerVO.setSmellRegisterTime("001");
             message = registMakeMsg(registerVO);
             return message;
         }
 
         else if(1059 < intTime && 1700 > intTime) {
+            registerVO.setSmellRegisterTime("002");
             message = registMakeMsg(registerVO);
             return message;
         }
         else if(1859 < intTime && 2300 > intTime) {
+            registerVO.setSmellRegisterTime("003");
             message = registMakeMsg(registerVO);
             return message;
         }
