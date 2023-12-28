@@ -72,10 +72,12 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public void memberDelete(JoinVO joinVO) throws Exception {
+    public int memberDelete(JoinVO joinVO) throws Exception {
 
         MemberMapper mapper = sqlSession.getMapper(MemberMapper.class);
-        mapper.memberDelete(joinVO);
+        int result = mapper.memberDelete(joinVO);
+
+        return result;
     }
 
     /**

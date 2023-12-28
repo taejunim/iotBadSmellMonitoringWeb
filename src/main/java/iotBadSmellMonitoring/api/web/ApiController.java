@@ -659,6 +659,42 @@ public class ApiController {
     }
 
     /**
+     * USER DELETE.
+     * @param joinVO         회원가입 / 로그인 / 아이디 찾기 관련 VO
+     * @return               RESPONSE MESSAGE.
+     * @throws Exception
+     */
+    @RequestMapping(value = "/api/userDelete", method = RequestMethod.POST, consumes="application/json;", produces = "application/json; charset=utf8")
+    public String userDelete(JoinVO joinVO, HttpServletRequest request)  throws Exception {
+
+        String message = "";
+
+        try {
+
+            BufferedReader  br 	        = new BufferedReader(new InputStreamReader(request.getInputStream(), StandardCharsets.UTF_8));
+            String          paramValue  = parseJSONData(br);                                                            //JSON OBJECT TO STRING CALL.
+            JSONParser      jsonParser  = new JSONParser();
+            JSONObject      jsonObject  = (JSONObject)jsonParser.parse(paramValue);
+
+            joinVO.setUserId(jsonObject.get("userId").toString());
+
+            int result = memberService.memberDelete(joinVO);
+
+            if(result == 1)
+                message = "{\"result\":\"success\"}";
+
+            else
+                message = "{\"result\":\"fail\",\"message\":\"NOT FOUND USER.\"}";
+
+        }catch (Exception e){
+
+            message = "{\"result\":\"error\",\"message\":\"ERR PASSWORD CHANGE.\"}";
+        }
+
+        return message;
+    }
+
+    /**
      * CURRENT DATE API
      * @return           RESPONSE MESSAGE.
      * @throws Exception

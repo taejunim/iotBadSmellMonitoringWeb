@@ -47,13 +47,15 @@ public interface MemberService {
      */
     int memberPasswordUpdate(JoinVO joinVO) throws Exception;
 
+
+
     /**
      * 회원 탈퇴
      * @param   joinVO
      * @return
      * @throws Exception
      */
-    void memberDelete(JoinVO joinVO) throws Exception;
+    int memberDelete(JoinVO joinVO) throws Exception;
 
     /**
      * 회원 승인

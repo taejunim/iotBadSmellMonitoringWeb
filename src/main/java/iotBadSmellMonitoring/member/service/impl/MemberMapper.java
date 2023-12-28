@@ -52,7 +52,7 @@ public interface MemberMapper {
      * @return
      * @throws Exception
      */
-    void memberDelete(JoinVO joinVO) throws Exception;
+    int memberDelete(JoinVO joinVO) throws Exception;
 
     /**
      * 회원 승인
